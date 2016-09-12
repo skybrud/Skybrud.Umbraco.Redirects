@@ -163,8 +163,8 @@
       <HintPath>..\packages\semver.1.1.2\lib\net45\Semver.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Skybrud.LinkPicker, Version=1.0.8.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Skybrud.LinkPicker.1.0.8\lib\net45\Skybrud.LinkPicker.dll</HintPath>
+    <Reference Include="Skybrud.LinkPicker, Version=1.0.9.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Skybrud.LinkPicker.1.0.9\lib\net45\Skybrud.LinkPicker.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Skybrud.Umbraco.GridData, Version=1.5.1.0, Culture=neutral, processorArchitecture=MSIL">
@@ -296,13 +296,16 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="web.config" />
     <Content Include="App_Plugins\Skybrud.LinkPicker\Styles\Table.less" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="App_Plugins\Skybrud.LinkPicker\Styles\LinkPicker.less" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="App_Plugins\Skybrud.LinkPicker\package.manifest" />
+    <None Include="web.Debug.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+    <None Include="web.Release.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
