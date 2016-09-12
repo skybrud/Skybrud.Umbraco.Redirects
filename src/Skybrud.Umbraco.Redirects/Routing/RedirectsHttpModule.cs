@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Web;
-using Skybrud.LinkPicker;
 using Skybrud.Umbraco.Redirects.Models;
-using Umbraco.Core.Models;
-using Umbraco.Web;
 
 namespace Skybrud.Umbraco.Redirects.Routing {
 
