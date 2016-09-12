@@ -1,0 +1,19 @@
+﻿{
+    "propertyEditors": [
+		{
+			"alias": "Skybrud.Umbraco.Redirects",
+			"name": "Skybrud Redirects",
+			"editor": {
+				"view": "~/App_Plugins/Skybrud.Umbraco.Redirects/Views/PropertyEditor.html",
+				"hideLabel": true
+			}
+		}
+	],
+    "javascript": [
+        "/App_Plugins/Skybrud.Umbraco.Redirects/Scripts/Controllers/Dashboard.js",
+        "/App_Plugins/Skybrud.Umbraco.Redirects/Scripts/Controllers/PropertyEditor.js"
+    ],
+    "css": [
+        "/App_Plugins/Skybrud.Umbraco.Redirects/Styles/Styles.css"
+    ]
+}

@@ -1,0 +1,64 @@
+﻿.SkybrudUmbracoRedirects .input {
+  display: flex;
+}
+.SkybrudUmbracoRedirects .input > .hest {
+  margin-bottom: 10px;
+  display: block;
+  width: 200px;
+}
+.SkybrudUmbracoRedirects .input > .hest small {
+  display: block;
+}
+.SkybrudUmbracoRedirects pre {
+  margin-top: 10px;
+  font-size: 10px;
+  line-height: 12px;
+}
+.SkybrudUmbracoRedirects .umb-editor-sub-header {
+  margin-bottom: 0;
+}
+.SkybrudUmbracoRedirects .umb-table-cell.col-id {
+  max-width: 50px;
+}
+.SkybrudUmbracoRedirects .umb-table-cell.col-date {
+  max-width: 110px;
+}
+.SkybrudUmbracoRedirects .umb-table-cell.col-actions {
+  /*flex-grow: 0.3;*/
+}
+.SkybrudUmbracoRedirects .umb-table-cell.col-destination {
+  flex-grow: 4;
+}
+.SkybrudUmbracoRedirects .umb-table-cell {
+  cursor: default;
+}
+.SkybrudUmbracoRedirects .umb-table-row {
+  cursor: default;
+}
+.SkybrudUmbracoRedirects .umb-era-button.-green {
+  background: #53a93f;
+  color: white;
+}
+.SkybrudUmbracoRedirects .umb-era-button.-green:hover {
+  background-color: #3e933e;
+}
+.SkybrudUmbracoRedirects .umb-era-button + .umb-era-button {
+  margin-left: 10px;
+}
+.SkybrudUmbracoRedirects .umb-era-button-group {
+  display: flex;
+}
+.SkybrudUmbracoRedirects .umb-load-indicator {
+  z-index: 9001;
+  display: none;
+}
+.SkybrudUmbracoRedirects .loading > .umb-load-indicator {
+  display: block;
+}
+.SkybrudUmbracoRedirects .loading .umb-table {
+  opacity: 0.75;
+}
+.SkybrudUmbracoRedirects .list {
+  min-height: 150px;
+  position: relative;
+}

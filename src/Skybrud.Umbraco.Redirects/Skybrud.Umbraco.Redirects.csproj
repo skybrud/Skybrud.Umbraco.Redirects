@@ -307,6 +307,14 @@
     <Content Include="App_Plugins\Skybrud.LinkPicker\Views\LinkPickerDirective.html" />
     <Content Include="App_Plugins\Skybrud.LinkPicker\Views\LinkPickerGridEditor.html" />
     <Content Include="App_Plugins\Skybrud.LinkPicker\Views\LinkPickerPreValues.html" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Lang\da-DK.xml" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Lang\en.xml" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Scripts\Controllers\Dashboard.js" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Scripts\Controllers\PropertyEditor.js" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Styles\Styles.css" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Styles\Styles.min.css" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Views\Dashboard.html" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Views\PropertyEditor.html" />
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -314,6 +322,8 @@
     <Content Include="App_Plugins\Skybrud.LinkPicker\Styles\Table.less" />
     <Content Include="App_Plugins\Skybrud.LinkPicker\Styles\LinkPicker.less" />
     <Content Include="App_Plugins\Skybrud.LinkPicker\package.manifest" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\package.manifest" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Styles\Styles.less" />
     <Content Include="Skybrud.Umbraco.Redirects.nuspec" />
     <None Include="Properties\AssemblyInfo.json" />
     <None Include="web.Debug.config">

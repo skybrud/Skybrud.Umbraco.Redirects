@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+
+<language alias="da" intName="Danish" localName="dansk" lcid="6" culture="da-DK">
+  <area alias="redirects">
+    <key alias="redirects">Redirects</key>
+    <key alias="addNewRedirect">Tilføj nyt redirect</key>
+    <key alias="reload">Genindlæs</key>
+    <key alias="addRedirect">Tilføj redirect</key>
+    <key alias="editRedirect">Rediger redirect</key>
+    <key alias="saveRedirect">Gem redirect</key>
+    <key alias="cancel">Annuller</key>
+    <key alias="edit">Rediger</key>
+    <key alias="delete">Slet</key>
+    <key alias="content">Indhold</key>
+    <key alias="media">Medie</key>
+    <key alias="url">URL</key>
+    <key alias="destination">Destination</key>
+    <key alias="created">Oprettet</key>
+    <key alias="updated">Opdateret</key>
+    <key alias="id">ID</key>
+  </area>
+</language>
