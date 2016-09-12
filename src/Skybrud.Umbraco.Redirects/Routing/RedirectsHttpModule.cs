@@ -17,13 +17,17 @@ namespace Skybrud.Umbraco.Redirects.Routing {
         public HttpResponse Response {
             get { return HttpContext.Current.Response; }
         }
-        
+
         public void Init(HttpApplication context) {
-            context.PostAuthorizeRequest += ContextOnPostAuthorizeRequest;
+            context.EndRequest += ContextOnEndRequest;
         }
 
-        private void ContextOnPostAuthorizeRequest(object sender, EventArgs eventArgs) {
+        private void ContextOnEndRequest(object sender, EventArgs eventArgs) {
 
+            HttpApplication application = (HttpApplication) sender;
+
+            // Ignore if not a 404 response
+            if (application.Response.StatusCode != 404) return;
 
             // Look for a redirect matching the URL
             RedirectItem redirect = Repository.GetRedirectByUrl(Request.RawUrl);
