@@ -163,6 +163,14 @@
       <HintPath>..\packages\semver.1.1.2\lib\net45\Semver.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Skybrud.LinkPicker, Version=1.0.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Skybrud.LinkPicker.1.0.8\lib\net45\Skybrud.LinkPicker.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Skybrud.Umbraco.GridData, Version=1.5.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Skybrud.Umbraco.GridData.1.5.1\lib\net45\Skybrud.Umbraco.GridData.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="SQLCE4Umbraco, Version=1.0.6092.24023, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.7.5.3\lib\SQLCE4Umbraco.dll</HintPath>
       <Private>True</Private>
@@ -273,7 +281,28 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Plugins\Skybrud.LinkPicker\Controllers\LinkPickerGridEditor.js" />
+    <Content Include="App_Plugins\Skybrud.LinkPicker\Controllers\LinkPickerPreValues.js" />
+    <Content Include="App_Plugins\Skybrud.LinkPicker\Directives\LinkPicker.js" />
+    <Content Include="App_Plugins\Skybrud.LinkPicker\Services\LinkPickerService.js" />
+    <Content Include="App_Plugins\Skybrud.LinkPicker\Styles\LinkPicker.css" />
+    <Content Include="App_Plugins\Skybrud.LinkPicker\Styles\LinkPicker.min.css" />
+    <Content Include="App_Plugins\Skybrud.LinkPicker\Styles\Table.css" />
+    <Content Include="App_Plugins\Skybrud.LinkPicker\Styles\Table.min.css" />
+    <Content Include="App_Plugins\Skybrud.LinkPicker\Views\LinkPicker.html" />
+    <Content Include="App_Plugins\Skybrud.LinkPicker\Views\LinkPickerDirective.html" />
+    <Content Include="App_Plugins\Skybrud.LinkPicker\Views\LinkPickerGridEditor.html" />
+    <Content Include="App_Plugins\Skybrud.LinkPicker\Views\LinkPickerPreValues.html" />
     <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Plugins\Skybrud.LinkPicker\Styles\Table.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Plugins\Skybrud.LinkPicker\Styles\LinkPicker.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Plugins\Skybrud.LinkPicker\package.manifest" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

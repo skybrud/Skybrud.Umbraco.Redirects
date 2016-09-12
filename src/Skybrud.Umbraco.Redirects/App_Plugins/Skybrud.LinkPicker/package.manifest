@@ -1,0 +1,32 @@
+﻿{
+	"propertyEditors": [
+		{
+			"alias": "Skybrud.LinkPicker",
+			"name": "Skybrud Link Picker",
+			"editor": {
+				"view": "~/App_Plugins/Skybrud.LinkPicker/Views/LinkPicker.html",
+				"hideLabel": false,
+				"valueType": "JSON"	
+			},
+			"prevalues": {
+				"fields": [
+					{
+						"label": "Config",
+						"description": "Configure the link picker.",
+						"key": "config",
+						"view": "~/App_Plugins/Skybrud.LinkPicker/Views/LinkPickerPreValues.html"
+					}
+				]
+			}
+		}
+	],
+	"javascript": [
+		"~/App_Plugins/Skybrud.LinkPicker/Services/LinkPickerService.js",
+		"~/App_Plugins/Skybrud.LinkPicker/Directives/LinkPicker.js",
+		"~/App_Plugins/Skybrud.LinkPicker/Controllers/LinkPickerPreValues.js",
+		"~/App_Plugins/Skybrud.LinkPicker/Controllers/LinkPickerGridEditor.js"
+	],
+	"css": [
+		"~/App_Plugins/Skybrud.LinkPicker/Styles/LinkPicker.css"
+	]
+}

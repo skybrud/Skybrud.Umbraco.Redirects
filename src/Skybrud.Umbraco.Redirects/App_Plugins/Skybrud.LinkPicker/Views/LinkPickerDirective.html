@@ -1,0 +1,49 @@
+﻿<div>
+    <label class="title" ng-if="config.title.show">
+        <input type="text" ng-model="value.title" placeholder="{{cfg.title.placeholder || 'Title'}}" class="title" />
+    </label>
+    <div class="list" ng-show="!config.showTable">
+        <ul ui-sortable="sortableOptionsList" ng-model="value.items">
+            <li ng-repeat="link in value.items">
+                <a href="{{link.url}}" target="_blank">{{link.name || link.url}}</a>
+                <a class="edit" href="#" prevent-default="" ng-click="editLink(link, $index)"><i class="icon icon-edit"></i></a>
+                <a class="remove" href="#" prevent-default="" ng-click="removeLink($index)"><i class="icon icon-delete"></i></a>
+                <i class="icon icon-navigation handle" ng-show="value.items.length > 1"></i>
+            </li>
+        </ul>
+        <div class="actions">
+            <a class="link" href="#" prevent-default="" ng-click="addLink()" ng-show="!config.limit || value.items.length < config.limit">Add link <i class="icon icon-add"></i></a>
+        </div>
+    </div>
+    <div class="table" ng-show="config.showTable">
+        <table ng-show="value.items.length">
+            <thead>
+                <tr>
+                    <th ng-show="config.columns.type">Type</th>
+                    <th ng-show="config.columns.id">ID</th>
+                    <th ng-show="config.columns.name">Name</th>
+                    <th ng-show="config.columns.url">Url</th>
+                    <th ng-show="config.columns.target">Target</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody ui-sortable="sortableOptions" ng-model="value.items">
+                <tr ng-repeat="link in value.items">
+                    <td ng-show="config.columns.type" style="text-transform: capitalize;">{{link.mode}}</td>
+                    <td ng-show="config.columns.id">{{link.id}}</td>
+                    <td ng-show="config.columns.name">{{link.name}}</td>
+                    <td ng-show="config.columns.url"><a href="{{link.url}}" target="_blank">{{link.url}}</a></td>
+                    <td ng-show="config.columns.target">{{link.target}}</td>
+                    <td style="text-align: right;">
+                        <a class="edit" href="#" prevent-default="" ng-click="editLink(link, $index)"><i class="icon icon-edit"></i></a>
+                        <a class="remove" href="#" prevent-default="" ng-click="removeLink($index)"><i class="icon icon-delete"></i></a>
+                        <i class="icon icon-navigation handle" ng-show="value.items.length > 1"></i>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="actions">
+            <a class="link" href="#" prevent-default="" ng-click="addLink()" ng-show="!config.limit || value.items.length < config.limit">Add link <i class="icon icon-add"></i></a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,98 @@
+﻿<div class="SkybrudPropertyEditors LinkPickerOptions" ng-controller="Skybrud.LinkPickerPreValues.Controller">
+
+    <div class="option titleShow">
+        <label>
+            Show title field
+            <small>Allows editor to specify a title for the link picker.</small>
+        </label>
+        <input type="checkbox" ng-model="model.value.title.show" />
+    </div>
+
+    <div class="option titlePlaceholder">
+        <label>
+            Title placeholder
+            <small>Specify a custom placeholder for the title.</small>
+        </label>
+        <input type="text" ng-model="model.value.title.placeholder" />
+    </div>
+    
+    <hr />
+
+    <div class="option limit">
+        <label>
+            Limit
+            <small>Enter the maximum number of links allowed. If set to 0, no limit will be enforced.</small>
+        </label>
+        <input type="number" ng-model="model.value.limit" />
+    </div>
+
+    <div class="option types">
+        <label>
+            Link types
+            <small>Specify which types of links can be inserted. <em>Coming soon ;)</em></small>
+        </label>
+        <div class="value">
+            <label>
+                <input type="checkbox" ng-model="model.value.types.url" ng-value="true" disabled="disabled" />
+                URL
+            </label>
+            <label>
+                <input type="checkbox" ng-model="model.value.types.content" ng-value="true" disabled="disabled" />
+                Content
+            </label>
+            <label>
+                <input type="checkbox" ng-model="model.value.types.media" ng-value="true" disabled="disabled" />
+                Media
+            </label>
+        </div>
+    </div>
+    
+    <hr />
+
+    <div class="option showTable">
+        <label>
+            Show table
+            <small>By the default the links will be shown as list. Select here if the links instead should be shown in a table with more details.</small>
+        </label>
+        <div class="value">
+            <label>
+                <input type="radio" name="{{model.alias}}_table" value="1" ng-model="model.value.showTable" ng-value="true" />
+                Yes
+            </label>
+            <label>
+                <input type="radio" name="{{model.alias}}_table" value="0" ng-model="model.value.showTable" ng-value="false"/>
+                No
+            </label>
+        </div>
+    </div>
+
+    <div class="option columns" ng-show="model.value.showTable">
+        <label>
+            Table columns
+            <small>Specify which columns should be shown in the table.</small>
+        </label>
+        <div class="value">
+            <label>
+                <input type="checkbox" ng-model="model.value.columns.type" ng-value="true" />
+                Type
+            </label>
+            <label>
+                <input type="checkbox" ng-model="model.value.columns.id" ng-value="true" />
+                ID
+            </label>
+            <label>
+                <input type="checkbox" ng-model="model.value.columns.name" ng-value="true" />
+                Name
+            </label>
+            <label>
+                <input type="checkbox" ng-model="model.value.columns.url" ng-value="true" />
+                URL
+            </label>
+            <label>
+                <input type="checkbox" ng-model="model.value.columns.target" ng-value="true" />
+                Target
+            </label>
+        </div>
+    </div>
+
+</div>

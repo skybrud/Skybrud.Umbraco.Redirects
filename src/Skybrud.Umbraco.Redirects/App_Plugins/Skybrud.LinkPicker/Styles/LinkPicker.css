@@ -1,0 +1,156 @@
+﻿.SkybrudPropertyEditors.LinkPicker ul {
+  margin: 0;
+  list-style-type: none;
+}
+.SkybrudPropertyEditors.LinkPicker label.title {
+  display: block;
+}
+.SkybrudPropertyEditors.LinkPicker label.title input {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+}
+.SkybrudPropertyEditors.LinkPicker .table .ui-sortable-helper {
+  border-left: 1px solid #d9d9d9;
+}
+.SkybrudPropertyEditors.LinkPicker .table .ui-sortable-helper > * {
+  border-bottom: 1px solid #d9d9d9;
+  background: #fff;
+}
+.SkybrudPropertyEditors.LinkPicker .table .actions {
+  margin-top: 5px;
+}
+.SkybrudPropertyEditors.LinkPicker .table > table {
+  width: 100%;
+  border: 1px solid #d9d9d9;
+}
+.SkybrudPropertyEditors.LinkPicker .table > table > thead {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  background-color: #f8f8f8;
+}
+.SkybrudPropertyEditors.LinkPicker .table > table > thead th {
+  text-align: left;
+  border-bottom: 2px solid #dbdbdb;
+}
+.SkybrudPropertyEditors.LinkPicker .table > table > tbody td.page {
+  width: 100%;
+}
+.SkybrudPropertyEditors.LinkPicker .table > table > tbody td.nowrap {
+  white-space: nowrap;
+}
+.SkybrudPropertyEditors.LinkPicker .table > table > * > tr {
+  -moz-transition: opacity 0.5s;
+  -o-transition: opacity 0.5s;
+  -webkit-transition: opacity 0.5s;
+  transition: opacity 0.5s;
+}
+.SkybrudPropertyEditors.LinkPicker .table > table > * > tr.expanded > td {
+  border-bottom: 1px solid white;
+}
+.SkybrudPropertyEditors.LinkPicker .table > table > * > tr > td,
+.SkybrudPropertyEditors.LinkPicker .table > table > * > tr > th {
+  padding: 8px;
+  line-height: 20px;
+  text-align: left;
+  vertical-align: top;
+  border-top: 1px solid #dbdbdb;
+}
+.SkybrudPropertyEditors.LinkPicker .table > table > * > tr > td:last-child,
+.SkybrudPropertyEditors.LinkPicker .table > table > * > tr > th:last-child {
+  border-right: 1px solid #dbdbdb;
+}
+.SkybrudPropertyEditors.LinkPickerOptions .option {
+  display: flex;
+}
+.SkybrudPropertyEditors.LinkPickerOptions .option.limit input {
+  width: 50px;
+}
+.SkybrudPropertyEditors.LinkPickerOptions .option.types label,
+.SkybrudPropertyEditors.LinkPickerOptions .option.columns label {
+  display: block;
+  margin-left: 0;
+}
+.SkybrudPropertyEditors.LinkPickerOptions .option + .option {
+  margin-top: 20px;
+}
+.SkybrudPropertyEditors.LinkPickerOptions .option.titlePlaceholder input {
+  max-width: initial;
+  width: 350px;
+}
+.SkybrudPropertyEditors.LinkPickerOptions label {
+  width: 400px;
+  padding-left: 0;
+}
+.SkybrudPropertyEditors.LinkPickerOptions .value {
+  display: inline-block;
+}
+.SkybrudPropertyEditors.LinkPickerOptions .value label {
+  width: auto;
+  padding-left: 0;
+}
+.SkybrudPropertyEditors.LinkPickerOptions .value label + label {
+  margin-left: 10px;
+}
+.SkybrudPropertyEditors .linkpicker-sortable-placeholder {
+  border: inherit;
+  background-color: #d0e7f1 !important;
+  font-size: 14px;
+  font-family: inherit;
+  height: 38px;
+}
+.SkybrudPropertyEditors .ui-sortable-helper {
+  display: none;
+}
+.SkybrudPropertyEditors .list .ui-sortable-helper {
+  display: initial;
+}
+.SkybrudPropertyEditors.SkybrudGridEditors.LinkPicker label {
+  margin: 0;
+  display: flex;
+}
+.SkybrudPropertyEditors.SkybrudGridEditors.LinkPicker label input.title {
+  display: block;
+  margin-bottom: 10px;
+  max-width: initial;
+  flex-grow: 1;
+  font-weight: bold;
+  color: #000;
+  font-size: 18px;
+}
+.SkybrudPropertyEditors.SkybrudGridEditors.LinkPicker label + .table {
+  margin-top: 10px;
+}
+.umb-grid .SkybrudPropertyEditors.SkybrudGridEditors.LinkPicker .table {
+  margin-bottom: 0;
+}
+.umb-grid .umb-control.-active .SkybrudPropertyEditors.SkybrudGridEditors.LinkPicker {
+  padding: 10px;
+}
+.umb-grid .SkybrudPropertyEditors.SkybrudGridEditors.LinkPicker .list .ui-sortable-helper {
+  width: initial !important;
+  height: initial !important;
+  padding: 0;
+  overflow: initial;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  text-align: left;
+  background-color: transparent !important;
+  border-radius: 0;
+  box-shadow: none;
+  visibility: visible !important;
+}
+.umb-grid .SkybrudPropertyEditors.SkybrudGridEditors.LinkPicker .list .ui-sortable-helper * {
+  display: initial;
+}
+.umb-grid .SkybrudPropertyEditors.SkybrudGridEditors.LinkPicker .list .ui-sortable-helper:after {
+  display: none;
+}
+.umb-grid .SkybrudPropertyEditors.SkybrudGridEditors.LinkPicker .list .ui-sortable-placeholder {
+  background: transparent;
+  height: 21px;
+  position: static;
+  margin: 0;
+}
