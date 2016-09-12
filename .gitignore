@@ -1,0 +1,8 @@
+src/packages/
+bin/
+obj/
+*.suo
+*.user
+App_Data/NuGetBackup/
+node_modules/
+releases/temp/
