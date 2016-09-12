@@ -288,6 +288,7 @@
     <Compile Include="Models\RedirectDomain.cs" />
     <Compile Include="Models\RedirectItem.cs" />
     <Compile Include="Models\RedirectsRepository.cs" />
+    <Compile Include="Properties\AssemblyInfoGenerated.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Routing\RedirectsContentFinder.cs" />
     <Compile Include="Routing\RedirectsHttpModule.cs" />
@@ -309,10 +310,12 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="web.config" />
+    <None Include="web.config" />
     <Content Include="App_Plugins\Skybrud.LinkPicker\Styles\Table.less" />
     <Content Include="App_Plugins\Skybrud.LinkPicker\Styles\LinkPicker.less" />
     <Content Include="App_Plugins\Skybrud.LinkPicker\package.manifest" />
+    <Content Include="Skybrud.Umbraco.Redirects.nuspec" />
+    <None Include="Properties\AssemblyInfo.json" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
@@ -345,6 +348,12 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <PropertyGroup>
+    <PreBuildEvent>"$(SolutionDir)..\.skybrud\Skybrud.Social.PreBuildTool.exe" 2016-07-18 "$(ProjectPath)"</PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>"$(SolutionDir)..\.skybrud\UpdateAssemblyInfoJson.exe" "$(ProjectPath)" "$(TargetPath)"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

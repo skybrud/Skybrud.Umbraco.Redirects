@@ -1,0 +1,21 @@
+{
+    "name": "Skybrud.Umbraco.Redirects",
+    "url": "https://github.com/skybrud/Skybrud.Umbraco.Redirects/",
+    "license": {
+        "name": "MIT",
+        "url": "https://github.com/skybrud/Skybrud.Umbraco.Redirects/blob/master/LICENSE.md"
+    },
+    "author": {
+        "name": "Skybrud.dk",
+        "url": "http://www.skybrud.dk/"
+    },
+    "readme": "Skybrud.Umbraco.Redirects is a package to handle 301 redirects in Umbraco.",
+    "devDependencies": {
+        "grunt": "~0.4.5",
+        "grunt-contrib-copy": "~0.4.1",
+        "grunt-nuget": "~0.1.4",
+        "grunt-zip": "~0.17.0",
+        "grunt-umbraco-package": "1.0.0",
+        "grunt-contrib-clean": "^0.7.0"
+    }
+}
