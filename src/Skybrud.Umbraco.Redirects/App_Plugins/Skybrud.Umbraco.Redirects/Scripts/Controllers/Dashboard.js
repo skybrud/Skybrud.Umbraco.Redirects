@@ -10,7 +10,7 @@
     $scope.addRedirect = function () {
         skybrudRedirectsService.addRedirect({
             callback: function () {
-                $scope.updateList(9999);
+                $scope.updateList(1);
             }
         });
     };

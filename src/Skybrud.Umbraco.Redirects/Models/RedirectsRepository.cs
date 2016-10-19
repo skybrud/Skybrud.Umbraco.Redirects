@@ -3,7 +3,9 @@ using System.Linq;
 using Skybrud.LinkPicker;
 using Skybrud.Umbraco.Redirects.Exceptions;
 using Umbraco.Core;
+using Umbraco.Core.Logging;
 using Umbraco.Core.Persistence;
+using Umbraco.Core.Persistence.SqlSyntax;
 
 namespace Skybrud.Umbraco.Redirects.Models {
 
@@ -21,6 +23,10 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// </summary>
         public UmbracoDatabase Database {
             get { return ApplicationContext.Current.DatabaseContext.Database; }
+        }
+
+        protected ISqlSyntaxProvider SqlSyntax {
+            get { return ApplicationContext.Current.DatabaseContext.SqlSyntax; }
         }
 
         protected readonly DatabaseSchemaHelper SchemaHelper = new DatabaseSchemaHelper(
@@ -209,7 +215,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
             if (!SchemaHelper.TableExist(RedirectItem.TableName)) return new RedirectsSearchResult(0, limit, 0, 0, 0, new RedirectItem[0]);
 
             // Generate the SQL for the query
-            Sql sql = new Sql().Select("*").From(RedirectItem.TableName);
+            Sql sql = new Sql().Select("*").From(RedirectItem.TableName).OrderByDescending<RedirectItem>(x => x.Updated, SqlSyntax);
 
             // Make the call to the database
             RedirectItem[] all = Database.Fetch<RedirectItem>(sql).ToArray();
