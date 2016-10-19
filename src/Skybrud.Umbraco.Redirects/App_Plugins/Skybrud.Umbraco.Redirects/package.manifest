@@ -10,6 +10,9 @@
 		}
 	],
     "javascript": [
+        "/App_Plugins/Skybrud.Umbraco.Redirects/Scripts/Services/RedirectsService.js",
+        "/App_Plugins/Skybrud.Umbraco.Redirects/Scripts/Controllers/AddRedirectDialog.js",
+        "/App_Plugins/Skybrud.Umbraco.Redirects/Scripts/Controllers/EditRedirectDialog.js",
         "/App_Plugins/Skybrud.Umbraco.Redirects/Scripts/Controllers/Dashboard.js",
         "/App_Plugins/Skybrud.Umbraco.Redirects/Scripts/Controllers/PropertyEditor.js"
     ],

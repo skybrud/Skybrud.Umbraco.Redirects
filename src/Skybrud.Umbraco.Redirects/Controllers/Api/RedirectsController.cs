@@ -27,14 +27,12 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         }
 
         [HttpGet]
-        public object GetRedirects() {
-
+        public object GetRedirects( int page = 1, int limit = 20) {
             try {
-                return JsonMetaResponse.GetSuccess(Repository.GetRedirects());
+                return Repository.GetRedirects(page, limit);
             } catch (RedirectsException ex) {
                 return Request.CreateResponse(JsonMetaResponse.GetError(HttpStatusCode.InternalServerError, ex.Message));
             }
-
         }
 
         [HttpGet]

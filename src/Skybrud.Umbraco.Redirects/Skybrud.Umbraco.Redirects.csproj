@@ -292,6 +292,8 @@
     <Compile Include="Models\RedirectDomain.cs" />
     <Compile Include="Models\RedirectItem.cs" />
     <Compile Include="Models\RedirectsRepository.cs" />
+    <Compile Include="Models\RedirectsSearchResult.cs" />
+    <Compile Include="Models\RedirectsSearchResultPagination.cs" />
     <Compile Include="Properties\AssemblyInfoGenerated.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Routing\RedirectsHttpModule.cs" />
@@ -320,10 +322,10 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="web.config" />
     <Content Include="App_Plugins\Skybrud.LinkPicker\Styles\Table.less" />
     <Content Include="App_Plugins\Skybrud.LinkPicker\Styles\LinkPicker.less" />
     <Content Include="App_Plugins\Skybrud.LinkPicker\package.manifest" />
+    <None Include="web.config" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\package.manifest" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Styles\Styles.less" />
     <Content Include="Skybrud.Umbraco.Redirects.nuspec" />

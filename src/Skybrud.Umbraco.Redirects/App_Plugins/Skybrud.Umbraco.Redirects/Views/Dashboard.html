@@ -1,34 +1,26 @@
 ﻿<div ng-controller="SkybrudUmbracoRedirects.Dashboard.Controller" class="SkybrudUmbracoRedirects">
-    <div ng-if="mode == 'list'">
+    <div>
         <div class="umb-editor-sub-header" umb-sticky-bar="">
             <h3><localize key="redirects_redirects">Redirects</localize></h3>
             <div class="umb-editor-sub-header__content-right">
                 <div class="umb-editor-sub-header__section">
-                    <!--<a href="#" prevent-default ng-click="add()" class="umb-era-button umb-button--s">
+                    <a href="#" prevent-default ng-click="addRedirect()" class="umb-era-button umb-button--s">
                         <localize key="redirects_addNewRedirect">Add new redirect</localize>
                     </a>
-                    <a href="#" prevent-default ng-click="loadRedirects()" class="umb-era-button umb-button--s">
+                    <a href="#" prevent-default ng-click="updateList()" class="umb-era-button umb-button--s">
                         <localize key="redirects_reload">Reload</localize>
-                    </a>-->
-                    <div>
-                        <a href="#" prevent-default ng-click="add()" class="btn btn-default">
-                            <localize key="redirects_addNewRedirect">Add new redirect</localize>
-                        </a>
-                        <a href="#" prevent-default ng-click="loadRedirects()" class="btn btn-default">
-                            <localize key="redirects_reload">Reload</localize>
-                        </a>
-                    </div>
+                    </a>
                 </div>
             </div>
         </div>
-        <div ng-class="{loading: loading.list}">
+        <div ng-class="{loading: loading}">
             <umb-load-indicator></umb-load-indicator>
             <div class="umb-table">
                 <div class="umb-table-head">
                     <div class="umb-table-row">
                         <div class="umb-table-cell"></div>
                         <div class="umb-table-cell col-id"><localize key="redirects_id">ID</localize></div>
-                        <div class="umb-table-cell"><localize key="redirects_url">URL</localize></div>
+                        <div class="umb-table-cell"><localize key="redirects_originalUrl">Original URL</localize></div>
                         <div class="umb-table-cell col-destination"><localize key="redirects_destination">Destination</localize></div>
                         <div class="umb-table-cell col-date"><localize key="redirects_created">Created</localize></div>
                         <div class="umb-table-cell col-date"><localize key="redirects_updated">Updated</localize></div>
@@ -55,130 +47,40 @@
                         </div>
                         <div class="umb-table-cell col-date">{{redirect.created * 1000 | date: 'yyyy-MM-dd HH:mm'}}</div>
                         <div class="umb-table-cell col-date">{{redirect.updated * 1000 | date: 'yyyy-MM-dd HH:mm'}}</div>
-                        <div class="umb-table-cell justify-end col-actions">
-                            <!--<a href="#" prevent-default="" ng-click="editRedirect(redirect)" class="umb-era-button umb-button--s"><localize key="redirects_edit">Edit</localize></a>
-                                <a href="#" prevent-default="" ng-click="deleteRedirect(redirect)" class="umb-era-button umb-button--s"><localize key="redirects_delete">Delete</localize></a>-->
-                            <div>
-                                <a href="#" prevent-default="" ng-click="editRedirect(redirect)" class="btn btn-default"><localize key="redirects_edit">Edit</localize></a>
-                                <a href="#" prevent-default="" ng-click="deleteRedirect(redirect)" class="btn btn-default"><localize key="redirects_delete">Delete</localize></a>
-                            </div>
+                        <div class="umb-table-cell justify-end col-actions" style="text-align: right;">
+                            <a href="#" prevent-default="" ng-click="editRedirect(redirect)" class="umb-era-button umb-button--s"><localize key="redirects_edit">Edit</localize></a>
+                            <a href="#" prevent-default="" ng-click="deleteRedirect(redirect)" class="umb-era-button umb-button--s"><localize key="redirects_delete">Delete</localize></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="umb-table-foot">
+                    <div class="umb-table-row">
+                        <div ng-show="pagination.page > 0 && pagination.total > 0" class="umb-table-cell">
+                            Viser {{pagination.from}}-{{pagination.to}} af {{pagination.total}} &bull; Side {{pagination.page}} af {{pagination.pages}}
+                        </div>
+                        <div class="umb-table-cell pagination pagination-right">
+                            <ul>
+                                <li ng-class="{disabled:pagination.page <= 1}">
+                                    <a href="#" ng-click="prev()" prevent-default="">
+                                        <localize key="general_previous" class="ng-isolate-scope ng-scope">Previous</localize>
+                                    </a>
+                                </li>
+                                <li ng-repeat="pgn in pagination.pagination" ng-class="{active: pgn.active}">
+                                    <a href="#" ng-click="updateList(pgn.page)" prevent-default="">{{pgn.page}}</a>
+                                </li>
+                                <li ng-class="{disabled:pagination.page >= pagination.pages}" class="">
+                                    <a href="#" ng-click="next()" prevent-default="">
+                                        <localize key="general_next" class="ng-isolate-scope ng-scope">Next</localize>
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <div ng-if="mode == 'add'">
-        <div class="umb-editor-sub-header" umb-sticky-bar="">
-            <h3>
-                <localize key="redirects_addNewRedirect">Add new redirect</localize>
-            </h3>
-        </div>
-        <div class="input" style="display: none;">
-            <div class="hest">
-                <strong>Domain</strong>
-                <small>Select the domain to match.</small>
-            </div>
-            <select ng-options="item.name for item in domains track by item.id" ng-model="details.domain"></select>
-        </div>
-        <div class="input">
-            <div class="hest">
-                <strong>URL</strong>
-                <small>Select the URL to match.</small>
-            </div>
-            <input type="text" ng-model="details.url" style="max-width: initial; width: 350px;" />
-        </div>
-        <div class="input">
-            <div class="hest">
-                <strong>Redirect</strong>
-                <small>Select the page or URL the user should be redirected to.</small>
-            </div>
-            <div ng-if="details.link">
-                {{details.link.name ? details.link.name : details.link.url}}
-                <a class="edit" href="#" prevent-default="" ng-click="editLink()"><i class="icon icon-edit"></i></a>
-            </div>
-            <div ng-if="!details.link">
-                <a class="link" href="#" prevent-default="" ng-click="addLink()">Add link <i class="icon icon-add"></i></a>
-            </div>
-        </div>
-
-        <!--<div class="umb-era-button-group">
-            <a href="#" prevent-default ng-click="cancel()" class="umb-era-button umb-button--s">
-                <localize key="redirects_cancel">Cancel</localize>
-            </a>
-            <a href="#" prevent-default ng-click="addSubmit()" class="umb-era-button -green umb-button--s">
-                <localize key="redirects_addRedirect">Add redirect</localize>
-            </a>
-        </div>-->
-
-        <div>
-            <a href="#" prevent-default ng-click="cancel()" class="btn btn-default">
-                <localize key="redirects_cancel">Cancel</localize>
-            </a>
-            <a href="#" prevent-default ng-click="addSubmit()" class="btn btn-success">
-                <localize key="redirects_addRedirect">Add redirect</localize>
-            </a>
-        </div>
-
-    </div>
-
-    <div ng-if="mode == 'edit'">
-        <div class="umb-editor-sub-header" umb-sticky-bar="">
-            <h3>
-                <localize key="redirects_editRedirect">Edit redirect</localize>
-            </h3>
-        </div>
-        <div class="input" style="display: none;">
-            <div class="hest">
-                <strong>Domain</strong>
-                <small>Select the domain to match.</small>
-            </div>
-            <select ng-options="item.name for item in domains track by item.id" ng-model="details.domain"></select>
-        </div>
-        <div class="input">
-            <div class="hest">
-                <strong>URL</strong>
-                <small>Select the URL to match.</small>
-            </div>
-            <input type="text" ng-model="details.url" style="max-width: initial; width: 350px;" />
-        </div>
-        <div class="input">
-            <div class="hest">
-                <strong>Redirect</strong>
-                <small>Select the page or URL the user should be redirected to.</small>
-            </div>
-            <div ng-if="details.link">
-                {{details.link.name ? details.link.name : details.link.url}}
-                <a class="edit" href="#" prevent-default="" ng-click="editLink()"><i class="icon icon-edit"></i></a>
-            </div>
-            <div ng-if="!details.link">
-                <a class="link" href="#" prevent-default="" ng-click="addLink()">Add link <i class="icon icon-add"></i></a>
-            </div>
-        </div>
-
-        <!--<div class="umb-era-button-group">
-            <a href="#" prevent-default ng-click="cancel()" class="umb-era-button umb-button--s">
-                <localize key="redirects_cancel">Cancel</localize>
-            </a>
-            <a href="#" prevent-default ng-click="editRedirectSubmit()" class="umb-era-button -green umb-button--s">
-                <localize key="redirects_saveRedirect">Save redirect</localize>
-            </a>
-        </div>-->
-
-        <div>
-            <a href="#" prevent-default ng-click="cancel()" class="btn btn-default">
-                <localize key="redirects_cancel">Cancel</localize>
-            </a>
-            <a href="#" prevent-default ng-click="editRedirectSubmit()" class="btn btn-success">
-                <localize key="redirects_saveRedirect">Save redirect</localize>
-            </a>
-        </div>
-
-    </div>
-
     <pre style="display: none;">{{domains | json}}</pre>
     <pre style="display: none;">{{redirects | json}}</pre>
     <pre style="display: none;">{{details | json}}</pre>
-
 </div>

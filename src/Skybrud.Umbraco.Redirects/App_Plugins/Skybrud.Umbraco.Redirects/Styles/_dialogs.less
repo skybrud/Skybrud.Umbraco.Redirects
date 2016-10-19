@@ -1,0 +1,79 @@
+﻿.EditRedirectDialog, .AddRedirectDialog {
+    
+    display: flex;
+    -ms-flex-direction: column;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    flex-grow: 1;
+
+    .umb-overlay-container {
+        padding: 20px;
+        flex-grow: 1;
+    }
+
+    .umb-overlay-drawer {
+        padding: 10px 20px;
+        margin: 0;
+        background: #f8f8f8;
+        border-top: 1px solid #d9d9d9;
+        -ms-flex-positive: 0;
+        flex-grow: 0;
+        -ms-flex-negative: 0;
+        flex-shrink: 0;
+        -ms-flex-preferred-size: 31px;
+        flex-basis: 31px;
+        text-align: right;
+    }
+
+    h3 {
+        margin-top: 0;
+        font-size: 20px;
+        line-height: 22px;
+    }
+
+    small {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .umb-overlay-header {
+        margin-top: 0;
+        background: #f8f8f8;
+        border-bottom: 1px solid #d9d9d9;
+        -ms-flex-positive: 0;
+        flex-grow: 0;
+        -ms-flex-negative: 0;
+        flex-shrink: 0;
+        padding: 20px;
+        box-sizing: border-box;
+        -ms-flex-preferred-size: 100px;
+        flex-basis: 100px;
+    }
+
+    .umb-overlay__title {
+        margin: 7px 0;
+        font-size: 17.5px;
+        font-weight: bold;
+        color: #000;
+    }
+
+    label {
+        display: block;
+        margin: 0;
+    }
+
+    label + label {
+        margin-top: 25px;
+    }
+
+    input[type="text"] {
+        display: block;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        height: 30px;
+        line-height: 30px;
+        max-width: initial;
+        width: 100%;
+    }
+}

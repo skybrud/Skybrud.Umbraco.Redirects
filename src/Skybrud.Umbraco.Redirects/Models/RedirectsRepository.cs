@@ -203,16 +203,25 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
         }
 
-        public RedirectItem[] GetRedirects() {
+        public RedirectsSearchResult GetRedirects(int page = 1, int limit = 20) {
 
             // Just return an empty array if the table doesn't exist (since there aren't any redirects anyway)
-            if (!SchemaHelper.TableExist(RedirectItem.TableName)) return new RedirectItem[0];
+            if (!SchemaHelper.TableExist(RedirectItem.TableName)) return new RedirectsSearchResult(0, limit, 0, 0, 0, new RedirectItem[0]);
 
             // Generate the SQL for the query
             Sql sql = new Sql().Select("*").From(RedirectItem.TableName);
 
             // Make the call to the database
-            return Database.Fetch<RedirectItem>(sql).ToArray();
+            RedirectItem[] all = Database.Fetch<RedirectItem>(sql).ToArray();
+
+            // Calculate variables used for the pagination
+            int pages = (int) Math.Ceiling(all.Length / (double) limit);
+            page = Math.Max(1, Math.Min(page, pages));
+
+            int offset = (page * limit) - limit;
+
+            // Return the items (on the requested page)
+            return new RedirectsSearchResult(all.Length, limit, offset, page, pages, all.Skip(offset).Take(limit).ToArray());
 
         }
 

@@ -23,9 +23,6 @@
 .SkybrudUmbracoRedirects .umb-table-cell.col-date {
   max-width: 110px;
 }
-.SkybrudUmbracoRedirects .umb-table-cell.col-actions {
-  /*flex-grow: 0.3;*/
-}
 .SkybrudUmbracoRedirects .umb-table-cell.col-destination {
   flex-grow: 4;
 }
@@ -52,6 +49,9 @@
   z-index: 9001;
   display: none;
 }
+.SkybrudUmbracoRedirects .loading {
+  position: relative;
+}
 .SkybrudUmbracoRedirects .loading > .umb-load-indicator {
   display: block;
 }
@@ -62,3 +62,142 @@
   min-height: 150px;
   position: relative;
 }
+.SkybrudUmbracoRedirects .btn-loader {
+  position: relative;
+}
+.SkybrudUmbracoRedirects .btn-loader.loading {
+  padding-right: 35px;
+}
+.SkybrudUmbracoRedirects .btn-loader.loading .umb-button__progress {
+  display: initial;
+  right: 10px;
+  left: initial;
+}
+.SkybrudUmbracoRedirects .btn-loader .umb-button__progress {
+  display: none;
+}
+.SkybrudUmbracoRedirects .umb-table {
+  background: #fff;
+}
+.SkybrudUmbracoRedirects .umb-table-foot {
+  font-size: 11px;
+  background-color: #f8f8f8;
+}
+.SkybrudUmbracoRedirects .umb-table-foot .umb-table-row {
+  border-top: 1px solid #d9d9d9;
+}
+.SkybrudUmbracoRedirects .umb-table-foot .umb-table-cell:first-of-type {
+  padding: initial;
+  -ms-flex: initial;
+  -webkit-flex: initial;
+  flex: initial;
+  flex-grow: 4;
+}
+.SkybrudUmbracoRedirects .pagination ul {
+  background: 0;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0);
+  -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0);
+}
+.SkybrudUmbracoRedirects .pagination.pagination-right > *:first-child {
+  margin-left: auto;
+}
+.SkybrudUmbracoRedirects .pagination ul > li > a,
+.SkybrudUmbracoRedirects .pagination ul > li > span {
+  padding: 0 4px;
+  font-size: 11px;
+  color: #b0b0b0;
+  background: 0;
+  border: 0;
+}
+.SkybrudUmbracoRedirects .pagination ul > li.active > a,
+.SkybrudUmbracoRedirects .pagination ul > li > a:hover {
+  color: #000;
+}
+.SkybrudUmbracoRedirects .pagination ul > li.disabled > a,
+.SkybrudUmbracoRedirects .pagination ul > li.disabled > a:hover {
+  color: #d9d9d9;
+}
+.EditRedirectDialog,
+.AddRedirectDialog {
+  display: flex;
+  -ms-flex-direction: column;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  flex-grow: 1;
+}
+.EditRedirectDialog .umb-overlay-container,
+.AddRedirectDialog .umb-overlay-container {
+  padding: 20px;
+  flex-grow: 1;
+}
+.EditRedirectDialog .umb-overlay-drawer,
+.AddRedirectDialog .umb-overlay-drawer {
+  padding: 10px 20px;
+  margin: 0;
+  background: #f8f8f8;
+  border-top: 1px solid #d9d9d9;
+  -ms-flex-positive: 0;
+  flex-grow: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  -ms-flex-preferred-size: 31px;
+  flex-basis: 31px;
+  text-align: right;
+}
+.EditRedirectDialog h3,
+.AddRedirectDialog h3 {
+  margin-top: 0;
+  font-size: 20px;
+  line-height: 22px;
+}
+.EditRedirectDialog small,
+.AddRedirectDialog small {
+  display: block;
+  margin-bottom: 5px;
+}
+.EditRedirectDialog .umb-overlay-header,
+.AddRedirectDialog .umb-overlay-header {
+  margin-top: 0;
+  background: #f8f8f8;
+  border-bottom: 1px solid #d9d9d9;
+  -ms-flex-positive: 0;
+  flex-grow: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  padding: 20px;
+  box-sizing: border-box;
+  -ms-flex-preferred-size: 100px;
+  flex-basis: 100px;
+}
+.EditRedirectDialog .umb-overlay__title,
+.AddRedirectDialog .umb-overlay__title {
+  margin: 7px 0;
+  font-size: 17.5px;
+  font-weight: bold;
+  color: #000;
+}
+.EditRedirectDialog label,
+.AddRedirectDialog label {
+  display: block;
+  margin: 0;
+}
+.EditRedirectDialog label + label,
+.AddRedirectDialog label + label {
+  margin-top: 25px;
+}
+.EditRedirectDialog input[type="text"],
+.AddRedirectDialog input[type="text"] {
+  display: block;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  height: 30px;
+  line-height: 30px;
+  max-width: initial;
+  width: 100%;
+}
+/*# sourceMappingURL=Styles.css.map */

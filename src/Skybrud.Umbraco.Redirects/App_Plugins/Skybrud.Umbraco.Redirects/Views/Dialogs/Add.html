@@ -1,0 +1,48 @@
+﻿<div class="SkybrudUmbracoRedirects AddRedirectDialog" ng-controller="SkybrudUmbracoRedirects.AddRedirectDialog.Controller">
+    
+    
+
+    <div class="umb-overlay-header">
+        <h4 class="umb-overlay__title">
+            <localize key="redirects_addNewRedirect">Tilføj nyt redirect</localize>
+        </h4>
+        <p class="umb-overlay__subtitle" ng-if="page">Udfyld nedenstående for at tilføje et nyt redirect til siden <strong>{{page.name}}</strong>.</p>
+        <p class="umb-overlay__subtitle" ng-if="!page">Udfyld nedenstående for at tilføje et nyt redirect.</p>
+    </div>
+    
+    <div class="umb-overlay-container">
+        <label>
+            <strong><localize key="redirects_originalUrl">Original URL</localize></strong>
+            <small>
+                <localize key="redirects_labelUrlDescription">Select the URL to match.</localize>
+            </small>
+            <input type="text" ng-model="redirect.url" />
+        </label>
+        <label ng-if="!page">
+            <strong><localize key="redirects_destination">Destination</localize></strong>
+            <small>
+                <localize key="redirects_labelDestinationDescription">Select the page or URL the user should be redirected to.</localize>
+            </small>
+            <div ng-if="redirect.link">
+                {{redirect.link.name ? redirect.link.name : redirect.link.url}}
+                <a class="edit" href="#" prevent-default="" ng-click="editLink()"><i class="icon icon-edit"></i></a>
+            </div>
+            <div ng-if="!redirect.link">
+                <a class="link" href="#" prevent-default="" ng-click="addLink()">
+                    <localize key="redirects_selectDestination">Select destination</localize> <i class="icon icon-add"></i>
+                </a>
+            </div>
+        </label>
+    </div>
+    
+    <div class="umb-overlay-drawer">
+        <a href="#" prevent-default ng-click="close()" class="btn btn-default">
+            <localize key="redirects_cancel">Cancel</localize>
+        </a>
+        <a href="#" prevent-default ng-click="save()" class="btn btn-success btn-loader" ng-class="{loading: loading}">
+            <localize key="redirects_addRedirect">Add redirect</localize>
+            <div class="umb-button__progress -white"></div>
+        </a>
+    </div>
+
+</div>

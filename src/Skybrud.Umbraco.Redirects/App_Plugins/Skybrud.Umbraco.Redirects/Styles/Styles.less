@@ -17,10 +17,6 @@
         max-width: 110px;
     }
 
-    .umb-table-cell.col-actions {
-        /*flex-grow: 0.3;*/
-    }
-
     .umb-table-cell.col-destination {
         flex-grow: 4;
     } 
@@ -56,6 +52,7 @@
     }
 
     .loading {
+        position: relative;
         &> .umb-load-indicator {
             display: block;
         }
@@ -69,4 +66,24 @@
         position: relative;
     }
 
+    .btn-loader {
+        position: relative;
+        &.loading {
+            padding-right: 35px;
+            .umb-button__progress {
+                display: initial;
+                right: 10px;
+                left: initial;
+            }
+        }
+        .umb-button__progress {
+            display: none;
+        }
+    }
+
+    @import '_table';
+    @import '_pagination';
+
 }
+
+@import '_dialogs';

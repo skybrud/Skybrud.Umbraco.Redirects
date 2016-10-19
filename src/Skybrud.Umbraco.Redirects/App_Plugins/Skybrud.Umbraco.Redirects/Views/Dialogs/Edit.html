@@ -1,0 +1,45 @@
+﻿<div class="SkybrudUmbracoRedirects EditRedirectDialog" ng-controller="SkybrudUmbracoRedirects.EditRedirectDialog.Controller">
+
+    <div class="umb-overlay-header">
+        <h4 class="umb-overlay__title ng-binding">
+            <localize key="redirects_editRedirect">Edit redirect</localize>
+        </h4>
+        <p class="umb-overlay__subtitle ng-binding"></p>
+    </div>
+    
+    <div class="umb-overlay-container">
+        <label>
+            <strong><localize key="redirects_originalUrl">Original URL</localize></strong>
+            <small>
+                <localize key="redirects_labelUrlDescription">Select the URL to match.</localize>
+            </small>
+            <input type="text" ng-model="redirect.url" style="max-width: initial;" />
+        </label>
+        <label>
+            <strong><localize key="redirects_destination">Destination</localize></strong>
+            <small>
+                <localize key="redirects_labelDestinationDescription">Select the page or URL the user should be redirected to.</localize>
+            </small>
+            <div ng-if="redirect.link">
+                {{redirect.link.name ? redirect.link.name : redirect.link.url}}
+                <a class="edit" href="#" prevent-default="" ng-click="editLink()"><i class="icon icon-edit"></i></a>
+            </div>
+            <div ng-if="!redirect.link">
+                <a class="link" href="#" prevent-default="" ng-click="addLink()">
+                    <localize key="redirects_selectDestination">Select destination</localize> <i class="icon icon-add"></i> <i class="icon icon-add"></i>
+                </a>
+            </div>
+        </label>
+    </div>
+    
+    <div class="umb-overlay-drawer">
+        <a href="#" prevent-default ng-click="close()" class="btn btn-default">
+            <localize key="redirects_cancel">Cancel</localize>
+        </a>
+        <a href="#" prevent-default ng-click="save()" class="btn btn-success btn-loader" ng-class="{loading: loading}">
+            <localize key="redirects_saveRedirect">Save redirect</localize>
+            <div class="umb-button__progress -white"></div>
+        </a>
+    </div>
+
+</div>

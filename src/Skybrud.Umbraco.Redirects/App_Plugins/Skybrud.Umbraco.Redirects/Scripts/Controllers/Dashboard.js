@@ -1,168 +1,73 @@
-﻿angular.module('umbraco').controller('SkybrudUmbracoRedirects.Dashboard.Controller', function ($scope, $http, $q, $timeout, dialogService, skybrudLinkPickerService, notificationsService) {
-
-    var lps = skybrudLinkPickerService;
+﻿angular.module('umbraco').controller('SkybrudUmbracoRedirects.Dashboard.Controller', function ($scope, $http, $q, $timeout, dialogService, skybrudLinkPickerService, notificationsService, skybrudRedirectsService) {
 
     $scope.redirects = [];
-    $scope.domains = [];
-
     $scope.mode = 'list';
 
-    $scope.details = null;
+    $scope.loading = false;
 
-    $scope.loading = {
-        list: false,
-        domains: false
-    };
-
-    $scope.add = function () {
-
-        $scope.details = {
-            domain: null,
-            url: '',
-            link: null
-        };
-
-        $scope.loadDomains(function () {
-            $scope.mode = 'add';
+    // Opens a dialog for adding a new redirect. When a callback received, the list is updated.
+    // Since we don't have any sorting, we can assume the added redirect will be shown last
+    $scope.addRedirect = function () {
+        skybrudRedirectsService.addRedirect({
+            callback: function () {
+                $scope.updateList(9999);
+            }
         });
-
     };
 
+    // Opens a dialog for adding a new redirect. When a callback received, the list is updated.
     $scope.editRedirect = function (redirect) {
-
-        $scope.details = {
-            redirect: redirect,
-            domain: null,
-            url: redirect.url + (redirect.queryString ? '?' + redirect.queryString : ''),
-            link: redirect.link
-        };
-
-        $scope.loadDomains(function () {
-            $scope.mode = 'edit';
+        skybrudRedirectsService.editRedirect(redirect, function (value) {
+            $scope.updateList();
         });
-
     };
 
     $scope.deleteRedirect = function (redirect) {
-
         var url = redirect.url + (redirect.queryString ? '?' + redirect.queryString : '');
-
         if (!confirm('Are you sure you want do delete the redirect at "' + url + '" ?')) return;
-
-        $http({
-            method: 'GET',
-            url: '/umbraco/backoffice/api/Redirects/DeleteRedirect',
-            params: {
-                redirectId: redirect.uniqueId
-            }
-        }).success(function () {
-            notificationsService.success('Redirect deleted', 'Your redirect was successfully deleted.');
-            $scope.mode = 'list';
-            $scope.loadRedirects();
-        }).error(function (res) {
-            notificationsService.error('Deleting redirect failed', res && res.meta ? res.meta.error : 'The server was unable to delete your redirect.');
+        skybrudRedirectsService.deleteRedirect(redirect, function (value) {
+            $scope.updateList();
         });
-
+    };
+    
+    // Initial pagination options
+    $scope.pagination = {
+        page: 1,
+        pages: 0,
+        limit: 10,
+        offset: 0,
+        pagination: []
     };
 
-    $scope.addSubmit = function() {
+    // Loads the previous page
+    $scope.prev = function () {
+        if ($scope.pagination.page > 1) $scope.updateList($scope.pagination.page - 1);
+    };
 
-        var domainId = $scope.details.domain ? $scope.details.domain.id : $scope.details.domain;
+    // Loads the next pages
+    $scope.next = function () {
+        if ($scope.pagination.page < $scope.pagination.pages) $scope.updateList($scope.pagination.page + 1);
+    };
 
-        if (!$scope.details.url) {
-            notificationsService.error('Empty field', 'You must specify an URL the redirect should match.');
-            return;
-        }
+    // Updates the list based on current arguments
+    $scope.updateList = function (page) {
 
-        if (!$scope.details.link) {
-            notificationsService.error('Empty field', 'You must specify a destination link.');
-            return;
-        }
+        $scope.loading = true;
 
-        var params = {
-            url: $scope.details.url,
-            linkMode: $scope.details.link.mode,
-            linkId: $scope.details.link.id,
-            linkUrl: $scope.details.link.url,
-            linkName: $scope.details.link.name
+        // If a page is specified, we load that page
+        page = (page ? page : $scope.pagination.page);
+
+        // Declare the arguments (making up the query string) for the call to the API
+        var args = {
+            limit: $scope.pagination.limit,
+            page: page
         };
 
-        $http({
-            method: 'GET',
-            url: '/umbraco/backoffice/api/Redirects/AddRedirect',
-            params: params
-        }).success(function () {
-            $scope.mode = 'list';
-            $scope.loadRedirects();
-            notificationsService.success('Redirect added', 'Your redirect was successfully added.');
-        }).error(function (res) {
-            notificationsService.error('Adding redirect failed', res && res.meta ? res.meta.error : 'The server was unable to add your redirect.');
-        });
-
-    };
-
-    $scope.editRedirectSubmit = function () {
-
-        if (!$scope.details.url) {
-            notificationsService.error('Empty field', 'You must specify an URL the redirect should match.');
-            return;
-        }
-
-        if (!$scope.details.link || !$scope.details.link.url) {
-            notificationsService.error('Empty field', 'You must specify a destination link.');
-            return;
-        }
-
-        var params = {
-            redirectId: $scope.details.redirect.uniqueId,
-            url: $scope.details.url,
-            linkMode: $scope.details.link.mode,
-            linkId: $scope.details.link.id,
-            linkUrl: $scope.details.link.url,
-            linkName: $scope.details.link.name
-        };
-
-        $http({
-            method: 'GET',
-            url: '/umbraco/backoffice/api/Redirects/EditRedirect',
-            params: params
-        }).success(function () {
-            notificationsService.success('Redirect saved', 'Your redirect was successfully saved.');
-            $scope.mode = 'list';
-            $scope.loadRedirects();
-        }).error(function (res) {
-            notificationsService.error('Saving redirect failed', res && res.meta ? res.meta.error : 'The server was unable to save your redirect.');
-        });
-
-    };
-
-    $scope.cancel = function() {
-        $scope.mode = 'list';
-    };
-
-    $scope.loadDomains = function (callback) {
-
-        $scope.loading.domains = true;
-
-        $http.get('/umbraco/backoffice/api/Redirects/GetDomains').success(function(domains) {
-            $scope.domains = domains.data;
-            $scope.loading.domains = false;
-            if (callback) callback(domains);
-        });
-
-    };
-
-    $scope.loadRedirects = function () {
-
-        $scope.loading.list = true;
-
-
-
-
-        // Make the call to the redirects API
+        // Declare the HTTP options
         var http = $http({
             method: 'GET',
-            url: '/umbraco/backoffice/api/Redirects/GetRedirects'
+            url: '/umbraco/backoffice/api/Redirects/GetRedirects',
+            params: args
         });
 
         // Show the loader for at least 200 ms
@@ -170,8 +75,20 @@
 
         // Wait for both the AJAX call and the timeout
         $q.all([http, timer]).then(function (array) {
-            $scope.redirects = array[0].data.data;
-            $scope.loading.list = false;
+
+            $scope.loading = false;
+            $scope.redirects = array[0].data.items;
+
+            // Update our pagination model
+            $scope.pagination = array[0].data.pagination;
+            $scope.pagination.pagination = [];
+            for (var i = 0; i < $scope.pagination.pages; i++) {
+                $scope.pagination.pagination.push({
+                    page: (i + 1),
+                    active: $scope.pagination.page == (i + 1)
+                });
+            }
+
         }, function () {
             notificationsService.error('Unable to load redirects', 'The list of redirects could not be loaded.');
             $scope.loading.list = false;
@@ -179,18 +96,6 @@
 
     };
 
-    $scope.addLink = function () {
-        lps.addLink(function (link) {
-            $scope.details.link = link;
-        });
-    };
-
-    $scope.editLink = function () {
-        lps.editLink($scope.details.link, function (link) {
-            $scope.details.link = link;
-        });
-    };
-
-    $scope.loadRedirects();
+    $scope.updateList();
 
 });
