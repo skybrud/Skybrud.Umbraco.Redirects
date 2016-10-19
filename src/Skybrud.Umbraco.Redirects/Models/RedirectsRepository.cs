@@ -87,12 +87,12 @@ namespace Skybrud.Umbraco.Redirects.Models {
             };
 
             // Attempt to add the redirect to the database
-            //try {
+            try {
                 Database.Insert(item);
-            //} catch (Exception ex) {
-            //    LogHelper.Error<RedirectsRepository>("Unable to insert redirect into the database", ex);
-            //    throw new Exception("Unable to insert redirect into the database");
-            //}
+            } catch (Exception ex) {
+                LogHelper.Error<RedirectsRepository>("Unable to insert redirect into the database", ex);
+                throw new Exception("Unable to insert redirect into the database");
+            }
 
             // Make the call to the database
             return GetRedirectById(item.Id);
