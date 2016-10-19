@@ -12,21 +12,22 @@
             };
         },
 
-        addLink: function (callback) {
-            dialogService.closeAll();
+        addLink: function (callback, closeAllDialogs) {
+            closeAllDialogs = closeAllDialogs !== false;
+            if (closeAllDialogs) dialogService.closeAll();
             dialogService.linkPicker({
                 callback: function (e) {
                     if (!e.id && !e.url && !confirm('The selected link appears to be empty. Do you want to continue anyways?')) return;
                     if (callback) callback(service.parseUmbracoLink(e));
-                    dialogService.closeAll();
+                    if (closeAllDialogs) dialogService.closeAll();
                 }
             });
         },
 
-        editLink: function (link, callback) {
-            dialogService.closeAll();
+        editLink: function (link, callback, closeAllDialogs) {
+            closeAllDialogs = closeAllDialogs !== false;
+            if (closeAllDialogs) dialogService.closeAll();
             if (link.mode == 'media') {
-
                 dialogService.linkPicker({
                     currentTarget: {
                         name: link.name,
@@ -35,15 +36,12 @@
                     },
                     callback: function (e) {
                         if (!e.id && !e.url && !confirm('The selected link appears to be empty. Do you want to continue anyways?')) return;
-
                         if (service.parseUmbracoLink(e).id == 0) {
                             e.id = link.id;
                             e.isMedia = true;
-
                         }
-
                         if (callback) callback(service.parseUmbracoLink(e));
-                        dialogService.closeAll();
+                        if (closeAllDialogs) dialogService.closeAll();
                     }
                 });
             } else {
@@ -57,7 +55,7 @@
                     callback: function (e) {
                         if (!e.id && !e.url && !confirm('The selected link appears to be empty. Do you want to continue anyways?')) return;
                         if (callback) callback(service.parseUmbracoLink(e));
-                        dialogService.closeAll();
+                        if (closeAllDialogs) dialogService.closeAll();
                     }
                 });
             }
