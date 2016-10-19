@@ -180,6 +180,11 @@
   font-weight: bold;
   color: #000;
 }
+.EditRedirectDialog .umb-overlay__subtitle,
+.AddRedirectDialog .umb-overlay__subtitle {
+  margin: 0;
+  font-size: 12px;
+}
 .EditRedirectDialog label,
 .AddRedirectDialog label {
   display: block;
@@ -200,4 +205,3 @@
   max-width: initial;
   width: 100%;
 }
-/*# sourceMappingURL=Styles.css.map */

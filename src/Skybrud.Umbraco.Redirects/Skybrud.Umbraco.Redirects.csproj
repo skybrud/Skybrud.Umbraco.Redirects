@@ -313,11 +313,20 @@
     <Content Include="App_Plugins\Skybrud.LinkPicker\Views\LinkPickerPreValues.html" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Lang\da-DK.xml" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Lang\en.xml" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Scripts\Controllers\AddRedirectDialog.js" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Scripts\Controllers\Dashboard.js" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Scripts\Controllers\EditRedirectDialog.js" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Scripts\Controllers\PropertyEditor.js" />
-    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Styles\Styles.css" />
-    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Styles\Styles.min.css" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Scripts\Services\RedirectsService.js" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Styles\Styles.css">
+      <DependentUpon>Styles.less</DependentUpon>
+    </Content>
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Styles\Styles.min.css">
+      <DependentUpon>Styles.css</DependentUpon>
+    </Content>
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Views\Dashboard.html" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Views\Dialogs\Add.html" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Views\Dialogs\Edit.html" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Views\PropertyEditor.html" />
     <Content Include="packages.config" />
   </ItemGroup>
@@ -325,6 +334,9 @@
     <Content Include="App_Plugins\Skybrud.LinkPicker\Styles\Table.less" />
     <Content Include="App_Plugins\Skybrud.LinkPicker\Styles\LinkPicker.less" />
     <Content Include="App_Plugins\Skybrud.LinkPicker\package.manifest" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Styles\_dialogs.less" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Styles\_pagination.less" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Styles\_table.less" />
     <None Include="web.config" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\package.manifest" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Styles\Styles.less" />
