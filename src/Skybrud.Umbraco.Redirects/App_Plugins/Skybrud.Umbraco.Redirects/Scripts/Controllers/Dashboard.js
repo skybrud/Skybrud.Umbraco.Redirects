@@ -17,7 +17,7 @@
 
     // Opens a dialog for adding a new redirect. When a callback received, the list is updated.
     $scope.editRedirect = function (redirect) {
-        skybrudRedirectsService.editRedirect(redirect, function (value) {
+        skybrudRedirectsService.editRedirect(redirect, function () {
             $scope.updateList();
         });
     };
@@ -25,7 +25,7 @@
     $scope.deleteRedirect = function (redirect) {
         var url = redirect.url + (redirect.queryString ? '?' + redirect.queryString : '');
         if (!confirm('Are you sure you want do delete the redirect at "' + url + '" ?')) return;
-        skybrudRedirectsService.deleteRedirect(redirect, function (value) {
+        skybrudRedirectsService.deleteRedirect(redirect, function () {
             $scope.updateList();
         });
     };
