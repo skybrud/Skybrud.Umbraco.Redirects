@@ -129,6 +129,20 @@
   flex-direction: column;
   flex-grow: 1;
 }
+.EditRedirectDialog .alert.alert-danger,
+.AddRedirectDialog .alert.alert-danger {
+  padding: 5px 8px;
+  font-size: 12px;
+  margin-bottom: 10px;
+  cursor: default;
+}
+.EditRedirectDialog .alert.alert-danger code,
+.AddRedirectDialog .alert.alert-danger code {
+  padding: 1px 4px;
+  color: #fff;
+  border-color: #721c15;
+  background-color: #872119;
+}
 .EditRedirectDialog .umb-overlay-container,
 .AddRedirectDialog .umb-overlay-container {
   padding: 20px;

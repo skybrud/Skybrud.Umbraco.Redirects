@@ -6,6 +6,24 @@
     flex-direction: column;
     flex-grow: 1;
 
+
+    
+    @danger: #9D261D;
+
+    .alert.alert-danger {
+        padding: 5px 8px;
+        font-size: 12px;
+        margin-bottom: 10px;
+        cursor: default;
+        code {
+            padding: 1px 4px;
+            color: #fff;
+            border-color: darken(@danger, 10%);
+            background-color: darken(@danger, 5%);
+        }
+    }
+
+
     .umb-overlay-container {
         padding: 20px;
         flex-grow: 1;

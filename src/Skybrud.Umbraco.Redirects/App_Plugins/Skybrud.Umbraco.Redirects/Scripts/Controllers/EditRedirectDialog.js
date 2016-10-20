@@ -1,4 +1,4 @@
-﻿angular.module('umbraco').controller('SkybrudUmbracoRedirects.EditRedirectDialog.Controller', function ($scope, $http, notificationsService, skybrudLinkPickerService) {
+﻿angular.module('umbraco').controller('SkybrudUmbracoRedirects.EditRedirectDialog.Controller', function ($scope, $http, notificationsService, skybrudLinkPickerService, skybrudRedirectsService) {
 
     $scope.loading = false;
 
@@ -17,17 +17,26 @@
         }, false);
     };
 
+    $scope.hasValidUrl = function () {
+        return skybrudRedirectsService.isValidUrl($scope.redirect.url);
+    };
+
     $scope.save = function () {
 
         if ($scope.loading) return;
 
         if (!$scope.redirect.url) {
-            notificationsService.error('Empty field', 'You must specify an URL the redirect should match.');
+            notificationsService.error('Ingen URL', 'Du skal angive den oprindelige URL.');
+            return;
+        }
+
+        if (!skybrudRedirectsService.isValidUrl($scope.redirect.url)) {
+            notificationsService.error('Ugyldig værdi', 'Den angivne URL er ikke gyldig.');
             return;
         }
 
         if (!$scope.redirect.link) {
-            notificationsService.error('Empty field', 'You must specify a destination link.');
+            notificationsService.error('Intet link', 'Du skal angive en destinationsside eller -link.');
             return;
         }
 
@@ -48,11 +57,11 @@
             params: params
         }).success(function () {
             $scope.loading = false;
-            notificationsService.success('Redirect saved', 'Your redirect was successfully saved.');
+            notificationsService.success('Redirect gemt', 'Dit redirect er nu blevet gemt.');
             $scope.submit($scope.redirect);
         }).error(function (res) {
             $scope.loading = false;
-            notificationsService.error('Saving redirect failed', res && res.meta ? res.meta.error : 'The server was unable to save your redirect.');
+            notificationsService.error('Redigering fejlede', res && res.meta ? res.meta.error : 'Grundet en fejl på serveren kunne dit redirect ikke gemmes.');
         });
 
     };

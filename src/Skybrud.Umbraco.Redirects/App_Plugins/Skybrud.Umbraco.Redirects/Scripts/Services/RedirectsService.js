@@ -54,6 +54,16 @@
             }).error(function (res) {
                 notificationsService.error('Deleting redirect failed', res && res.meta ? res.meta.error : 'The server was unable to delete your redirect.');
             });
+        },
+
+        isValidUrl: function(url) {
+
+            // Make sure we have a string and trim all leading and trailing whitespace
+            url = $.trim(url + '');
+
+            // For now a valid URL should start with a forward slash
+            return url.indexOf('/') === 0;
+
         }
 
     };

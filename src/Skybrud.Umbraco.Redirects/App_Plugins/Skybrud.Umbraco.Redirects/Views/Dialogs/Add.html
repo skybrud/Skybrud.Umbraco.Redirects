@@ -16,6 +16,9 @@
             <small>
                 <localize key="redirects_labelUrlDescription">Select the URL to match.</localize>
             </small>
+            <div ng-show="redirect.url.length > 0 && !hasValidUrl()" class="alert alert-danger">
+                Den angivne URL er ikke gyldig. En gyldig URL bør fx se ud som <code>/borger</code> eller <code>/borger/underside</code>.
+            </div>
             <input type="text" ng-model="redirect.url" />
         </label>
         <label ng-if="!page">

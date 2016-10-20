@@ -1,4 +1,4 @@
-﻿angular.module('umbraco').controller('SkybrudUmbracoRedirects.AddRedirectDialog.Controller', function ($scope, $http, skybrudLinkPickerService, notificationsService) {
+﻿angular.module('umbraco').controller('SkybrudUmbracoRedirects.AddRedirectDialog.Controller', function ($scope, $http, notificationsService, skybrudLinkPickerService, skybrudRedirectsService) {
 
     $scope.options = $scope.dialogOptions.options;
     $scope.page = $scope.options && $scope.options.page;
@@ -29,17 +29,26 @@
         }, false);
     };
 
+    $scope.hasValidUrl = function () {
+        return skybrudRedirectsService.isValidUrl($scope.redirect.url);
+    };
+
     $scope.save = function () {
 
         if ($scope.loading) return;
 
         if (!$scope.redirect.url) {
-            notificationsService.error('Empty field', 'You must specify an URL the redirect should match.');
+            notificationsService.error('Ingen URL', 'Du skal angive den oprindelige URL.');
+            return;
+        }
+
+        if (!skybrudRedirectsService.isValidUrl($scope.redirect.url)) {
+            notificationsService.error('Ugyldig værdi', 'Den angivne URL er ikke gyldig.');
             return;
         }
 
         if (!$scope.redirect.link) {
-            notificationsService.error('Empty field', 'You must specify a destination link.');
+            notificationsService.error('Intet link', 'Du skal angive en destinationsside eller -link.');
             return;
         }
 
@@ -59,11 +68,11 @@
             params: params
         }).success(function () {
             $scope.loading = false;
-            notificationsService.success('Redirect added', 'Your redirect was successfully added.');
+            notificationsService.success('Redirect oprettet', 'Dit redirect er nu blevet oprettet.');
             $scope.submit($scope.redirect);
         }).error(function (res) {
             $scope.loading = false;
-            notificationsService.error('Adding redirect failed', res && res.meta ? res.meta.error : 'The server was unable to add your redirect.');
+            notificationsService.error('Oprettelse fejlede', res && res.meta ? res.meta.error : 'Grundet en fejl på serveren kunne dit redirect ikke oprettes.');
         });
 
     };

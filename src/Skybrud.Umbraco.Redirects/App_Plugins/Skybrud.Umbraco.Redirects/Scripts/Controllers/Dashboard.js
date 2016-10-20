@@ -1,4 +1,4 @@
-﻿angular.module('umbraco').controller('SkybrudUmbracoRedirects.Dashboard.Controller', function ($scope, $http, $q, $timeout, dialogService, skybrudLinkPickerService, notificationsService, skybrudRedirectsService) {
+﻿angular.module('umbraco').controller('SkybrudUmbracoRedirects.Dashboard.Controller', function ($scope, $http, $q, $timeout, dialogService, notificationsService, skybrudLinkPickerService, skybrudRedirectsService) {
 
     $scope.redirects = [];
     $scope.mode = 'list';
