@@ -163,8 +163,8 @@
       <HintPath>..\packages\semver.1.1.2\lib\net45\Semver.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Skybrud.Essentials, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Skybrud.Essentials.1.0.0\lib\net45\Skybrud.Essentials.dll</HintPath>
+    <Reference Include="Skybrud.Essentials, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Skybrud.Essentials.1.0.4\lib\net45\Skybrud.Essentials.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Skybrud.LinkPicker, Version=1.0.12.0, Culture=neutral, processorArchitecture=MSIL">
