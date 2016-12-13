@@ -27,7 +27,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         }
 
         [HttpGet]
-        public object GetRedirects( int page = 1, int limit = 20) {
+        public object GetRedirects(int page = 1, int limit = 20) {
             try {
                 return Repository.GetRedirects(page, limit);
             } catch (RedirectsException ex) {

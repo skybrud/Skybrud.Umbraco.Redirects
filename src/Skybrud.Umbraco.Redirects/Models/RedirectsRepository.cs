@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 using Skybrud.LinkPicker;
 using Skybrud.Umbraco.Redirects.Exceptions;
 using Umbraco.Core;
@@ -62,8 +64,8 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
             // Attempt to create the database table if it doesn't exist
             //try {
-                if (!SchemaHelper.TableExist(RedirectItem.TableName)) {
-                    SchemaHelper.CreateTable<RedirectItem>(false);
+                if (!SchemaHelper.TableExist(RedirectItemRow.TableName)) {
+                    SchemaHelper.CreateTable<RedirectItemRow>(false);
                 }
             //} catch (Exception ex) {
             //    LogHelper.Error<RedirectsRepository>("Unable to create database table: " + RedirectItem.TableName, ex);
@@ -80,7 +82,6 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
             // Initialize the new redirect and populate the properties
             RedirectItem item = new RedirectItem {
-                UniqueId = Guid.NewGuid().ToString(),
                 LinkId = redirect.Id,
                 LinkUrl = redirect.Url,
                 LinkMode = redirect.Mode,
@@ -94,7 +95,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
             // Attempt to add the redirect to the database
             try {
-                Database.Insert(item);
+                Database.Insert(item.Row);
             } catch (Exception ex) {
                 LogHelper.Error<RedirectsRepository>("Unable to insert redirect into the database", ex);
                 throw new Exception("Unable to insert redirect into the database");
@@ -116,7 +117,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
                 throw new RedirectsException("A redirect with the same URL and query string already exists.");
             }
 
-            // Update the timestam for when the redirect was modified
+            // Update the timestamp for when the redirect was modified
             redirect.Updated = DateTime.Now;
 
             // Update the redirect in the database
@@ -132,37 +133,45 @@ namespace Skybrud.Umbraco.Redirects.Models {
             if (redirect == null) throw new ArgumentNullException("redirect");
 
             // Remove the redirect from the database
-            Database.Delete(redirect);
+            Database.Delete(redirect.Row);
 
         }
 
         public RedirectItem GetRedirectById(int redirectId) {
 
+            // Validate the input
             if (redirectId == 0) throw new ArgumentException("redirectId");
 
             // Just return "null" if the table doesn't exist (since there aren't any redirects anyway)
-            if (!SchemaHelper.TableExist(RedirectItem.TableName)) return null;
+            if (!SchemaHelper.TableExist(RedirectItemRow.TableName)) return null;
 
             // Generate the SQL for the query
-            Sql sql = new Sql().Select("*").From(RedirectItem.TableName).Where<RedirectItem>(x => x.Id == redirectId);
+            Sql sql = new Sql().Select("*").From(RedirectItemRow.TableName).Where<RedirectItemRow>(x => x.Id == redirectId);
 
             // Make the call to the database
-            return Database.FirstOrDefault<RedirectItem>(sql);
+            RedirectItemRow row = Database.FirstOrDefault<RedirectItemRow>(sql);
+
+            // Wrap the database row
+            return row == null ? null : new RedirectItem(row);
 
         }
 
         public RedirectItem GetRedirectById(string redirectId) {
 
+            // Validate the input
             if (String.IsNullOrWhiteSpace(redirectId)) throw new ArgumentException("redirectId");
 
             // Just return "null" if the table doesn't exist (since there aren't any redirects anyway)
-            if (!SchemaHelper.TableExist(RedirectItem.TableName)) return null;
+            if (!SchemaHelper.TableExist(RedirectItemRow.TableName)) return null;
 
             // Generate the SQL for the query
-            Sql sql = new Sql().Select("*").From(RedirectItem.TableName).Where<RedirectItem>(x => x.UniqueId == redirectId);
+            Sql sql = new Sql().Select("*").From(RedirectItemRow.TableName).Where<RedirectItem>(x => x.UniqueId == redirectId);
 
             // Make the call to the database
-            return Database.FirstOrDefault<RedirectItem>(sql);
+            RedirectItemRow row = Database.FirstOrDefault<RedirectItemRow>(sql);
+
+            // Wrap the database row
+            return row == null ? null : new RedirectItem(row);
 
         }
 
@@ -186,39 +195,42 @@ namespace Skybrud.Umbraco.Redirects.Models {
             queryString = (queryString ?? "").Trim();
 
             // Just return "null" if the table doesn't exist (since there aren't any redirects anyway)
-            if (!SchemaHelper.TableExist(RedirectItem.TableName)) return null;
+            if (!SchemaHelper.TableExist(RedirectItemRow.TableName)) return null;
 
             // Generate the SQL for the query
-            Sql sql = new Sql().Select("*").From(RedirectItem.TableName).Where<RedirectItem>(x => x.Url == url && x.QueryString == queryString);
+            Sql sql = new Sql().Select("*").From(RedirectItemRow.TableName).Where<RedirectItemRow>(x => x.Url == url && x.QueryString == queryString);
 
             // Make the call to the database
-            return Database.FirstOrDefault<RedirectItem>(sql);
+            RedirectItemRow row = Database.FirstOrDefault<RedirectItemRow>(sql);
+
+            // Wrap the database row
+            return row == null ? null : new RedirectItem(row);
 
         }
 
         public RedirectItem[] GetRedirectsByContentId(int contentId) {
 
             // Just return an empty array if the table doesn't exist (since there aren't any redirects anyway)
-            if (!SchemaHelper.TableExist(RedirectItem.TableName)) return new RedirectItem[0];
+            if (!SchemaHelper.TableExist(RedirectItemRow.TableName)) return new RedirectItem[0];
 
             // Generate the SQL for the query
-            Sql sql = new Sql().Select("*").From(RedirectItem.TableName).Where<RedirectItem>(x => x.LinkModeStr == "content" && x.LinkId == contentId);
+            Sql sql = new Sql().Select("*").From(RedirectItemRow.TableName).Where<RedirectItemRow>(x => x.LinkMode == "content" && x.LinkId == contentId);
 
             // Make the call to the database
-            return Database.Fetch<RedirectItem>(sql).ToArray();
+            return Database.Fetch<RedirectItemRow>(sql).Select(RedirectItem.GetFromRow).ToArray();
 
         }
 
         public RedirectsSearchResult GetRedirects(int page = 1, int limit = 20) {
 
             // Just return an empty array if the table doesn't exist (since there aren't any redirects anyway)
-            if (!SchemaHelper.TableExist(RedirectItem.TableName)) return new RedirectsSearchResult(0, limit, 0, 0, 0, new RedirectItem[0]);
+            if (!SchemaHelper.TableExist(RedirectItemRow.TableName)) return new RedirectsSearchResult(0, limit, 0, 0, 0, new RedirectItem[0]);
 
             // Generate the SQL for the query
-            Sql sql = new Sql().Select("*").From(RedirectItem.TableName).OrderByDescending<RedirectItem>(x => x.Updated, SqlSyntax);
+            Sql sql = new Sql().Select("*").From(RedirectItemRow.TableName).OrderByDescending<RedirectItemRow>(x => x.Updated, SqlSyntax);
 
             // Make the call to the database
-            RedirectItem[] all = Database.Fetch<RedirectItem>(sql).ToArray();
+            RedirectItemRow[] all = Database.Fetch<RedirectItemRow>(sql).ToArray();
 
             // Calculate variables used for the pagination
             int pages = (int) Math.Ceiling(all.Length / (double) limit);
@@ -226,21 +238,24 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
             int offset = (page * limit) - limit;
 
+            // Apply pagination and wrap the database rows
+            RedirectItem[] items = all.Skip(offset).Take(limit).Select(RedirectItem.GetFromRow).ToArray();
+
             // Return the items (on the requested page)
-            return new RedirectsSearchResult(all.Length, limit, offset, page, pages, all.Skip(offset).Take(limit).ToArray());
+            return new RedirectsSearchResult(all.Length, limit, offset, page, pages, items);
 
         }
 
         public object GetRedirectsForContents(int contentId) {
 
             // Just return an empty array if the table doesn't exist (since there aren't any redirects anyway)
-            if (!SchemaHelper.TableExist(RedirectItem.TableName)) return new RedirectItem[0];
+            if (!SchemaHelper.TableExist(RedirectItemRow.TableName)) return new RedirectItem[0];
 
             // Generate the SQL for the query
-            Sql sql = new Sql().Select("*").From(RedirectItem.TableName).Where<RedirectItem>(x => x.LinkId == contentId && x.LinkModeStr == "content");
+            Sql sql = new Sql().Select("*").From(RedirectItemRow.TableName).Where<RedirectItemRow>(x => x.LinkId == contentId && x.LinkMode == "content");
 
             // Make the call to the database
-            return Database.Fetch<RedirectItem>(sql).ToArray();
+            return Database.Fetch<RedirectItemRow>(sql).Select(RedirectItem.GetFromRow).ToArray();
         
         }
 

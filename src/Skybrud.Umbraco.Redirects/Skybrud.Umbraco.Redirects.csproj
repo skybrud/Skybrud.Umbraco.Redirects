@@ -290,6 +290,7 @@
     <Compile Include="Exceptions\RedirectNotFoundException.cs" />
     <Compile Include="Exceptions\RedirectsException.cs" />
     <Compile Include="Models\RedirectDomain.cs" />
+    <Compile Include="Models\RedirectItemRow.cs" />
     <Compile Include="Models\RedirectItem.cs" />
     <Compile Include="Models\RedirectsRepository.cs" />
     <Compile Include="Models\RedirectsSearchResult.cs" />

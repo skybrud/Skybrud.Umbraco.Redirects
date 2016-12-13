@@ -1,69 +1,76 @@
 ﻿using System;
 using Newtonsoft.Json;
+using Skybrud.Essentials.Enums;
+using Skybrud.Essentials.Json.Converters.Time;
+using Skybrud.Essentials.Time;
 using Skybrud.LinkPicker;
-using Umbraco.Core.Persistence;
-using Umbraco.Core.Persistence.DatabaseAnnotations;
 
 namespace Skybrud.Umbraco.Redirects.Models {
 
-    [TableName(TableName)]
-    [PrimaryKey(PrimaryKey, autoIncrement = true)]
-    [ExplicitColumns]
     public class RedirectItem {
 
-        #region Constants
+        #region Private fields
 
-        public const string TableName = "SkybrudRedirects";
-
-        public const string PrimaryKey = "RedirectId";
+        private EssentialsDateTime _created;
+        private EssentialsDateTime _updated;
+        private LinkPickerMode _linkMode;
 
         #endregion
 
         #region Properties
 
-        [Column(PrimaryKey)]
-        [PrimaryKeyColumn(AutoIncrement = true)]
+        /// <summary>
+        /// Gets a reference to the internal <see cref="RedirectItemRow"/> class used for representing the data as they
+        /// are stored in the database.
+        /// </summary>
+        internal RedirectItemRow Row { get; private set; }
+
         [JsonProperty("id")]
-        public int Id { get; set; }
-
-        [Column("RedirectUniqueId")]
-        [JsonProperty("uniqueId")]
-        public string UniqueId { get; set; }
-
-        [Column("Url")]
-        [JsonProperty("url")]
-        public string Url { get; set; }
-
-        [Column("QueryString")]
-        [NullSetting(NullSetting = NullSettings.Null)]
-        [JsonProperty("queryString")]
-        public string QueryString { get; set; }
-
-        [Column("LinkMode")]
-        [JsonIgnore]
-        public string LinkModeStr {
-            get { return LinkMode.ToString().ToLower(); }
-            set { LinkMode = (LinkPickerMode)Enum.Parse(typeof(LinkPickerMode), value, true); }
+        public int Id {
+            get { return Row.Id; }
         }
 
-        [Ignore]
+        [JsonProperty("uniqueId")]
+        public string UniqueId {
+            get { return Row.UniqueId; }
+        }
+
+        [JsonProperty("url")]
+        public string Url {
+            get { return Row.Url; }
+            set { Row.Url = value; }
+        }
+
+        [JsonProperty("queryString")]
+        public string QueryString {
+            get { return Row.QueryString; }
+            set { Row.QueryString = value; }
+        }
+
         [JsonProperty("linkMode")]
-        public LinkPickerMode LinkMode { get; set; }
+        public LinkPickerMode LinkMode {
+            get { return _linkMode; }
+            set { _linkMode = value; Row.LinkMode = _linkMode.ToString().ToLower(); }
+        }
 
-        [Column("LinkId")]
         [JsonProperty("linkId")]
-        public int LinkId { get; set; }
+        public int LinkId {
+            get { return Row.LinkId; }
+            set { Row.LinkId = value; }
+        }
 
-        [Column("LinkUrl")]
         [JsonProperty("linkUrl")]
-        public string LinkUrl { get; set; }
+        public string LinkUrl {
+            get { return Row.LinkUrl; }
+            set { Row.LinkUrl = value; }
+        }
 
-        [Column("LinkName")]
         [JsonProperty("linkName")]
-        [NullSetting(NullSetting = NullSettings.Null)]
-        public string LinkName { get; set; }
+        public string LinkName {
+            get { return Row.LinkName; }
+            set { Row.LinkName = value; }
+        }
 
-        [Ignore]
         [JsonProperty("link")]
         public LinkPickerItem Link {
             get { return new LinkPickerItem(LinkId, LinkName, LinkUrl, null, LinkMode); }
@@ -76,31 +83,51 @@ namespace Skybrud.Umbraco.Redirects.Models {
             }
         }
 
-        [Ignore]
-        [JsonIgnore]
-        public DateTime Created { get; set; }
-
-        [Column("Created")]
         [JsonProperty("created")]
-        public long CreatedUnixTimestamp {
-            get { return (long) (Created.ToUniversalTime() - new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds; }
-            set { Created = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddSeconds(value); }
+        [JsonConverter(typeof(EssentialsDateTimeUnixTimeConverter))]
+        public EssentialsDateTime Created {
+            get { return _created; }
+            set { _created = value ?? EssentialsDateTime.Zero; Row.Created = _created.UnixTimestamp; }
         }
 
-        [Ignore]
-        [JsonIgnore]
-        public DateTime Updated { get; set; }
-
-        [Column("Updated")]
         [JsonProperty("updated")]
-        public long UpdatedUnixTimestamp {
-            get { return (long)(Updated.ToUniversalTime() - new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds; }
-            set { Updated = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddSeconds(value); }
+        [JsonConverter(typeof(EssentialsDateTimeUnixTimeConverter))]
+        public EssentialsDateTime Updated {
+            get { return _updated; }
+            set { _updated = value ?? EssentialsDateTime.Zero; Row.Updated = _updated.UnixTimestamp; }
         }
 
-        [Column("IsPermanent")]
         [JsonProperty("permanent")]
-        public bool IsPermanent { get; set; }
+        public bool IsPermanent {
+            get { return Row.IsPermanent; }
+            set { Row.IsPermanent = value; }
+        }
+
+        #endregion
+
+        #region Constructors
+
+        internal RedirectItem(RedirectItemRow row) {
+            _created = EssentialsDateTime.FromUnixTimestamp(row.Created);
+            _updated = EssentialsDateTime.FromUnixTimestamp(row.Updated);
+            _linkMode = EnumHelper.ParseEnum(row.LinkMode, LinkPickerMode.Content);
+            Row = row;
+        }
+
+        public RedirectItem() {
+            Row = new RedirectItemRow();
+            _created = EssentialsDateTime.Now;
+            _updated = EssentialsDateTime.Now;
+            Row.UniqueId = Guid.NewGuid().ToString();
+        }
+
+        #endregion
+
+        #region Static methods
+
+        internal static RedirectItem GetFromRow(RedirectItemRow row) {
+            return row == null ? null : new RedirectItem(row);
+        }
 
         #endregion
 
