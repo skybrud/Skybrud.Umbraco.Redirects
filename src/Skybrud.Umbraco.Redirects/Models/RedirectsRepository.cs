@@ -121,7 +121,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
             redirect.Updated = DateTime.Now;
 
             // Update the redirect in the database
-            Database.Update(redirect);
+            Database.Update(redirect.Row);
 
             return redirect;
 
@@ -165,7 +165,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
             if (!SchemaHelper.TableExist(RedirectItemRow.TableName)) return null;
 
             // Generate the SQL for the query
-            Sql sql = new Sql().Select("*").From(RedirectItemRow.TableName).Where<RedirectItem>(x => x.UniqueId == redirectId);
+            Sql sql = new Sql().Select("*").From(RedirectItemRow.TableName).Where<RedirectItemRow>(x => x.UniqueId == redirectId);
 
             // Make the call to the database
             RedirectItemRow row = Database.FirstOrDefault<RedirectItemRow>(sql);
