@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+
+<language alias="en" intName="English (US)" localName="English (US)" lcid="" culture="en-US">
+  <area alias="redirects">
+    <key alias="redirects">Redirects</key>
+    <key alias="addNewRedirect">Add new redirect</key>
+    <key alias="addRedirect">Add redirect</key>
+    <key alias="editRedirect">Edit redirect</key>
+    <key alias="saveRedirect">Save redirect</key>
+    <key alias="cancel">Cancel</key>
+    <key alias="reload">Reload</key>
+    <key alias="edit">Edit</key>
+    <key alias="delete">Delete</key>
+    <key alias="content">Content</key>
+    <key alias="media">Media</key>
+    <key alias="url">URL</key>
+    <key alias="originalUrl">Original URL</key>
+    <key alias="destination">Destination</key>
+    <key alias="selectDestination">Select destination</key>
+    <key alias="created">Created</key>
+    <key alias="updated">Updated</key>
+    <key alias="id">ID</key>
+    <key alias="labelUrlDescription">Specify the original URL to match from which the user should be redirected to the destination.</key>
+    <key alias="labelDestinationDescription">Select the page or URL the user should be redirected to.</key>
+  </area>
+</language>

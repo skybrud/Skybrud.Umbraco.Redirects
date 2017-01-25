@@ -313,7 +313,8 @@
     <Content Include="App_Plugins\Skybrud.LinkPicker\Views\LinkPickerGridEditor.html" />
     <Content Include="App_Plugins\Skybrud.LinkPicker\Views\LinkPickerPreValues.html" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Lang\da-DK.xml" />
-    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Lang\en.xml" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Lang\en-US.xml" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Lang\en-GB.xml" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Scripts\Controllers\AddRedirectDialog.js" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Scripts\Controllers\Dashboard.js" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Scripts\Controllers\EditRedirectDialog.js" />
