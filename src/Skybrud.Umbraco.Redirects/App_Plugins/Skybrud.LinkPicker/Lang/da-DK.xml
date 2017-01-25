@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+
+<language alias="da" intName="Danish" localName="dansk" lcid="6" culture="da-DK">
+  <area alias="linkpicker">
+    <key alias="addLink">Tilføj link</key>
+    <key alias="type">Type</key>
+    <key alias="id">ID</key>
+    <key alias="name">Navn</key>
+    <key alias="url">Url</key>
+    <key alias="target">Target</key>
+  </area>
+</language>

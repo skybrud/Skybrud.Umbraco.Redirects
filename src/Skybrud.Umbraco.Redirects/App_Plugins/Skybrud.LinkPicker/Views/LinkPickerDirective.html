@@ -12,18 +12,31 @@
             </li>
         </ul>
         <div class="actions">
-            <a class="link" href="#" prevent-default="" ng-click="addLink()" ng-show="!config.limit || value.items.length < config.limit">Add link <i class="icon icon-add"></i></a>
+            <a class="link" href="#" prevent-default="" ng-click="addLink()" ng-show="!config.limit || value.items.length < config.limit">
+                <localize key="linkpicker_addLink">Add link</localize>
+                <i class="icon icon-add"></i>
+            </a>
         </div>
     </div>
     <div class="table" ng-show="config.showTable">
         <table ng-show="value.items.length">
             <thead>
                 <tr>
-                    <th ng-show="config.columns.type">Type</th>
-                    <th ng-show="config.columns.id">ID</th>
-                    <th ng-show="config.columns.name">Name</th>
-                    <th ng-show="config.columns.url">Url</th>
-                    <th ng-show="config.columns.target">Target</th>
+                    <th ng-show="config.columns.type">
+                        <localize key="linkpicker_type">Type</localize>
+                    </th>
+                    <th ng-show="config.columns.id">
+                        <localize key="linkpicker_id">ID</localize>
+                    </th>
+                    <th ng-show="config.columns.name">
+                        <localize key="linkpicker_name">Name</localize>
+                    </th>
+                    <th ng-show="config.columns.url">
+                        <localize key="linkpicker_url">Url</localize>
+                    </th>
+                    <th ng-show="config.columns.target">
+                        <localize key="linkpicker_target">Target</localize>
+                    </th>
                     <th>&nbsp;</th>
                 </tr>
             </thead>
@@ -43,7 +56,10 @@
             </tbody>
         </table>
         <div class="actions">
-            <a class="link" href="#" prevent-default="" ng-click="addLink()" ng-show="!config.limit || value.items.length < config.limit">Add link <i class="icon icon-add"></i></a>
+            <a class="link" href="#" prevent-default="" ng-click="addLink()" ng-show="!config.limit || value.items.length < config.limit">
+                <localize key="linkpicker_addLink">Add link</localize>
+                <i class="icon icon-add"></i>
+            </a>
         </div>
     </div>
 </div>
