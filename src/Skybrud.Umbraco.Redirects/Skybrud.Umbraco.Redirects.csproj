@@ -377,10 +377,10 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
-    <PreBuildEvent>"$(SolutionDir)..\.skybrud\Skybrud.Social.PreBuildTool.exe" 2016-07-18 "$(ProjectPath)"</PreBuildEvent>
+    <PreBuildEvent>"$(SolutionDir)build\Skybrud.Social.PreBuildTool.exe" 2016-07-18 "$(ProjectPath)"</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>"$(SolutionDir)..\.skybrud\UpdateAssemblyInfoJson.exe" "$(ProjectPath)" "$(TargetPath)"</PostBuildEvent>
+    <PostBuildEvent>"$(SolutionDir)build\UpdateAssemblyInfoJson.exe" "$(ProjectPath)" "$(TargetPath)"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -33,6 +33,10 @@ module.exports = function (grunt) {
 						src: [
 							pkg.name + '.dll',
 							pkg.name + '.xml',
+							'Skybrud.Essentials.dll',
+							'Skybrud.Essentials.xml',
+							'Skybrud.WebApi.Json.dll',
+							'Skybrud.WebApi.Json.xml',
 							'Skybrud.LinkPicker.dll',
 							'Skybrud.LinkPicker.xml',
 							'Skybrud.Umbraco.GridData.dll',
@@ -113,8 +117,8 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-zip');
 	grunt.loadNpmTasks('grunt-umbraco-package');
 
-	grunt.registerTask('dev', ['clean', 'copy:binary', 'copy:resources', 'nugetpack', 'zip'/*, 'umbracoPackage'*/]);
+	grunt.registerTask('release', ['clean', 'copy:binary', 'copy:resources', 'nugetpack', 'zip'/*, 'umbracoPackage'*/, 'clean']);
 
-	grunt.registerTask('default', ['dev']);
+	grunt.registerTask('default', ['release']);
 
 };
