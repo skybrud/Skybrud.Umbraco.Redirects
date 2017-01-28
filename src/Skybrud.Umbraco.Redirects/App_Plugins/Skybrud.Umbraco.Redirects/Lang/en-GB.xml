@@ -22,5 +22,10 @@
     <key alias="id">ID</key>
     <key alias="labelUrlDescription">Specify the original URL to match from which the user should be redirected to the destination.</key>
     <key alias="labelDestinationDescription">Select the page or URL the user should be redirected to.</key>
+    <key alias="labelNoRedirects">There has not yet been added any redirects.</key>
+    <key alias="labelNoPageRedirects">There has not yet been added any redirects to this page.</key>
+    <key alias="showing">Showing</key>
+    <key alias="of">of</key>
+    <key alias="page">Page</key>
   </area>
 </language>

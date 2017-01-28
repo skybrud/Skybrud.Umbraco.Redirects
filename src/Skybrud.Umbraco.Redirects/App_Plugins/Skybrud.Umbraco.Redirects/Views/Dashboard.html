@@ -28,6 +28,11 @@
                     </div>
                 </div>
                 <div class="umb-table-body">
+                    <div class="umb-table-row" ng-show="redirects.length == 0">
+                        <div class="umb-table-cell" style="flex-grow: 1; margin: 0; padding: 25px; color: #000;">
+                            <span><localize key="redirects_labelNoRedirects">There has not yet been added any redirects.</localize></span>
+                        </div>
+                    </div>
                     <div class="umb-table-row" ng-repeat="redirect in redirects">
                         <div class="umb-table-cell">
                             <i class="umb-table-body__icon umb-table-body__fileicon icon-shuffle"></i>
@@ -56,7 +61,7 @@
                 <div class="umb-table-foot">
                     <div class="umb-table-row">
                         <div ng-show="pagination.page > 0 && pagination.total > 0" class="umb-table-cell">
-                            Viser {{pagination.from}}-{{pagination.to}} af {{pagination.total}} &bull; Side {{pagination.page}} af {{pagination.pages}}
+                            <localize key="redirects_showing">Showing</localize>&nbsp;{{pagination.from}}-{{pagination.to}}&nbsp;<localize key="redirects_of">of</localize>&nbsp;{{pagination.total}}&nbsp;&bull;&nbsp;<localize key="redirects_page">Page</localize>&nbsp;{{pagination.page}}&nbsp;<localize key="redirects_of">of</localize>&nbsp;{{pagination.pages}}
                         </div>
                         <div class="umb-table-cell pagination pagination-right">
                             <ul>

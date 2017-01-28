@@ -22,5 +22,10 @@
     <key alias="id">ID</key>
     <key alias="labelUrlDescription">Angiv den oprindelige URL, der skal sende brugeren videre til den valgte destination.</key>
     <key alias="labelDestinationDescription">Vælg den side eller URL, som brugeren skal sendes videre til.</key>
+    <key alias="labelNoRedirects">Der er endnu ikke blevet tilføjet nogle redirects.</key>
+    <key alias="labelNoPageRedirects">Der er endnu ikke blevet tilføjet nogle redirects, der henviser til denne side.</key>
+    <key alias="showing">Viser</key>
+    <key alias="of">af</key>
+    <key alias="page">Side</key>
   </area>
 </language>
