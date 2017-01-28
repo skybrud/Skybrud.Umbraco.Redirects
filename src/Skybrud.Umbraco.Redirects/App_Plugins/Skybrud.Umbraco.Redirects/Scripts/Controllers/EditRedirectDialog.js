@@ -1,4 +1,4 @@
-﻿angular.module('umbraco').controller('SkybrudUmbracoRedirects.EditRedirectDialog.Controller', function ($scope, $http, notificationsService, skybrudLinkPickerService, skybrudRedirectsService) {
+﻿angular.module('umbraco').controller('SkybrudUmbracoRedirects.EditRedirectDialog.Controller', function ($scope, $http, notificationsService, skybrudRedirectsService) {
 
     $scope.loading = false;
 
@@ -6,13 +6,13 @@
     $scope.redirect = angular.copy($scope.dialogOptions.redirect);
 
     $scope.addLink = function () {
-        skybrudLinkPickerService.addLink(function (link) {
+        skybrudRedirectsService.addLink(function (link) {
             $scope.redirect.link = link;
         }, false);
     };
 
     $scope.editLink = function () {
-        skybrudLinkPickerService.editLink($scope.redirect.link, function (link) {
+        skybrudRedirectsService.editLink($scope.redirect.link, function (link) {
             $scope.redirect.link = link;
         }, false);
     };

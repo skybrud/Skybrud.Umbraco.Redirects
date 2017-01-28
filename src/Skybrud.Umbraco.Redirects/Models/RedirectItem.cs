@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using Skybrud.Essentials.Enums;
 using Skybrud.Essentials.Json.Converters.Time;
 using Skybrud.Essentials.Time;
-using Skybrud.LinkPicker;
 
 namespace Skybrud.Umbraco.Redirects.Models {
 
@@ -13,7 +12,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
         private EssentialsDateTime _created;
         private EssentialsDateTime _updated;
-        private LinkPickerMode _linkMode;
+        private RedirectLinkMode _linkMode;
 
         #endregion
 
@@ -48,7 +47,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         }
 
         [JsonProperty("linkMode")]
-        public LinkPickerMode LinkMode {
+        public RedirectLinkMode LinkMode {
             get { return _linkMode; }
             set { _linkMode = value; Row.LinkMode = _linkMode.ToString().ToLower(); }
         }
@@ -72,8 +71,8 @@ namespace Skybrud.Umbraco.Redirects.Models {
         }
 
         [JsonProperty("link")]
-        public LinkPickerItem Link {
-            get { return new LinkPickerItem(LinkId, LinkName, LinkUrl, null, LinkMode); }
+        public RedirectLinkItem Link {
+            get { return new RedirectLinkItem(LinkId, LinkName, LinkUrl, LinkMode); }
             set {
                 if (value == null) throw new ArgumentNullException("value");
                 LinkMode = value.Mode;
@@ -84,14 +83,14 @@ namespace Skybrud.Umbraco.Redirects.Models {
         }
 
         [JsonProperty("created")]
-        [JsonConverter(typeof(EssentialsDateTimeUnixTimeConverter))]
+        [JsonConverter(typeof(UnixTimeConverter))]
         public EssentialsDateTime Created {
             get { return _created; }
             set { _created = value ?? EssentialsDateTime.Zero; Row.Created = _created.UnixTimestamp; }
         }
 
         [JsonProperty("updated")]
-        [JsonConverter(typeof(EssentialsDateTimeUnixTimeConverter))]
+        [JsonConverter(typeof(UnixTimeConverter))]
         public EssentialsDateTime Updated {
             get { return _updated; }
             set { _updated = value ?? EssentialsDateTime.Zero; Row.Updated = _updated.UnixTimestamp; }
@@ -110,7 +109,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         internal RedirectItem(RedirectItemRow row) {
             _created = EssentialsDateTime.FromUnixTimestamp(row.Created);
             _updated = EssentialsDateTime.FromUnixTimestamp(row.Updated);
-            _linkMode = EnumHelper.ParseEnum(row.LinkMode, LinkPickerMode.Content);
+            _linkMode = EnumUtils.ParseEnum(row.LinkMode, RedirectLinkMode.Content);
             Row = row;
         }
 

@@ -1,6 +1,4 @@
-﻿angular.module('umbraco').controller('SkybrudUmbracoRedirects.PropertyEditor.Controller', function ($scope, $routeParams, $http, $q, $timeout, dialogService, skybrudLinkPickerService, notificationsService, skybrudRedirectsService) {
-
-    var lps = skybrudLinkPickerService;
+﻿angular.module('umbraco').controller('SkybrudUmbracoRedirects.PropertyEditor.Controller', function ($scope, $routeParams, $http, $q, $timeout, dialogService, notificationsService, skybrudRedirectsService) {
 
     $scope.route = $routeParams;
     $scope.redirects = [];
@@ -23,7 +21,7 @@
     };
 
     $scope.editRedirect = function (redirect) {
-        skybrudRedirectsService.editRedirect(redirect, function (value) {
+        skybrudRedirectsService.editRedirect(redirect, function () {
             $scope.updateList();
         });
     };
@@ -31,7 +29,7 @@
     $scope.deleteRedirect = function (redirect) {
         var url = redirect.url + (redirect.queryString ? '?' + redirect.queryString : '');
         if (!confirm('Are you sure you want do delete the redirect at "' + url + '" ?')) return;
-        skybrudRedirectsService.deleteRedirect(redirect, function (value) {
+        skybrudRedirectsService.deleteRedirect(redirect, function () {
             $scope.updateList();
         });
     };

@@ -2,7 +2,6 @@
 using System.Net;
 using System.Web.Http;
 using Newtonsoft.Json.Linq;
-using Skybrud.LinkPicker;
 using Skybrud.Umbraco.Redirects.Exceptions;
 using Skybrud.Umbraco.Redirects.Models;
 using Skybrud.WebApi.Json;
@@ -60,7 +59,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
 
             try {
 
-                LinkPickerItem redirect = LinkPickerItem.Parse(new JObject {
+                RedirectLinkItem redirect = RedirectLinkItem.Parse(new JObject {
                     {"id", linkId},
                     {"name", linkName + ""},
                     {"url", linkUrl},
@@ -89,7 +88,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                 if (String.IsNullOrWhiteSpace(linkMode)) throw new RedirectsException("You must specify a destination link for the redirect.");
 
                 // Initialize a new link picker item
-                LinkPickerItem link = LinkPickerItem.Parse(new JObject {
+                RedirectLinkItem link = RedirectLinkItem.Parse(new JObject {
                     {"id", linkId},
                     {"name", linkName + ""},
                     {"url", linkUrl},

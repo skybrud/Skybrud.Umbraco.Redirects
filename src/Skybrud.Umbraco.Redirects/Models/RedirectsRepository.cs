@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Skybrud.LinkPicker;
 using Skybrud.Umbraco.Redirects.Exceptions;
 using Umbraco.Core;
 using Umbraco.Core.Logging;
@@ -54,11 +53,11 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// <param name="url">The URL to match.</param>
         /// <param name="redirect">The ID of the content node the user should be redirected to.</param>
         /// <returns>Returns an instance of <see cref="RedirectItem"/> representing the created redirect.</returns>
-        public RedirectItem AddRedirect(string url, LinkPickerItem redirect) {
+        public RedirectItem AddRedirect(string url, RedirectLinkItem redirect) {
             return AddRedirect(url, redirect, true);
         }
 
-        public RedirectItem AddRedirect(string url, LinkPickerItem redirect, bool permanent) {
+        public RedirectItem AddRedirect(string url, RedirectLinkItem redirect, bool permanent) {
 
             // Attempt to create the database table if it doesn't exist
             //try {

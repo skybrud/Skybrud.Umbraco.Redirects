@@ -36,11 +36,7 @@ module.exports = function (grunt) {
 							'Skybrud.Essentials.dll',
 							'Skybrud.Essentials.xml',
 							'Skybrud.WebApi.Json.dll',
-							'Skybrud.WebApi.Json.xml',
-							'Skybrud.LinkPicker.dll',
-							'Skybrud.LinkPicker.xml',
-							'Skybrud.Umbraco.GridData.dll',
-							'Skybrud.Umbraco.GridData.xml'
+							'Skybrud.WebApi.Json.xml'
 						],
 						dest: 'releases/temp/bin/'
 					}
@@ -53,12 +49,6 @@ module.exports = function (grunt) {
 					    cwd: projectRoot + 'App_Plugins/' + pkg.name + '/',
 					    src: ['**/*.*'],
 					    dest: 'releases/temp/App_Plugins/' + pkg.name + '/'
-					},
-					{
-					    expand: true,
-					    cwd: projectRoot + 'App_Plugins/Skybrud.LinkPicker/',
-					    src: ['**/*.*'],
-					    dest: 'releases/temp/App_Plugins/Skybrud.LinkPicker/'
 					}
 				]
 			},
