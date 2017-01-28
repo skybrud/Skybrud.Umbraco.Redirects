@@ -4,20 +4,29 @@
     $scope.redirects = [];
 
     $scope.mode = $routeParams.create ? 'create' : 'list';
+    $scope.type = $scope.route.section;
 
     $scope.loading = false;
 
-    // If we're not in the content section, we stop further execution (eg. property editor preview)
-    if ($scope.route.section != 'content') return;
+    // If we're neither in the content or media section, we stop further execution (eg. property editor preview)
+    if ($scope.type != 'content' && $scope.type != 'media') return;
 
     $scope.addRedirect = function () {
-        var page = $scope.$parent.$parent.$parent.content;
-        skybrudRedirectsService.addRedirect({
-            page: page,
-            callback: function () {
-                $scope.updateList();
-            }
-        });
+        if ($scope.type == 'content') {
+            skybrudRedirectsService.addRedirect({
+                content: $scope.$parent.$parent.$parent.content,
+                callback: function () {
+                    $scope.updateList();
+                }
+            });
+        } else if ($scope.type == 'content') {
+            skybrudRedirectsService.addRedirect({
+                media: $scope.$parent.$parent.$parent.content,
+                callback: function () {
+                    $scope.updateList();
+                }
+            });
+        }
     };
 
     $scope.editRedirect = function (redirect) {
@@ -41,7 +50,7 @@
         // Make the call to the redirects API
         var http = $http({
             method: 'GET',
-            url: '/umbraco/backoffice/api/Redirects/GetRedirectsForContent',
+            url: '/umbraco/backoffice/api/Redirects/GetRedirectsFor' + $scope.type,
             params: {
                 contentId: $routeParams.id
             }

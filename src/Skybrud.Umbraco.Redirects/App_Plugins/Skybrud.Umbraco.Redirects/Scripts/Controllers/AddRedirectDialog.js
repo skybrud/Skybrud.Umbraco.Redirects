@@ -1,20 +1,43 @@
 ﻿angular.module('umbraco').controller('SkybrudUmbracoRedirects.AddRedirectDialog.Controller', function ($scope, $http, notificationsService, skybrudRedirectsService) {
 
     $scope.options = $scope.dialogOptions.options;
-    $scope.page = $scope.options && $scope.options.page;
+
+    $scope.type = $scope.options && $scope.options.media ? 'media' : 'content';
+    $scope.content = $scope.options && $scope.options.content;
+    $scope.media = $scope.options && $scope.options.media;
 
     $scope.redirect = {
         url: '',
         link: null
     };
 
-    if ($scope.page) {
+
+    if ($scope.content) {
         $scope.redirect.link = {
-            id: $scope.page.id,
-            name: $scope.page.name,
-            url: $scope.page.urls.length > 0 ? $scope.page.urls[0] : '#',
+            id: $scope.content.id,
+            name: $scope.content.name,
+            url: $scope.content.urls.length > 0 ? $scope.content.urls[0] : '#',
             mode: 'content'
         }
+    } else if ($scope.media) {
+
+        // $scope.media doesn't expode the URL directly, so we need to read it from the "_umb_urls" property
+        var mediaUrl = null;
+        angular.forEach($scope.media.tabs, function (tab) {
+            angular.forEach(tab.properties, function (property) {
+                if (property.alias == '_umb_urls') {
+                    mediaUrl = property.value;
+                }
+            });
+        });
+
+        $scope.redirect.link = {
+            id: $scope.media.id,
+            name: $scope.media.name,
+            url: mediaUrl ? mediaUrl : '#',
+            mode: 'media'
+        }
+
     }
 
     $scope.addLink = function () {
@@ -54,7 +77,7 @@
 
         var params = {
             url: $scope.redirect.url,
-            linkMode: 'content',
+            linkMode: $scope.type,
             linkId: $scope.redirect.link.id,
             linkUrl: $scope.redirect.link.url,
             linkName: $scope.redirect.link.name

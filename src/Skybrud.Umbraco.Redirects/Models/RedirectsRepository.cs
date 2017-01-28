@@ -243,7 +243,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
         }
 
-        public object GetRedirectsForContents(int contentId) {
+        public object GetRedirectsForContent(int contentId) {
 
             // Just return an empty array if the table doesn't exist (since there aren't any redirects anyway)
             if (!SchemaHelper.TableExist(RedirectItemRow.TableName)) return new RedirectItem[0];
@@ -253,7 +253,20 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
             // Make the call to the database
             return Database.Fetch<RedirectItemRow>(sql).Select(RedirectItem.GetFromRow).ToArray();
-        
+
+        }
+
+        public object GetRedirectsForMedia(int mediaId) {
+
+            // Just return an empty array if the table doesn't exist (since there aren't any redirects anyway)
+            if (!SchemaHelper.TableExist(RedirectItemRow.TableName)) return new RedirectItem[0];
+
+            // Generate the SQL for the query
+            Sql sql = new Sql().Select("*").From(RedirectItemRow.TableName).Where<RedirectItemRow>(x => x.LinkId == mediaId && x.LinkMode == "media");
+
+            // Make the call to the database
+            return Database.Fetch<RedirectItemRow>(sql).Select(RedirectItem.GetFromRow).ToArray();
+
         }
 
         #endregion

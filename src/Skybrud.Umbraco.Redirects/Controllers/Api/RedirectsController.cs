@@ -46,12 +46,32 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                         id = content.Id,
                         name = content.Name
                     },
-                    redirects = Repository.GetRedirectsForContents(contentId)
+                    redirects = Repository.GetRedirectsForContent(contentId)
                 });
             } catch (RedirectsException ex) {
                 return Request.CreateResponse(JsonMetaResponse.GetError(HttpStatusCode.InternalServerError, ex.Message));
             }
         
+        }
+
+        [HttpGet]
+        public object GetRedirectsForMedia(int contentId) {
+
+            IMedia media = ApplicationContext.Services.MediaService.GetById(contentId);
+            if (media == null) throw new RedirectsException(HttpStatusCode.NotFound, "A media item with the specified ID could not be found.");
+
+            try {
+                return JsonMetaResponse.GetSuccess(new {
+                    media = new {
+                        id = media.Id,
+                        name = media.Name
+                    },
+                    redirects = Repository.GetRedirectsForMedia(contentId)
+                });
+            } catch (RedirectsException ex) {
+                return Request.CreateResponse(JsonMetaResponse.GetError(HttpStatusCode.InternalServerError, ex.Message));
+            }
+
         }
 
         [HttpGet]
