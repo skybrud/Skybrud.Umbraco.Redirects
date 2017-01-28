@@ -1,4 +1,4 @@
-﻿angular.module('umbraco').controller('SkybrudUmbracoRedirects.Dashboard.Controller', function ($scope, $http, $q, $timeout, dialogService, notificationsService, skybrudRedirectsService) {
+﻿angular.module('umbraco').controller('SkybrudUmbracoRedirects.Dashboard.Controller', function ($scope, $http, $q, $timeout, dialogService, notificationsService, localizationService, skybrudRedirectsService) {
 
     $scope.redirects = [];
     $scope.mode = 'list';
@@ -32,6 +32,7 @@
     
     // Initial pagination options
     $scope.pagination = {
+        text: '',
         page: 1,
         pages: 0,
         limit: 10,
@@ -82,12 +83,28 @@
             // Update our pagination model
             $scope.pagination = array[0].data.pagination;
             $scope.pagination.pagination = [];
-            for (var i = 0; i < $scope.pagination.pages; i++) {
+
+            var from = Math.max(1, $scope.pagination.page - 7);
+            var to = Math.min($scope.pagination.pages, $scope.pagination.page + 7);
+
+            for (var i = from; i <= to; i++) {
                 $scope.pagination.pagination.push({
-                    page: (i + 1),
-                    active: $scope.pagination.page == (i + 1)
+                    page: i,
+                    active: $scope.pagination.page == i
                 });
             }
+
+            var tokens = [
+                $scope.pagination.from,
+                $scope.pagination.to,
+                $scope.pagination.total,
+                $scope.pagination.page,
+                $scope.pagination.pages
+            ];
+
+            localizationService.localize('redirects_pagination', tokens).then(function (value) {
+                $scope.pagination.text = value;
+            });
 
         }, function () {
             notificationsService.error('Unable to load redirects', 'The list of redirects could not be loaded.');

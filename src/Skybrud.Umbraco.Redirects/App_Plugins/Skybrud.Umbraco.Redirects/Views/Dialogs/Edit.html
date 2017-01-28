@@ -1,10 +1,10 @@
 ﻿<div class="SkybrudUmbracoRedirects EditRedirectDialog" ng-controller="SkybrudUmbracoRedirects.EditRedirectDialog.Controller">
 
     <div class="umb-overlay-header">
-        <h4 class="umb-overlay__title ng-binding">
+        <h4 class="umb-overlay__title">
             <localize key="redirects_editRedirect">Edit redirect</localize>
         </h4>
-        <p class="umb-overlay__subtitle ng-binding"></p>
+        <p class="umb-overlay__subtitle"></p>
     </div>
     
     <div class="umb-overlay-container">
@@ -14,7 +14,7 @@
                 <localize key="redirects_labelUrlDescription">Select the URL to match.</localize>
             </small>
             <div ng-show="redirect.url.length > 0 && !hasValidUrl()" class="alert alert-danger">
-                Den angivne URL er ikke gyldig. En gyldig URL bør fx se ud som <code>/borger</code> eller <code>/borger/underside</code>.
+                <localize key="redirects_urlNotValid">The specified URL is not valid. A valid URL should look like <code>/page</code> or <code>/page/subpage</code>.</localize>
             </div>
             <input type="text" ng-model="redirect.url" style="max-width: initial;" />
         </label>

@@ -61,7 +61,7 @@
                 <div class="umb-table-foot">
                     <div class="umb-table-row">
                         <div ng-show="pagination.page > 0 && pagination.total > 0" class="umb-table-cell">
-                            <localize key="redirects_showing">Showing</localize>&nbsp;{{pagination.from}}-{{pagination.to}}&nbsp;<localize key="redirects_of">of</localize>&nbsp;{{pagination.total}}&nbsp;&bull;&nbsp;<localize key="redirects_page">Page</localize>&nbsp;{{pagination.page}}&nbsp;<localize key="redirects_of">of</localize>&nbsp;{{pagination.pages}}
+                            {{pagination.text}}
                         </div>
                         <div class="umb-table-cell pagination pagination-right">
                             <ul>
