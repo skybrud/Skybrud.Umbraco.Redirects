@@ -91,7 +91,7 @@
   -ms-flex: initial;
   -webkit-flex: initial;
   flex: initial;
-  flex-grow: 4;
+  flex-grow: 1;
 }
 .SkybrudUmbracoRedirects .pagination ul {
   background: 0;
