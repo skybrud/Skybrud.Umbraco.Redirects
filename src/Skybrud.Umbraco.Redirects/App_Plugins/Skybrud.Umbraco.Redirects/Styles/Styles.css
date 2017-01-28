@@ -79,6 +79,9 @@
 .SkybrudUmbracoRedirects .umb-table {
   background: #fff;
 }
+.SkybrudUmbracoRedirects .umb-table-body .umb-table-row.-no-hover:hover {
+  background-color: #fff;
+}
 .SkybrudUmbracoRedirects .umb-table-foot {
   font-size: 11px;
   background-color: #f8f8f8;
