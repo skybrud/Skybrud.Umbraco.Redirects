@@ -21,7 +21,7 @@ module.exports = function (grunt) {
 		pkg: pkg,
 		clean: {
 			files: [
-				'releases/temp/**/*.*'
+				'releases/temp'
 			]
 		},
 		copy: {
@@ -107,6 +107,7 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-zip');
 	grunt.loadNpmTasks('grunt-umbraco-package');
 
+	grunt.registerTask('abjerner', ['clean', 'copy:binary', 'copy:resources', 'nugetpack', 'zip'/*, 'umbracoPackage'*/, 'clean', 'copy:nuget']);
 	grunt.registerTask('release', ['clean', 'copy:binary', 'copy:resources', 'nugetpack', 'zip'/*, 'umbracoPackage'*/, 'clean']);
 
 	grunt.registerTask('default', ['release']);
