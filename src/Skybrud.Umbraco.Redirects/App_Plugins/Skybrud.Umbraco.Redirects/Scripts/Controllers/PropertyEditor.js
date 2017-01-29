@@ -19,7 +19,7 @@
                     $scope.updateList();
                 }
             });
-        } else if ($scope.type == 'content') {
+        } else if ($scope.type == 'media') {
             skybrudRedirectsService.addRedirect({
                 media: $scope.$parent.$parent.$parent.content,
                 callback: function () {
