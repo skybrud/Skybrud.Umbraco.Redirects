@@ -1,6 +1,12 @@
 Skybrud.Umbraco.Redirects
 =========================
 
+This package features a dashboard and property editor that let's users manage inbound redirects from within the Umbraco backoffice.
+
+URLs can be added to redirect to either a content item, media item or a custom URL.
+
+![image](https://cloud.githubusercontent.com/assets/3634580/22441437/ac65dc6e-e737-11e6-8a5c-e89a46aea3a1.png)
+
 ## Installation
 
 1. [**NuGet Package**][NuGetPackage]  
