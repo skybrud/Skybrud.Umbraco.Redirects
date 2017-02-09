@@ -25,6 +25,7 @@
     <key alias="labelNoRedirects">There has not yet been added any redirects.</key>
     <key alias="labelNoContentRedirects">There has not yet been added any redirects to this page.</key>
     <key alias="labelNoMediaRedirects">There has not yet been added any redirects to this media.</key>
+    <key alias="labelNoSearchRedirects">Your search did not match any redirects.</key>
     <key alias="pagination">Showing %0%-%1% of %2% - Page %3% of %4%</key>
     <key alias="urlNotValid"><![CDATA[The specified URL is not valid. A valid URL should look like <code>/page</code> or <code>/page/subpage</code>.]]></key>
     <key alias="addNewRedirectSubTitle">Fill out the fields below to add a new redirect.</key>

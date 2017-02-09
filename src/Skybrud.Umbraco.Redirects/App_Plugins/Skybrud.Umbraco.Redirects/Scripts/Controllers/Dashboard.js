@@ -3,6 +3,21 @@
     $scope.redirects = [];
     $scope.mode = 'list';
 
+
+    $scope.types = [
+        { name: 'All types', value: 'all' },
+        { name: 'Content', value: 'content' },
+        { name: 'Media', value: 'media' },
+        { name: 'URL', value: 'url' }
+    ];
+
+    $scope.filters = {
+        type: $scope.types[0],
+        text: ''
+    };
+
+    $scope.activeFilters = 0;
+
     $scope.loading = false;
 
     // Opens a dialog for adding a new redirect. When a callback received, the list is updated.
@@ -64,6 +79,19 @@
             page: page
         };
 
+        $scope.activeFilters = 0;
+
+        // Any filters?
+        if ($scope.filters.type.value != 'all') {
+            args.type = $scope.filters.type.value;
+            $scope.activeFilters++;
+        }
+
+        if ($scope.filters.text) {
+            args.text = $scope.filters.text;
+            $scope.activeFilters++;
+        }
+        
         // Declare the HTTP options
         var http = $http({
             method: 'GET',
@@ -114,5 +142,9 @@
     };
 
     $scope.updateList();
+
+    $scope.$watch('filters', function () {
+        $scope.updateList();
+    }, true);
 
 });

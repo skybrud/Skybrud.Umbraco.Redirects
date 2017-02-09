@@ -2,17 +2,20 @@
     <div>
         <div class="umb-editor-sub-header" umb-sticky-bar="">
             <h3><localize key="redirects_redirects">Redirects</localize></h3>
-            <div class="umb-editor-sub-header__content-right">
-                <div class="umb-editor-sub-header__section">
-                    <a href="#" prevent-default ng-click="addRedirect()" class="umb-era-button umb-button--s">
-                        <localize key="redirects_addNewRedirect">Add new redirect</localize>
-                    </a>
-                    <a href="#" prevent-default ng-click="updateList()" class="umb-era-button umb-button--s">
-                        <localize key="redirects_reload">Reload</localize>
-                    </a>
-                </div>
-            </div>
         </div>
+        
+
+        <div style="margin-bottom: 20px; display: flex;">
+            <select style="margin-right: 10px;" ng-options="item as item.name for item in types track by item.value" ng-model="filters.type"></select>
+            <input type="text" ng-model="filters.text" placeholder="Type to search..." style="max-width: initial; flex: 1; margin-right: 100px;" />
+            <a href="#" prevent-default ng-click="addRedirect()" class="umb-era-button umb-button--s">
+                <localize key="redirects_addNewRedirect">Add new redirect</localize>
+            </a>
+            <a href="#" prevent-default ng-click="updateList()" class="umb-era-button umb-button--s">
+                <localize key="redirects_reload">Reload</localize>
+            </a>
+        </div>
+
         <div ng-class="{loading: loading}">
             <umb-load-indicator></umb-load-indicator>
             <div class="umb-table">
@@ -30,7 +33,8 @@
                 <div class="umb-table-body">
                     <div class="umb-table-row -no-hover" ng-show="redirects.length == 0">
                         <div class="umb-table-cell" style="flex-grow: 1; margin: 0; padding: 25px; color: #000;">
-                            <span><localize key="redirects_labelNoRedirects">There has not yet been added any redirects.</localize></span>
+                            <span ng-if="activeFilters == 0"><localize key="redirects_labelNoRedirects">There has not yet been added any redirects.</localize></span>
+                            <span ng-if="activeFilters > 0"><localize key="redirects_labelNoSearchRedirects">Your search did not match any redirects.</localize></span>
                         </div>
                     </div>
                     <div class="umb-table-row" ng-repeat="redirect in redirects">

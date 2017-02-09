@@ -25,6 +25,7 @@
     <key alias="labelNoRedirects">Der er endnu ikke blevet tilføjet nogle redirects.</key>
     <key alias="labelNoContentRedirects">Der er endnu ikke blevet tilføjet nogle redirects, der henviser til denne side.</key>
     <key alias="labelNoMediaRedirects">Der er endnu ikke blevet tilføjet nogle redirects, der henviser til dette medie.</key>
+    <key alias="labelNoSearchRedirects">Din søgning matchede ingen redirects.</key>
     <key alias="pagination">Viser %0%-%1% af %2% – Side %3% af %4%</key>
     <key alias="urlNotValid"><![CDATA[Den angivne URL er ikke gyldig. En gyldig URL bør fx se ud som <code>/side</code> eller <code>/underside</code>.]]></key>
     <key alias="addNewRedirectSubTitle">Udfyld nedenstående felter for at tilføje et nyt redirect.</key>

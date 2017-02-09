@@ -218,13 +218,22 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
         }
 
-        public RedirectsSearchResult GetRedirects(int page = 1, int limit = 20) {
+        public RedirectsSearchResult GetRedirects(int page = 1, int limit = 20, string type = null, string text = null) {
 
             // Just return an empty array if the table doesn't exist (since there aren't any redirects anyway)
             if (!SchemaHelper.TableExist(RedirectItemRow.TableName)) return new RedirectsSearchResult(0, limit, 0, 0, 0, new RedirectItem[0]);
 
             // Generate the SQL for the query
-            Sql sql = new Sql().Select("*").From(RedirectItemRow.TableName).OrderByDescending<RedirectItemRow>(x => x.Updated, SqlSyntax);
+            Sql sql = new Sql().Select("*").From(RedirectItemRow.TableName);
+
+            // Search by the type
+            if (!String.IsNullOrWhiteSpace(type)) sql = sql.Where<RedirectItemRow>(x => x.LinkMode == type);
+
+            // Search by the text
+            if (!String.IsNullOrWhiteSpace(text)) sql = sql.Where<RedirectItemRow>(x => x.LinkName.Contains(text) || x.Url.Contains(text));
+            
+            // Order the redirects
+            sql = sql.OrderByDescending<RedirectItemRow>(x => x.Updated, SqlSyntax);
 
             // Make the call to the database
             RedirectItemRow[] all = Database.Fetch<RedirectItemRow>(sql).ToArray();
