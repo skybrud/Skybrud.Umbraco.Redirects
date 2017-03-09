@@ -15,6 +15,16 @@ Install this NuGet package in your Visual Studio project. Makes updating easy.
 1. [**ZIP file**][GitHubRelease]  
 Grab a ZIP file of the latest release; unzip and move the contents to the root directory of your web application.
 
+## Features
+
+- Global dashboard for listing all redirects. Supports filtering and searching.
+
+- Property editor that can be added to either a content item or media item to show inbound redirects
+
+- Package only handles custom redirecs - eg. added manually by an editor. The will let Umbraco 7.5+ handle redirects for renamed pages
+
+- Includes a `RedirectsRepository` for managing the redirects from your own code
+
 [NuGetPackage]: https://www.nuget.org/packages/Skybrud.Umbraco.Redirects
 [GitHubRelease]: https://github.com/skybrud/Skybrud.Umbraco.Redirects
 
@@ -66,7 +76,7 @@ In a standard Umbraco 7.5, the entire `<modules>` element would then look like:
 
 #### Adding a Redirects tab to the Content dashboard
 
-This step is optinal, but if you wish to show redirects at a global level, you can add a *Redirects* tab to the dashboard of the *Content* section. To do this, open up `~/Config/Dashboard.config`, and search for the line with `<section alias="StartupDashboardSection">`. This particular `<section>` element describes the tabs of the *Content* section. THe *Redirects* tab can be added by adding the following XML as a child element:
+This step is optional, but if you wish to show redirects at a global level, you can add a *Redirects* tab to the dashboard of the *Content* section. To do this, open up `~/Config/Dashboard.config`, and search for the line with `<section alias="StartupDashboardSection">`. This particular `<section>` element describes the tabs of the *Content* section. THe *Redirects* tab can be added by adding the following XML as a child element:
 
 ```xml
 <tab caption="Redirects">
@@ -78,6 +88,8 @@ This step is optinal, but if you wish to show redirects at a global level, you c
 ```
 
 With the example above, the tab will only be visible to admins. If you remove the `<access>` element, all your users will be able to see the tab.
+
+The dashboard will list all redirects - for content, media and custom URLs.
 
 ## Screenshots
 
