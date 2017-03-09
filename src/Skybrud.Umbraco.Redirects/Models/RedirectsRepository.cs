@@ -47,17 +47,27 @@ namespace Skybrud.Umbraco.Redirects.Models {
         }
 
         /// <summary>
-        /// Adds a new redirect matching the specified <code>url</code>. A user matching <code>url</code> will
-        /// automatically be redirected to the URL of the content node with the specified <code>contentId</code>.
+        /// Adds a new permanent redirect matching the specified inbound <paramref name="url"/>. A request to
+        /// <paramref name="url"/> will automatically be redirected to the URL of the specified
+        /// <paramref name="destionation"/> link.
         /// </summary>
-        /// <param name="url">The URL to match.</param>
-        /// <param name="redirect">The ID of the content node the user should be redirected to.</param>
-        /// <returns>Returns an instance of <see cref="RedirectItem"/> representing the created redirect.</returns>
-        public RedirectItem AddRedirect(string url, RedirectLinkItem redirect) {
-            return AddRedirect(url, redirect, true);
+        /// <param name="url">The inbound URL to match.</param>
+        /// <param name="destionation">An instance of <see cref="RedirectLinkItem"/> representing the destination link.</param>
+        /// <returns>An instance of <see cref="RedirectItem"/> representing the created redirect.</returns>
+        public RedirectItem AddRedirect(string url, RedirectLinkItem destionation) {
+            return AddRedirect(url, destionation, true);
         }
 
-        public RedirectItem AddRedirect(string url, RedirectLinkItem redirect, bool permanent) {
+        /// <summary>
+        /// Adds a new redirect matching the specified inbound <paramref name="url"/>. A request to
+        /// <paramref name="url"/> will automatically be redirected to the URL of the specified
+        /// <paramref name="destionation"/> link.
+        /// </summary>
+        /// <param name="url">The inbound URL to match.</param>
+        /// <param name="destionation">An instance of <see cref="RedirectLinkItem"/> representing the destination link.</param>
+        /// <param name="permanent">Whether the redirect should be permanent (301) or temporary (302).</param>
+        /// <returns>An instance of <see cref="RedirectItem"/> representing the created redirect.</returns>
+        public RedirectItem AddRedirect(string url, RedirectLinkItem destionation, bool permanent) {
 
             // Attempt to create the database table if it doesn't exist
             //try {
@@ -79,10 +89,10 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
             // Initialize the new redirect and populate the properties
             RedirectItem item = new RedirectItem {
-                LinkId = redirect.Id,
-                LinkUrl = redirect.Url,
-                LinkMode = redirect.Mode,
-                LinkName = redirect.Name,
+                LinkId = destionation.Id,
+                LinkUrl = destionation.Url,
+                LinkMode = destionation.Mode,
+                LinkName = destionation.Name,
                 Url = url,
                 QueryString = query,
                 Created = DateTime.Now,
@@ -103,6 +113,11 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
         }
 
+        /// <summary>
+        /// Saves the specified <paramref name="redirect"/>.
+        /// </summary>
+        /// <param name="redirect">The redirected to be saved.</param>
+        /// <returns>The saved <see cref="redirect"/>.</returns>
         public RedirectItem SaveRedirect(RedirectItem redirect) {
 
             // Some input validation
@@ -124,6 +139,10 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
         }
 
+        /// <summary>
+        /// Deletes the specified <paramref name="redirect"/> from the database.
+        /// </summary>
+        /// <param name="redirect">The redirected to be deleted.</param>
         public void DeleteRedirect(RedirectItem redirect) {
 
             // Some input validation
@@ -134,6 +153,11 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
         }
 
+        /// <summary>
+        /// Gets the redirect mathing the specified numeric <paramref name="redirectId"/>.
+        /// </summary>
+        /// <param name="redirectId">The numeric ID of the redirect.</param>
+        /// <returns>An instance of <see cref="RedirectItem"/>, or <code>null</code> if not found.</returns>
         public RedirectItem GetRedirectById(int redirectId) {
 
             // Validate the input
@@ -153,6 +177,11 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
         }
 
+        /// <summary>
+        /// Gets the redirect mathing the specified unique <paramref name="redirectId"/>.
+        /// </summary>
+        /// <param name="redirectId">The unique ID of the redirect.</param>
+        /// <returns>An instance of <see cref="RedirectItem"/>, or <code>null</code> if not found.</returns>
         public RedirectItem GetRedirectById(string redirectId) {
 
             // Validate the input
@@ -172,6 +201,11 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
         }
 
+        /// <summary>
+        /// Gets the redirect mathing the specified <paramref name="url"/>.
+        /// </summary>
+        /// <param name="url">The URL of the redirect.</param>
+        /// <returns>An instance of <see cref="RedirectItem"/>, or <code>null</code> if not found.</returns>
         public RedirectItem GetRedirectByUrl(string url) {
 
             // Some input validation
@@ -183,6 +217,12 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
         }
 
+        /// <summary>
+        /// Gets the redirect mathing the specified <paramref name="url"/> and <paramref name="queryString"/>.
+        /// </summary>
+        /// <param name="url">The URL of the redirect.</param>
+        /// <param name="queryString">The query string of the redirect.</param>
+        /// <returns>An instance of <see cref="RedirectItem"/>, or <code>null</code> if not found.</returns>
         public RedirectItem GetRedirectByUrl(string url, string queryString) {
 
             // Some input validation
@@ -205,6 +245,11 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
         }
 
+        /// <summary>
+        /// Gets an array of <see cref="RedirectItem"/> for the content item with the specified <paramref name="contentId"/>.
+        /// </summary>
+        /// <param name="contentId">The numeric ID of the content item.</param>
+        /// <returns>An array of <see cref="RedirectItem"/>.</returns>
         public RedirectItem[] GetRedirectsByContentId(int contentId) {
 
             // Just return an empty array if the table doesn't exist (since there aren't any redirects anyway)
@@ -218,6 +263,17 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
         }
 
+        /// <summary>
+        /// Gets an instance of <see cref="RedirectsSearchResult"/> representing a paginated search for redirects.
+        /// </summary>
+        /// <param name="page">The page to be returned (default is <code>1</code>)</param>.
+        /// <param name="limit">The maximum amount of redirects to be returned per page (default is <code>20</code>).</param>
+        /// <param name="type">The type of the redirects to be returned. Possible values are <code>url</code>,
+        /// <code>content</code> or <code>media</code>. If not specified, all types of redirects will be returned.
+        /// Default is <code>null</code>.</param>
+        /// <param name="text">A string value that should be present in either the text or URL of the returned
+        /// redirects. Default is <code>null</code>.</param>
+        /// <returns>An instance of <see cref="RedirectsSearchResult"/>.</returns>
         public RedirectsSearchResult GetRedirects(int page = 1, int limit = 20, string type = null, string text = null) {
 
             // Just return an empty array if the table doesn't exist (since there aren't any redirects anyway)
