@@ -264,6 +264,24 @@ namespace Skybrud.Umbraco.Redirects.Models {
         }
 
         /// <summary>
+        /// Gets an array of <see cref="RedirectItem"/> for the media item with the specified <paramref name="mediaId"/>.
+        /// </summary>
+        /// <param name="mediaId">The numeric ID of the media item.</param>
+        /// <returns>An array of <see cref="RedirectItem"/>.</returns>
+        public RedirectItem[] GetRedirectsByMediaId(int mediaId) {
+
+            // Just return an empty array if the table doesn't exist (since there aren't any redirects anyway)
+            if (!SchemaHelper.TableExist(RedirectItemRow.TableName)) return new RedirectItem[0];
+
+            // Generate the SQL for the query
+            Sql sql = new Sql().Select("*").From(RedirectItemRow.TableName).Where<RedirectItemRow>(x => x.LinkMode == "media" && x.LinkId == mediaId);
+
+            // Make the call to the database
+            return Database.Fetch<RedirectItemRow>(sql).Select(RedirectItem.GetFromRow).ToArray();
+
+        }
+
+        /// <summary>
         /// Gets an instance of <see cref="RedirectsSearchResult"/> representing a paginated search for redirects.
         /// </summary>
         /// <param name="page">The page to be returned (default is <code>1</code>)</param>.
@@ -308,31 +326,31 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
         }
 
-        public object GetRedirectsForContent(int contentId) {
+        //public object GetRedirectsForContent(int contentId) {
 
-            // Just return an empty array if the table doesn't exist (since there aren't any redirects anyway)
-            if (!SchemaHelper.TableExist(RedirectItemRow.TableName)) return new RedirectItem[0];
+        //    // Just return an empty array if the table doesn't exist (since there aren't any redirects anyway)
+        //    if (!SchemaHelper.TableExist(RedirectItemRow.TableName)) return new RedirectItem[0];
 
-            // Generate the SQL for the query
-            Sql sql = new Sql().Select("*").From(RedirectItemRow.TableName).Where<RedirectItemRow>(x => x.LinkId == contentId && x.LinkMode == "content");
+        //    // Generate the SQL for the query
+        //    Sql sql = new Sql().Select("*").From(RedirectItemRow.TableName).Where<RedirectItemRow>(x => x.LinkId == contentId && x.LinkMode == "content");
 
-            // Make the call to the database
-            return Database.Fetch<RedirectItemRow>(sql).Select(RedirectItem.GetFromRow).ToArray();
+        //    // Make the call to the database
+        //    return Database.Fetch<RedirectItemRow>(sql).Select(RedirectItem.GetFromRow).ToArray();
 
-        }
+        //}
 
-        public object GetRedirectsForMedia(int mediaId) {
+        //public object GetRedirectsForMedia(int mediaId) {
 
-            // Just return an empty array if the table doesn't exist (since there aren't any redirects anyway)
-            if (!SchemaHelper.TableExist(RedirectItemRow.TableName)) return new RedirectItem[0];
+        //    // Just return an empty array if the table doesn't exist (since there aren't any redirects anyway)
+        //    if (!SchemaHelper.TableExist(RedirectItemRow.TableName)) return new RedirectItem[0];
 
-            // Generate the SQL for the query
-            Sql sql = new Sql().Select("*").From(RedirectItemRow.TableName).Where<RedirectItemRow>(x => x.LinkId == mediaId && x.LinkMode == "media");
+        //    // Generate the SQL for the query
+        //    Sql sql = new Sql().Select("*").From(RedirectItemRow.TableName).Where<RedirectItemRow>(x => x.LinkId == mediaId && x.LinkMode == "media");
 
-            // Make the call to the database
-            return Database.Fetch<RedirectItemRow>(sql).Select(RedirectItem.GetFromRow).ToArray();
+        //    // Make the call to the database
+        //    return Database.Fetch<RedirectItemRow>(sql).Select(RedirectItem.GetFromRow).ToArray();
 
-        }
+        //}
 
         #endregion
 

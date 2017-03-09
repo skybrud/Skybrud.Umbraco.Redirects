@@ -46,7 +46,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                         id = content.Id,
                         name = content.Name
                     },
-                    redirects = Repository.GetRedirectsForContent(contentId)
+                    redirects = Repository.GetRedirectsByContentId(contentId)
                 });
             } catch (RedirectsException ex) {
                 return Request.CreateResponse(JsonMetaResponse.GetError(HttpStatusCode.InternalServerError, ex.Message));
@@ -66,7 +66,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                         id = media.Id,
                         name = media.Name
                     },
-                    redirects = Repository.GetRedirectsForMedia(contentId)
+                    redirects = Repository.GetRedirectsByMediaId(contentId)
                 });
             } catch (RedirectsException ex) {
                 return Request.CreateResponse(JsonMetaResponse.GetError(HttpStatusCode.InternalServerError, ex.Message));
