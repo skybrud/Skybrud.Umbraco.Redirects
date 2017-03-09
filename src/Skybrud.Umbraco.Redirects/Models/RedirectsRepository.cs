@@ -36,6 +36,8 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
         #endregion
 
+        #region Member methods
+
         /// <summary>
         /// Gets an array of all domains (<see cref="RedirectDomain"/>) registered in Umbraco.
         /// </summary>
@@ -43,8 +45,6 @@ namespace Skybrud.Umbraco.Redirects.Models {
         public RedirectDomain[] GetDomains() {
             return ApplicationContext.Current.Services.DomainService.GetAll(false).Select(RedirectDomain.GetFromDomain).ToArray();
         }
-
-        #region Member methods
 
         /// <summary>
         /// Adds a new redirect matching the specified <code>url</code>. A user matching <code>url</code> will
