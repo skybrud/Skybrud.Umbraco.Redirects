@@ -60,6 +60,7 @@
 
         var params = {
             redirectId: $scope.redirect.uniqueId,
+            rootNodeId: $scope.redirect.rootNodeId,
             url: $scope.redirect.url,
             linkMode: 'content',
             linkId: $scope.redirect.link.id,

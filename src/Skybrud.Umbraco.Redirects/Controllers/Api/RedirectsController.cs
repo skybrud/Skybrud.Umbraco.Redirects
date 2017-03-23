@@ -122,7 +122,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         }
 
         [HttpGet]
-        public object EditRedirect(string redirectId, string url, string linkMode, int linkId, string linkUrl, string linkName = null) {
+        public object EditRedirect(int rootNodeId, string redirectId, string url, string linkMode, int linkId, string linkUrl, string linkName = null) {
 
             try {
 
@@ -146,6 +146,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                 url = urlParts[0].TrimEnd('/');
                 string query = urlParts.Length == 2 ? urlParts[1] : "";
 
+                redirect.RootNodeId = rootNodeId;
                 redirect.Url = url;
                 redirect.QueryString = query;
                 redirect.Link = link;
