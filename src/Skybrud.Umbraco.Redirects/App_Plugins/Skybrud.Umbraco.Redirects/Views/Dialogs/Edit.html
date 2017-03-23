@@ -8,6 +8,11 @@
     </div>
     
     <div class="umb-overlay-container">
+        <label ng-hide="hideRootNodeOption">
+            <strong>Site</strong>
+            <small>Vælg det site (eller rodnode) som redirectet skal gælde for. Vælges det ikke noget site, vil redirectet virke for alle domæner/sites i Umbraco-løsningen.</small>
+            <select ng-options="item as item.name for item in rootNodes track by item.id" ng-model="rootNode" ng-change="rootNodeChanged()"></select>
+        </label>
         <label>
             <strong><localize key="redirects_originalUrl">Original URL</localize></strong>
             <small>

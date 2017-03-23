@@ -127,6 +127,10 @@
 
     };
 
+    service.getRootNodes = function() {
+        return $http.get('/umbraco/backoffice/api/Redirects/GetRootNodes');
+    };
+
     return service;
 
 });

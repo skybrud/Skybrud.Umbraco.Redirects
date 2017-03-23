@@ -278,6 +278,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EventHandlers\MigrationEvents.cs" />
+    <Compile Include="Migrations\AddRootNodeIdColumn.cs" />
+    <Compile Include="Models\RedirectRootNode.cs" />
     <Compile Include="Controllers\Api\RedirectsController.cs" />
     <Compile Include="Exceptions\RedirectNotFoundException.cs" />
     <Compile Include="Exceptions\RedirectsException.cs" />
@@ -289,6 +292,7 @@
     <Compile Include="Models\RedirectsRepository.cs" />
     <Compile Include="Models\RedirectsSearchResult.cs" />
     <Compile Include="Models\RedirectsSearchResultPagination.cs" />
+    <Compile Include="Package.cs" />
     <Compile Include="Properties\AssemblyInfoGenerated.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Routing\RedirectsHttpModule.cs" />

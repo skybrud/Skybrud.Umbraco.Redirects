@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Web.Http;
 using Newtonsoft.Json.Linq;
@@ -6,6 +8,7 @@ using Skybrud.Umbraco.Redirects.Exceptions;
 using Skybrud.Umbraco.Redirects.Models;
 using Skybrud.WebApi.Json;
 using Skybrud.WebApi.Json.Meta;
+using Umbraco.Core;
 using Umbraco.Core.Models;
 using Umbraco.Web.WebApi;
 
@@ -25,10 +28,34 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
             };
         }
 
+        /// <summary>
+        /// Gets a list of root nodes based on the domains added to Umbraco. A root ndoe will only be included in the
+        /// list once - even if it has been assigned multiple domains.
+        /// </summary>
         [HttpGet]
-        public object GetRedirects(int page = 1, int limit = 20, string type = null, string text = null) {
+        public object GetRootNodes() {
+            
+            RedirectDomain[] domains = Repository.GetDomains();
+
+            List<RedirectRootNode> temp = new List<RedirectRootNode>();
+
+            foreach (RedirectDomain domain in domains.Where(x => x.RootNodeId > 0).DistinctBy(x => x.RootNodeId)) {
+                IContent content = ApplicationContext.Services.ContentService.GetById(domain.RootNodeId);
+                if (content == null) return null;
+                temp.Add(RedirectRootNode.GetFromContent(content));
+            }
+
+            return new {
+                total = temp.Count,
+                data = temp.OrderBy(x => x.Id)
+            };
+        
+        }
+        
+        [HttpGet]
+        public object GetRedirects(int page = 1, int limit = 20, string type = null, string text = null, int? rootNodeId = null) {
             try {
-                return Repository.GetRedirects(page, limit, type, text);
+                return Repository.GetRedirects(page, limit, type, text, rootNodeId);
             } catch (RedirectsException ex) {
                 return Request.CreateResponse(JsonMetaResponse.GetError(HttpStatusCode.InternalServerError, ex.Message));
             }
@@ -75,7 +102,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         }
 
         [HttpGet]
-        public object AddRedirect(string url, string linkMode, int linkId, string linkUrl, string linkName = null) {
+        public object AddRedirect(int rootNodeId, string url, string linkMode, int linkId, string linkUrl, string linkName = null) {
 
             try {
 
@@ -86,7 +113,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                     {"mode", linkMode}
                 });
 
-                return Repository.AddRedirect(url, redirect);
+                return Repository.AddRedirect(rootNodeId, url, redirect);
 
             } catch (RedirectsException ex) {
                 return Request.CreateResponse(JsonMetaResponse.GetError(HttpStatusCode.InternalServerError, ex.Message));

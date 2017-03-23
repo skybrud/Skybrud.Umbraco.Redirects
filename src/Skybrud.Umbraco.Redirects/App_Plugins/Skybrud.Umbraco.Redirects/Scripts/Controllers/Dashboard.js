@@ -3,6 +3,13 @@
     $scope.redirects = [];
     $scope.mode = 'list';
 
+    $scope.rootNodes = [
+        { name: 'All sites', value: '' }
+    ];
+
+    localizationService.localize('redirects_allSites').then(function (value) {
+        $scope.rootNodes[0].name = value;
+    });
 
     $scope.types = [
         { name: 'All types', value: 'all' },
@@ -11,7 +18,14 @@
         { name: 'URL', value: 'url' }
     ];
 
+    angular.forEach($scope.types, function (type) {
+        localizationService.localize('redirects_media_' + type.value).then(function (value) {
+            type.name = value;
+        });
+    });
+
     $scope.filters = {
+        rootNode: $scope.rootNodes[0],
         type: $scope.types[0],
         text: ''
     };
@@ -50,7 +64,7 @@
         text: '',
         page: 1,
         pages: 0,
-        limit: 10,
+        limit: 11,
         offset: 0,
         pagination: []
     };
@@ -80,6 +94,12 @@
         };
 
         $scope.activeFilters = 0;
+
+        // Any filters?
+        if ($scope.filters.rootNode && $scope.filters.rootNode.id > 0) {
+            args.rootNodeId = $scope.filters.rootNode.id;
+            $scope.activeFilters++;
+        }
 
         // Any filters?
         if ($scope.filters.type.value != 'all') {
@@ -140,6 +160,12 @@
         });
 
     };
+
+    skybrudRedirectsService.getRootNodes().success(function (r) {
+        angular.forEach(r.data, function (rootNode) {
+            $scope.rootNodes.push(rootNode);
+        });
+    });
 
     $scope.updateList();
 

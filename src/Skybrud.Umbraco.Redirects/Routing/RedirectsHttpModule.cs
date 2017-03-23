@@ -1,6 +1,14 @@
 ﻿using System;
+using System.Text;
 using System.Web;
 using Skybrud.Umbraco.Redirects.Models;
+using umbraco.cms.businesslogic.web;
+using Umbraco.Core;
+using Umbraco.Core.Models;
+using Umbraco.Core.Persistence;
+using Umbraco.Core.Services;
+using Umbraco.Web;
+using Umbraco.Web.Routing;
 
 namespace Skybrud.Umbraco.Redirects.Routing {
 
@@ -22,32 +30,44 @@ namespace Skybrud.Umbraco.Redirects.Routing {
             context.EndRequest += ContextOnEndRequest;
         }
 
+        private IDomain GetUmbracoDomain() {
+
+            // Get the Umbraco request (it may be NULL)
+            PublishedContentRequest pcr = UmbracoContext.Current == null ? null : UmbracoContext.Current.PublishedContentRequest;
+
+            // Return the domain of the Umbraco request
+            if (pcr != null) return pcr.UmbracoDomain;
+
+            // TODO: Find the domain manually via the DomainService
+
+            return null;
+
+        }
+
         private void ContextOnEndRequest(object sender, EventArgs eventArgs) {
 
             HttpApplication application = (HttpApplication) sender;
 
             // Ignore if not a 404 response
             if (application.Response.StatusCode != 404) return;
+            
+            // Get the Umbraco domain of the current request
+            IDomain domain = GetUmbracoDomain();
 
-            // Look for a redirect matching the URL
-            RedirectItem redirect = Repository.GetRedirectByUrl(Request.RawUrl);
+            // Get the root node/content ID of the domain (no domain = 0)
+            int rootNodeId = (domain == null || domain.RootContentId == null ? 0 : domain.RootContentId.Value);
+
+            // Look for a redirect matching the URL (and domain)
+            RedirectItem redirect = null;
+            if (rootNodeId > 0) redirect = Repository.GetRedirectByUrl(rootNodeId, Request.RawUrl);
+            redirect = redirect ?? Repository.GetRedirectByUrl(0, Request.RawUrl);
             if (redirect == null) return;
-
-            // Get the "IPublishedContent" of the node the redirect is pointing to (if not a raw URL)
-            string redirectUrl = redirect.LinkUrl;
-            //if (redirect.Link.Mode == LinkPickerMode.Content) {
-            //    IPublishedContent content = UmbracoContext.Current.ContentCache.GetById(redirect.Link.Id);
-            //    if (content != null) redirectUrl = content.Url;
-            //} else if (redirect.Link.Mode == LinkPickerMode.Media) {
-            //    IPublishedContent media = UmbracoContext.Current.MediaCache.GetById(redirect.Link.Id);
-            //    if (media != null) redirectUrl = media.Url;
-            //}
 
             // Redirect to the URL
             if (redirect.IsPermanent) {
-                Response.RedirectPermanent(redirectUrl);
+                Response.RedirectPermanent(redirect.LinkUrl);
             } else {
-                Response.Redirect(redirectUrl);
+                Response.Redirect(redirect.LinkUrl);
             }
 
         }

@@ -10,6 +10,11 @@
     </div>
 
     <div class="umb-overlay-container">
+        <label ng-hide="hideRootNodeOption">
+            <strong><localize key="redirects_site">Site</localize></strong>
+            <small><localize key="redirects_siteDescription"></localize></small>
+            <select ng-options="item as item.name for item in rootNodes track by item.id" ng-model="rootNode" ng-change="rootNodeChanged()"></select>
+        </label>
         <label>
             <strong><localize key="redirects_originalUrl">Original URL</localize></strong>
             <small>

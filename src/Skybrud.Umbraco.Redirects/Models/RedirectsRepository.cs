@@ -54,8 +54,8 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// <param name="url">The inbound URL to match.</param>
         /// <param name="destionation">An instance of <see cref="RedirectLinkItem"/> representing the destination link.</param>
         /// <returns>An instance of <see cref="RedirectItem"/> representing the created redirect.</returns>
-        public RedirectItem AddRedirect(string url, RedirectLinkItem destionation) {
-            return AddRedirect(url, destionation, true);
+        public RedirectItem AddRedirect(int rootNodeId, string url, RedirectLinkItem destionation) {
+            return AddRedirect(rootNodeId, url, destionation, true);
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// <param name="destionation">An instance of <see cref="RedirectLinkItem"/> representing the destination link.</param>
         /// <param name="permanent">Whether the redirect should be permanent (301) or temporary (302).</param>
         /// <returns>An instance of <see cref="RedirectItem"/> representing the created redirect.</returns>
-        public RedirectItem AddRedirect(string url, RedirectLinkItem destionation, bool permanent) {
+        public RedirectItem AddRedirect(int rootNodeId, string url, RedirectLinkItem destionation, bool permanent) {
 
             // Attempt to create the database table if it doesn't exist
             //try {
@@ -83,12 +83,13 @@ namespace Skybrud.Umbraco.Redirects.Models {
             url = urlParts[0].TrimEnd('/');
             string query = urlParts.Length == 2 ? urlParts[1] : "";
 
-            if (GetRedirectByUrl(url, query) != null) {
+            if (GetRedirectByUrl(rootNodeId, url, query) != null) {
                 throw new RedirectsException("A redirect with the specified URL already exists.");
             }
 
             // Initialize the new redirect and populate the properties
             RedirectItem item = new RedirectItem {
+                RootNodeId = rootNodeId,
                 LinkId = destionation.Id,
                 LinkUrl = destionation.Url,
                 LinkMode = destionation.Mode,
@@ -124,7 +125,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
             if (redirect == null) throw new ArgumentNullException("redirect");
 
             // Check whether another redirect matches the new URL and query string
-            RedirectItem existing = GetRedirectByUrl(redirect.Url, redirect.QueryString);
+            RedirectItem existing = GetRedirectByUrl(redirect.RootNodeId, redirect.Url, redirect.QueryString);
             if (existing != null && existing.Id != redirect.Id) {
                 throw new RedirectsException("A redirect with the same URL and query string already exists.");
             }
@@ -206,14 +207,14 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// </summary>
         /// <param name="url">The URL of the redirect.</param>
         /// <returns>An instance of <see cref="RedirectItem"/>, or <code>null</code> if not found.</returns>
-        public RedirectItem GetRedirectByUrl(string url) {
+        public RedirectItem GetRedirectByUrl(int rootNodeId, string url) {
 
             // Some input validation
             if (String.IsNullOrWhiteSpace(url)) throw new ArgumentNullException("url");
 
             // Split the URL
             string[] parts = url.Split('?');
-            return GetRedirectByUrl(parts[0], parts.Length == 2 ? parts[1] : null);
+            return GetRedirectByUrl(rootNodeId, parts[0], parts.Length == 2 ? parts[1] : null);
 
         }
 
@@ -223,7 +224,51 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// <param name="url">The URL of the redirect.</param>
         /// <param name="queryString">The query string of the redirect.</param>
         /// <returns>An instance of <see cref="RedirectItem"/>, or <code>null</code> if not found.</returns>
-        public RedirectItem GetRedirectByUrl(string url, string queryString) {
+        public RedirectItem GetRedirectByUrl(int rootNodeId, string url, string queryString) {
+
+            // Some input validation
+            if (String.IsNullOrWhiteSpace(url)) throw new ArgumentNullException("url");
+
+            url = url.TrimEnd('/').Trim();
+            queryString = (queryString ?? "").Trim();
+
+            // Just return "null" if the table doesn't exist (since there aren't any redirects anyway)
+            if (!SchemaHelper.TableExist(RedirectItemRow.TableName)) return null;
+
+            // Generate the SQL for the query
+            Sql sql = new Sql().Select("*").From(RedirectItemRow.TableName).Where<RedirectItemRow>(x => x.RootNodeId == rootNodeId && x.Url == url && x.QueryString == queryString);
+
+            // Make the call to the database
+            RedirectItemRow row = Database.FirstOrDefault<RedirectItemRow>(sql);
+
+            // Wrap the database row
+            return row == null ? null : new RedirectItem(row);
+
+        }
+
+        /// <summary>
+        /// Gets the redirects mathing the specified <paramref name="url"/>.
+        /// </summary>
+        /// <param name="url">The URL of the redirects.</param>
+        /// <returns>An array of <see cref="RedirectItem"/>.</returns>
+        public RedirectItem[] GetRedirectsByUrl(string url) {
+
+            // Some input validation
+            if (String.IsNullOrWhiteSpace(url)) throw new ArgumentNullException("url");
+
+            // Split the URL
+            string[] parts = url.Split('?');
+            return GetRedirectsByUrl(parts[0], parts.Length == 2 ? parts[1] : null);
+
+        }
+
+        /// <summary>
+        /// Gets the redirects mathing the specified <paramref name="url"/> and <paramref name="queryString"/>.
+        /// </summary>
+        /// <param name="url">The URL of the redirect.</param>
+        /// <param name="queryString">The query string of the redirect.</param>
+        /// <returns>An array of <see cref="RedirectItem"/>, or <code>null</code> if not found.</returns>
+        public RedirectItem[] GetRedirectsByUrl(string url, string queryString) {
 
             // Some input validation
             if (String.IsNullOrWhiteSpace(url)) throw new ArgumentNullException("url");
@@ -238,10 +283,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
             Sql sql = new Sql().Select("*").From(RedirectItemRow.TableName).Where<RedirectItemRow>(x => x.Url == url && x.QueryString == queryString);
 
             // Make the call to the database
-            RedirectItemRow row = Database.FirstOrDefault<RedirectItemRow>(sql);
-
-            // Wrap the database row
-            return row == null ? null : new RedirectItem(row);
+            return Database.Fetch<RedirectItemRow>(sql).Select(RedirectItem.GetFromRow).OrderBy(x => x.RootNodeId > 0 ? "0" : "1").ToArray();
 
         }
 
@@ -284,21 +326,25 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// <summary>
         /// Gets an instance of <see cref="RedirectsSearchResult"/> representing a paginated search for redirects.
         /// </summary>
-        /// <param name="page">The page to be returned (default is <code>1</code>)</param>.
+        /// <param name="page">The page to be returned (default is <code>1</code>)</param>
         /// <param name="limit">The maximum amount of redirects to be returned per page (default is <code>20</code>).</param>
         /// <param name="type">The type of the redirects to be returned. Possible values are <code>url</code>,
-        /// <code>content</code> or <code>media</code>. If not specified, all types of redirects will be returned.
-        /// Default is <code>null</code>.</param>
+        ///     <code>content</code> or <code>media</code>. If not specified, all types of redirects will be returned.
+        ///     Default is <code>null</code>.</param>
         /// <param name="text">A string value that should be present in either the text or URL of the returned
-        /// redirects. Default is <code>null</code>.</param>
+        ///     redirects. Default is <code>null</code>.</param>
+        /// <param name="rootNodeId"></param>
         /// <returns>An instance of <see cref="RedirectsSearchResult"/>.</returns>
-        public RedirectsSearchResult GetRedirects(int page = 1, int limit = 20, string type = null, string text = null) {
+        public RedirectsSearchResult GetRedirects(int page = 1, int limit = 20, string type = null, string text = null, int? rootNodeId = null) {
 
             // Just return an empty array if the table doesn't exist (since there aren't any redirects anyway)
             if (!SchemaHelper.TableExist(RedirectItemRow.TableName)) return new RedirectsSearchResult(0, limit, 0, 0, 0, new RedirectItem[0]);
 
             // Generate the SQL for the query
             Sql sql = new Sql().Select("*").From(RedirectItemRow.TableName);
+
+            // Search by the rootNodeId
+            if (rootNodeId != null) sql = sql.Where<RedirectItemRow>(x => x.RootNodeId == rootNodeId.Value);
 
             // Search by the type
             if (!String.IsNullOrWhiteSpace(type)) sql = sql.Where<RedirectItemRow>(x => x.LinkMode == type);

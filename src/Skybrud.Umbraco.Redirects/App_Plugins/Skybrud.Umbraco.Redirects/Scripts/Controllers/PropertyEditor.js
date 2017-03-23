@@ -11,16 +11,20 @@
     // If we're neither in the content or media section, we stop further execution (eg. property editor preview)
     if ($scope.type != 'content' && $scope.type != 'media') return;
 
+    console.log($scope.model.config);
+
     $scope.addRedirect = function () {
         if ($scope.type == 'content') {
             skybrudRedirectsService.addRedirect({
                 content: $scope.$parent.$parent.$parent.content,
+                hideRootNodeOption: $scope.model.config.hideRootNodeOption,
                 callback: function () {
                     $scope.updateList();
                 }
             });
         } else if ($scope.type == 'media') {
             skybrudRedirectsService.addRedirect({
+                hideRootNodeOption: $scope.model.config.hideRootNodeOption,
                 media: $scope.$parent.$parent.$parent.content,
                 callback: function () {
                     $scope.updateList();
@@ -30,8 +34,11 @@
     };
 
     $scope.editRedirect = function (redirect) {
-        skybrudRedirectsService.editRedirect(redirect, function () {
-            $scope.updateList();
+        skybrudRedirectsService.editRedirect(redirect, {
+            hideRootNodeOption: $scope.model.config.hideRootNodeOption,
+            callback: function () {
+                $scope.updateList();
+            }
         });
     };
 

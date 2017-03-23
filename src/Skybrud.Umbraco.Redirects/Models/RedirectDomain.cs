@@ -16,6 +16,9 @@ namespace Skybrud.Umbraco.Redirects.Models {
         [JsonProperty("name")]
         public string Name { get; private set; }
 
+        [JsonProperty("rootNodeId")]
+        public int RootNodeId { get; private set; }
+
         #endregion
 
         #region Constructors
@@ -24,6 +27,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
             Domain = domain;
             Id = domain.Id;
             Name = domain.DomainName;
+            RootNodeId = domain.RootContentId == null ? 0 : domain.RootContentId.Value;
         }
 
         #endregion

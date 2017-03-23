@@ -1,16 +1,24 @@
 ﻿angular.module('umbraco').controller('SkybrudUmbracoRedirects.AddRedirectDialog.Controller', function ($scope, $http, notificationsService, skybrudRedirectsService) {
 
-    $scope.options = $scope.dialogOptions.options;
+    $scope.options = $scope.dialogOptions.options || {};
 
-    $scope.type = $scope.options && $scope.options.media ? 'media' : 'content';
-    $scope.content = $scope.options && $scope.options.content;
-    $scope.media = $scope.options && $scope.options.media;
+    $scope.type = $scope.options.media ? 'media' : 'content';
+    $scope.content = $scope.options.content;
+    $scope.media = $scope.options.media;
+
+    $scope.hideRootNodeOption = $scope.options.hideRootNodeOption === '1' || $scope.options.hideRootNodeOption === true;
 
     $scope.redirect = {
+        rootNodeId: 0,
         url: '',
         link: null
     };
 
+    $scope.rootNodes = [
+        { id: 0, name: 'All sites' }
+    ];
+
+    $scope.rootNode = $scope.rootNodes[0];
 
     if ($scope.content) {
         $scope.redirect.link = {
@@ -21,7 +29,7 @@
         }
     } else if ($scope.media) {
 
-        // $scope.media doesn't expode the URL directly, so we need to read it from the "_umb_urls" property
+        // $scope.media doesn't expose the URL directly, so we need to read it from the "_umb_urls" property
         var mediaUrl = null;
         angular.forEach($scope.media.tabs, function (tab) {
             angular.forEach(tab.properties, function (property) {
@@ -39,6 +47,10 @@
         }
 
     }
+
+    $scope.rootNodeChanged = function() {
+        $scope.redirect.rootNodeId = $scope.rootNode.id;
+    };
 
     $scope.addLink = function () {
         skybrudRedirectsService.addLink(function (link) {
@@ -76,6 +88,7 @@
         }
 
         var params = {
+            rootNodeId: $scope.redirect.rootNodeId,
             url: $scope.redirect.url,
             linkMode: $scope.type,
             linkId: $scope.redirect.link.id,
@@ -99,5 +112,18 @@
         });
 
     };
+
+    skybrudRedirectsService.getRootNodes().success(function (r) {
+        angular.forEach(r.data, function (rootNode) {
+            $scope.rootNodes.push(rootNode);
+
+            // If a property editor for content, the current root node (if present) should be pre-selected 
+            if ($scope.content && (',' + $scope.content.path + ',').indexOf(',' + rootNode.id + ',') > 0) {
+                $scope.rootNode = rootNode;
+                $scope.rootNodeChanged();
+            }
+
+        });
+    });
 
 });

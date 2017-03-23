@@ -14,6 +14,9 @@
     <key alias="content">Indhold</key>
     <key alias="media">Medie</key>
     <key alias="url">URL</key>
+    <key alias="site">Site</key>
+    <key alias="siteDescription">Vælg det site (eller rodnode) som redirectet skal gælde for. Vælges det ikke noget site, vil redirectet virke for alle domæner/sites i Umbraco-løsningen.</key>
+    <key alias="allSites">Alle sites</key>
     <key alias="originalUrl">Oprindelig URL</key>
     <key alias="destination">Destination</key>
     <key alias="selectDestination">Vælg destination</key>
@@ -29,5 +32,9 @@
     <key alias="pagination">Viser %0%-%1% af %2% – Side %3% af %4%</key>
     <key alias="urlNotValid"><![CDATA[Den angivne URL er ikke gyldig. En gyldig URL bør fx se ud som <code>/side</code> eller <code>/underside</code>.]]></key>
     <key alias="addNewRedirectSubTitle">Udfyld nedenstående felter for at tilføje et nyt redirect.</key>
+    <key alias="media_all">Alle typer</key>
+    <key alias="media_content">Indhold</key>
+    <key alias="media_media">Medier</key>
+    <key alias="media_url">URLs</key>
   </area>
 </language>

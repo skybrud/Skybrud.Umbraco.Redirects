@@ -48,7 +48,9 @@
                             <i class="umb-table-body__icon umb-table-body__fileicon icon-shuffle"></i>
                         </div>
                         <div class="umb-table-cell col-id">{{redirect.id}}</div>
-                        <div class="umb-table-cell"><a href="{{redirect.url}}{{redirect.queryString ? '?' + redirect.queryString : ''}}" rel="noopener noreferrer" target="_blank" target="_blank">{{redirect.url}}{{redirect.queryString ? '?' + redirect.queryString : ''}}</a></div>
+                        <div class="umb-table-cell">
+                            <a href="{{redirect.urls[0]}}" rel="noopener noreferrer" target="_blank" target="_blank">{{redirect.url}}{{redirect.queryString ? '?' + redirect.queryString : ''}}</a>
+                        </div>
                         <div class="umb-table-cell col-destination">
                             <span ng-if="redirect.link.mode == 'content'">
                                 <localize key="redirects_content">Content</localize>: <a href="{{redirect.link.url}}" rel="noopener noreferrer" target="_blank">{{redirect.link.name ? redirect.link.name : redirect.link.url}}</a>

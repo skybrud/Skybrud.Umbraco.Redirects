@@ -1,8 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 using Newtonsoft.Json;
 using Skybrud.Essentials.Enums;
 using Skybrud.Essentials.Json.Converters.Time;
 using Skybrud.Essentials.Time;
+using Umbraco.Core;
+using Umbraco.Core.Models;
 
 namespace Skybrud.Umbraco.Redirects.Models {
 
@@ -10,6 +15,8 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
         #region Private fields
 
+        private IContent _rootNode;
+        private string[] _rootNodeDomains;
         private EssentialsDateTime _created;
         private EssentialsDateTime _updated;
         private RedirectLinkMode _linkMode;
@@ -34,10 +41,78 @@ namespace Skybrud.Umbraco.Redirects.Models {
             get { return Row.UniqueId; }
         }
 
+        [JsonProperty("rootNodeId")]
+        public int RootNodeId {
+            get { return Row.RootNodeId; }
+            set { Row.RootNodeId = value; _rootNode = null; _rootNodeDomains = null; }
+        }
+
+        [JsonProperty("rootNodeName")]
+        public string RootNodeName {
+            get {
+                if (RootNodeId > 0 && _rootNode == null) _rootNode = ApplicationContext.Current.Services.ContentService.GetById(RootNodeId);
+                return _rootNode == null ? null : _rootNode.Name;
+            }
+        }
+
+        [JsonProperty("rootNodeIcon")]
+        public string RootNodeIcon {
+            get {
+                if (RootNodeId > 0 && _rootNode == null) _rootNode = ApplicationContext.Current.Services.ContentService.GetById(RootNodeId);
+                return _rootNode == null ? null : _rootNode.ContentType.Icon;
+            }
+        }
+
+        [JsonProperty("rootNodeDomains")]
+        public string[] RootNodeDomains {
+            get {
+                if (RootNodeId > 0 && _rootNodeDomains == null) {
+                    _rootNodeDomains = ApplicationContext.Current.Services.DomainService.GetAssignedDomains(RootNodeId, false).Select(x => x.DomainName).ToArray();
+                }
+                return _rootNodeDomains ?? new string[0];
+            }
+        }
+
         [JsonProperty("url")]
         public string Url {
             get { return Row.Url; }
             set { Row.Url = value; }
+        }
+
+        [JsonProperty("urls")]
+        public string[] Urls {
+            get {
+
+                HttpRequest request = HttpContext.Current == null ? null : HttpContext.Current.Request;
+
+                if (RootNodeId > 0 && request != null) {
+
+                    List<string> temp = new List<string>();
+
+                    // Calculate the base URL of the current request so we can prioritize it in the list of URLs
+                    string baseUrl = (request.IsSecureConnection ? "https://" : "http://") + request.Url.Authority + "/";
+
+                    foreach (string domain in RootNodeDomains) {
+
+                        string prefix = "";
+
+                        // Prepend the protocol if not already specified
+                        if (!domain.StartsWith("http://") && !domain.StartsWith("https://")) {
+                            prefix = request.IsSecureConnection ? "https://" : "http://";
+                        }
+
+                        temp.Add(prefix + domain.TrimEnd('/') + Url + (String.IsNullOrWhiteSpace(QueryString) ? "" : "?" + QueryString));
+
+                    }
+
+                    if (temp.Count > 0) return temp.Where(x => x.StartsWith(baseUrl)).Union(temp.Where(x => !x.StartsWith(baseUrl))).ToArray();
+
+                }
+
+                return new [] { Url };
+
+
+            }
         }
 
         [JsonProperty("queryString")]

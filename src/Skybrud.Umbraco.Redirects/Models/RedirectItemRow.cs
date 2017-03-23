@@ -25,6 +25,9 @@ namespace Skybrud.Umbraco.Redirects.Models {
         [Column("RedirectUniqueId")]
         public string UniqueId { get; set; }
 
+        [Column("RootNodeId")]
+        public int RootNodeId { get; set; }
+
         [Column("Url")]
         public string Url { get; set; }
 

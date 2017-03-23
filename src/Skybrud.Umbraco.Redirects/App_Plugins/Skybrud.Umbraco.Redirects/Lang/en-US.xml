@@ -14,6 +14,8 @@
     <key alias="content">Content</key>
     <key alias="media">Media</key>
     <key alias="url">URL</key>
+    <key alias="site">Site</key>
+    <key alias="allSites">All sites</key>
     <key alias="originalUrl">Original URL</key>
     <key alias="destination">Destination</key>
     <key alias="selectDestination">Select destination</key>
@@ -29,5 +31,9 @@
     <key alias="pagination">Showing %0%-%1% of %2% - Page %3% of %4%</key>
     <key alias="urlNotValid"><![CDATA[The specified URL is not valid. A valid URL should look like <code>/page</code> or <code>/page/subpage</code>.]]></key>
     <key alias="addNewRedirectSubTitle">Fill out the fields below to add a new redirect.</key>
+    <key alias="media_all">All types</key>
+    <key alias="media_content">Content</key>
+    <key alias="media_media">Media</key>
+    <key alias="media_url">URLs</key>
   </area>
 </language>

@@ -2,8 +2,26 @@
 
     $scope.loading = false;
 
+    $scope.options = $scope.dialogOptions.options || {};
+
     // Make a copy of the redirect so we don't modify the object used in the list
     $scope.redirect = angular.copy($scope.dialogOptions.redirect);
+
+
+
+
+
+    $scope.hideRootNodeOption = $scope.options.hideRootNodeOption === '1' || $scope.options.hideRootNodeOption === true;
+    
+    $scope.rootNodes = [
+        { id: 0, name: 'All sites' }
+    ];
+
+    $scope.rootNode = $scope.rootNodes[0];
+
+    $scope.rootNodeChanged = function () {
+        $scope.redirect.rootNodeId = $scope.rootNode.id;
+    };
 
     $scope.addLink = function () {
         skybrudRedirectsService.addLink(function (link) {
@@ -65,5 +83,18 @@
         });
 
     };
+
+    skybrudRedirectsService.getRootNodes().success(function (r) {
+        angular.forEach(r.data, function (rootNode) {
+            $scope.rootNodes.push(rootNode);
+
+            // If a property editor for content, the current root node (if present) should be pre-selected 
+            if ($scope.redirect.rootNodeId == rootNode.id) {
+                $scope.rootNode = rootNode;
+                $scope.rootNodeChanged();
+            }
+
+        });
+    });
 
 });
