@@ -28,11 +28,15 @@ namespace Skybrud.Umbraco.Redirects.Models {
             get { return ApplicationContext.Current.DatabaseContext.SqlSyntax; }
         }
 
-        protected readonly DatabaseSchemaHelper SchemaHelper = new DatabaseSchemaHelper(
-            ApplicationContext.Current.DatabaseContext.Database,
-            ApplicationContext.Current.ProfilingLogger.Logger,
-            ApplicationContext.Current.DatabaseContext.SqlSyntax
-        );
+        protected DatabaseSchemaHelper SchemaHelper {
+            get {
+                return new DatabaseSchemaHelper(
+                    ApplicationContext.Current.DatabaseContext.Database,
+                    ApplicationContext.Current.ProfilingLogger.Logger,
+                    ApplicationContext.Current.DatabaseContext.SqlSyntax
+                );
+            }
+        }
 
         #endregion
 
