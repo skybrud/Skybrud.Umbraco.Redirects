@@ -102,7 +102,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         }
 
         [HttpGet]
-        public object AddRedirect(int rootNodeId, string url, string linkMode, int linkId, string linkUrl, string linkName = null) {
+        public object AddRedirect(int rootNodeId, string url, string linkMode, int linkId, string linkUrl, string linkName = null, bool isRegex = false) {
 
             try {
 
@@ -113,7 +113,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                     {"mode", linkMode}
                 });
 
-                return Repository.AddRedirect(rootNodeId, url, redirect);
+                return Repository.AddRedirect(rootNodeId, url, redirect, isRegex);
 
             } catch (RedirectsException ex) {
                 return Request.CreateResponse(JsonMetaResponse.GetError(HttpStatusCode.InternalServerError, ex.Message));
@@ -122,7 +122,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         }
 
         [HttpGet]
-        public object EditRedirect(int rootNodeId, string redirectId, string url, string linkMode, int linkId, string linkUrl, string linkName = null) {
+        public object EditRedirect(int rootNodeId, string redirectId, string url, string linkMode, int linkId, string linkUrl, string linkName = null, bool isRegex = false) {
 
             try {
 
@@ -140,7 +140,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                     {"name", linkName + ""},
                     {"url", linkUrl},
                     {"mode", linkMode}
-                });
+				});
 
                 string[] urlParts = url.Split('?');
                 url = urlParts[0].TrimEnd('/');
@@ -150,6 +150,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                 redirect.Url = url;
                 redirect.QueryString = query;
                 redirect.Link = link;
+				redirect.IsRegex = isRegex;
                 
                 Repository.SaveRedirect(redirect);
 

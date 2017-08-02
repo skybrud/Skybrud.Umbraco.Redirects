@@ -5,6 +5,7 @@ using Umbraco.Core;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Persistence;
 using Umbraco.Core.Persistence.SqlSyntax;
+using System.Text.RegularExpressions;
 
 namespace Skybrud.Umbraco.Redirects.Models {
 
@@ -58,8 +59,8 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// <param name="url">The inbound URL to match.</param>
         /// <param name="destionation">An instance of <see cref="RedirectLinkItem"/> representing the destination link.</param>
         /// <returns>An instance of <see cref="RedirectItem"/> representing the created redirect.</returns>
-        public RedirectItem AddRedirect(int rootNodeId, string url, RedirectLinkItem destionation) {
-            return AddRedirect(rootNodeId, url, destionation, true);
+        public RedirectItem AddRedirect(int rootNodeId, string url, RedirectLinkItem destionation, bool isRegex) {
+            return AddRedirect(rootNodeId, url, destionation, isRegex, true);
         }
 
         /// <summary>
@@ -71,21 +72,26 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// <param name="destionation">An instance of <see cref="RedirectLinkItem"/> representing the destination link.</param>
         /// <param name="permanent">Whether the redirect should be permanent (301) or temporary (302).</param>
         /// <returns>An instance of <see cref="RedirectItem"/> representing the created redirect.</returns>
-        public RedirectItem AddRedirect(int rootNodeId, string url, RedirectLinkItem destionation, bool permanent) {
+        public RedirectItem AddRedirect(int rootNodeId, string url, RedirectLinkItem destionation, bool isRegex, bool permanent) {
 
             // Attempt to create the database table if it doesn't exist
             //try {
                 if (!SchemaHelper.TableExist(RedirectItemRow.TableName)) {
                     SchemaHelper.CreateTable<RedirectItemRow>(false);
                 }
-            //} catch (Exception ex) {
-            //    LogHelper.Error<RedirectsRepository>("Unable to create database table: " + RedirectItem.TableName, ex);
-            //    throw new Exception("Din opgave kunne ikke oprettes pga. en fejl på serveren");
-            //}
+			//} catch (Exception ex) {
+			//    LogHelper.Error<RedirectsRepository>("Unable to create database table: " + RedirectItem.TableName, ex);
+			//    throw new Exception("Din opgave kunne ikke oprettes pga. en fejl på serveren");
+			//}
 
-            string[] urlParts = url.Split('?');
-            url = urlParts[0].TrimEnd('/');
-            string query = urlParts.Length == 2 ? urlParts[1] : "";
+			var query = "";
+
+			if (!isRegex)
+			{
+				string[] urlParts = url.Split('?');
+				url = urlParts[0].TrimEnd('/');
+				query = urlParts.Length == 2 ? urlParts[1] : "";
+			}
 
             if (GetRedirectByUrl(rootNodeId, url, query) != null) {
                 throw new RedirectsException("A redirect with the specified URL already exists.");
@@ -102,7 +108,8 @@ namespace Skybrud.Umbraco.Redirects.Models {
                 QueryString = query,
                 Created = DateTime.Now,
                 Updated = DateTime.Now,
-                IsPermanent = permanent
+                IsPermanent = permanent,
+				IsRegex = isRegex
             };
 
             // Attempt to add the redirect to the database
@@ -233,20 +240,32 @@ namespace Skybrud.Umbraco.Redirects.Models {
             // Some input validation
             if (String.IsNullOrWhiteSpace(url)) throw new ArgumentNullException("url");
 
-            url = url.TrimEnd('/').Trim();
+			var fullUrl = url + (queryString.IsNullOrWhiteSpace() ? "" : "?" + queryString);
+
+			url = url.TrimEnd('/').Trim();
             queryString = (queryString ?? "").Trim();
 
             // Just return "null" if the table doesn't exist (since there aren't any redirects anyway)
             if (!SchemaHelper.TableExist(RedirectItemRow.TableName)) return null;
 
             // Generate the SQL for the query
-            Sql sql = new Sql().Select("*").From(RedirectItemRow.TableName).Where<RedirectItemRow>(x => x.RootNodeId == rootNodeId && x.Url == url && x.QueryString == queryString);
+            Sql sql = new Sql().Select("*").From(RedirectItemRow.TableName).Where<RedirectItemRow>(x => x.RootNodeId == rootNodeId && !x.IsRegex && x.Url == url && x.QueryString == queryString);
 
             // Make the call to the database
             RedirectItemRow row = Database.FirstOrDefault<RedirectItemRow>(sql);
 
-            // Wrap the database row
-            return row == null ? null : new RedirectItem(row);
+			if (row != null)
+			{
+				// found a non regex redirect, wrap it
+				return new RedirectItem(row);
+			}
+
+			// try finding a regex redirect, we need to fetch all regex redirects and check against them
+			sql = new Sql().Select("*").From(RedirectItemRow.TableName).Where<RedirectItemRow>(x => x.RootNodeId == rootNodeId && x.IsRegex);
+			row = Database.Fetch<RedirectItemRow>(sql).FirstOrDefault(x => Regex.IsMatch(fullUrl, x.Url));
+			
+			// Wrap the database row
+			return row == null ? null : new RedirectItem(row);
 
         }
 
@@ -277,19 +296,29 @@ namespace Skybrud.Umbraco.Redirects.Models {
             // Some input validation
             if (String.IsNullOrWhiteSpace(url)) throw new ArgumentNullException("url");
 
-            url = url.TrimEnd('/').Trim();
+			var fullUrl = url + (queryString.IsNullOrWhiteSpace() ? "" : "?" + queryString);
+
+			url = url.TrimEnd('/').Trim();
             queryString = (queryString ?? "").Trim();
 
             // Just return "null" if the table doesn't exist (since there aren't any redirects anyway)
             if (!SchemaHelper.TableExist(RedirectItemRow.TableName)) return null;
 
             // Generate the SQL for the query
-            Sql sql = new Sql().Select("*").From(RedirectItemRow.TableName).Where<RedirectItemRow>(x => x.Url == url && x.QueryString == queryString);
+            Sql sql = new Sql().Select("*").From(RedirectItemRow.TableName).Where<RedirectItemRow>(x => !x.IsRegex && x.Url == url && x.QueryString == queryString);
 
-            // Make the call to the database
-            return Database.Fetch<RedirectItemRow>(sql).Select(RedirectItem.GetFromRow).OrderBy(x => x.RootNodeId > 0 ? "0" : "1").ToArray();
+			// Make the call to the database
+			var redirects = Database.Fetch<RedirectItemRow>(sql).Select(RedirectItem.GetFromRow).ToList();//.OrderBy(x => x.RootNodeId > 0 ? "0" : "1");
 
-        }
+			// find regex redirects
+			sql = new Sql().Select("*").From(RedirectItemRow.TableName).Where<RedirectItemRow>(x => x.IsRegex);
+			var regexRedirects = Database.Fetch<RedirectItemRow>(sql).Where(x => Regex.IsMatch(fullUrl, x.Url)).Select(RedirectItem.GetFromRow).ToList();//.OrderBy(x => x.RootNodeId > 0 ? "0" : "1");
+
+			redirects.AddRange(regexRedirects);
+
+			return redirects.OrderBy(x => x.RootNodeId > 0 ? "0" : "1").ToArray();
+
+		}
 
         /// <summary>
         /// Gets an array of <see cref="RedirectItem"/> for the content item with the specified <paramref name="contentId"/>.

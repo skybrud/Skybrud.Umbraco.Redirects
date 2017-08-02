@@ -35,8 +35,8 @@
         }, false);
     };
 
-    $scope.hasValidUrl = function () {
-        return skybrudRedirectsService.isValidUrl($scope.redirect.url);
+	$scope.hasValidUrl = function () {
+		return skybrudRedirectsService.isValidUrl($scope.redirect.url, $scope.redirect.isRegex);
     };
 
     $scope.save = function () {
@@ -48,7 +48,7 @@
             return;
         }
 
-        if (!skybrudRedirectsService.isValidUrl($scope.redirect.url)) {
+		if (!skybrudRedirectsService.isValidUrl($scope.redirect.url, $scope.redirect.isRegex)) {
             notificationsService.error('Ugyldig værdi', 'Den angivne URL er ikke gyldig.');
             return;
         }
@@ -65,7 +65,8 @@
             linkMode: 'content',
             linkId: $scope.redirect.link.id,
             linkUrl: $scope.redirect.link.url,
-            linkName: $scope.redirect.link.name
+			linkName: $scope.redirect.link.name,
+			isRegex: $scope.redirect.isRegex
         };
 
         $scope.loading = true;

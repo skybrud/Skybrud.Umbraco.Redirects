@@ -23,11 +23,18 @@
             </div>
             <input type="text" ng-model="redirect.url" style="max-width: initial;" />
         </label>
+		<label>
+			<strong><localize key="redirects_isRegex">Use Regular Expressions</localize></strong>
+			<input type="checkbox" ng-model="redirect.isRegex" />
+		</label>
         <label>
             <strong><localize key="redirects_destination">Destination</localize></strong>
             <small>
                 <localize key="redirects_labelDestinationDescription">Select the page or URL the user should be redirected to.</localize>
             </small>
+			<small ng-if="redirect.isRegex">
+				<localize key="redirects_isRegexDestinationDescription">You can use capturing groups backreferences when using Regex; $1, $2 etc.</localize>
+			</small>
             <div ng-if="redirect.link">
                 {{redirect.link.name ? redirect.link.name : redirect.link.url}}
                 <a class="edit" href="#" prevent-default="" ng-click="editLink()"><i class="icon icon-edit"></i></a>

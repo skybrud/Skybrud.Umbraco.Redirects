@@ -9,12 +9,15 @@ using Umbraco.Core.Persistence;
 using Umbraco.Core.Services;
 using Umbraco.Web;
 using Umbraco.Web.Routing;
+using System.Text.RegularExpressions;
 
 namespace Skybrud.Umbraco.Redirects.Routing {
 
-    public class RedirectsHttpModule : IHttpModule {
+    public class RedirectsHttpModule : IHttpModule
+	{
+		static Regex _capturingGroupsRegex = new Regex("\\$\\d+");
 
-        public RedirectsRepository Repository {
+		public RedirectsRepository Repository {
             get { return RedirectsRepository.Current; }
         }
 
@@ -63,11 +66,23 @@ namespace Skybrud.Umbraco.Redirects.Routing {
             redirect = redirect ?? Repository.GetRedirectByUrl(0, Request.RawUrl);
             if (redirect == null) return;
 
-            // Redirect to the URL
-            if (redirect.IsPermanent) {
-                Response.RedirectPermanent(redirect.LinkUrl);
+			var redirectUrl = redirect.LinkUrl;
+
+			if (redirect.IsRegex)
+			{
+				var regex = new Regex(redirect.Url);
+
+				if (_capturingGroupsRegex.IsMatch(redirectUrl))
+				{
+					redirectUrl = regex.Replace(redirect.Url, redirectUrl);
+				}
+			}
+
+			// Redirect to the URL
+			if (redirect.IsPermanent) {
+                Response.RedirectPermanent(redirectUrl);
             } else {
-                Response.Redirect(redirect.LinkUrl);
+                Response.Redirect(redirectUrl);
             }
 
         }
