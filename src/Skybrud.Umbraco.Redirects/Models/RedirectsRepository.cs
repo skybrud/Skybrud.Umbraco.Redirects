@@ -58,8 +58,8 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// <param name="url">The inbound URL to match.</param>
         /// <param name="destionation">An instance of <see cref="RedirectLinkItem"/> representing the destination link.</param>
         /// <returns>An instance of <see cref="RedirectItem"/> representing the created redirect.</returns>
-        public RedirectItem AddRedirect(int rootNodeId, string url, RedirectLinkItem destionation) {
-            return AddRedirect(rootNodeId, url, destionation, true);
+        public RedirectItem AddRedirect(int rootNodeId, string url, RedirectLinkItem destionation, bool forwardQueryString) {
+            return AddRedirect(rootNodeId, url, destionation, forwardQueryString, true);
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// <param name="destionation">An instance of <see cref="RedirectLinkItem"/> representing the destination link.</param>
         /// <param name="permanent">Whether the redirect should be permanent (301) or temporary (302).</param>
         /// <returns>An instance of <see cref="RedirectItem"/> representing the created redirect.</returns>
-        public RedirectItem AddRedirect(int rootNodeId, string url, RedirectLinkItem destionation, bool permanent) {
+        public RedirectItem AddRedirect(int rootNodeId, string url, RedirectLinkItem destionation, bool forwardQueryString, bool permanent) {
 
             // Attempt to create the database table if it doesn't exist
             //try {
@@ -102,7 +102,8 @@ namespace Skybrud.Umbraco.Redirects.Models {
                 QueryString = query,
                 Created = DateTime.Now,
                 Updated = DateTime.Now,
-                IsPermanent = permanent
+                IsPermanent = permanent,
+				ForwardQueryString = forwardQueryString
             };
 
             // Attempt to add the redirect to the database
@@ -245,6 +246,15 @@ namespace Skybrud.Umbraco.Redirects.Models {
             // Make the call to the database
             RedirectItemRow row = Database.FirstOrDefault<RedirectItemRow>(sql);
 
+			if (row == null)
+			{
+				// no redirect found, try with forwardQueryString = true, and no querystring
+				sql = new Sql().Select("*").From(RedirectItemRow.TableName).Where<RedirectItemRow>(x => x.RootNodeId == rootNodeId && x.Url == url && x.ForwardQueryString);
+
+				// Make the call to the database
+				row = Database.FirstOrDefault<RedirectItemRow>(sql);
+			}
+
             // Wrap the database row
             return row == null ? null : new RedirectItem(row);
 
@@ -284,7 +294,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
             if (!SchemaHelper.TableExist(RedirectItemRow.TableName)) return null;
 
             // Generate the SQL for the query
-            Sql sql = new Sql().Select("*").From(RedirectItemRow.TableName).Where<RedirectItemRow>(x => x.Url == url && x.QueryString == queryString);
+            Sql sql = new Sql().Select("*").From(RedirectItemRow.TableName).Where<RedirectItemRow>(x => x.Url == url && (x.QueryString == queryString || x.ForwardQueryString));
 
             // Make the call to the database
             return Database.Fetch<RedirectItemRow>(sql).Select(RedirectItem.GetFromRow).OrderBy(x => x.RootNodeId > 0 ? "0" : "1").ToArray();

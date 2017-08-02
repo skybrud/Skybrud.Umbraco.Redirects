@@ -11,7 +11,8 @@
     $scope.redirect = {
         rootNodeId: 0,
         url: '',
-        link: null
+		link: null,
+		forwardQueryString: false
     };
 
     $scope.rootNodes = [
@@ -93,7 +94,8 @@
             linkMode: $scope.type,
             linkId: $scope.redirect.link.id,
             linkUrl: $scope.redirect.link.url,
-            linkName: $scope.redirect.link.name
+			linkName: $scope.redirect.link.name,
+			forwardQueryString: $scope.redirect.forwardQueryString
         };
 
         $scope.loading = true;

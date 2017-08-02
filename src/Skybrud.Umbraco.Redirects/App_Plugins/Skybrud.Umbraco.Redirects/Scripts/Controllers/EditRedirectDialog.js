@@ -65,7 +65,8 @@
             linkMode: 'content',
             linkId: $scope.redirect.link.id,
             linkUrl: $scope.redirect.link.url,
-            linkName: $scope.redirect.link.name
+			linkName: $scope.redirect.link.name,
+			forwardQueryString: $scope.redirect.forwardQueryString
         };
 
         $scope.loading = true;

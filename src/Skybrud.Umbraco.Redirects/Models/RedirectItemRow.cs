@@ -54,11 +54,14 @@ namespace Skybrud.Umbraco.Redirects.Models {
         [Column("Updated")]
         public long Updated { get; set; }
 
-        [Column("IsPermanent")]
-        public bool IsPermanent { get; set; }
+		[Column("IsPermanent")]
+		public bool IsPermanent { get; set; }
 
-        #endregion
+		[Column("ForwardQueryString")]
+		public bool ForwardQueryString { get; set; }
 
-    }
+		#endregion
+
+	}
 
 }
