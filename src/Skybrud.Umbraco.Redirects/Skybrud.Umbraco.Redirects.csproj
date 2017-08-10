@@ -278,6 +278,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Domains\DomainUtils.cs" />
     <Compile Include="EventHandlers\MigrationEvents.cs" />
     <Compile Include="Migrations\AddRootNodeIdColumn.cs" />
     <Compile Include="Models\RedirectRootNode.cs" />

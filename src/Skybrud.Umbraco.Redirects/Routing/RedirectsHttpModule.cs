@@ -9,6 +9,7 @@ using Umbraco.Core.Persistence;
 using Umbraco.Core.Services;
 using Umbraco.Web;
 using Umbraco.Web.Routing;
+using Skybrud.Umbraco.Redirects.Domains;
 
 namespace Skybrud.Umbraco.Redirects.Routing {
 
@@ -38,7 +39,10 @@ namespace Skybrud.Umbraco.Redirects.Routing {
             // Return the domain of the Umbraco request
             if (pcr != null) return pcr.UmbracoDomain;
 
-            // TODO: Find the domain manually via the DomainService
+            // Find domain via DomainService based on current request domain
+            var domain = DomainUtils.FindDomainForUri(Request.Url);
+
+            if (domain != null) return domain;
 
             return null;
 
