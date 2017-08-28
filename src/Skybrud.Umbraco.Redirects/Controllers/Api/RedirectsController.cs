@@ -29,7 +29,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         }
 
         /// <summary>
-        /// Gets a list of root nodes based on the domains added to Umbraco. A root ndoe will only be included in the
+        /// Gets a list of root nodes based on the domains added to Umbraco. A root node will only be included in the
         /// list once - even if it has been assigned multiple domains.
         /// </summary>
         [HttpGet]
