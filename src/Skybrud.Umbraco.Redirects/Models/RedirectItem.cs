@@ -73,18 +73,32 @@ namespace Skybrud.Umbraco.Redirects.Models {
             }
         }
 
+        /// <summary>
+        /// Gets the inbound URL (path) of the redirect. The value value will not contain the domain or the query
+        /// string.
+        /// </summary>
         [JsonProperty("url")]
         public string Url {
             get { return Row.Url; }
             set { Row.Url = value; }
         }
 
+        /// <summary>
+        /// Gets an array of inbound URLs of the redirect. If a root node has been selected for this redirect, the
+        /// array will contain a full URL for each domain associated with the root node. The returned URLs will also
+        /// contain the query string (if specified).
+        /// </summary>
         [JsonProperty("urls")]
         public string[] Urls {
+            
             get {
+
+                // Get the URL (path and query string) of the redirect
+                string url = Url + (String.IsNullOrWhiteSpace(QueryString) ? "" : "?" + QueryString);
 
                 HttpRequest request = HttpContext.Current == null ? null : HttpContext.Current.Request;
 
+                // Return the full URL for each domain of the selected root node
                 if (RootNodeId > 0 && request != null) {
 
                     List<string> temp = new List<string>();
@@ -101,7 +115,8 @@ namespace Skybrud.Umbraco.Redirects.Models {
                             prefix = request.IsSecureConnection ? "https://" : "http://";
                         }
 
-                        temp.Add(prefix + domain.TrimEnd('/') + Url + (String.IsNullOrWhiteSpace(QueryString) ? "" : "?" + QueryString));
+                        // Append the full URL for "domain"
+                        temp.Add(prefix + domain.TrimEnd('/') + url);
 
                     }
 
@@ -109,12 +124,16 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
                 }
 
-                return new [] { Url };
-
+                // Or just return the normal URL as a fallback
+                return new[] { url };
 
             }
+        
         }
 
+        /// <summary>
+        /// Gets the inbound query string of the redirect.
+        /// </summary>
         [JsonProperty("queryString")]
         public string QueryString {
             get { return Row.QueryString; }

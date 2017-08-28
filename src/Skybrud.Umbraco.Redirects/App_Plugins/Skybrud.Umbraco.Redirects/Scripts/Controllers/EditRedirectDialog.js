@@ -7,9 +7,8 @@
     // Make a copy of the redirect so we don't modify the object used in the list
     $scope.redirect = angular.copy($scope.dialogOptions.redirect);
 
-
-
-
+    // Combine the URL and query string so we can bind to it in a single input field
+    $scope.redirectUrl = $scope.redirect.url + ($scope.redirect.queryString ? "?" + $scope.redirect.queryString : "");
 
     $scope.hideRootNodeOption = $scope.options.hideRootNodeOption === '1' || $scope.options.hideRootNodeOption === true;
     
@@ -36,19 +35,19 @@
     };
 
     $scope.hasValidUrl = function () {
-        return skybrudRedirectsService.isValidUrl($scope.redirect.url);
+        return skybrudRedirectsService.isValidUrl($scope.redirectUrl);
     };
 
     $scope.save = function () {
 
         if ($scope.loading) return;
 
-        if (!$scope.redirect.url) {
+        if (!$scope.redirectUrl) {
             notificationsService.error('Ingen URL', 'Du skal angive den oprindelige URL.');
             return;
         }
 
-        if (!skybrudRedirectsService.isValidUrl($scope.redirect.url)) {
+        if (!skybrudRedirectsService.isValidUrl($scope.redirectUrl)) {
             notificationsService.error('Ugyldig værdi', 'Den angivne URL er ikke gyldig.');
             return;
         }
@@ -61,7 +60,7 @@
         var params = {
             redirectId: $scope.redirect.uniqueId,
             rootNodeId: $scope.redirect.rootNodeId,
-            url: $scope.redirect.url,
+            url: $scope.redirectUrl,
             linkMode: $scope.redirect.link.mode,
             linkId: $scope.redirect.link.id,
             linkUrl: $scope.redirect.link.url,

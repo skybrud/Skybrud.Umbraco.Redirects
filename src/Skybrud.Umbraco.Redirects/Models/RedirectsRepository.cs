@@ -354,7 +354,22 @@ namespace Skybrud.Umbraco.Redirects.Models {
             if (!String.IsNullOrWhiteSpace(type)) sql = sql.Where<RedirectItemRow>(x => x.LinkMode == type);
 
             // Search by the text
-            if (!String.IsNullOrWhiteSpace(text)) sql = sql.Where<RedirectItemRow>(x => x.LinkName.Contains(text) || x.Url.Contains(text));
+            if (!String.IsNullOrWhiteSpace(text)) {
+                string[] parts = text.Split('?');
+                if (parts.Length == 1) {
+                    sql = sql.Where<RedirectItemRow>(x => x.LinkName.Contains(text) || x.Url.Contains(text) || x.QueryString.Contains(text));
+                } else {
+                    string url = parts[0];
+                    string query = parts[1];
+                    sql = sql.Where<RedirectItemRow>(x => (
+                        x.LinkName.Contains(text)
+                        ||
+                        x.Url.Contains(text)
+                        ||
+                        (x.Url.Contains(url) && x.QueryString.Contains(query))
+                    ));
+                }
+            }
             
             // Order the redirects
             sql = sql.OrderByDescending<RedirectItemRow>(x => x.Updated, SqlSyntax);
