@@ -4,7 +4,7 @@
 			"alias": "Skybrud.Umbraco.Redirects",
 			"name": "Skybrud Redirects",
 			"editor": {
-				"view": "~/App_Plugins/Skybrud.Umbraco.Redirects/Views/PropertyEditor.html?v=0.2.4",
+				"view": "~/App_Plugins/Skybrud.Umbraco.Redirects/Views/PropertyEditor.html?v=0.2.9",
                 "hideLabel": true
 			},
 			"prevalues": {
