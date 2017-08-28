@@ -62,7 +62,7 @@
             redirectId: $scope.redirect.uniqueId,
             rootNodeId: $scope.redirect.rootNodeId,
             url: $scope.redirect.url,
-            linkMode: 'content',
+            linkMode: $scope.redirect.link.mode,
             linkId: $scope.redirect.link.id,
             linkUrl: $scope.redirect.link.url,
             linkName: $scope.redirect.link.name
