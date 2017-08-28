@@ -40,9 +40,19 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
             List<RedirectRootNode> temp = new List<RedirectRootNode>();
 
             foreach (RedirectDomain domain in domains.Where(x => x.RootNodeId > 0).DistinctBy(x => x.RootNodeId)) {
+                
+                // Get the root node from the content service
                 IContent content = ApplicationContext.Services.ContentService.GetById(domain.RootNodeId);
-                if (content == null) return null;
+                
+                // Skip if not found via the content service
+                if (content == null) continue;
+                
+                // Skip if the root node is located in the recycle bin
+                if (content.Path.StartsWith("-1,-20,")) continue;
+                
+                // Append the root node to the result
                 temp.Add(RedirectRootNode.GetFromContent(content));
+            
             }
 
             return new {
