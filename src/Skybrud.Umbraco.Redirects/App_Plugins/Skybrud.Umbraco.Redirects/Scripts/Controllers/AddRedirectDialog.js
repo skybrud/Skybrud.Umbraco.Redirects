@@ -90,7 +90,7 @@
         var params = {
             rootNodeId: $scope.redirect.rootNodeId,
             url: $scope.redirect.url,
-            linkMode: $scope.type,
+            linkMode: $scope.redirect.link.mode,
             linkId: $scope.redirect.link.id,
             linkUrl: $scope.redirect.link.url,
             linkName: $scope.redirect.link.name
