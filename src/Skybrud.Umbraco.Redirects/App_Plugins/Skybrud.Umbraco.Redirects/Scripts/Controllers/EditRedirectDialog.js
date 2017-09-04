@@ -35,7 +35,7 @@
     };
 
     $scope.hasValidUrl = function () {
-        return skybrudRedirectsService.isValidUrl($scope.redirectUrl);
+        return skybrudRedirectsService.isValidUrl($scope.redirect.url, $scope.redirect.isRegex);
     };
 
     $scope.save = function () {
@@ -47,7 +47,7 @@
             return;
         }
 
-        if (!skybrudRedirectsService.isValidUrl($scope.redirectUrl)) {
+        if (!skybrudRedirectsService.isValidUrl($scope.redirect.url, $scope.redirect.isRegex)) {
             notificationsService.error('Ugyldig værdi', 'Den angivne URL er ikke gyldig.');
             return;
         }
@@ -64,7 +64,8 @@
             linkMode: $scope.redirect.link.mode,
             linkId: $scope.redirect.link.id,
             linkUrl: $scope.redirect.link.url,
-            linkName: $scope.redirect.link.name
+			linkName: $scope.redirect.link.name,
+			isRegex: $scope.redirect.isRegex
         };
 
         $scope.loading = true;

@@ -11,7 +11,8 @@
     $scope.redirect = {
         rootNodeId: 0,
         url: '',
-        link: null
+		link: null,
+		isRegex: false
     };
 
     $scope.rootNodes = [
@@ -64,8 +65,8 @@
         }, false);
     };
 
-    $scope.hasValidUrl = function () {
-        return skybrudRedirectsService.isValidUrl($scope.redirect.url);
+	$scope.hasValidUrl = function () {
+		return skybrudRedirectsService.isValidUrl($scope.redirect.url, $scope.redirect.isRegex);
     };
 
     $scope.save = function () {
@@ -93,7 +94,8 @@
             linkMode: $scope.redirect.link.mode,
             linkId: $scope.redirect.link.id,
             linkUrl: $scope.redirect.link.url,
-            linkName: $scope.redirect.link.name
+			linkName: $scope.redirect.link.name,
+			isRegex: $scope.redirect.isRegex
         };
 
         $scope.loading = true;

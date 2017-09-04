@@ -17,6 +17,8 @@
     <key alias="site">Site</key>
     <key alias="allSites">All sites</key>
     <key alias="originalUrl">Original URL</key>
+		<key alias="isRegex">Use regular expressions</key>
+		<key alias="isRegexDestinationDescription">You can use capturing groups backreferences when using Regex; $1, $2 etc.</key>
     <key alias="destination">Destination</key>
     <key alias="selectDestination">Select destination</key>
     <key alias="created">Created</key>
