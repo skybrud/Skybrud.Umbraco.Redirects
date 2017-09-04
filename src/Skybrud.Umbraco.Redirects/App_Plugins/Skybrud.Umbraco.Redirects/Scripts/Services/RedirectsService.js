@@ -115,13 +115,13 @@
             });
         },
 
-        isValidUrl: function(url) {
+        isValidUrl: function(url, isRegex) {
 
             // Make sure we have a string and trim all leading and trailing whitespace
             url = $.trim(url + '');
 
             // For now a valid URL should start with a forward slash
-            return url.indexOf('/') === 0;
+            return isRegex || url.indexOf('/') === 0;
 
         }
 
