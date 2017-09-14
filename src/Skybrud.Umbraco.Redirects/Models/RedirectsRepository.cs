@@ -57,6 +57,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// <paramref name="url"/> will automatically be redirected to the URL of the specified
         /// <paramref name="destionation"/> link.
         /// </summary>
+        /// <param name="rootNodeId">THe ID of the root/side node. Use <code>0</code> for a global redirect.</param>
         /// <param name="url">The inbound URL to match.</param>
         /// <param name="destionation">An instance of <see cref="RedirectLinkItem"/> representing the destination link.</param>
         /// <returns>An instance of <see cref="RedirectItem"/> representing the created redirect.</returns>
@@ -69,9 +70,12 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// <paramref name="url"/> will automatically be redirected to the URL of the specified
         /// <paramref name="destionation"/> link.
         /// </summary>
+        /// <param name="rootNodeId">THe ID of the root/side node. Use <code>0</code> for a global redirect.</param>
         /// <param name="url">The inbound URL to match.</param>
         /// <param name="destionation">An instance of <see cref="RedirectLinkItem"/> representing the destination link.</param>
         /// <param name="permanent">Whether the redirect should be permanent (301) or temporary (302).</param>
+        /// <param name="isRegex">Whether regex should be enabled for the redirect.</param>
+        /// <param name="forwardQueryString">Whether the redirect should forward the original query string.</param>
         /// <returns>An instance of <see cref="RedirectItem"/> representing the created redirect.</returns>
         public RedirectItem AddRedirect(int rootNodeId, string url, RedirectLinkItem destionation, bool permanent, bool isRegex, bool forwardQueryString) {
 
@@ -218,6 +222,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// <summary>
         /// Gets the redirect mathing the specified <paramref name="url"/>.
         /// </summary>
+        /// <param name="rootNodeId">THe ID of the root/side node. Use <code>0</code> for a global redirect.</param>
         /// <param name="url">The URL of the redirect.</param>
         /// <returns>An instance of <see cref="RedirectItem"/>, or <code>null</code> if not found.</returns>
         public RedirectItem GetRedirectByUrl(int rootNodeId, string url) {
@@ -234,6 +239,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// <summary>
         /// Gets the redirect mathing the specified <paramref name="url"/> and <paramref name="queryString"/>.
         /// </summary>
+        /// <param name="rootNodeId">THe ID of the root/side node. Use <code>0</code> for a global redirect.</param>
         /// <param name="url">The URL of the redirect.</param>
         /// <param name="queryString">The query string of the redirect.</param>
         /// <returns>An instance of <see cref="RedirectItem"/>, or <code>null</code> if not found.</returns>
