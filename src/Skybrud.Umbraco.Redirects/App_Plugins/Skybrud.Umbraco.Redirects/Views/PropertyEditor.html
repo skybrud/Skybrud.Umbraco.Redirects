@@ -47,7 +47,7 @@
                         <div class="umb-table-cell col-id">{{redirect.id}}</div>
                         <div class="umb-table-cell">
                             <a href="{{redirect.urls[0]}}" rel="noopener noreferrer" target="_blank" target="_blank">{{redirect.url}}{{redirect.queryString ? '?' + redirect.queryString : ''}}</a>
-							<small ng-if="redirect.isRegex">&nbsp;(.*)</small>
+							<small ng-if="redirect.regex">&nbsp;(.*)</small>
                         </div>
 						<div class="umb-table-cell">
 							<i class="umb-table-body__icon umb-table-body__fileicon icon-shuffle"></i>
