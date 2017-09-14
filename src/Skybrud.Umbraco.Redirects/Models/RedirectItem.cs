@@ -204,7 +204,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
 			set { Row.IsRegex = value; }
 		}
 
-		[JsonProperty("forwardQueryString")]
+		[JsonProperty("forward")]
 		public bool ForwardQueryString {
 			get { return Row.ForwardQueryString; }
 			set { Row.ForwardQueryString = value; }

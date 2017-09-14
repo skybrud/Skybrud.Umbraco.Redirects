@@ -14,7 +14,7 @@
         link: null,
         permanent: true,
         regex: false,
-        forwardQueryString: false
+        forward: false
     };
 
     $scope.rootNodes = [
@@ -99,7 +99,7 @@
             linkName: $scope.redirect.link.name,
             permanent: $scope.redirect.permanent,
             regex: $scope.redirect.regex,
-            forwardQueryString: $scope.redirect.forwardQueryString
+            forward: $scope.redirect.forward
         };
 
         $scope.loading = true;
