@@ -6,8 +6,11 @@ using System.Linq;
 namespace Skybrud.Umbraco.Redirects.Extensions
 {
 
-	public static class NameValueCollectionExtension
+	internal static class NameValueCollectionExtension
 	{
+
+        // TODO: We have similar logic in "Skybrud.Social", which should probably be moved to "Skybrud.Essentials", and then used instead
+
 		public static bool CollectionEquals(this NameValueCollection nameValueCollection1, NameValueCollection nameValueCollection2)
 		{
 			return nameValueCollection1.ToKeyValue().SequenceEqual(nameValueCollection2.ToKeyValue());
