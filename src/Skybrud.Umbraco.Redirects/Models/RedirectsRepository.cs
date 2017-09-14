@@ -248,8 +248,6 @@ namespace Skybrud.Umbraco.Redirects.Models {
             // Some input validation
             if (String.IsNullOrWhiteSpace(url)) throw new ArgumentNullException("url");
 
-			var fullUrl = url + (queryString.IsNullOrWhiteSpace() ? "" : "?" + queryString);
-
 			url = url.TrimEnd('/').Trim();
             queryString = (queryString ?? "").Trim();
 
