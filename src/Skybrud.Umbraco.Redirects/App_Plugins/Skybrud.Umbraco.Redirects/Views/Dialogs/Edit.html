@@ -66,6 +66,7 @@
                     </label>
                 </div>
             </div>
+
             <!--<div class="sky-option">
                 <strong>Regular expressions</strong>
                 <small>
@@ -82,7 +83,17 @@
                     </label>
                 </div>
             </div>-->
+
+            <label>
+                <strong><localize key="redirects_forwardQueryString">Forward query string</localize></strong>
+                <small>
+                    <localize key="redirects_forwardQueryStringDescription">When enabled, the query string of the original request is forwarded to the redirect location (pass through)</localize>
+                </small>
+                <input type="checkbox" ng-model="redirect.forwardQueryString" />
+            </label>
+
         </div>
+
     </div>
     
     <div class="umb-overlay-drawer">

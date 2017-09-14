@@ -112,7 +112,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         }
 
         [HttpGet]
-        public object AddRedirect(int rootNodeId, string url, string linkMode, int linkId, string linkUrl, string linkName = null, bool permanent = true, bool regex = false) {
+        public object AddRedirect(int rootNodeId, string url, string linkMode, int linkId, string linkUrl, string linkName = null, bool permanent = true, bool regex = false, bool forwardQueryString = false) {
 
             try {
 
@@ -123,7 +123,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                     {"mode", linkMode}
                 });
 
-                return Repository.AddRedirect(rootNodeId, url, redirect, permanent, regex);
+                return Repository.AddRedirect(rootNodeId, url, redirect, permanent, regex, forwardQueryString);
 
             } catch (RedirectsException ex) {
                 return Request.CreateResponse(JsonMetaResponse.GetError(HttpStatusCode.InternalServerError, ex.Message));
@@ -132,7 +132,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         }
 
         [HttpGet]
-        public object EditRedirect(int rootNodeId, string redirectId, string url, string linkMode, int linkId, string linkUrl, string linkName = null, bool permanent = true, bool regex = false) {
+        public object EditRedirect(int rootNodeId, string redirectId, string url, string linkMode, int linkId, string linkUrl, string linkName = null, bool permanent = true, bool regex = false, bool forwardQueryString = false) {
 
             try {
 
@@ -160,8 +160,10 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                 redirect.Url = url;
                 redirect.QueryString = query;
                 redirect.Link = link;
+
                 redirect.IsPermanent = permanent;
 				redirect.IsRegex = regex;
+				redirect.ForwardQueryString = forwardQueryString;
                 
                 Repository.SaveRedirect(redirect);
 

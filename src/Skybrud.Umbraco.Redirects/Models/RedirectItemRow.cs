@@ -60,6 +60,9 @@ namespace Skybrud.Umbraco.Redirects.Models {
 		[Column("IsRegex")]
 		public bool IsRegex { get; set; }
 
+		[Column("ForwardQueryString")]
+		public bool ForwardQueryString { get; set; }
+
 		#endregion
 
 	}

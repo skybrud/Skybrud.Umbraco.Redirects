@@ -13,7 +13,8 @@
         url: '',
         link: null,
         permanent: true,
-		regex: false
+        regex: false,
+        forwardQueryString: false
     };
 
     $scope.rootNodes = [
@@ -97,7 +98,8 @@
             linkUrl: $scope.redirect.link.url,
             linkName: $scope.redirect.link.name,
             permanent: $scope.redirect.permanent,
-            regex: $scope.redirect.regex
+            regex: $scope.redirect.regex,
+            forwardQueryString: $scope.redirect.forwardQueryString
         };
 
         $scope.loading = true;

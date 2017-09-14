@@ -280,6 +280,8 @@
   <ItemGroup>
     <Compile Include="EventHandlers\MigrationEvents.cs" />
     <Compile Include="Migrations\AddIsRegexColumn.cs" />
+    <Compile Include="Extensions\NameValueCollectionExtensions.cs" />
+    <Compile Include="Migrations\AddForwardQueryStringColumn.cs" />
     <Compile Include="Migrations\AddRootNodeIdColumn.cs" />
     <Compile Include="Models\RedirectRootNode.cs" />
     <Compile Include="Controllers\Api\RedirectsController.cs" />

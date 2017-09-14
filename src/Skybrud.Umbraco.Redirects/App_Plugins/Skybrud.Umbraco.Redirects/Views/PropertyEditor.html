@@ -62,6 +62,9 @@
                             <span ng-if="redirect.link.mode == 'url'">
                                 <localize key="redirects_url">URL</localize>: <a href="{{redirect.link.url}}" rel="noopener noreferrer" target="_blank">{{redirect.link.url}}</a>
                             </span>
+							<small ng-if="redirect.forwardQueryString">
+								&nbsp;?&amp;
+							</small>
                         </div>
                         <div class="umb-table-cell col-date">{{redirect.created * 1000 | date: 'yyyy-MM-dd HH:mm'}}</div>
                         <div class="umb-table-cell col-date">{{redirect.updated * 1000 | date: 'yyyy-MM-dd HH:mm'}}</div>
