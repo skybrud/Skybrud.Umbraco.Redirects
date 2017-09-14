@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Text;
 using System.Web;
 using Skybrud.Umbraco.Redirects.Models;
-using umbraco.cms.businesslogic.web;
-using Umbraco.Core;
 using Umbraco.Core.Models;
-using Umbraco.Core.Persistence;
-using Umbraco.Core.Services;
 using Umbraco.Web;
 using Umbraco.Web.Routing;
 using System.Text.RegularExpressions;
