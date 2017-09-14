@@ -59,8 +59,8 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// <param name="url">The inbound URL to match.</param>
         /// <param name="destionation">An instance of <see cref="RedirectLinkItem"/> representing the destination link.</param>
         /// <returns>An instance of <see cref="RedirectItem"/> representing the created redirect.</returns>
-        public RedirectItem AddRedirect(int rootNodeId, string url, RedirectLinkItem destionation, bool isRegex) {
-            return AddRedirect(rootNodeId, url, destionation, isRegex, true);
+        public RedirectItem AddRedirect(int rootNodeId, string url, RedirectLinkItem destionation) {
+            return AddRedirect(rootNodeId, url, destionation, true, false);
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// <param name="destionation">An instance of <see cref="RedirectLinkItem"/> representing the destination link.</param>
         /// <param name="permanent">Whether the redirect should be permanent (301) or temporary (302).</param>
         /// <returns>An instance of <see cref="RedirectItem"/> representing the created redirect.</returns>
-        public RedirectItem AddRedirect(int rootNodeId, string url, RedirectLinkItem destionation, bool isRegex, bool permanent) {
+        public RedirectItem AddRedirect(int rootNodeId, string url, RedirectLinkItem destionation, bool permanent, bool isRegex) {
 
             // Attempt to create the database table if it doesn't exist
             //try {

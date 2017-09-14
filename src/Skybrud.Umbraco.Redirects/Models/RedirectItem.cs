@@ -196,7 +196,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
             set { Row.IsPermanent = value; }
         }
 
-		[JsonProperty("isRegex")]
+		[JsonProperty("regex")]
 		public bool IsRegex
 		{
 			get { return Row.IsRegex; }

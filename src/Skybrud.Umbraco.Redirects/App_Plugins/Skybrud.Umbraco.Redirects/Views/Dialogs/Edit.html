@@ -8,43 +8,81 @@
     </div>
     
     <div class="umb-overlay-container">
-        <label ng-hide="hideRootNodeOption">
-            <strong>Site</strong>
-            <small>Vælg det site (eller rodnode) som redirectet skal gælde for. Vælges det ikke noget site, vil redirectet virke for alle domæner/sites i Umbraco-løsningen.</small>
-            <select ng-options="item as item.name for item in rootNodes track by item.id" ng-model="rootNode" ng-change="rootNodeChanged()"></select>
-        </label>
-        <label>
-            <strong><localize key="redirects_originalUrl">Original URL</localize></strong>
-            <small>
-                <localize key="redirects_labelUrlDescription">Select the URL to match.</localize>
-            </small>
-            <div ng-show="redirectUrl.length > 0 && !hasValidUrl()" class="alert alert-danger">
-                <localize key="redirects_urlNotValid">The specified URL is not valid. A valid URL should look like <code>/page</code> or <code>/page/subpage</code>.</localize>
+
+        <div class="redirects-basic-options">
+            <label ng-hide="hideRootNodeOption">
+                <strong>Site</strong>
+                <small>Vælg det site (eller rodnode) som redirectet skal gælde for. Vælges det ikke noget site, vil redirectet virke for alle domæner/sites i Umbraco-løsningen.</small>
+                <select ng-options="item as item.name for item in rootNodes track by item.id" ng-model="rootNode" ng-change="rootNodeChanged()"></select>
+            </label>
+            <label>
+                <strong><localize key="redirects_originalUrl">Original URL</localize></strong>
+                <small>
+                    <localize key="redirects_labelUrlDescription">Select the URL to match.</localize>
+                </small>
+                <div ng-show="redirectUrl.length > 0 && !hasValidUrl()" class="alert alert-danger">
+                    <localize key="redirects_urlNotValid">The specified URL is not valid. A valid URL should look like <code>/page</code> or <code>/page/subpage</code>.</localize>
+                </div>
+                <input type="text" ng-model="redirectUrl" style="max-width: initial;" />
+            </label>
+            <label>
+                <strong><localize key="redirects_isRegex">Use Regular Expressions</localize></strong>
+                <input type="checkbox" ng-model="redirect.isRegex" />
+            </label>
+            <label>
+                <strong><localize key="redirects_destination">Destination</localize></strong>
+                <small>
+                    <localize key="redirects_labelDestinationDescription">Select the page or URL the user should be redirected to.</localize>
+                </small>
+                <small ng-if="redirect.isRegex">
+                    <localize key="redirects_isRegexDestinationDescription">You can use capturing groups backreferences when using Regex; $1, $2 etc.</localize>
+                </small>
+                <div ng-if="redirect.link">
+                    {{redirect.link.name ? redirect.link.name : redirect.link.url}}
+                    <a class="edit" href="#" prevent-default="" ng-click="editLink()"><i class="icon icon-edit"></i></a>
+                </div>
+                <div ng-if="!redirect.link">
+                    <a class="link" href="#" prevent-default="" ng-click="addLink()">
+                        <localize key="redirects_selectDestination">Select destination</localize> <i class="icon icon-add"></i> <i class="icon icon-add"></i>
+                    </a>
+                </div>
+            </label>
+        </div>
+        <div class="redirects-advanced-options">
+            <h4>Advanced options</h4>
+            <div class="sky-option">
+                <strong>Redirect type</strong>
+                <small>
+                    Select the type of the redirect. Browsers will remember permanent redirects.
+                </small>
+                <div class="sky-button-group">
+                    <label>
+                        <input type="radio" name="addRedirectPermanent" ng-model="redirect.permanent" ng-value="true" />
+                        Permanent
+                    </label>
+                    <label>
+                        <input type="radio" name="addRedirectPermanent" ng-model="redirect.permanent" ng-value="false" />
+                        Temporary
+                    </label>
+                </div>
             </div>
-            <input type="text" ng-model="redirectUrl" style="max-width: initial;" />
-        </label>
-		<label>
-			<strong><localize key="redirects_isRegex">Use Regular Expressions</localize></strong>
-			<input type="checkbox" ng-model="redirect.isRegex" />
-		</label>
-        <label>
-            <strong><localize key="redirects_destination">Destination</localize></strong>
-            <small>
-                <localize key="redirects_labelDestinationDescription">Select the page or URL the user should be redirected to.</localize>
-            </small>
-			<small ng-if="redirect.isRegex">
-				<localize key="redirects_isRegexDestinationDescription">You can use capturing groups backreferences when using Regex; $1, $2 etc.</localize>
-			</small>
-            <div ng-if="redirect.link">
-                {{redirect.link.name ? redirect.link.name : redirect.link.url}}
-                <a class="edit" href="#" prevent-default="" ng-click="editLink()"><i class="icon icon-edit"></i></a>
+            <div class="sky-option">
+                <strong>Regular expressions</strong>
+                <small>
+                    Enable support for regular expressions?
+                </small>
+                <div class="sky-button-group">
+                    <label>
+                        <input type="radio" name="addRedirectRegex" ng-model="redirect.regex" ng-value="true" />
+                        Enabled
+                    </label>
+                    <label>
+                        <input type="radio" name="addRedirectRegex" ng-model="redirect.regex" ng-value="false" />
+                        Disabled
+                    </label>
+                </div>
             </div>
-            <div ng-if="!redirect.link">
-                <a class="link" href="#" prevent-default="" ng-click="addLink()">
-                    <localize key="redirects_selectDestination">Select destination</localize> <i class="icon icon-add"></i> <i class="icon icon-add"></i>
-                </a>
-            </div>
-        </label>
+        </div>
     </div>
     
     <div class="umb-overlay-drawer">

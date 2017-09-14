@@ -87,3 +87,82 @@
 }
 
 @import '_dialogs';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+    New styling lives here while still "work in progress"
+*/
+.SkybrudUmbracoRedirects {
+
+    .umb-overlay-container {
+        position: relative;
+        height: auto;
+        overflow-x: hidden;
+        overflow-y: auto;
+        -ms-flex-positive: 1;
+        flex-grow: 1;
+        -ms-flex-negative: 1;
+        flex-shrink: 1;
+        -ms-flex-preferred-size: auto;
+        flex-basis: auto;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .sky-button-group {
+        display: flex;
+    }
+
+    .sky-button-group label {
+        display: flex;
+        margin: 0;
+    }
+
+    .sky-button-group label + label {
+        margin-left: 20px;
+    }
+
+    .sky-button-group input {
+        margin-right: 7px;
+    }
+
+    .sky-option + .sky-option {
+        margin-top: 25px;
+    }
+
+    .redirects-basic-options {
+        height: auto;
+        -ms-flex-positive: 1;
+        flex-grow: 1;
+        -ms-flex-negative: 1;
+        flex-shrink: 1;
+        -ms-flex-preferred-size: auto;
+        flex-basis: auto;
+    }
+
+    .redirects-advanced-options {
+        margin-top: 50px;
+        h4 {
+            margin: 10px 0 15px 0;
+            border-bottom: 1px solid #e9e9eb;
+            padding-bottom: 10px;
+            font-weight: bold;
+        }
+    }
+}
