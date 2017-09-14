@@ -68,15 +68,15 @@ namespace Skybrud.Umbraco.Redirects.Routing {
 
 			var redirectUrl = redirect.LinkUrl;
 
-			if (redirect.IsRegex)
-			{
-				var regex = new Regex(redirect.Url);
+            //if (redirect.IsRegex)
+            //{
+            //    var regex = new Regex(redirect.Url);
 
-				if (_capturingGroupsRegex.IsMatch(redirectUrl))
-				{
-					redirectUrl = regex.Replace(redirect.Url, redirectUrl);
-				}
-			}
+            //    if (_capturingGroupsRegex.IsMatch(redirectUrl))
+            //    {
+            //        redirectUrl = regex.Replace(redirect.Url, redirectUrl);
+            //    }
+            //}
 
 			// Redirect to the URL
 			if (redirect.IsPermanent) {
