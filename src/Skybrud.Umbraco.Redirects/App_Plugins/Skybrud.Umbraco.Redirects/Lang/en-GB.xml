@@ -26,7 +26,7 @@
     <key alias="updated">Updated</key>
     <key alias="id">ID</key>
 		<key alias="forwardQueryString">Forward query string</key>
-		<key alias="forwardQueryStringDescription">When enabled, the query string of the original request is forwarded to the redirect location (pass through)</key>
+		<key alias="forwardQueryStringDescription">When enabled, the query string of the original request is forwarded to the redirect location (pass through).</key>
     <key alias="labelUrlDescription">Specify the original URL to match from which the user should be redirected to the destination.</key>
     <key alias="labelDestinationDescription">Select the page or URL the user should be redirected to.</key>
     <key alias="labelNoRedirects">There has not yet been added any redirects.</key>
