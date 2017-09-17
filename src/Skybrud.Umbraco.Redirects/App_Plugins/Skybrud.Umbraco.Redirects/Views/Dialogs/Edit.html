@@ -14,7 +14,7 @@
                 <strong>
                     <localize key="redirects_site">Site</localize>
                 </strong>
-                <small class="umb-details">
+                <small class="umb-detail">
                     <localize key="redirects_siteDescription"></localize>
                 </small>
                 <select ng-options="item as item.name for item in rootNodes track by item.id" ng-model="rootNode" ng-change="rootNodeChanged()"></select>
@@ -23,7 +23,7 @@
                 <strong>
                     <localize key="redirects_originalUrl">Original URL</localize>
                 </strong>
-                <small class="umb-details">
+                <small class="umb-detail">
                     <localize key="redirects_labelUrlDescription">Select the URL to match.</localize>
                 </small>
                 <div ng-show="redirectUrl.length > 0 && !hasValidUrl()" class="alert alert-danger">
@@ -35,10 +35,10 @@
                 <strong>
                     <localize key="redirects_destination">Destination</localize>
                 </strong>
-                <small class="umb-details">
+                <small class="umb-detail">
                     <localize key="redirects_labelDestinationDescription">Select the page or URL the user should be redirected to.</localize>
                 </small>
-                <small class="umb-details" ng-if="redirect.regex">
+                <small class="umb-detail" ng-if="redirect.regex">
                     <localize key="redirects_isRegexDestinationDescription">You can use capturing groups backreferences when using Regex; $1, $2 etc.</localize>
                 </small>
                 <div ng-if="redirect.link">
@@ -76,7 +76,7 @@
                 <strong>
                     <localize key="redirects_propertyRedirectTypeName">Redirect type</localize>
                 </strong>
-                <small class="umb-details">
+                <small class="umb-detail">
                     <localize key="redirects_propertyRedirectTypeDescription">Select the type of the redirect. Notice that browsers will remember permanent redirects.</localize>
                 </small>
                 <div class="sky-button-group">
@@ -112,7 +112,7 @@
                 <strong>
                     <localize key="redirects_forwardQueryString">Forward query string</localize>
                 </strong>
-                <small class="umb-details">
+                <small class="umb-detail">
                     <localize key="redirects_forwardQueryStringDescription">When enabled, the query string of the original request is forwarded to the redirect location (pass through).</localize>
                 </small>
                 <div class="sky-button-group">
