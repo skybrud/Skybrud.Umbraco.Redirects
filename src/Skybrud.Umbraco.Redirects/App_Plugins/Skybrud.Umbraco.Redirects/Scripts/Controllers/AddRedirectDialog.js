@@ -76,17 +76,17 @@
         if ($scope.loading) return;
 
         if (!$scope.redirect.url) {
-            notificationsService.error('Ingen URL', 'Du skal angive den oprindelige URL.');
+            notificationsService.error($scope.labels.errorNoUrl.title, $scope.labels.errorNoUrl.message);
             return;
         }
 
         if (!skybrudRedirectsService.isValidUrl($scope.redirect.url)) {
-            notificationsService.error('Ugyldig værdi', 'Den angivne URL er ikke gyldig.');
+            notificationsService.error($scope.labels.errorInvalidUrl.title, $scope.labels.errorInvalidUrl.message);
             return;
         }
 
         if (!$scope.redirect.link) {
-            notificationsService.error('Intet link', 'Du skal angive en destinationsside eller -link.');
+            notificationsService.error($scope.labels.errorNoLink.title, $scope.labels.errorNoLink.message);
             return;
         }
 
@@ -110,14 +110,47 @@
             params: params
         }).success(function () {
             $scope.loading = false;
-            notificationsService.success('Redirect oprettet', 'Dit redirect er nu blevet oprettet.');
+            notificationsService.success($scope.labels.saveSuccessful.title, $scope.labels.saveSuccessful.message);
             $scope.submit($scope.redirect);
         }).error(function (res) {
             $scope.loading = false;
-            notificationsService.error('Oprettelse fejlede', res && res.meta ? res.meta.error : 'Grundet en fejl på serveren kunne dit redirect ikke oprettes.');
+            notificationsService.error($scope.labels.errorAddFailed.title, res && res.meta ? res.meta.error : $scope.labels.errorAddFailed.message);
         });
 
     };
+
+    function initLabels() {
+
+        localizationService.localize('redirects_allSites').then(function (value) {
+            $scope.rootNodes[0].name = value;
+        });
+
+        $scope.labels = {
+            errorNoUrl: { title: 'No URL', message: 'You must specify the original URL.' },
+            errorInvalidUrl: { title: 'Invalid URL', message: 'The specified URL is not valid.' },
+            errorNoLink: { title: 'No link', message: 'You must select a destination page or link.' },
+            errorAddFailed: { title: 'Saving failed', message: 'The redirect could not be saved due to an error on the server.' },
+            saveSuccessful: { title: 'Redirect added', message: 'Your redirect has successfully been added.' }
+        };
+
+        localizationService.localize('redirects_errorNoUrlTitle').then(function (value) { $scope.labels.errorNoUrl.title = value; });
+        localizationService.localize('redirects_errorNoUrlMessage').then(function (value) { $scope.labels.errorNoUrl.message = value; });
+
+        localizationService.localize('redirects_errorInvalidUrlTitle').then(function (value) { $scope.labels.errorInvalidUrl.title = value; });
+        localizationService.localize('redirects_errorInvalidUrlMessage').then(function (value) { $scope.labels.errorInvalidUrl.message = value; });
+
+        localizationService.localize('redirects_errorNoLinkTitle').then(function (value) { $scope.labels.errorNoLink.title = value; });
+        localizationService.localize('redirects_errorNoLinkMessage').then(function (value) { $scope.labels.errorNoLink.message = value; });
+
+        localizationService.localize('redirects_errorAddFailedTitle').then(function (value) { $scope.labels.errorAddFailed.title = value; });
+        localizationService.localize('redirects_errorAddFailedMessage').then(function (value) { $scope.labels.errorAddFailed.message = value; });
+
+        localizationService.localize('redirects_addSuccessfulTitle').then(function (value) { $scope.labels.saveSuccessful.title = value; });
+        localizationService.localize('redirects_addSuccessfulMessage').then(function (value) { $scope.labels.saveSuccessful.message = value; });
+
+    }
+
+    initLabels();
 
     skybrudRedirectsService.getRootNodes().success(function (r) {
         angular.forEach(r.data, function (rootNode) {

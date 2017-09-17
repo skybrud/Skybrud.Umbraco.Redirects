@@ -39,5 +39,36 @@
     <key alias="media_content">Content</key>
     <key alias="media_media">Media</key>
     <key alias="media_url">URLs</key>
+    
+    <key alias="labelPermanent">Permament</key>
+    <key alias="labelTemporary">Temporary</key>
+    <key alias="labelEnabled">Enabled</key>
+    <key alias="labelDisabled">Disabled</key>
+    <key alias="labelAdvancedOptions">Advanced options</key>
+
+    <key alias="propertyRedirectTypeName">Redirect type</key>
+    <key alias="propertyRedirectTypeDescription">Select the type of the redirect. Notice that browsers will remember permanent redirects.</key>
+
+    <key alias="addSuccessfulTitle">Redirect added</key>
+    <key alias="addSuccessfulMessage">Your redirect has successfully been added.</key>
+
+    <key alias="saveSuccessfulTitle">Redirect saved</key>
+    <key alias="saveSuccessfulMessage">Your redirect has successfully been saved.</key>
+
+    <key alias="errorNoUrlTitle">No URL</key>
+    <key alias="errorNoUrlMessage">You must specify the original URL.</key>
+
+    <key alias="errorInvalidUrlTitle">Invalid URL</key>
+    <key alias="errorInvalidUrlMessage">The specified URL is not valid.</key>
+
+    <key alias="errorNoLinkTitle">No link</key>
+    <key alias="errorNoLinkMessage">You must select a destination page or link.</key>
+
+    <key alias="errorAddFailedTitle">Saving failed</key>
+    <key alias="errorAddFailedMessage">The redirect could not be saved due to an error on the server.</key>
+
+    <key alias="errorEditFailedTitle">Saving failed</key>
+    <key alias="errorEditFailedMessage">The redirect could not be saved due to an error on the server.</key>
+
   </area>
 </language>

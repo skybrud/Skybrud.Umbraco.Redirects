@@ -43,17 +43,17 @@
         if ($scope.loading) return;
 
         if (!$scope.redirectUrl) {
-            notificationsService.error('Ingen URL', 'Du skal angive den oprindelige URL.');
+            notificationsService.error($scope.labels.errorNoUrl.title, $scope.labels.errorNoUrl.message);
             return;
         }
 
-        if (!skybrudRedirectsService.isValidUrl($scope.redirect.url, $scope.redirect.regex)) {
-            notificationsService.error('Ugyldig værdi', 'Den angivne URL er ikke gyldig.');
+        if (!skybrudRedirectsService.isValidUrl($scope.redirectUrl, $scope.redirect.regex)) {
+            notificationsService.error($scope.labels.errorInvalidUrl.title, $scope.labels.errorInvalidUrl.message);
             return;
         }
 
         if (!$scope.redirect.link) {
-            notificationsService.error('Intet link', 'Du skal angive en destinationsside eller -link.');
+            notificationsService.error($scope.labels.errorNoLink.title, $scope.labels.errorNoLink.message);
             return;
         }
 
@@ -78,14 +78,47 @@
             params: params
         }).success(function () {
             $scope.loading = false;
-            notificationsService.success('Redirect gemt', 'Dit redirect er nu blevet gemt.');
+            notificationsService.success($scope.labels.saveSuccessful.title, $scope.labels.saveSuccessful.message);
             $scope.submit($scope.redirect);
         }).error(function (res) {
             $scope.loading = false;
-            notificationsService.error('Redigering fejlede', res && res.meta ? res.meta.error : 'Grundet en fejl på serveren kunne dit redirect ikke gemmes.');
+            notificationsService.error($scope.labels.errorEditFailed.title, res && res.meta ? res.meta.error : $scope.labels.errorEditFailed.message);
         });
 
     };
+
+    function initLabels() {
+
+        localizationService.localize('redirects_allSites').then(function (value) {
+            $scope.rootNodes[0].name = value;
+        });
+
+        $scope.labels = {
+            errorNoUrl: { title: 'No URL', message: 'You must specify the original URL.' },
+            errorInvalidUrl: { title: 'Invalid URL', message: 'The specified URL is not valid.' },
+            errorNoLink: { title: 'No link', message: 'You must select a destination page or link.' },
+            errorEditFailed: { title: 'Saving failed', message: 'The redirect could not be saved due to an error on the server.' },
+            saveSuccessful: { title: 'Redirect saved', message: 'Your redirect has successfully been saved.' }
+        };
+
+        localizationService.localize('redirects_errorNoUrlTitle').then(function (value) { $scope.labels.errorNoUrl.title = value; });
+        localizationService.localize('redirects_errorNoUrlMessage').then(function (value) { $scope.labels.errorNoUrl.message = value; });
+
+        localizationService.localize('redirects_errorInvalidUrlTitle').then(function (value) { $scope.labels.errorInvalidUrl.title = value; });
+        localizationService.localize('redirects_errorInvalidUrlMessage').then(function (value) { $scope.labels.errorInvalidUrl.message = value; });
+
+        localizationService.localize('redirects_errorNoLinkTitle').then(function (value) { $scope.labels.errorNoLink.title = value; });
+        localizationService.localize('redirects_errorNoLinkMessage').then(function (value) { $scope.labels.errorNoLink.message = value; });
+
+        localizationService.localize('redirects_errorEditFailedTitle').then(function (value) { $scope.labels.errorEditFailed.title = value; });
+        localizationService.localize('redirects_errorEditFailedMessage').then(function (value) { $scope.labels.errorEditFailed.message = value; });
+
+        localizationService.localize('redirects_saveSuccessfulTitle').then(function (value) { $scope.labels.saveSuccessful.title = value; });
+        localizationService.localize('redirects_saveSuccessfulMessage').then(function (value) { $scope.labels.saveSuccessful.message = value; });
+
+    }
+
+    initLabels();
 
     skybrudRedirectsService.getRootNodes().success(function (r) {
         angular.forEach(r.data, function (rootNode) {

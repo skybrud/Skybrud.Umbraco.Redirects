@@ -13,12 +13,18 @@
         
         <div class="redirects-basic-options">
             <label ng-hide="hideRootNodeOption">
-                <strong><localize key="redirects_site">Site</localize></strong>
-                <small><localize key="redirects_siteDescription"></localize></small>
+                <strong>
+                    <localize key="redirects_site">Site</localize>
+                </strong>
+                <small>
+                    <localize key="redirects_siteDescription"></localize>
+                </small>
                 <select ng-options="item as item.name for item in rootNodes track by item.id" ng-model="rootNode" ng-change="rootNodeChanged()"></select>
             </label>
             <label>
-                <strong><localize key="redirects_originalUrl">Original URL</localize></strong>
+                <strong>
+                    <localize key="redirects_originalUrl">Original URL</localize>
+                </strong>
                 <small>
                     <localize key="redirects_labelUrlDescription">Select the URL to match.</localize>
                 </small>
@@ -28,7 +34,9 @@
                 <input type="text" ng-model="redirect.url" />
             </label>
             <label ng-if="!page">
-                <strong><localize key="redirects_destination">Destination</localize></strong>
+                <strong>
+                    <localize key="redirects_destination">Destination</localize>
+                </strong>
                 <small>
                     <localize key="redirects_labelDestinationDescription">Select the page or URL the user should be redirected to.</localize>
                 </small>
@@ -48,20 +56,24 @@
         </div>
         
         <div class="redirects-advanced-options">
-            <h4>Advanced options</h4>
+            <h4>
+                <localize key="redirects_labelAdvancedOptions">Advanced options</localize>
+            </h4>
             <div class="sky-option">
-                <strong>Redirect type</strong>
+                <strong>
+                    <localize key="redirects_propertyRedirectTypeName">Redirect type</localize>
+                </strong>
                 <small>
-                    Select the type of the redirect. Browsers will remember permanent redirects.
+                    <localize key="redirects_propertyRedirectTypeDescription">Select the type of the redirect. Notice that browsers will remember permanent redirects.</localize>
                 </small>
                 <div class="sky-button-group">
                     <label>
                         <input type="radio" name="addRedirectPermanent" ng-model="redirect.permanent" ng-value="true" />
-                        Permanent
+                        <localize key="redirects_labelPermanent">Permament</localize>
                     </label>
                     <label>
                         <input type="radio" name="addRedirectPermanent" ng-model="redirect.permanent" ng-value="false" />
-                        Temporary
+                        <localize key="redirects_labelTemporary">Temporary</localize>
                     </label>
                 </div>
             </div>
@@ -84,18 +96,20 @@
             </div>-->
 
             <div class="sky-option">
-                <strong><localize key="redirects_forwardQueryString">Forward query string</localize></strong>
-                <small class="umb-detail">
+                <strong>
+                    <localize key="redirects_forwardQueryString">Forward query string</localize>
+                </strong>
+                <small>
                     <localize key="redirects_forwardQueryStringDescription">When enabled, the query string of the original request is forwarded to the redirect location (pass through).</localize>
                 </small>
                 <div class="sky-button-group">
                     <label>
                         <input type="radio" name="addRedirectForwardQueryString" ng-model="redirect.forward" ng-value="true" />
-                        Enabled
+                        <localize key="redirects_labelEnabled">Enabled</localize>
                     </label>
                     <label>
                         <input type="radio" name="addRedirectForwardQueryString" ng-model="redirect.forward" ng-value="false" />
-                        Disabled
+                        <localize key="redirects_labelDisabled">Disabled</localize>
                     </label>
                 </div>
             </div>

@@ -40,5 +40,36 @@
     <key alias="media_content">Indhold</key>
     <key alias="media_media">Medier</key>
     <key alias="media_url">URLs</key>
+    
+    <key alias="labelPermanent">Permament</key>
+    <key alias="labelTemporary">Midlertidig</key>
+    <key alias="labelEnabled">Aktiveret</key>
+    <key alias="labelDisabled">Deaktiveret</key>
+    <key alias="labelAdvancedOptions">Advancerede indstillinger</key>
+
+    <key alias="propertyRedirectTypeName">Type</key>
+    <key alias="propertyRedirectTypeDescription">Vælg typen for dit redirect. Bemærk at browsere vil huske et permanent redirect.</key>
+
+    <key alias="addSuccessfulTitle">Redirect oprettet</key>
+    <key alias="addSuccessfulMessage">Dit redirect er nu blevet oprettet.</key>
+
+    <key alias="saveSuccessfulTitle">Redirect gemt</key>
+    <key alias="saveSuccessfulMessage">Dit redirect er nu blevet gemt.</key>
+
+    <key alias="errorNoUrlTitle">Ingen URL</key>
+    <key alias="errorNoUrlMessage">Du skal angive den oprindelige URL.</key>
+
+    <key alias="errorInvalidUrlTitle">Ugyldig værdi</key>
+    <key alias="errorInvalidUrlMessage">Den angivne URL er ikke gyldig.</key>
+
+    <key alias="errorNoLinkTitle">Intet link</key>
+    <key alias="errorNoLinkMessage">Du skal angive en destinationsside eller -link.</key>
+
+    <key alias="errorAddFailedTitle">Oprettelse fejlede</key>
+    <key alias="errorAddFailedMessage">Grundet en fejl på serveren kunne dit redirect ikke oprettes.</key>
+
+    <key alias="errorEditFailedTitle">Redigering fejlede</key>
+    <key alias="errorEditFailedMessage">Grundet en fejl på serveren kunne dit redirect ikke gemmes.</key>
+    
   </area>
 </language>
