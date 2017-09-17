@@ -1,4 +1,4 @@
-﻿<div class="SkybrudUmbracoRedirects AddRedirectDialog" ng-controller="SkybrudUmbracoRedirects.AddRedirectDialog.Controller">
+﻿<div class="SkybrudUmbracoRedirects AddRedirectDialog umb-overlay umb-overlay-right" ng-controller="SkybrudUmbracoRedirects.AddRedirectDialog.Controller">
 
     <div class="umb-overlay-header">
         <h4 class="umb-overlay__title">
@@ -10,22 +10,22 @@
     </div>
 
     <div class="umb-overlay-container">
-        
+
         <div class="redirects-basic-options">
-            <label ng-hide="hideRootNodeOption">
+            <label class="sky-option" ng-hide="hideRootNodeOption">
                 <strong>
                     <localize key="redirects_site">Site</localize>
                 </strong>
-                <small>
+                <small class="umb-details">
                     <localize key="redirects_siteDescription"></localize>
                 </small>
                 <select ng-options="item as item.name for item in rootNodes track by item.id" ng-model="rootNode" ng-change="rootNodeChanged()"></select>
             </label>
-            <label>
+            <label class="sky-option">
                 <strong>
                     <localize key="redirects_originalUrl">Original URL</localize>
                 </strong>
-                <small>
+                <small class="umb-details">
                     <localize key="redirects_labelUrlDescription">Select the URL to match.</localize>
                 </small>
                 <div ng-show="redirect.url.length > 0 && !hasValidUrl()" class="alert alert-danger">
@@ -33,26 +33,42 @@
                 </div>
                 <input type="text" ng-model="redirect.url" />
             </label>
-            <label ng-if="!page">
+            <div class="sky-option" ng-if="!page">
                 <strong>
                     <localize key="redirects_destination">Destination</localize>
                 </strong>
-                <small>
+                <small class="umb-details">
                     <localize key="redirects_labelDestinationDescription">Select the page or URL the user should be redirected to.</localize>
                 </small>
-                <small ng-if="redirect.isRegex">
+                <small class="umb-details" ng-if="redirect.isRegex">
                     <localize key="redirects_isRegexDestinationDescription">You can use capturing groups backreferences when using Regex; $1, $2 etc.</localize>
                 </small>
                 <div ng-if="redirect.link">
-                    {{redirect.link.name ? redirect.link.name : redirect.link.url}}
-                    <a class="edit" href="#" prevent-default="" ng-click="editLink()"><i class="icon icon-edit"></i></a>
+                    <div ng-if="gte76" class="umb-node-preview">
+                        <i ng-if="icon" class="umb-node-preview__icon icon-shopping-basket"></i>
+                        <div class="umb-node-preview__content">
+                            <div class="umb-node-preview__name">{{redirect.link.name}}</div>
+                            <div class="umb-node-preview__description">{{redirect.link.url}}</div>
+                        </div>
+                        <div class="umb-node-preview__actions">
+                            <a class="umb-node-preview__action" title="Edit" href="" ng-click="editLink()"><localize key="general_edit">Edit</localize></a>
+                            <a class="umb-node-preview__action umb-node-preview__action--red" title="Remove" href="" ng-click="removeLink()"><localize key="general_remove">Remove</localize></a>
+                        </div>
+                    </div>
+                    <div ng-if="!gte76">
+                        {{redirect.link.name ? redirect.link.name : redirect.link.url}}
+                        <a class="edit" href="#" prevent-default="" ng-click="editLink()"><i class="icon icon-edit"></i></a>
+                    </div>
                 </div>
                 <div ng-if="!redirect.link">
-                    <a class="link" href="#" prevent-default="" ng-click="addLink()">
+                    <a ng-if="gte76" class="umb-node-preview-add" href="#" prevent-default="" ng-click="addLink()">
+                        <localize key="redirects_selectDestination">Select destination</localize>
+                    </a>
+                    <a ng-if="!gte76" class="link" href="#" prevent-default="" ng-click="addLink()">
                         <localize key="redirects_selectDestination">Select destination</localize> <i class="icon icon-add"></i>
                     </a>
                 </div>
-            </label>
+            </div>
         </div>
         
         <div class="redirects-advanced-options">
@@ -63,7 +79,7 @@
                 <strong>
                     <localize key="redirects_propertyRedirectTypeName">Redirect type</localize>
                 </strong>
-                <small>
+                <small class="umb-details">
                     <localize key="redirects_propertyRedirectTypeDescription">Select the type of the redirect. Notice that browsers will remember permanent redirects.</localize>
                 </small>
                 <div class="sky-button-group">
@@ -79,27 +95,27 @@
             </div>
 
             <!--<div class="sky-option">
-                <strong>Regular expressions</strong>
-                <small>
-                    Enable support for regular expressions?
-                </small>
-                <div class="sky-button-group">
-                    <label>
-                        <input type="radio" name="addRedirectRegex" ng-model="redirect.regex" ng-value="true" />
-                        Enabled
-                    </label>
-                    <label>
-                        <input type="radio" name="addRedirectRegex" ng-model="redirect.regex" ng-value="false" />
-                        Disabled
-                    </label>
-                </div>
-            </div>-->
+                    <strong>Regular expressions</strong>
+                    <small>
+                        Enable support for regular expressions?
+                    </small>
+                    <div class="sky-button-group">
+                        <label>
+                            <input type="radio" name="addRedirectRegex" ng-model="redirect.regex" ng-value="true" />
+                            Enabled
+                        </label>
+                        <label>
+                            <input type="radio" name="addRedirectRegex" ng-model="redirect.regex" ng-value="false" />
+                            Disabled
+                        </label>
+                    </div>
+                </div>-->
 
             <div class="sky-option">
                 <strong>
                     <localize key="redirects_forwardQueryString">Forward query string</localize>
                 </strong>
-                <small>
+                <small class="umb-details">
                     <localize key="redirects_forwardQueryStringDescription">When enabled, the query string of the original request is forwarded to the redirect location (pass through).</localize>
                 </small>
                 <div class="sky-button-group">

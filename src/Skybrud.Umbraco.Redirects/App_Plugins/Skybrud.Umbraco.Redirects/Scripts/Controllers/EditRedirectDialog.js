@@ -1,7 +1,10 @@
-﻿angular.module('umbraco').controller('SkybrudUmbracoRedirects.EditRedirectDialog.Controller', function ($scope, $http, notificationsService, skybrudRedirectsService) {
+﻿angular.module('umbraco').controller('SkybrudUmbracoRedirects.EditRedirectDialog.Controller', function ($scope, $http, notificationsService, skybrudRedirectsService, localizationService) {
+
+    // Get the Umbraco version
+    var v = Umbraco.Sys.ServerVariables.application.version.split('.');
+    $scope.gte76 = v[0] == 7 && v[1] >= 6;
 
     $scope.loading = false;
-
     $scope.options = $scope.dialogOptions.options || {};
 
     // Make a copy of the redirect so we don't modify the object used in the list
@@ -32,6 +35,10 @@
         skybrudRedirectsService.editLink($scope.redirect.link, function (link) {
             $scope.redirect.link = link;
         }, false);
+    };
+
+    $scope.removeLink = function () {
+        $scope.redirect.link = null;
     };
 
     $scope.hasValidUrl = function () {
