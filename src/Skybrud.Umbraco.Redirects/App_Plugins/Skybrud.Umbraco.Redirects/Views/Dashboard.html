@@ -8,7 +8,7 @@
         <div style="margin-bottom: 20px; display: flex;">
             <select style="margin-right: 10px;" ng-options="item as item.name for item in rootNodes" ng-model="filters.rootNode" no-dirty-check></select>
             <select style="margin-right: 10px;" ng-options="item as item.name for item in types track by item.value" ng-model="filters.type" no-dirty-check></select>
-            <input type="text" ng-model="filters.text" no-dirty-check placeholder="Type to search..." style="max-width: initial; flex: 1; margin-right: 100px;" />
+            <input type="text" ng-model="filters.text" no-dirty-check placeholder="typeToSearch" localize="placeholder" style="max-width: initial; flex: 1; margin-right: 100px;" />
             <a href="#" prevent-default ng-click="addRedirect()" class="umb-era-button umb-button--s">
                 <localize key="redirects_addNewRedirect">Add new redirect</localize>
             </a>
