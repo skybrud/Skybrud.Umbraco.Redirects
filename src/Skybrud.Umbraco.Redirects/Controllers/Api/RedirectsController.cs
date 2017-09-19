@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Web.Http;
@@ -18,6 +19,19 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
     public class RedirectsController : UmbracoAuthorizedApiController {
 
         protected RedirectsRepository Repository = new RedirectsRepository();
+
+        private CultureInfo _culture;
+
+        #region Properties
+
+        /// <summary>
+        /// Gets a reference to the culture of the authenticated user.
+        /// </summary>
+        public CultureInfo Culture {
+            get { return _culture ?? (_culture = new CultureInfo(Security.CurrentUser.Language)); }
+        }
+
+        #endregion
 
         [HttpGet]
         public object GetDomains() {
@@ -75,7 +89,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         public object GetRedirectsForContent(int contentId) {
 
             IContent content = ApplicationContext.Services.ContentService.GetById(contentId);
-            if (content == null) throw new RedirectsException(HttpStatusCode.NotFound, "A content item with the specified ID could not be found.");
+            if (content == null) throw new RedirectsException(HttpStatusCode.NotFound, Localize("redirects/errorContentNoRedirects"));
  
             try {
                 return JsonMetaResponse.GetSuccess(new {
@@ -95,7 +109,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         public object GetRedirectsForMedia(int contentId) {
 
             IMedia media = ApplicationContext.Services.MediaService.GetById(contentId);
-            if (media == null) throw new RedirectsException(HttpStatusCode.NotFound, "A media item with the specified ID could not be found.");
+            if (media == null) throw new RedirectsException(HttpStatusCode.NotFound, Localize("redirects/errorMediaNoRedirects"));
 
             try {
                 return JsonMetaResponse.GetSuccess(new {
@@ -140,9 +154,9 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                 RedirectItem redirect = Repository.GetRedirectById(redirectId);
                 if (redirect == null) throw new RedirectNotFoundException();
 
-                if (String.IsNullOrWhiteSpace(url)) throw new RedirectsException("You must specify a URL for the redirect.");
-                if (String.IsNullOrWhiteSpace(linkUrl)) throw new RedirectsException("You must specify a destination link for the redirect.");
-                if (String.IsNullOrWhiteSpace(linkMode)) throw new RedirectsException("You must specify a destination link for the redirect.");
+                if (String.IsNullOrWhiteSpace(url)) throw new RedirectsException(Localize("redirects/errorNoUrl"));
+                if (String.IsNullOrWhiteSpace(linkUrl)) throw new RedirectsException(Localize("redirects/errorNoDestination"));
+                if (String.IsNullOrWhiteSpace(linkMode)) throw new RedirectsException(Localize("redirects/errorNoDestination"));
 
                 // Initialize a new link picker item
                 RedirectLinkItem link = RedirectLinkItem.Parse(new JObject {
@@ -192,6 +206,10 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                 return Request.CreateResponse(JsonMetaResponse.GetError(HttpStatusCode.InternalServerError, ex.Message));
             }
 
+        }
+
+        private string Localize(string key) {
+            return Services.TextService.Localize(key, Culture);
         }
 
     }

@@ -70,6 +70,11 @@
 
     <key alias="errorEditFailedTitle">Redigering fejlede</key>
     <key alias="errorEditFailedMessage">Grundet en fejl på serveren kunne dit redirect ikke gemmes.</key>
+
+    <key alias="errorContentNoRedirects">A side med det angivne ID blev ikke fundet.</key>
+    <key alias="errorMediaNoRedirects">Et medie med det angivne ID blev ikke fundet.</key>
+    <key alias="errorNoUrl">Du skal angive en URL for dit redirect.</key>
+    <key alias="errorNoDestination">Du skal angive en destination for dit redirect.</key>
     
   </area>
 </language>

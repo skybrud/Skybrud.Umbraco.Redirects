@@ -70,5 +70,10 @@
     <key alias="errorEditFailedTitle">Saving failed</key>
     <key alias="errorEditFailedMessage">The redirect could not be saved due to an error on the server.</key>
 
+    <key alias="errorContentNoRedirects">A content item with the specified ID could not be found.</key>
+    <key alias="errorMediaNoRedirects">A media item with the specified ID could not be found.</key>
+    <key alias="errorNoUrl">You must specify a URL for the redirect.</key>
+    <key alias="errorNoDestination">You must specify a destination link for the redirect.</key>
+
   </area>
 </language>
