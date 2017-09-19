@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Web.Http;
-using Newtonsoft.Json.Linq;
 using Skybrud.Umbraco.Redirects.Exceptions;
 using Skybrud.Umbraco.Redirects.Models;
 using Skybrud.WebApi.Json;
@@ -18,20 +17,23 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
     [JsonOnlyConfiguration]
     public class RedirectsController : UmbracoAuthorizedApiController {
 
-        protected RedirectsRepository Repository = new RedirectsRepository();
-
         private CultureInfo _culture;
 
         #region Properties
+
+        protected RedirectsRepository Repository = new RedirectsRepository();
 
         /// <summary>
         /// Gets a reference to the culture of the authenticated user.
         /// </summary>
         public CultureInfo Culture {
+            // TODO: Is the language reliable for determining the culture?
             get { return _culture ?? (_culture = new CultureInfo(Security.CurrentUser.Language)); }
         }
 
         #endregion
+
+        #region Public API methods
 
         [HttpGet]
         public object GetDomains() {
@@ -88,10 +90,15 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         [HttpGet]
         public object GetRedirectsForContent(int contentId) {
 
-            IContent content = ApplicationContext.Services.ContentService.GetById(contentId);
-            if (content == null) throw new RedirectsException(HttpStatusCode.NotFound, Localize("redirects/errorContentNoRedirects"));
- 
             try {
+                
+                // Get a reference to the content item
+                IContent content = ApplicationContext.Services.ContentService.GetById(contentId);
+
+                // Trigger an exception if the content item couldn't be found
+                if (content == null) throw new RedirectsException(HttpStatusCode.NotFound, Localize("redirects/errorContentNoRedirects"));
+                
+                // Generate the response
                 return JsonMetaResponse.GetSuccess(new {
                     content = new {
                         id = content.Id,
@@ -99,8 +106,12 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                     },
                     redirects = Repository.GetRedirectsByContentId(contentId)
                 });
+            
             } catch (RedirectsException ex) {
+                
+                // Generate the error response
                 return Request.CreateResponse(JsonMetaResponse.GetError(HttpStatusCode.InternalServerError, ex.Message));
+            
             }
         
         }
@@ -108,10 +119,15 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         [HttpGet]
         public object GetRedirectsForMedia(int contentId) {
 
-            IMedia media = ApplicationContext.Services.MediaService.GetById(contentId);
-            if (media == null) throw new RedirectsException(HttpStatusCode.NotFound, Localize("redirects/errorMediaNoRedirects"));
-
             try {
+
+                // Get a reference to the media item
+                IMedia media = ApplicationContext.Services.MediaService.GetById(contentId);
+
+                // Trigger an exception if the media item couldn't be found
+                if (media == null) throw new RedirectsException(HttpStatusCode.NotFound, Localize("redirects/errorMediaNoRedirects"));
+
+                // Generate the response
                 return JsonMetaResponse.GetSuccess(new {
                     media = new {
                         id = media.Id,
@@ -119,8 +135,12 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                     },
                     redirects = Repository.GetRedirectsByMediaId(contentId)
                 });
+            
             } catch (RedirectsException ex) {
+
+                // Generate the error response
                 return Request.CreateResponse(JsonMetaResponse.GetError(HttpStatusCode.InternalServerError, ex.Message));
+            
             }
 
         }
@@ -129,18 +149,35 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         public object AddRedirect(int rootNodeId, string url, string linkMode, int linkId, string linkUrl, string linkName = null, bool permanent = true, bool regex = false, bool forward = false) {
 
             try {
+                
+                // Some input validation
+                if (String.IsNullOrWhiteSpace(url)) throw new RedirectsException(Localize("redirects/errorNoUrl"));
+                if (String.IsNullOrWhiteSpace(linkUrl)) throw new RedirectsException(Localize("redirects/errorNoDestination"));
+                if (String.IsNullOrWhiteSpace(linkMode)) throw new RedirectsException(Localize("redirects/errorNoDestination"));
 
-                RedirectLinkItem redirect = RedirectLinkItem.Parse(new JObject {
-                    {"id", linkId},
-                    {"name", linkName + ""},
-                    {"url", linkUrl},
-                    {"mode", linkMode}
-                });
+                // Parse the link mode
+                RedirectLinkMode mode;
+                switch (linkMode) {
+                    case "content": mode = RedirectLinkMode.Content; break;
+                    case "media": mode = RedirectLinkMode.Media; break;
+                    case "url": mode = RedirectLinkMode.Url; break;
+                    default: throw new RedirectsException(Localize("redirects/errorUnknownLinkMode"));
+                }
 
-                return Repository.AddRedirect(rootNodeId, url, redirect, permanent, regex, forward);
+                // Initialize a new link item
+                RedirectLinkItem destination = new RedirectLinkItem(linkId, linkName, linkUrl, mode);
+
+                // Add the redirect
+                RedirectItem redirect =  Repository.AddRedirect(rootNodeId, url, destination, permanent, regex, forward);
+
+                // Return the redirect
+                return redirect;
 
             } catch (RedirectsException ex) {
+
+                // Generate the error response
                 return Request.CreateResponse(JsonMetaResponse.GetError(HttpStatusCode.InternalServerError, ex.Message));
+            
             }
 
         }
@@ -150,67 +187,93 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
 
             try {
 
-                // Get the redirect from the database
+                // Get a reference to the redirect
                 RedirectItem redirect = Repository.GetRedirectById(redirectId);
                 if (redirect == null) throw new RedirectNotFoundException();
 
+                // Some input validation
                 if (String.IsNullOrWhiteSpace(url)) throw new RedirectsException(Localize("redirects/errorNoUrl"));
                 if (String.IsNullOrWhiteSpace(linkUrl)) throw new RedirectsException(Localize("redirects/errorNoDestination"));
                 if (String.IsNullOrWhiteSpace(linkMode)) throw new RedirectsException(Localize("redirects/errorNoDestination"));
 
-                // Initialize a new link picker item
-                RedirectLinkItem link = RedirectLinkItem.Parse(new JObject {
-                    {"id", linkId},
-                    {"name", linkName + ""},
-                    {"url", linkUrl},
-                    {"mode", linkMode}
-				});
+                // Parse the link mode
+                RedirectLinkMode mode;
+                switch (linkMode) {
+                    case "content": mode = RedirectLinkMode.Content; break;
+                    case "media": mode = RedirectLinkMode.Media; break;
+                    case "url": mode = RedirectLinkMode.Url; break;
+                    default: throw new RedirectsException(Localize("redirects/errorUnknownLinkMode"));
+                }
 
+                // Initialize a new link item
+                RedirectLinkItem destination = new RedirectLinkItem(linkId, linkName, linkUrl, mode);
+
+                // Split the URL and query string
                 string[] urlParts = url.Split('?');
                 url = urlParts[0].TrimEnd('/');
                 string query = urlParts.Length == 2 ? urlParts[1] : "";
 
+                // Update the properties of the redirect
                 redirect.RootNodeId = rootNodeId;
                 redirect.Url = url;
                 redirect.QueryString = query;
-                redirect.Link = link;
-
+                redirect.Link = destination;
                 redirect.IsPermanent = permanent;
 				redirect.IsRegex = regex;
                 redirect.ForwardQueryString = forward;
                 
+                // Save/update the redirect
                 Repository.SaveRedirect(redirect);
 
+                // Return the redirect
                 return redirect;
 
             } catch (RedirectsException ex) {
+
+                // Generate the error response
                 return Request.CreateResponse(JsonMetaResponse.GetError(HttpStatusCode.InternalServerError, ex.Message));
+            
             }
 
         }
 
+        /// <summary>
+        /// Deletes the redirect with the specified <paramref name="redirectId"/>.
+        /// </summary>
+        /// <param name="redirectId">The ID of the redirect.</param>
         [HttpGet]
         public object DeleteRedirect(string redirectId) {
 
             try {
 
-                // Get the redirect from the database
+                // Get a reference to the redirect
                 RedirectItem redirect = Repository.GetRedirectById(redirectId);
                 if (redirect == null) throw new RedirectNotFoundException();
 
+                // Delete the redirect
                 Repository.DeleteRedirect(redirect);
 
+                // Return the redirect
                 return redirect;
 
             } catch (RedirectsException ex) {
+
+                // Generate the error response
                 return Request.CreateResponse(JsonMetaResponse.GetError(HttpStatusCode.InternalServerError, ex.Message));
+            
             }
 
         }
 
+        #endregion
+
+        #region Private helper methods
+
         private string Localize(string key) {
             return Services.TextService.Localize(key, Culture);
         }
+
+        #endregion
 
     }
 

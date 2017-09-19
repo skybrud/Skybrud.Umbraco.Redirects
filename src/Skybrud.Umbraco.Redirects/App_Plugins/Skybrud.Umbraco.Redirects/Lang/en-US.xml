@@ -74,6 +74,7 @@
     <key alias="errorMediaNoRedirects">A media item with the specified ID could not be found.</key>
     <key alias="errorNoUrl">You must specify a URL for the redirect.</key>
     <key alias="errorNoDestination">You must specify a destination link for the redirect.</key>
+    <key alias="errorUnknownLinkMode">Specified link mode is not valid.</key>
 
   </area>
 </language>
