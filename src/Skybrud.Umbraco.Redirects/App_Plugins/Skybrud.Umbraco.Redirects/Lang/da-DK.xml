@@ -21,6 +21,7 @@
 		<key alias="isRegex">Brug regular expressions</key>
 		<key alias="isRegexDestinationDescription">Du kan bruge capture group referencer, når du bruger regular expressions. Fx. $1  $2 osv.</key>
     <key alias="destination">Destination</key>
+    <key alias="redirectedTo">Viderestillet til</key>
     <key alias="selectDestination">Vælg destination</key>
     <key alias="created">Oprettet</key>
     <key alias="updated">Opdateret</key>
