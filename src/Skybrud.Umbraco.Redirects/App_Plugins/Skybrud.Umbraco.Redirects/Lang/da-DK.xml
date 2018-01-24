@@ -41,9 +41,12 @@
     <key alias="media_content">Indhold</key>
     <key alias="media_media">Medier</key>
     <key alias="media_url">URLs</key>
-    
+
     <key alias="labelPermanent">Permament</key>
     <key alias="labelTemporary">Midlertidig</key>
+    <key alias="labelPermanentRedirect">Permament redirect</key>
+    <key alias="labelTemporaryRedirect">Midlertidig redirect</key>
+    
     <key alias="labelEnabled">Aktiveret</key>
     <key alias="labelDisabled">Deaktiveret</key>
     <key alias="labelAdvancedOptions">Advancerede indstillinger</key>

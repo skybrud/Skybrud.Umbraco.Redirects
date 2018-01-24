@@ -279,10 +279,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EventHandlers\MigrationEvents.cs" />
+    <Compile Include="Extensions\PublishedContentExtensions.cs" />
     <Compile Include="Migrations\AddIsRegexColumn.cs" />
     <Compile Include="Extensions\NameValueCollectionExtensions.cs" />
     <Compile Include="Migrations\AddForwardQueryStringColumn.cs" />
     <Compile Include="Migrations\AddRootNodeIdColumn.cs" />
+    <Compile Include="Models\Outbound\OutboundRedirectPropertyValueConverter.cs" />
     <Compile Include="Models\RedirectRootNode.cs" />
     <Compile Include="Controllers\Api\RedirectsController.cs" />
     <Compile Include="Exceptions\RedirectNotFoundException.cs" />
@@ -295,6 +297,7 @@
     <Compile Include="Models\RedirectsRepository.cs" />
     <Compile Include="Models\RedirectsSearchResult.cs" />
     <Compile Include="Models\RedirectsSearchResultPagination.cs" />
+    <Compile Include="Models\Outbound\OutboundRedirect.cs" />
     <Compile Include="Package.cs" />
     <Compile Include="Properties\AssemblyInfoGenerated.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -307,6 +310,7 @@
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Scripts\Controllers\AddRedirectDialog.js" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Scripts\Controllers\Dashboard.js" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Scripts\Controllers\EditRedirectDialog.js" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Scripts\Controllers\Editors\Outbound.js" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Scripts\Controllers\PropertyEditor.js" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Scripts\Services\RedirectsService.js" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Styles\Styles.css">
@@ -318,6 +322,7 @@
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Views\Dashboard.html" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Views\Dialogs\Add.html" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Views\Dialogs\Edit.html" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Views\Editors\Outbound.html" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Views\PropertyEditor.html" />
     <Content Include="packages.config" />
   </ItemGroup>

@@ -16,6 +16,13 @@
 						"view": "boolean"
 					}
 				]
+		},
+		{
+			"alias": "Skybrud.Umbraco.Redirects.OutboundRedirect",
+			"name": "Skybrud Redirects - Outbound redirect",
+            "group": "Skybrud.dk Redirects",
+			"editor": {
+				"view": "~/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/Outbound.html?v=0.2.9"
 			}
 		}
 	],
@@ -24,7 +31,8 @@
         "/App_Plugins/Skybrud.Umbraco.Redirects/Scripts/Controllers/AddRedirectDialog.js",
         "/App_Plugins/Skybrud.Umbraco.Redirects/Scripts/Controllers/EditRedirectDialog.js",
         "/App_Plugins/Skybrud.Umbraco.Redirects/Scripts/Controllers/Dashboard.js",
-        "/App_Plugins/Skybrud.Umbraco.Redirects/Scripts/Controllers/PropertyEditor.js"
+        "/App_Plugins/Skybrud.Umbraco.Redirects/Scripts/Controllers/PropertyEditor.js",
+        "/App_Plugins/Skybrud.Umbraco.Redirects/Scripts/Controllers/Editors/Outbound.js"
     ],
     "css": [
         "/App_Plugins/Skybrud.Umbraco.Redirects/Styles/Styles.css"

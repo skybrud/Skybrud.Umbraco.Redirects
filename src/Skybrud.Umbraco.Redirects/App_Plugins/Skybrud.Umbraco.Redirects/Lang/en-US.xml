@@ -40,9 +40,12 @@
     <key alias="media_content">Content</key>
     <key alias="media_media">Media</key>
     <key alias="media_url">URLs</key>
-    
+
     <key alias="labelPermanent">Permament</key>
     <key alias="labelTemporary">Temporary</key>
+    <key alias="labelPermanentRedirect">Permament redirect</key>
+    <key alias="labelTemporaryRedirect">Temporary redirect</key>
+
     <key alias="labelEnabled">Enabled</key>
     <key alias="labelDisabled">Disabled</key>
     <key alias="labelAdvancedOptions">Advanced options</key>
