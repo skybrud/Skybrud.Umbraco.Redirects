@@ -8,10 +8,10 @@
 
     $scope.loading = false;
 
+    $scope.showTitle = $scope.model.config !== '1';
+
     // If we're neither in the content or media section, we stop further execution (eg. property editor preview)
     if ($scope.type != 'content' && $scope.type != 'media') return;
-
-    console.log($scope.model.config);
 
     $scope.addRedirect = function () {
         if ($scope.type == 'content') {

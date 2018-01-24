@@ -19,6 +19,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -307,11 +308,11 @@
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Lang\da-DK.xml" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Lang\en-US.xml" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Lang\en-GB.xml" />
-    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Scripts\Controllers\AddRedirectDialog.js" />
-    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Scripts\Controllers\Dashboard.js" />
-    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Scripts\Controllers\EditRedirectDialog.js" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Scripts\Controllers\Dialogs\AddRedirectDialog.js" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Scripts\Controllers\Dashboards\Default.js" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Scripts\Controllers\Dialogs\EditRedirectDialog.js" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Scripts\Controllers\Editors\Outbound.js" />
-    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Scripts\Controllers\PropertyEditor.js" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Scripts\Controllers\Editors\Inbound.js" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Scripts\Services\RedirectsService.js" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Styles\Styles.css">
       <DependentUpon>Styles.less</DependentUpon>
@@ -323,7 +324,7 @@
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Views\Dialogs\Add.html" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Views\Dialogs\Edit.html" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Views\Editors\Outbound.html" />
-    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Views\PropertyEditor.html" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Views\Editors\Inbound.html" />
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
