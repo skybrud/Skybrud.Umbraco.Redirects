@@ -90,7 +90,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
             Id = obj.GetInt32("id");
             Name = obj.GetString("name");
             RawUrl = obj.GetString("url");
-            Mode = obj.GetEnum<RedirectLinkMode>("mode");
+            Mode = obj.GetEnum("mode", RedirectLinkMode.Url);
         }
 
         #endregion

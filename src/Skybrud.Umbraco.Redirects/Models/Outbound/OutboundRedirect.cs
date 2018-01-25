@@ -46,7 +46,7 @@ namespace Skybrud.Umbraco.Redirects.Models.Outbound {
         protected OutboundRedirect(JObject obj) {
             JObject = obj;
             IsPermanent = obj.GetBoolean("permanent");
-            Link = obj.GetObject(obj.HasValue("items") ? "items.items[0]" : "link", RedirectLinkItem.Parse);
+            Link = obj.GetObject(obj.HasValue("items") ? "items.items[0]" : "link", RedirectLinkItem.Parse) ?? new RedirectLinkItem();
         }
 
         #endregion
