@@ -51,6 +51,8 @@
     <key alias="labelDisabled">Deaktiveret</key>
     <key alias="labelAdvancedOptions">Avancerede indstillinger</key>
 
+    <key alias="labelDeleteRedirectConfirm">Er du sikker på at du vil slette det valgte redirect på %0% ?</key>
+
     <key alias="propertyRedirectTypeName">Type</key>
     <key alias="propertyRedirectTypeDescription">Vælg typen for dit redirect. Bemærk at browsere vil huske et permanent redirect.</key>
 

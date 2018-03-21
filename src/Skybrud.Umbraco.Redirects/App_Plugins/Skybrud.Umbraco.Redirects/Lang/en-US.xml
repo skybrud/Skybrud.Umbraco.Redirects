@@ -51,6 +51,8 @@
     <key alias="labelDisabled">Disabled</key>
     <key alias="labelAdvancedOptions">Advanced options</key>
 
+    <key alias="labelDeleteRedirectConfirm">Are you sure you want do delete the redirect at %0% ?</key>
+
     <key alias="propertyRedirectTypeName">Redirect type</key>
     <key alias="propertyRedirectTypeDescription">Select the type of the redirect. Notice that browsers will remember permanent redirects.</key>
 
