@@ -25,7 +25,7 @@
                         <div class="umb-table-cell col-id"><localize key="redirects_id">ID</localize></div>
                         <div class="umb-table-cell"><localize key="redirects_site">Site</localize></div>
                         <div class="umb-table-cell"><localize key="redirects_originalUrl">Original URL</localize></div>
-						<div class="umb-table-cell"></div>
+						<div class="umb-table-cell col-arrow"></div>
                         <div class="umb-table-cell col-destination"><localize key="redirects_redirectedTo">Destination</localize></div>
                         <div class="umb-table-cell col-date"><localize key="redirects_created">Created</localize></div>
                         <div class="umb-table-cell col-date"><localize key="redirects_updated">Updated</localize></div>
@@ -54,7 +54,7 @@
                             <small ng-if="redirect.regex">&nbsp;(.*)</small>
                         </div>
 
-                        <div class="umb-table-cell">
+                        <div class="umb-table-cell col-arrow">
                             <i class="umb-table-body__icon umb-table-body__fileicon icon-arrow-right" style="font-size: 12px; line-height: 1;"></i>
                         </div>
 
@@ -77,7 +77,7 @@
                         </div>
                         <div class="umb-table-cell col-date">{{redirect.created * 1000 | date: 'yyyy-MM-dd HH:mm'}}</div>
                         <div class="umb-table-cell col-date">{{redirect.updated * 1000 | date: 'yyyy-MM-dd HH:mm'}}</div>
-                        <div class="umb-table-cell justify-end col-actions" style="text-align: right;">
+                        <div class="umb-table-cell col-actions justify-end">
                             <a href="#" prevent-default="" ng-click="editRedirect(redirect)" class="umb-era-button umb-button--s"><localize key="redirects_edit">Edit</localize></a>
                             <a href="#" prevent-default="" ng-click="deleteRedirect(redirect)" class="umb-era-button umb-button--s -red"><localize key="redirects_delete">Delete</localize></a>
                         </div>

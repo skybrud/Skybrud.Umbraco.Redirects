@@ -331,6 +331,10 @@
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Styles\_dialogs.less" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Styles\_pagination.less" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Styles\_table.less" />
+    <None Include="compilerconfig.json" />
+    <None Include="compilerconfig.json.defaults">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </None>
     <None Include="web.config" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\package.manifest" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Styles\Styles.less" />

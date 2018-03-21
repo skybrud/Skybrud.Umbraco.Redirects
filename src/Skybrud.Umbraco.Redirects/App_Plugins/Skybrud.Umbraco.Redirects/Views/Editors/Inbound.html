@@ -25,7 +25,7 @@
                     <div class="umb-table-row">
                         <div class="umb-table-cell col-id"><localize key="redirects_id">ID</localize></div>
                         <div class="umb-table-cell"><localize key="redirects_originalUrl">Original URL</localize></div>
-                        <div class="umb-table-cell"></div>
+                        <div class="umb-table-cell col-arrow"></div>
                         <div class="umb-table-cell col-destination"><localize key="redirectUrls_redirectedTo">Redirected to</localize></div>
                         <div class="umb-table-cell col-date"><localize key="redirects_created">Created</localize></div>
                         <div class="umb-table-cell col-date"><localize key="redirects_updated">Updated</localize></div>
@@ -49,7 +49,7 @@
                             <a href="{{redirect.urls[0]}}" rel="noopener noreferrer" target="_blank" title="{{redirect.url}}{{redirect.queryString ? '?' + redirect.queryString : ''}}">{{redirect.url}}{{redirect.queryString ? '?' + redirect.queryString : ''}}</a>
                             <small ng-if="redirect.regex">&nbsp;(.*)</small>
                         </div>
-                        <div class="umb-table-cell">
+                        <div class="umb-table-cell col-arrow">
                             <i class="umb-table-body__icon umb-table-body__fileicon icon-arrow-right" style="font-size: 12px; line-height: 1;"></i>
                         </div>
                         <div class="umb-table-cell col-destination">
