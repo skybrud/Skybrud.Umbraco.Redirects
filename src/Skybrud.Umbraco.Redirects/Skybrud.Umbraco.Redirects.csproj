@@ -279,6 +279,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Domains\DomainUtils.cs" />
     <Compile Include="EventHandlers\MigrationEvents.cs" />
     <Compile Include="Extensions\PublishedContentExtensions.cs" />
     <Compile Include="Migrations\AddIsRegexColumn.cs" />
