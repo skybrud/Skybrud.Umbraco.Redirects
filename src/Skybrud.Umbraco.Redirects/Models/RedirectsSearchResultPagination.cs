@@ -11,37 +11,37 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// Gets the total amount of items across all pages.
         /// </summary>
         [JsonProperty("total")]
-        public int Total { get; private set; }
+        public int Total { get; }
 
         /// <summary>
         /// Gets the maximum amount of items per page.
         /// </summary>
         [JsonProperty("limit")]
-        public int Limit { get; private set; }
+        public int Limit { get; }
 
         /// <summary>
         /// Gets the offset.
         /// </summary>
         [JsonProperty("offset")]
-        public int Offset { get; private set; }
+        public int Offset { get; }
 
         /// <summary>
         /// Gets the current page.
         /// </summary>
         [JsonProperty("page")]
-        public int Page { get; private set; }
+        public int Page { get; }
 
         /// <summary>
         /// Gets the total amout of pages.
         /// </summary>
         [JsonProperty("pages")]
-        public int Pages { get; private set; }
+        public int Pages { get; }
 
         [JsonProperty("from")]
-        public int From { get; private set; }
+        public int From { get; }
 
         [JsonProperty("to")]
-        public int To { get; private set; }
+        public int To { get; }
 
         #endregion
 

@@ -29,21 +29,17 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// Gets a reference to the internal <see cref="RedirectItemRow"/> class used for representing the data as they
         /// are stored in the database.
         /// </summary>
-        internal RedirectItemRow Row { get; private set; }
+        internal RedirectItemRow Row { get; }
 
         [JsonProperty("id")]
-        public int Id {
-            get { return Row.Id; }
-        }
+        public int Id => Row.Id;
 
         [JsonProperty("uniqueId")]
-        public string UniqueId {
-            get { return Row.UniqueId; }
-        }
+        public string UniqueId => Row.UniqueId;
 
         [JsonProperty("rootNodeId")]
         public int RootNodeId {
-            get { return Row.RootNodeId; }
+            get => Row.RootNodeId;
             set { Row.RootNodeId = value; _rootNode = null; _rootNodeDomains = null; }
         }
 
@@ -51,7 +47,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         public string RootNodeName {
             get {
                 if (RootNodeId > 0 && _rootNode == null) _rootNode = ApplicationContext.Current.Services.ContentService.GetById(RootNodeId);
-                return _rootNode == null ? null : _rootNode.Name;
+                return _rootNode?.Name;
             }
         }
 
@@ -59,7 +55,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         public string RootNodeIcon {
             get {
                 if (RootNodeId > 0 && _rootNode == null) _rootNode = ApplicationContext.Current.Services.ContentService.GetById(RootNodeId);
-                return _rootNode == null ? null : _rootNode.ContentType.Icon;
+                return _rootNode?.ContentType.Icon;
             }
         }
 
@@ -79,8 +75,8 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// </summary>
         [JsonProperty("url")]
         public string Url {
-            get { return Row.Url; }
-            set { Row.Url = value; }
+            get => Row.Url;
+            set => Row.Url = value;
         }
 
         /// <summary>
@@ -136,39 +132,39 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// </summary>
         [JsonProperty("queryString")]
         public string QueryString {
-            get { return Row.QueryString; }
-            set { Row.QueryString = value; }
+            get => Row.QueryString;
+            set => Row.QueryString = value;
         }
 
         [JsonProperty("linkMode")]
         public RedirectLinkMode LinkMode {
-            get { return _linkMode; }
+            get => _linkMode;
             set { _linkMode = value; Row.LinkMode = _linkMode.ToString().ToLower(); }
         }
 
         [JsonProperty("linkId")]
         public int LinkId {
-            get { return Row.LinkId; }
-            set { Row.LinkId = value; }
+            get => Row.LinkId;
+            set => Row.LinkId = value;
         }
 
         [JsonProperty("linkUrl")]
         public string LinkUrl {
-            get { return Row.LinkUrl; }
-            set { Row.LinkUrl = value; }
+            get => Row.LinkUrl;
+            set => Row.LinkUrl = value;
         }
 
         [JsonProperty("linkName")]
         public string LinkName {
-            get { return Row.LinkName; }
-            set { Row.LinkName = value; }
+            get => Row.LinkName;
+            set => Row.LinkName = value;
         }
 
         [JsonProperty("link")]
         public RedirectLinkItem Link {
-            get { return new RedirectLinkItem(LinkId, LinkName, LinkUrl, LinkMode); }
+            get => new RedirectLinkItem(LinkId, LinkName, LinkUrl, LinkMode);
             set {
-                if (value == null) throw new ArgumentNullException("value");
+                if (value == null) throw new ArgumentNullException(nameof(value));
                 LinkMode = value.Mode;
                 LinkId = value.Id;
                 LinkUrl = value.Url;
@@ -179,35 +175,33 @@ namespace Skybrud.Umbraco.Redirects.Models {
         [JsonProperty("created")]
         [JsonConverter(typeof(UnixTimeConverter))]
         public EssentialsDateTime Created {
-            get { return _created; }
+            get => _created;
             set { _created = value ?? EssentialsDateTime.Zero; Row.Created = _created.UnixTimestamp; }
         }
 
         [JsonProperty("updated")]
         [JsonConverter(typeof(UnixTimeConverter))]
         public EssentialsDateTime Updated {
-            get { return _updated; }
+            get => _updated;
             set { _updated = value ?? EssentialsDateTime.Zero; Row.Updated = _updated.UnixTimestamp; }
 		}
 
 		[JsonProperty("permanent")]
-		public bool IsPermanent
-		{
-			get { return Row.IsPermanent; }
-			set { Row.IsPermanent = value; }
+		public bool IsPermanent {
+			get => Row.IsPermanent;
+		    set => Row.IsPermanent = value;
 		}
 
 		[JsonProperty("regex")]
-		public bool IsRegex
-		{
-			get { return Row.IsRegex; }
-			set { Row.IsRegex = value; }
+		public bool IsRegex {
+			get => Row.IsRegex;
+		    set => Row.IsRegex = value;
 		}
 
 		[JsonProperty("forward")]
 		public bool ForwardQueryString {
-			get { return Row.ForwardQueryString; }
-			set { Row.ForwardQueryString = value; }
+			get => Row.ForwardQueryString;
+		    set => Row.ForwardQueryString = value;
 		}
 
 		#endregion

@@ -22,23 +22,15 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// <summary>
         /// Gets a reference to the Umbraco database.
         /// </summary>
-        public UmbracoDatabase Database {
-            get { return ApplicationContext.Current.DatabaseContext.Database; }
-        }
+        public UmbracoDatabase Database => ApplicationContext.Current.DatabaseContext.Database;
 
-        protected ISqlSyntaxProvider SqlSyntax {
-            get { return ApplicationContext.Current.DatabaseContext.SqlSyntax; }
-        }
+        protected ISqlSyntaxProvider SqlSyntax => ApplicationContext.Current.DatabaseContext.SqlSyntax;
 
-        protected DatabaseSchemaHelper SchemaHelper {
-            get {
-                return new DatabaseSchemaHelper(
-                    ApplicationContext.Current.DatabaseContext.Database,
-                    ApplicationContext.Current.ProfilingLogger.Logger,
-                    ApplicationContext.Current.DatabaseContext.SqlSyntax
-                );
-            }
-        }
+        protected DatabaseSchemaHelper SchemaHelper => new DatabaseSchemaHelper(
+            ApplicationContext.Current.DatabaseContext.Database,
+            ApplicationContext.Current.ProfilingLogger.Logger,
+            ApplicationContext.Current.DatabaseContext.SqlSyntax
+        );
 
         #endregion
 
@@ -57,7 +49,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// <paramref name="url"/> will automatically be redirected to the URL of the specified
         /// <paramref name="destionation"/> link.
         /// </summary>
-        /// <param name="rootNodeId">THe ID of the root/side node. Use <code>0</code> for a global redirect.</param>
+        /// <param name="rootNodeId">THe ID of the root/side node. Use <c>0</c> for a global redirect.</param>
         /// <param name="url">The inbound URL to match.</param>
         /// <param name="destionation">An instance of <see cref="RedirectLinkItem"/> representing the destination link.</param>
         /// <returns>An instance of <see cref="RedirectItem"/> representing the created redirect.</returns>
@@ -70,7 +62,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// <paramref name="url"/> will automatically be redirected to the URL of the specified
         /// <paramref name="destionation"/> link.
         /// </summary>
-        /// <param name="rootNodeId">THe ID of the root/side node. Use <code>0</code> for a global redirect.</param>
+        /// <param name="rootNodeId">THe ID of the root/side node. Use <c>0</c> for a global redirect.</param>
         /// <param name="url">The inbound URL to match.</param>
         /// <param name="destionation">An instance of <see cref="RedirectLinkItem"/> representing the destination link.</param>
         /// <param name="permanent">Whether the redirect should be permanent (301) or temporary (302).</param>
@@ -139,7 +131,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         public RedirectItem SaveRedirect(RedirectItem redirect) {
 
             // Some input validation
-            if (redirect == null) throw new ArgumentNullException("redirect");
+            if (redirect == null) throw new ArgumentNullException(nameof(redirect));
 
             // Check whether another redirect matches the new URL and query string
             RedirectItem existing = GetRedirectByUrl(redirect.RootNodeId, redirect.Url, redirect.QueryString);
@@ -164,7 +156,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         public void DeleteRedirect(RedirectItem redirect) {
 
             // Some input validation
-            if (redirect == null) throw new ArgumentNullException("redirect");
+            if (redirect == null) throw new ArgumentNullException(nameof(redirect));
 
             // Remove the redirect from the database
             Database.Delete(redirect.Row);
@@ -175,11 +167,11 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// Gets the redirect mathing the specified numeric <paramref name="redirectId"/>.
         /// </summary>
         /// <param name="redirectId">The numeric ID of the redirect.</param>
-        /// <returns>An instance of <see cref="RedirectItem"/>, or <code>null</code> if not found.</returns>
+        /// <returns>An instance of <see cref="RedirectItem"/>, or <c>null</c> if not found.</returns>
         public RedirectItem GetRedirectById(int redirectId) {
 
             // Validate the input
-            if (redirectId == 0) throw new ArgumentException("redirectId");
+            if (redirectId == 0) throw new ArgumentException("redirectId must have a value", nameof(redirectId));
 
             // Just return "null" if the table doesn't exist (since there aren't any redirects anyway)
             if (!SchemaHelper.TableExist(RedirectItemRow.TableName)) return null;
@@ -199,11 +191,11 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// Gets the redirect mathing the specified unique <paramref name="redirectId"/>.
         /// </summary>
         /// <param name="redirectId">The unique ID of the redirect.</param>
-        /// <returns>An instance of <see cref="RedirectItem"/>, or <code>null</code> if not found.</returns>
+        /// <returns>An instance of <see cref="RedirectItem"/>, or <c>null</c> if not found.</returns>
         public RedirectItem GetRedirectById(string redirectId) {
 
             // Validate the input
-            if (String.IsNullOrWhiteSpace(redirectId)) throw new ArgumentException("redirectId");
+            if (String.IsNullOrWhiteSpace(redirectId)) throw new ArgumentNullException(nameof(redirectId));
 
             // Just return "null" if the table doesn't exist (since there aren't any redirects anyway)
             if (!SchemaHelper.TableExist(RedirectItemRow.TableName)) return null;
@@ -222,13 +214,13 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// <summary>
         /// Gets the redirect mathing the specified <paramref name="url"/>.
         /// </summary>
-        /// <param name="rootNodeId">THe ID of the root/side node. Use <code>0</code> for a global redirect.</param>
+        /// <param name="rootNodeId">THe ID of the root/side node. Use <c>0</c> for a global redirect.</param>
         /// <param name="url">The URL of the redirect.</param>
-        /// <returns>An instance of <see cref="RedirectItem"/>, or <code>null</code> if not found.</returns>
+        /// <returns>An instance of <see cref="RedirectItem"/>, or <c>null</c> if not found.</returns>
         public RedirectItem GetRedirectByUrl(int rootNodeId, string url) {
 
             // Some input validation
-            if (String.IsNullOrWhiteSpace(url)) throw new ArgumentNullException("url");
+            if (String.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
 
             // Split the URL
             string[] parts = url.Split('?');
@@ -239,14 +231,14 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// <summary>
         /// Gets the redirect mathing the specified <paramref name="url"/> and <paramref name="queryString"/>.
         /// </summary>
-        /// <param name="rootNodeId">THe ID of the root/side node. Use <code>0</code> for a global redirect.</param>
+        /// <param name="rootNodeId">THe ID of the root/side node. Use <c>0</c> for a global redirect.</param>
         /// <param name="url">The URL of the redirect.</param>
         /// <param name="queryString">The query string of the redirect.</param>
-        /// <returns>An instance of <see cref="RedirectItem"/>, or <code>null</code> if not found.</returns>
+        /// <returns>An instance of <see cref="RedirectItem"/>, or <c>null</c> if not found.</returns>
         public RedirectItem GetRedirectByUrl(int rootNodeId, string url, string queryString) {
 
             // Some input validation
-            if (String.IsNullOrWhiteSpace(url)) throw new ArgumentNullException("url");
+            if (String.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
 
 			url = url.TrimEnd('/').Trim();
             queryString = (queryString ?? "").Trim();
@@ -284,7 +276,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         public RedirectItem[] GetRedirectsByUrl(string url) {
 
             // Some input validation
-            if (String.IsNullOrWhiteSpace(url)) throw new ArgumentNullException("url");
+            if (String.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
 
             // Split the URL
             string[] parts = url.Split('?');
@@ -297,11 +289,11 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// </summary>
         /// <param name="url">The URL of the redirect.</param>
         /// <param name="queryString">The query string of the redirect.</param>
-        /// <returns>An array of <see cref="RedirectItem"/>, or <code>null</code> if not found.</returns>
+        /// <returns>An array of <see cref="RedirectItem"/>, or <c>null</c> if not found.</returns>
         public RedirectItem[] GetRedirectsByUrl(string url, string queryString) {
 
             // Some input validation
-            if (String.IsNullOrWhiteSpace(url)) throw new ArgumentNullException("url");
+            if (String.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
 
 			var fullUrl = url + (queryString.IsNullOrWhiteSpace() ? "" : "?" + queryString);
 
@@ -363,13 +355,13 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// <summary>
         /// Gets an instance of <see cref="RedirectsSearchResult"/> representing a paginated search for redirects.
         /// </summary>
-        /// <param name="page">The page to be returned (default is <code>1</code>)</param>
-        /// <param name="limit">The maximum amount of redirects to be returned per page (default is <code>20</code>).</param>
-        /// <param name="type">The type of the redirects to be returned. Possible values are <code>url</code>,
-        ///     <code>content</code> or <code>media</code>. If not specified, all types of redirects will be returned.
-        ///     Default is <code>null</code>.</param>
+        /// <param name="page">The page to be returned (default is <c>1</c>)</param>
+        /// <param name="limit">The maximum amount of redirects to be returned per page (default is <c>20</c>).</param>
+        /// <param name="type">The type of the redirects to be returned. Possible values are <c>url</c>,
+        ///     <c>content</c> or <c>media</c>. If not specified, all types of redirects will be returned.
+        ///     Default is <c>null</c>.</param>
         /// <param name="text">A string value that should be present in either the text or URL of the returned
-        ///     redirects. Default is <code>null</code>.</param>
+        ///     redirects. Default is <c>null</c>.</param>
         /// <param name="rootNodeId"></param>
         /// <returns>An instance of <see cref="RedirectsSearchResult"/>.</returns>
         public RedirectsSearchResult GetRedirects(int page = 1, int limit = 20, string type = null, string text = null, int? rootNodeId = null) {

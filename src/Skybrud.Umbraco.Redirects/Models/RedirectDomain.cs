@@ -8,16 +8,16 @@ namespace Skybrud.Umbraco.Redirects.Models {
         #region Properties
 
         [JsonIgnore]
-        public IDomain Domain { get; private set; }
+        public IDomain Domain { get; }
 
         [JsonProperty("id")]
-        public int Id { get; private set; }
+        public int Id { get; }
 
         [JsonProperty("name")]
-        public string Name { get; private set; }
+        public string Name { get; }
 
         [JsonProperty("rootNodeId")]
-        public int RootNodeId { get; private set; }
+        public int RootNodeId { get; }
 
         #endregion
 
@@ -27,7 +27,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
             Domain = domain;
             Id = domain.Id;
             Name = domain.DomainName;
-            RootNodeId = domain.RootContentId == null ? 0 : domain.RootContentId.Value;
+            RootNodeId = domain.RootContentId ?? 0;
         }
 
         #endregion

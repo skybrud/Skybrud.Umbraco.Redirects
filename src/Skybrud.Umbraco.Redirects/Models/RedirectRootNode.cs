@@ -6,13 +6,13 @@ namespace Skybrud.Umbraco.Redirects.Models {
     public class RedirectRootNode {
 
         [JsonProperty("id")]
-        public int Id { get; private set; }
+        public int Id { get; }
 
         [JsonProperty("name")]
-        public string Name { get; private set; }
+        public string Name { get; }
 
         [JsonProperty("icon")]
-        public string Icon { get; private set; }
+        public string Icon { get; }
 
         private RedirectRootNode(IContent content) {
             Id = content.Id;

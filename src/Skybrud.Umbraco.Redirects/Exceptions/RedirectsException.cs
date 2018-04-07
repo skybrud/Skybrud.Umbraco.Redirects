@@ -5,7 +5,7 @@ namespace Skybrud.Umbraco.Redirects.Exceptions {
     
     public class RedirectsException : Exception {
 
-        public HttpStatusCode StatusCode { get; private set; }
+        public HttpStatusCode StatusCode { get; }
 
         public RedirectsException(string message) : base(message) { }
 

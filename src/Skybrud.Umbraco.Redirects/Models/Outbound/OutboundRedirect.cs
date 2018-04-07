@@ -57,7 +57,7 @@ namespace Skybrud.Umbraco.Redirects.Models.Outbound {
         /// Parses the specified <see cref="JObject"/> into an instance of <see cref="OutboundRedirect"/>.
         /// </summary>
         /// <param name="obj">An instance of <see cref="JObject"/> representing the redirect.</param>
-        /// <returns>An instacne of <see cref="OutboundRedirect"/>, or <code>null</code> if <code>obj</code> is <code>null</code>.</returns>
+        /// <returns>An instacne of <see cref="OutboundRedirect"/>, or <c>null</c> if <paramref name="obj"/> is <c>null</c>.</returns>
         public static OutboundRedirect Parse(JObject obj) {
             return obj == null ? null : new OutboundRedirect(obj);
         }

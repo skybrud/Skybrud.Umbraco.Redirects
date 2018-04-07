@@ -7,10 +7,10 @@ namespace Skybrud.Umbraco.Redirects.Models {
         #region Properties
 
         [JsonProperty("pagination")]
-        public RedirectsSearchResultPagination Pagination { get; private set; }
+        public RedirectsSearchResultPagination Pagination { get; }
 
         [JsonProperty("items")]
-        public RedirectItem[] Items { get; private set; }
+        public RedirectItem[] Items { get; }
 
         #endregion
 
