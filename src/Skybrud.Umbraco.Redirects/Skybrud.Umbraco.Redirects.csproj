@@ -164,9 +164,8 @@
       <HintPath>..\packages\semver.1.1.2\lib\net45\Semver.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Skybrud.Essentials, Version=1.0.8.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Skybrud.Essentials.1.0.8\lib\net45\Skybrud.Essentials.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Skybrud.Essentials, Version=1.1.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Skybrud.Essentials.1.1.3\lib\net45\Skybrud.Essentials.dll</HintPath>
     </Reference>
     <Reference Include="Skybrud.WebApi.Json, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Skybrud.WebApi.Json.1.0.4\lib\net45\Skybrud.WebApi.Json.dll</HintPath>
