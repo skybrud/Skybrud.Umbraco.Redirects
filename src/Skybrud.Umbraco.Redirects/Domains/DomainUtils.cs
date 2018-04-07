@@ -39,6 +39,9 @@ namespace Skybrud.Umbraco.Redirects.Domains
         /// <param name="filter">A function to filter the list of domains, if more than one applies, or <c>null</c>.</param>
         /// <returns>The domain and its normalized uri, that best matches the specified uri.</returns>
         /// <remarks>Copied from Umbraco core, since it's an internal method there.</remarks>
+        /// <see>
+        ///     <cref>https://github.com/umbraco/Umbraco-CMS/blob/22bd6cd989e2596b69339d9b344e14bcc759e82b/src/Umbraco.Web/Routing/DomainHelper.cs#L117</cref>
+        /// </see>
         private static DomainAndUri DomainForUri(IEnumerable<IDomain> domains, Uri current, Func<DomainAndUri[], DomainAndUri> filter = null)
         {
             // sanitize the list to have proper uris for comparison (scheme, path end with /)
