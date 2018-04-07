@@ -19,7 +19,7 @@ namespace Skybrud.Umbraco.Redirects.Domains {
         /// <param name="current">The uri, or null.</param>
         /// <returns>The domain</returns>
         public static IDomain FindDomainForUri(Uri current) {
-            var domains = ApplicationContext.Current.Services.DomainService.GetAll(true);
+            var domains = ApplicationContext.Current.Services.DomainService.GetAll(false);
             if (domains == null || !domains.Any()) return null;
             DomainAndUri domain = DomainForUri(domains, current);
             return domain?.UmbracoDomain;
@@ -30,61 +30,39 @@ namespace Skybrud.Umbraco.Redirects.Domains {
         /// </summary>
         /// <param name="domains">The group of domains.</param>
         /// <param name="current">The uri, or null.</param>
-        /// <param name="filter">A function to filter the list of domains, if more than one applies, or <c>null</c>.</param>
         /// <returns>The domain and its normalized uri, that best matches the specified uri.</returns>
         /// <remarks>Copied from Umbraco core, since it's an internal method there.</remarks>
         /// <see>
         ///     <cref>https://github.com/umbraco/Umbraco-CMS/blob/22bd6cd989e2596b69339d9b344e14bcc759e82b/src/Umbraco.Web/Routing/DomainHelper.cs#L117</cref>
         /// </see>
-        private static DomainAndUri DomainForUri(IEnumerable<IDomain> domains, Uri current, Func<DomainAndUri[], DomainAndUri> filter = null)
-        {
+        private static DomainAndUri DomainForUri(IEnumerable<IDomain> domains, Uri current) {
+            
             // sanitize the list to have proper uris for comparison (scheme, path end with /)
             // we need to end with / because example.com/foo cannot match example.com/foobar
             // we need to order so example.com/foo matches before example.com/
-            var scheme = current == null ? Uri.UriSchemeHttp : current.Scheme;
-            var domainsAndUris = domains
-                .Where(d => d.IsWildcard == false)
-                .Select(SanitizeForBackwardCompatibility)
-                .Select(d => new DomainAndUri(d, scheme))
+            string scheme = current == null ? Uri.UriSchemeHttp : current.Scheme;
+            DomainAndUri[] domainsAndUris = domains
+                .Select(x => new DomainAndUri(SanitizeForBackwardCompatibility(x), scheme))
                 .OrderByDescending(d => d.Uri.ToString())
                 .ToArray();
 
-            if (domainsAndUris.Any() == false)
-                return null;
+            // Just return null if there are no domains
+            if (domainsAndUris.Length == 0) return null;
 
-            DomainAndUri domainAndUri;
-            if (current == null)
-            {
-                // take the first one by default (what else can we do?)
-                domainAndUri = domainsAndUris.First(); // .First() protected by .Any() above
-            }
-            else
-            {
-                // look for the first domain that would be the base of the current url
-                // ie current is www.example.com/foo/bar, look for domain www.example.com
-                var currentWithSlash = current.EndPathWithSlash();
-                domainAndUri = domainsAndUris
-                    .FirstOrDefault(d => d.Uri.EndPathWithSlash().IsBaseOf(currentWithSlash));
-                if (domainAndUri != null) return domainAndUri;
+            // take the first one by default (what else can we do?)
+            if (current == null) return domainsAndUris[0]; 
+            
+            // look for the first domain that would be the base of the current url
+            // ie current is www.example.com/foo/bar, look for domain www.example.com
+            Uri currentWithSlash = current.EndPathWithSlash();
+            DomainAndUri domainAndUri = domainsAndUris.FirstOrDefault(d => d.Uri.EndPathWithSlash().IsBaseOf(currentWithSlash));
+            if (domainAndUri != null) return domainAndUri;
 
-                // if none matches, try again without the port
-                // ie current is www.example.com:1234/foo/bar, look for domain www.example.com
-                domainAndUri = domainsAndUris
-                    .FirstOrDefault(d => d.Uri.EndPathWithSlash().IsBaseOf(currentWithSlash.WithoutPort()));
-                if (domainAndUri != null) return domainAndUri;
-
-                // if none matches, then try to run the filter to pick a domain
-                if (filter != null)
-                {
-                    domainAndUri = filter(domainsAndUris);
-                    // if still nothing, pick the first one?
-                    // no: move that constraint to the filter, but check
-                    if (domainAndUri == null)
-                        throw new InvalidOperationException("The filter returned null.");
-                }
-            }
-
+            // if none matches, try again without the port
+            // ie current is www.example.com:1234/foo/bar, look for domain www.example.com
+            domainAndUri = domainsAndUris.FirstOrDefault(d => d.Uri.EndPathWithSlash().IsBaseOf(currentWithSlash.WithoutPort()));
             return domainAndUri;
+
         }
 
         /// <summary>
@@ -93,18 +71,23 @@ namespace Skybrud.Umbraco.Redirects.Domains {
         /// <param name="domain">The Domain to sanitize.</param>
         /// <returns>The sanitized domain.</returns>
         /// <remarks>Copied from Umbraco core, since it's an internal method there.</remarks>
-        private static IDomain SanitizeForBackwardCompatibility(IDomain domain)
-        {
-            var context = HttpContext.Current;
+        /// <see>
+        ///     <cref>https://github.com/umbraco/Umbraco-CMS/blob/22bd6cd989e2596b69339d9b344e14bcc759e82b/src/Umbraco.Web/Routing/DomainHelper.cs#L197</cref>
+        /// </see>
+        private static IDomain SanitizeForBackwardCompatibility(IDomain domain) {
 
-            if (context != null && domain.DomainName.StartsWith("/"))
-            {
-                // turn "/en" into "http://whatever.com/en" so it becomes a parseable uri
-                var authority = context.Request.Url.GetLeftPart(UriPartial.Authority);
-                domain.DomainName = authority + domain.DomainName;
-            }
+            HttpContext context = HttpContext.Current;
+
+            if (context == null || !domain.DomainName.StartsWith("/")) return domain;
+            
+            // turn "/en" into "http://whatever.com/en" so it becomes a parseable uri
+            string authority = context.Request.Url.GetLeftPart(UriPartial.Authority);
+            domain.DomainName = authority + domain.DomainName;
 
             return domain;
+
         }
+
     }
+
 }
