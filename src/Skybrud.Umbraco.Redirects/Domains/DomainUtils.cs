@@ -6,29 +6,23 @@ using Umbraco.Core;
 using Umbraco.Core.Models;
 using Umbraco.Web.Routing;
 
-namespace Skybrud.Umbraco.Redirects.Domains
-{
+namespace Skybrud.Umbraco.Redirects.Domains {
+    
     /// <summary>
     /// Static utility class with helper methods related to domains.
     /// </summary>
-    public static class DomainUtils
-    {
+    public static class DomainUtils {
+        
         /// <summary>
         /// Finds the domain matching the specified uri using the domain service.
         /// </summary>
         /// <param name="current">The uri, or null.</param>
         /// <returns>The domain</returns>
-        public static IDomain FindDomainForUri(Uri current)
-        {
+        public static IDomain FindDomainForUri(Uri current) {
             var domains = ApplicationContext.Current.Services.DomainService.GetAll(true);
-
             if (domains == null || !domains.Any()) return null;
-
-            var domain = DomainForUri(domains, current);
-
-            if (domain != null) return domain.UmbracoDomain;
-
-            return null;
+            DomainAndUri domain = DomainForUri(domains, current);
+            return domain?.UmbracoDomain;
         }
 
         /// <summary>
