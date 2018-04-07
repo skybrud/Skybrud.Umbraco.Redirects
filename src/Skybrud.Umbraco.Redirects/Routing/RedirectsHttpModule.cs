@@ -11,22 +11,32 @@ using Skybrud.Umbraco.Redirects.Domains;
 
 namespace Skybrud.Umbraco.Redirects.Routing {
 
-    public class RedirectsHttpModule : IHttpModule
-	{
-		static Regex _capturingGroupsRegex = new Regex("\\$\\d+");
+    /// <summary>
+    /// HTTP module for handling inbound redirects.
+    /// </summary>
+    public class RedirectsHttpModule : IHttpModule {
 
-		public RedirectsRepository Repository {
-            get { return RedirectsRepository.Current; }
-        }
+        static Regex _capturingGroupsRegex = new Regex("\\$\\d+");
 
-        public HttpRequest Request {
-            get { return HttpContext.Current.Request; }
-        }
+        /// <summary>
+        /// Gets a reference to the current redirects repository.
+        /// </summary>
+		public RedirectsRepository Repository => RedirectsRepository.Current;
 
-        public HttpResponse Response {
-            get { return HttpContext.Current.Response; }
-        }
+        /// <summary>
+        /// Gets a reference to the current <see cref="HttpRequest"/>.
+        /// </summary>
+	    public HttpRequest Request => HttpContext.Current.Request;
 
+        /// <summary>
+        /// Gets a reference to the current <see cref="HttpResponse"/>.
+        /// </summary>
+        public HttpResponse Response => HttpContext.Current.Response;
+
+        /// <summary>
+        /// Initializes the HTTP module.
+        /// </summary>
+        /// <param name="context"></param>
         public void Init(HttpApplication context) {
             context.EndRequest += ContextOnEndRequest;
         }
@@ -104,6 +114,9 @@ namespace Skybrud.Umbraco.Redirects.Routing {
 
         }
 
+        /// <summary>
+        /// Disposes the HTTP module.
+        /// </summary>
         public void Dispose() { }
     
     }

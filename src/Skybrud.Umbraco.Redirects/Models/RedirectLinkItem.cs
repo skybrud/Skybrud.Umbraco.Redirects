@@ -110,6 +110,10 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
         #region Member methods
 
+        /// <summary>
+        /// Method for calculating the current destination URL of the redirect if the destination is either a content item or media item.
+        /// </summary>
+        /// <returns>The calculated URL.</returns>
         protected virtual string GetCalculatedUrl() {
 
             // If we dont have a valid UmbracoContext (eg. during Examine indexing), we simply return the raw URL

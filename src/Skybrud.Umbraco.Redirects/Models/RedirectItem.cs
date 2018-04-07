@@ -11,6 +11,9 @@ using Umbraco.Core.Models;
 
 namespace Skybrud.Umbraco.Redirects.Models {
 
+    /// <summary>
+    /// Class representing a redirect.
+    /// </summary>
     public class RedirectItem {
 
         #region Private fields
@@ -31,18 +34,30 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// </summary>
         internal RedirectItemRow Row { get; }
 
+        /// <summary>
+        /// Gets the ID of the redirect.
+        /// </summary>
         [JsonProperty("id")]
         public int Id => Row.Id;
 
+        /// <summary>
+        /// Gets the unique ID of the redirect.
+        /// </summary>
         [JsonProperty("uniqueId")]
         public string UniqueId => Row.UniqueId;
 
+        /// <summary>
+        /// Gets or sets the root node ID of the redirect.
+        /// </summary>
         [JsonProperty("rootNodeId")]
         public int RootNodeId {
             get => Row.RootNodeId;
             set { Row.RootNodeId = value; _rootNode = null; _rootNodeDomains = null; }
         }
 
+        /// <summary>
+        /// Gets the name of the root node, or <c>null</c> if a global redirect.
+        /// </summary>
         [JsonProperty("rootNodeName")]
         public string RootNodeName {
             get {
@@ -51,6 +66,9 @@ namespace Skybrud.Umbraco.Redirects.Models {
             }
         }
 
+        /// <summary>
+        /// Gets the icon of the root node, or <c>null</c> if a global redirect.
+        /// </summary>
         [JsonProperty("rootNodeIcon")]
         public string RootNodeIcon {
             get {
@@ -59,6 +77,9 @@ namespace Skybrud.Umbraco.Redirects.Models {
             }
         }
 
+        /// <summary>
+        /// Gets the domains of the root node.
+        /// </summary>
         [JsonProperty("rootNodeDomains")]
         public string[] RootNodeDomains {
             get {
@@ -70,7 +91,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         }
 
         /// <summary>
-        /// Gets the inbound URL (path) of the redirect. The value value will not contain the domain or the query
+        /// Gets or sets the inbound URL (path) of the redirect. The value value will not contain the domain or the query
         /// string.
         /// </summary>
         [JsonProperty("url")]
@@ -128,7 +149,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         }
 
         /// <summary>
-        /// Gets the inbound query string of the redirect.
+        /// Gets or sets the inbound query string of the redirect.
         /// </summary>
         [JsonProperty("queryString")]
         public string QueryString {
@@ -136,30 +157,45 @@ namespace Skybrud.Umbraco.Redirects.Models {
             set => Row.QueryString = value;
         }
 
+        /// <summary>
+        /// Gets or sets the mode/type of the destination link.
+        /// </summary>
         [JsonProperty("linkMode")]
         public RedirectLinkMode LinkMode {
             get => _linkMode;
             set { _linkMode = value; Row.LinkMode = _linkMode.ToString().ToLower(); }
         }
 
+        /// <summary>
+        /// Gets or sets the content or media ID of the destination link.
+        /// </summary>
         [JsonProperty("linkId")]
         public int LinkId {
             get => Row.LinkId;
             set => Row.LinkId = value;
         }
 
+        /// <summary>
+        /// Gets or sets the URL of the destination link.
+        /// </summary>
         [JsonProperty("linkUrl")]
         public string LinkUrl {
             get => Row.LinkUrl;
             set => Row.LinkUrl = value;
         }
 
+        /// <summary>
+        /// Gets or sets the name of the destination link.
+        /// </summary>
         [JsonProperty("linkName")]
         public string LinkName {
             get => Row.LinkName;
             set => Row.LinkName = value;
         }
 
+        /// <summary>
+        /// Gets or sets an instance of <see cref="RedirectLinkItem"/> representing the destination link.
+        /// </summary>
         [JsonProperty("link")]
         public RedirectLinkItem Link {
             get => new RedirectLinkItem(LinkId, LinkName, LinkUrl, LinkMode);
@@ -172,6 +208,9 @@ namespace Skybrud.Umbraco.Redirects.Models {
             }
         }
 
+        /// <summary>
+        /// Gets or sets the timestamp for when the redirect was created.
+        /// </summary>
         [JsonProperty("created")]
         [JsonConverter(typeof(UnixTimeConverter))]
         public EssentialsDateTime Created {
@@ -179,25 +218,37 @@ namespace Skybrud.Umbraco.Redirects.Models {
             set { _created = value ?? EssentialsDateTime.Zero; Row.Created = _created.UnixTimestamp; }
         }
 
+        /// <summary>
+        /// Gets or sets the timestamp for when the redirect was last updated.
+        /// </summary>
         [JsonProperty("updated")]
         [JsonConverter(typeof(UnixTimeConverter))]
         public EssentialsDateTime Updated {
             get => _updated;
             set { _updated = value ?? EssentialsDateTime.Zero; Row.Updated = _updated.UnixTimestamp; }
 		}
-
+        
+        /// <summary>
+        /// Gets or sets whether the redirect is permanent.
+        /// </summary>
 		[JsonProperty("permanent")]
 		public bool IsPermanent {
 			get => Row.IsPermanent;
 		    set => Row.IsPermanent = value;
 		}
 
-		[JsonProperty("regex")]
+        /// <summary>
+        /// Gets or sets whether <see cref="Url"/> is a REGEX pattern.
+        /// </summary>
+        [JsonProperty("regex")]
 		public bool IsRegex {
 			get => Row.IsRegex;
 		    set => Row.IsRegex = value;
 		}
 
+        /// <summary>
+        /// Gets or sets whether the query string should be forwarded.
+        /// </summary>
 		[JsonProperty("forward")]
 		public bool ForwardQueryString {
 			get => Row.ForwardQueryString;
@@ -215,6 +266,9 @@ namespace Skybrud.Umbraco.Redirects.Models {
             Row = row;
         }
 
+        /// <summary>
+        /// Initializes an empty redirect.
+        /// </summary>
         public RedirectItem() {
             Row = new RedirectItemRow();
             _created = EssentialsDateTime.Now;

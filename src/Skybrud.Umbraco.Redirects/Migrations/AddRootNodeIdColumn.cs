@@ -8,7 +8,7 @@ using Umbraco.Core.Persistence.SqlSyntax;
 namespace Skybrud.Umbraco.Redirects.Migrations {
 
     [Migration("0.2.5", 1, Package.Alias)]
-    public class AddRootNodeIdColumn : MigrationBase {
+    internal class AddRootNodeIdColumn : MigrationBase {
 
         private readonly UmbracoDatabase _database = ApplicationContext.Current.DatabaseContext.Database;
         private readonly DatabaseSchemaHelper _schemaHelper;

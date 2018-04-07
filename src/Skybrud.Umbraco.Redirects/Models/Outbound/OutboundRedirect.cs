@@ -5,27 +5,42 @@ using Skybrud.Essentials.Json.Extensions;
 
 namespace Skybrud.Umbraco.Redirects.Models.Outbound {
     
-    public class OutboundRedirect {
+    /// <summary>
+    /// Model for an outbound redirect.
+    /// </summary>
+    public class OutboundRedirect : JsonObjectBase {
 
         #region Properties
-
-        [JsonIgnore]
-        public JObject JObject { get; }
-
+        
+        /// <summary>
+        /// Gets whether the redirect is permanent.
+        /// </summary>
         [JsonProperty("permanent")]
         public bool IsPermanent { get; }
 
+        /// <summary>
+        /// Gets an instance of <see cref="RedirectLinkItem"/> representing the destination.
+        /// </summary>
         [JsonProperty("link")]
         public RedirectLinkItem Link { get; }
 
+        /// <summary>
+        /// Gets the URL of the redirects.
+        /// </summary>
         [JsonIgnore]
         public string Url => HasLink ? Link.Url : "";
 
+        /// <summary>
+        /// Same as <see cref="IsValid"/>.
+        /// </summary>
         [JsonIgnore]
-        public bool HasLink => Link != null && Link.IsValid;
+        public bool HasLink => IsValid;
 
+        /// <summary>
+        /// Gets whether the redirects has a valid link.
+        /// </summary>
         [JsonIgnore]
-        public bool IsValid => HasLink;
+        public bool IsValid => Link != null && Link.IsValid;
 
         #endregion
 
@@ -34,7 +49,7 @@ namespace Skybrud.Umbraco.Redirects.Models.Outbound {
         /// <summary>
         /// Initializes a new instance with an empty model.
         /// </summary>
-        public OutboundRedirect() {
+        public OutboundRedirect() : base(null) {
             IsPermanent = true;
             Link = new RedirectLinkItem();
         }
@@ -43,8 +58,7 @@ namespace Skybrud.Umbraco.Redirects.Models.Outbound {
         /// Initializes a new instance based on the specified <see cref="JObject"/>.
         /// </summary>
         /// <param name="obj">An instance of <see cref="JObject"/> representing the redirect.</param>
-        protected OutboundRedirect(JObject obj) {
-            JObject = obj;
+        protected OutboundRedirect(JObject obj) : base(obj) {
             IsPermanent = obj.GetBoolean("permanent");
             Link = obj.GetObject(obj.HasValue("items") ? "items.items[0]" : "link", RedirectLinkItem.Parse) ?? new RedirectLinkItem();
         }

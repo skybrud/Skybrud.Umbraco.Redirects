@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Web;
 
 namespace Skybrud.Umbraco.Redirects.Extensions
 {
@@ -27,7 +28,7 @@ namespace Skybrud.Umbraco.Redirects.Extensions
 		public static void Append(this NameValueCollection nameValueCollection1, NameValueCollection nameValueCollection2)
 		{
 			if (nameValueCollection1 == null)
-				throw new ArgumentNullException("first");
+				throw new ArgumentNullException(nameof(nameValueCollection1));
 
 			if (nameValueCollection2 != null)
 			{
@@ -53,13 +54,13 @@ namespace Skybrud.Umbraco.Redirects.Extensions
 			return result;
 		}
 
-		/// <summary>
-		/// Constructs a QueryString (string).
-		/// Consider this method to be the opposite of <see cref="System.Web.HttpUtility.ParseQueryString"/>
-		/// </summary>
-		/// <param name="nvc">NameValueCollection</param>
-		/// <returns>String</returns>
-		public static string ToQueryString(this NameValueCollection nameValueCollection)
+        /// <summary>
+        /// Constructs a QueryString (string).
+        /// Consider this method to be the opposite of <see cref="HttpUtility.ParseQueryString(string)"/>
+        /// </summary>
+        /// <param name="nameValueCollection">NameValueCollection</param>
+        /// <returns>String</returns>
+        public static string ToQueryString(this NameValueCollection nameValueCollection)
 		{
 			List<string> items = new List<string>();
 

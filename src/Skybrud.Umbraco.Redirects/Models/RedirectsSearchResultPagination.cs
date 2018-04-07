@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 
 namespace Skybrud.Umbraco.Redirects.Models {
     
+    /// <summary>
+    /// Class with pagination information about a collection of redirect items.
+    /// </summary>
     public class RedirectsSearchResultPagination {
 
         #region Properties
@@ -37,9 +40,15 @@ namespace Skybrud.Umbraco.Redirects.Models {
         [JsonProperty("pages")]
         public int Pages { get; }
 
+        /// <summary>
+        /// Gets the index of the first item on the page.
+        /// </summary>
         [JsonProperty("from")]
         public int From { get; }
 
+        /// <summary>
+        /// Gets the index of the last item on the page.
+        /// </summary>
         [JsonProperty("to")]
         public int To { get; }
 
@@ -47,6 +56,14 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
         #region Constructors
 
+        /// <summary>
+        /// Initializes a new instance based on the specified parameters.
+        /// </summary>
+        /// <param name="total">The total amount of redirects matched.</param>
+        /// <param name="limit">The maximum amount of redirects to be returned per page.</param>
+        /// <param name="offset">The offset.</param>
+        /// <param name="page">The page returned.</param>
+        /// <param name="pages">The total amount of pages.</param>
         public RedirectsSearchResultPagination(int total, int limit, int offset, int page, int pages) {
             Total = total;
             Limit = limit;

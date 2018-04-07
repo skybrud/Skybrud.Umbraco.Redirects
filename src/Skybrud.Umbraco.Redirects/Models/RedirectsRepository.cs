@@ -10,10 +10,17 @@ using System.Text.RegularExpressions;
 
 namespace Skybrud.Umbraco.Redirects.Models {
 
+    /// <summary>
+    /// Repository for managing redirects.
+    /// </summary>
     public class RedirectsRepository {
 
         #region Properties
 
+        /// <summary>
+        /// Gets a reference to the corrent repository.
+        /// </summary>
+        /// <remarks>Notice: This property will just initialize and return a new instance each time called.</remarks>
         public static RedirectsRepository Current {
             // TODO: Implement as singleton or similar
             get { return new RedirectsRepository(); }
@@ -24,8 +31,14 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// </summary>
         public UmbracoDatabase Database => ApplicationContext.Current.DatabaseContext.Database;
 
+        /// <summary>
+        /// Gets a reference to the current <see cref="ISqlSyntaxProvider"/>.
+        /// </summary>
         protected ISqlSyntaxProvider SqlSyntax => ApplicationContext.Current.DatabaseContext.SqlSyntax;
 
+        /// <summary>
+        /// Gets a reference to the current <see cref="SchemaHelper"/>.
+        /// </summary>
         protected DatabaseSchemaHelper SchemaHelper => new DatabaseSchemaHelper(
             ApplicationContext.Current.DatabaseContext.Database,
             ApplicationContext.Current.ProfilingLogger.Logger,
@@ -127,7 +140,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// Saves the specified <paramref name="redirect"/>.
         /// </summary>
         /// <param name="redirect">The redirected to be saved.</param>
-        /// <returns>The saved <see cref="redirect"/>.</returns>
+        /// <returns>The saved <paramref name="redirect"/>.</returns>
         public RedirectItem SaveRedirect(RedirectItem redirect) {
 
             // Some input validation
