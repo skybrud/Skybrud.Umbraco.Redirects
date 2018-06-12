@@ -6,3 +6,4 @@ obj/
 App_Data/NuGetBackup/
 node_modules/
 releases/temp/
+src/.vs/

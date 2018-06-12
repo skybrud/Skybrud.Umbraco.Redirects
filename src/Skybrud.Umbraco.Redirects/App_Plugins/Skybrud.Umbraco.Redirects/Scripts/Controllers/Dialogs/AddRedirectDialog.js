@@ -2,6 +2,7 @@
 
     // Get the Umbraco version
     var v = Umbraco.Sys.ServerVariables.application.version.split('.');
+    $scope.gte74 = v[0] == 7 && v[1] >= 4;
     $scope.gte76 = v[0] == 7 && v[1] >= 6;
 
     $scope.options = $scope.dialogOptions.options || {};
@@ -60,15 +61,44 @@
     };
 
     $scope.addLink = function () {
-        skybrudRedirectsService.addLink(function (link) {
-            $scope.redirect.link = link;
-        }, false);
+        if ($scope.gte74) {
+            $scope.linkPickerOverlay = {
+                view: "linkpicker",
+                title: $scope.labels.selectDestination,
+                show: true,
+                hideTarget: true,
+                submit: function (model) {
+                    $scope.linkPickerOverlay.show = false;
+                    $scope.linkPickerOverlay = null;
+                    $scope.redirect.link = skybrudRedirectsService.parseUmbracoLink(model.target);
+                }
+            };
+        } else {
+            skybrudRedirectsService.addLink(function (link) {
+                $scope.redirect.link = link;
+            }, false);
+        }
     };
 
     $scope.editLink = function () {
-        skybrudRedirectsService.editLink($scope.redirect.link, function (link) {
-            $scope.redirect.link = link;
-        }, false);
+        if ($scope.gte74) {
+            $scope.linkPickerOverlay = {
+                view: "linkpicker",
+                show: true,
+                currentTarget: $scope.redirect.link,
+                hideTarget: true,
+                title: $scope.labels.selectDestination,
+                submit: function (model) {
+                    $scope.linkPickerOverlay.show = false;
+                    $scope.linkPickerOverlay = null;
+                    $scope.redirect.link = skybrudRedirectsService.parseUmbracoLink(model.target);
+                }
+            };
+        } else {
+            skybrudRedirectsService.editLink($scope.redirect.link, function (link) {
+                $scope.redirect.link = link;
+            }, false);
+        }
     };
 
     $scope.removeLink = function () {
@@ -138,7 +168,8 @@
             errorInvalidUrl: { title: 'Invalid URL', message: 'The specified URL is not valid.' },
             errorNoLink: { title: 'No link', message: 'You must select a destination page or link.' },
             errorAddFailed: { title: 'Saving failed', message: 'The redirect could not be saved due to an error on the server.' },
-            saveSuccessful: { title: 'Redirect added', message: 'Your redirect has successfully been added.' }
+            saveSuccessful: { title: 'Redirect added', message: 'Your redirect has successfully been added.' },
+            selectDestination: 'Select destination'
         };
 
         localizationService.localize('redirects_errorNoUrlTitle').then(function (value) { $scope.labels.errorNoUrl.title = value; });
@@ -155,6 +186,8 @@
 
         localizationService.localize('redirects_addSuccessfulTitle').then(function (value) { $scope.labels.saveSuccessful.title = value; });
         localizationService.localize('redirects_addSuccessfulMessage').then(function (value) { $scope.labels.saveSuccessful.message = value; });
+
+        localizationService.localize('redirects_selectDestination').then(function (value) { $scope.labels.selectDestination = value; });
 
     }
 

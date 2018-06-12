@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 
-<language alias="en" intName="English (US)" localName="English (US)" lcid="" culture="en-US">
+<language alias="en" intName="English (UK)" localName="English (UK)" lcid="" culture="en-GB">
   <area alias="redirects">
     <key alias="redirects">Redirects</key>
     <key alias="addNewRedirect">Add new redirect</key>
@@ -18,16 +18,16 @@
     <key alias="siteDescription">Select the site (or root node) the redirect should apply to. If a site is not selected, the redirect will apply to all domains/sites in the Umbraco solution.</key>
     <key alias="allSites">All sites</key>
     <key alias="originalUrl">Original URL</key>
-		<key alias="isRegex">Use regular expressions</key>
-		<key alias="isRegexDestinationDescription">You can use capturing groups backreferences when using Regex; $1, $2 etc.</key>
+    <key alias="isRegex">Use regular expressions</key>
+    <key alias="isRegexDestinationDescription">You can use capturing groups backreferences when using Regex; $1, $2 etc.</key>
     <key alias="destination">Destination</key>
     <key alias="redirectedTo">Redirected to</key>
     <key alias="selectDestination">Select destination</key>
     <key alias="created">Created</key>
     <key alias="updated">Updated</key>
     <key alias="id">ID</key>
-		<key alias="forwardQueryString">Forward query string</key>
-		<key alias="forwardQueryStringDescription">When enabled, the query string of the original request is forwarded to the redirect location (pass through).</key>
+    <key alias="forwardQueryString">Forward query string</key>
+    <key alias="forwardQueryStringDescription">When enabled, the query string of the original request is forwarded to the redirect location (pass through).</key>
     <key alias="labelUrlDescription">Specify the original URL to match from which the user should be redirected to the destination.</key>
     <key alias="labelDestinationDescription">Select the page or URL the user should be redirected to.</key>
     <key alias="labelNoRedirects">There has not yet been added any redirects.</key>
@@ -42,8 +42,11 @@
     <key alias="media_media">Media</key>
     <key alias="media_url">URLs</key>
 
-    <key alias="labelPermanent">Permament</key>
+    <key alias="labelPermanent">Permanent</key>
     <key alias="labelTemporary">Temporary</key>
+    <key alias="labelPermanentRedirect">Permanent redirect</key>
+    <key alias="labelTemporaryRedirect">Temporary redirect</key>
+
     <key alias="labelEnabled">Enabled</key>
     <key alias="labelDisabled">Disabled</key>
     <key alias="labelAdvancedOptions">Advanced options</key>

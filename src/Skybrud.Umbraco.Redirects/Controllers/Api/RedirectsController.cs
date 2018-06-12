@@ -14,6 +14,9 @@ using Umbraco.Web.WebApi;
 
 namespace Skybrud.Umbraco.Redirects.Controllers.Api {
     
+    /// <summary>
+    /// WebAPI controller for managing redirects.
+    /// </summary>
     [JsonOnlyConfiguration]
     public class RedirectsController : UmbracoAuthorizedApiController {
 
@@ -21,7 +24,10 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
 
         #region Properties
 
-        protected RedirectsRepository Repository = new RedirectsRepository();
+        /// <summary>
+        /// Gets a reference to the current redirects repository.
+        /// </summary>
+        protected RedirectsRepository Repository = RedirectsRepository.Current;
 
         /// <summary>
         /// Gets a reference to the culture of the authenticated user.
@@ -35,6 +41,10 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
 
         #region Public API methods
 
+        /// <summary>
+        /// Gets a list of all Umbraco domains.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public object GetDomains() {
             RedirectDomain[] domains = Repository.GetDomains();
@@ -78,6 +88,15 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         
         }
         
+        /// <summary>
+        /// Gets a paginated list of all redirects.
+        /// </summary>
+        /// <param name="page">The page to be returned.</param>
+        /// <param name="limit">The maximum amount of redirects to be returned per page.</param>
+        /// <param name="type">The type of redirects that should be returned.</param>
+        /// <param name="text">The text that the returned redirects should match.</param>
+        /// <param name="rootNodeId">The root node ID that the returned redirects should match. <c>null</c> means all redirects. <code>0</code> means all global redirects.</param>
+        /// <returns>A list of redirects.</returns>
         [HttpGet]
         public object GetRedirects(int page = 1, int limit = 20, string type = null, string text = null, int? rootNodeId = null) {
             try {
@@ -87,6 +106,11 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
             }
         }
 
+        /// <summary>
+        /// Gets a list of all redirects for the content item matching the specified <paramref name="contentId"/>.
+        /// </summary>
+        /// <param name="contentId">The ID of the content item.</param>
+        /// <returns>A list of redirects.</returns>
         [HttpGet]
         public object GetRedirectsForContent(int contentId) {
 
@@ -116,6 +140,11 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         
         }
 
+        /// <summary>
+        /// Gets a list of all redirects for the media item matching the specified <paramref name="contentId"/>.
+        /// </summary>
+        /// <param name="contentId">The ID of the media item.</param>
+        /// <returns>A list of redirects.</returns>
         [HttpGet]
         public object GetRedirectsForMedia(int contentId) {
 
@@ -145,6 +174,19 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
 
         }
 
+        /// <summary>
+        /// Adds a new redirect.
+        /// </summary>
+        /// <param name="rootNodeId">The root node ID. <c>0</c> indicates a global redirect.</param>
+        /// <param name="url">The inbound URL of the redirect.</param>
+        /// <param name="linkMode">The mode/type of the destination link.</param>
+        /// <param name="linkId">The media or content ID of the destination link.</param>
+        /// <param name="linkUrl">The URL of the destination link.</param>
+        /// <param name="linkName">The name of the destination link.</param>
+        /// <param name="permanent">Indicates whether the redirect should be permanent. Default is <c>true</c>.</param>
+        /// <param name="regex">Indicates wether the inbound URL is a REGEX pattern. <c>false</c> by default.</param>
+        /// <param name="forward">Indicates whether the query string should be forwarded. <c>false</c> by default.</param>
+        /// <returns>The created redirect.</returns>
         [HttpGet]
         public object AddRedirect(int rootNodeId, string url, string linkMode, int linkId, string linkUrl, string linkName = null, bool permanent = true, bool regex = false, bool forward = false) {
 
@@ -182,6 +224,20 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
 
         }
 
+        /// <summary>
+        /// Edits the redirect with the specified <paramref name="redirectId"/>.
+        /// </summary>
+        /// <param name="rootNodeId">The root node ID. <c>0</c> indicates a global redirect.</param>
+        /// <param name="redirectId">The ID of the redirect.</param>
+        /// <param name="url">The inbound URL of the redirect.</param>
+        /// <param name="linkMode">The mode/type of the destination link.</param>
+        /// <param name="linkId">The media or content ID of the destination link.</param>
+        /// <param name="linkUrl">The URL of the destination link.</param>
+        /// <param name="linkName">The name of the destination link.</param>
+        /// <param name="permanent">Indicates whether the redirect should be permanent. Default is <c>true</c>.</param>
+        /// <param name="regex">Indicates wether the inbound URL is a REGEX pattern. <c>false</c> by default.</param>
+        /// <param name="forward">Indicates whether the query string should be forwarded. <c>false</c> by default.</param>
+        /// <returns>The updated redirect.</returns>
         [HttpGet]
         public object EditRedirect(int rootNodeId, string redirectId, string url, string linkMode, int linkId, string linkUrl, string linkName = null, bool permanent = true, bool regex = false, bool forward = false) {
 

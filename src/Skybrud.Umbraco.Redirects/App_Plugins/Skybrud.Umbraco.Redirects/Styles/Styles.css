@@ -17,18 +17,27 @@
 .SkybrudUmbracoRedirects .umb-editor-sub-header {
   margin-bottom: 0;
 }
+.SkybrudUmbracoRedirects .umb-table-cell {
+  cursor: default;
+  margin: auto 7px;
+}
 .SkybrudUmbracoRedirects .umb-table-cell.col-id {
   max-width: 50px;
   padding: 6px 2px;
 }
+.SkybrudUmbracoRedirects .umb-table-cell.col-arrow {
+  max-width: 25px;
+}
 .SkybrudUmbracoRedirects .umb-table-cell.col-date {
   max-width: 115px;
+  min-width: 115px;
 }
 .SkybrudUmbracoRedirects .umb-table-cell.col-destination {
   flex-grow: 4;
 }
-.SkybrudUmbracoRedirects .umb-table-cell {
-  cursor: default;
+.SkybrudUmbracoRedirects .umb-table-cell.col-actions a {
+  padding: 0 10px;
+  font-size: 12px;
 }
 .SkybrudUmbracoRedirects .umb-table-row {
   cursor: default;
@@ -212,6 +221,11 @@
 .EditRedirectDialog label + label,
 .AddRedirectDialog label + label {
   margin-top: 25px;
+}
+.EditRedirectDialog select,
+.AddRedirectDialog select {
+  display: block;
+  width: 100%;
 }
 .EditRedirectDialog input[type="text"],
 .AddRedirectDialog input[type="text"] {

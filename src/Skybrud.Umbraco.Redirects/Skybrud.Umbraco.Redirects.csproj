@@ -19,6 +19,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -36,6 +37,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Skybrud.Umbraco.Redirects.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AutoMapper, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -163,9 +165,8 @@
       <HintPath>..\packages\semver.1.1.2\lib\net45\Semver.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Skybrud.Essentials, Version=1.0.8.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Skybrud.Essentials.1.0.8\lib\net45\Skybrud.Essentials.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Skybrud.Essentials, Version=1.1.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Skybrud.Essentials.1.1.3\lib\net45\Skybrud.Essentials.dll</HintPath>
     </Reference>
     <Reference Include="Skybrud.WebApi.Json, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Skybrud.WebApi.Json.1.0.4\lib\net45\Skybrud.WebApi.Json.dll</HintPath>
@@ -278,11 +279,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Domains\DomainUtils.cs" />
     <Compile Include="EventHandlers\MigrationEvents.cs" />
+    <Compile Include="Extensions\PublishedContentExtensions.cs" />
     <Compile Include="Migrations\AddIsRegexColumn.cs" />
     <Compile Include="Extensions\NameValueCollectionExtensions.cs" />
     <Compile Include="Migrations\AddForwardQueryStringColumn.cs" />
     <Compile Include="Migrations\AddRootNodeIdColumn.cs" />
+    <Compile Include="Models\Outbound\OutboundRedirectPropertyValueConverter.cs" />
     <Compile Include="Models\RedirectRootNode.cs" />
     <Compile Include="Controllers\Api\RedirectsController.cs" />
     <Compile Include="Exceptions\RedirectNotFoundException.cs" />
@@ -295,6 +299,7 @@
     <Compile Include="Models\RedirectsRepository.cs" />
     <Compile Include="Models\RedirectsSearchResult.cs" />
     <Compile Include="Models\RedirectsSearchResultPagination.cs" />
+    <Compile Include="Models\Outbound\OutboundRedirect.cs" />
     <Compile Include="Package.cs" />
     <Compile Include="Properties\AssemblyInfoGenerated.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -304,10 +309,11 @@
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Lang\da-DK.xml" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Lang\en-US.xml" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Lang\en-GB.xml" />
-    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Scripts\Controllers\AddRedirectDialog.js" />
-    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Scripts\Controllers\Dashboard.js" />
-    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Scripts\Controllers\EditRedirectDialog.js" />
-    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Scripts\Controllers\PropertyEditor.js" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Scripts\Controllers\Dialogs\AddRedirectDialog.js" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Scripts\Controllers\Dashboards\Default.js" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Scripts\Controllers\Dialogs\EditRedirectDialog.js" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Scripts\Controllers\Editors\Outbound.js" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Scripts\Controllers\Editors\Inbound.js" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Scripts\Services\RedirectsService.js" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Styles\Styles.css">
       <DependentUpon>Styles.less</DependentUpon>
@@ -318,7 +324,8 @@
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Views\Dashboard.html" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Views\Dialogs\Add.html" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Views\Dialogs\Edit.html" />
-    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Views\PropertyEditor.html" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Views\Editors\Outbound.html" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Views\Editors\Inbound.html" />
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -327,6 +334,10 @@
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Styles\_table.less" />
     <Content Include="config\Dashboard.config.install.xdt" />
     <Content Include="config\Dashboard.config.uninstall.xdt" />
+    <None Include="compilerconfig.json" />
+    <None Include="compilerconfig.json.defaults">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </None>
     <None Include="web.config" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\package.manifest" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Styles\Styles.less" />

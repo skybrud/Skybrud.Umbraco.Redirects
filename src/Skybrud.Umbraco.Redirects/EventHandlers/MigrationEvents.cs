@@ -10,7 +10,7 @@ using Umbraco.Web;
 
 namespace Skybrud.Umbraco.Redirects.EventHandlers {
 
-    public class MigrationEvents : ApplicationEventHandler {
+    internal class MigrationEvents : ApplicationEventHandler {
         
         protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext) {
             HandleStatisticsMigration();

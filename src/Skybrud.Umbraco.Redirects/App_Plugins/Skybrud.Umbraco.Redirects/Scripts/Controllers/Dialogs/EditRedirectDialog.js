@@ -2,6 +2,7 @@
 
     // Get the Umbraco version
     var v = Umbraco.Sys.ServerVariables.application.version.split('.');
+    $scope.gte74 = v[0] == 7 && v[1] >= 4;
     $scope.gte76 = v[0] == 7 && v[1] >= 6;
 
     $scope.loading = false;
@@ -26,15 +27,44 @@
     };
 
     $scope.addLink = function () {
-        skybrudRedirectsService.addLink(function (link) {
-            $scope.redirect.link = link;
-        }, false);
+        if ($scope.gte74) {
+            $scope.linkPickerOverlay = {
+                view: "linkpicker",
+                title: $scope.labels.selectDestination,
+                show: true,
+                hideTarget: true,
+                submit: function (model) {
+                    $scope.linkPickerOverlay.show = false;
+                    $scope.linkPickerOverlay = null;
+                    $scope.redirect.link = skybrudRedirectsService.parseUmbracoLink(model.target);
+                }
+            };
+        } else {
+            skybrudRedirectsService.addLink(function (link) {
+                $scope.redirect.link = link;
+            }, false);
+        }
     };
 
     $scope.editLink = function () {
-        skybrudRedirectsService.editLink($scope.redirect.link, function (link) {
-            $scope.redirect.link = link;
-        }, false);
+        if ($scope.gte74) {
+            $scope.linkPickerOverlay = {
+                view: "linkpicker",
+                show: true,
+                currentTarget: $scope.redirect.link,
+                hideTarget: true,
+                title: $scope.labels.selectDestination,
+                submit: function (model) {
+                    $scope.linkPickerOverlay.show = false;
+                    $scope.linkPickerOverlay = null;
+                    $scope.redirect.link = skybrudRedirectsService.parseUmbracoLink(model.target);
+                }
+            };
+        } else {
+            skybrudRedirectsService.editLink($scope.redirect.link, function (link) {
+                $scope.redirect.link = link;
+            }, false);
+        }
     };
 
     $scope.removeLink = function () {
@@ -122,6 +152,8 @@
 
         localizationService.localize('redirects_saveSuccessfulTitle').then(function (value) { $scope.labels.saveSuccessful.title = value; });
         localizationService.localize('redirects_saveSuccessfulMessage').then(function (value) { $scope.labels.saveSuccessful.message = value; });
+
+        localizationService.localize('redirects_selectDestination').then(function (value) { $scope.labels.selectDestination = value; });
 
     }
 
