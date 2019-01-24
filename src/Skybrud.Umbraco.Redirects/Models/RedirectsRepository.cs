@@ -429,7 +429,44 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
         }
 
-        //public object GetRedirectsForContent(int contentId) {
+	    public string HandleForwardQueryString(RedirectItem redirect, string rawurl)
+	    {
+		   string newRedirectUrl = "";
+
+			// find querystrings from rawurl
+		    string[] elementsRawurl = rawurl.Split('?');
+			string querystringsRawurl = 1 < elementsRawurl.Length ? elementsRawurl[1] : null;
+
+			if (!string.IsNullOrWhiteSpace(querystringsRawurl))
+		    {
+				// we have querystrings in the original url
+
+				// find querystrings in the redirect url
+			    string[] elementsRedirecturl = redirect.LinkUrl.Split('?');
+			    string querystringsRedirecturl = 1 < elementsRedirecturl.Length ? elementsRedirecturl[1] : null;
+
+				// merge querystrings
+				List<string> queryElements = new List<string>();
+
+				if (!string.IsNullOrWhiteSpace(querystringsRedirecturl))
+			    {
+				    queryElements.Add(querystringsRedirecturl);
+			    }
+
+				queryElements.Add(querystringsRawurl);
+
+				// create new redirect url w. merged querystrings
+			    newRedirectUrl = $"{elementsRedirecturl[0]}?{string.Join("&", queryElements)}";
+		    }
+		    else
+		    {
+			    newRedirectUrl = redirect.LinkUrl;
+		    }
+
+			return newRedirectUrl;
+	    }
+
+	    //public object GetRedirectsForContent(int contentId) {
 
         //    // Just return an empty array if the table doesn't exist (since there aren't any redirects anyway)
         //    if (!SchemaHelper.TableExist(RedirectItemRow.TableName)) return new RedirectItem[0];

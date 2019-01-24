@@ -78,32 +78,18 @@ namespace Skybrud.Umbraco.Redirects.Routing {
             if (redirect == null) return;
 
 			var redirectUrl = redirect.LinkUrl;
-            
-            if (redirect.ForwardQueryString) {
-                
-                Uri redirectUri = new Uri(redirectUrl.StartsWith(Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase) ? redirectUrl : string.Format("{0}{1}{2}{3}/{4}", Request.Url.Scheme, Uri.SchemeDelimiter, Request.Url.Host, Request.Url.Port != 80 ? string.Concat(":", Request.Url.Port) : string.Empty, redirectUrl.StartsWith("/") ? redirectUrl.Substring(1) : redirectUrl));
 
-                NameValueCollection redirectQueryString = HttpUtility.ParseQueryString(redirectUri.Query);
-                NameValueCollection newQueryString = HttpUtility.ParseQueryString(Request.Url.Query);
+			if (redirect.ForwardQueryString) redirectUrl = Repository.HandleForwardQueryString(redirect, Request.RawUrl);
 
-                if (redirectQueryString.HasKeys()) {
-                    newQueryString = newQueryString.Merge(redirectQueryString);
-                }
-                string pathAndQuery = Uri.UnescapeDataString(redirectUri.PathAndQuery) + redirectUri.Fragment;
-                redirectUri = new Uri(string.Format("{0}{1}{2}{3}/{4}{5}", redirectUri.Scheme, Uri.SchemeDelimiter, redirectUri.Host, redirectUri.Port != 80 ? string.Concat(":", redirectUri.Port) : string.Empty, pathAndQuery.Contains("?") ? pathAndQuery.Substring(0, pathAndQuery.IndexOf('?')) : pathAndQuery.StartsWith("/") ? pathAndQuery.Substring(1) : pathAndQuery, newQueryString.HasKeys() ? string.Concat("?", newQueryString.ToQueryString()) : string.Empty));
+			//if (redirect.IsRegex)
+			//{
+			//    var regex = new Regex(redirect.Url);
 
-                redirectUrl = redirectUri.AbsoluteUri;
-            }
-
-            //if (redirect.IsRegex)
-            //{
-            //    var regex = new Regex(redirect.Url);
-
-            //    if (_capturingGroupsRegex.IsMatch(redirectUrl))
-            //    {
-            //        redirectUrl = regex.Replace(redirect.Url, redirectUrl);
-            //    }
-            //}
+			//    if (_capturingGroupsRegex.IsMatch(redirectUrl))
+			//    {
+			//        redirectUrl = regex.Replace(redirect.Url, redirectUrl);
+			//    }
+			//}
 
 			// Redirect to the URL
 			if (redirect.IsPermanent) {
