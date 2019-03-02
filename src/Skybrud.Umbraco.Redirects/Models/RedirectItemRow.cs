@@ -1,4 +1,5 @@
-﻿using Umbraco.Core.Persistence;
+﻿using NPoco;
+using Umbraco.Core.Persistence;
 using Umbraco.Core.Persistence.DatabaseAnnotations;
 
 namespace Skybrud.Umbraco.Redirects.Models {
@@ -7,7 +8,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
     /// Class representing the database row of a redirect.
     /// </summary>
     [TableName(TableName)]
-    [PrimaryKey(PrimaryKey, autoIncrement = true)]
+    [PrimaryKey(PrimaryKey, AutoIncrement = true)]
     [ExplicitColumns]
     public class RedirectItemRow {
 

@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Collections.Specialized;
 using Skybrud.Umbraco.Redirects.Extensions;
 using Skybrud.Umbraco.Redirects.Domains;
+using Umbraco.Web.Composing;
 
 namespace Skybrud.Umbraco.Redirects.Routing {
 
@@ -41,13 +42,13 @@ namespace Skybrud.Umbraco.Redirects.Routing {
             context.EndRequest += ContextOnEndRequest;
         }
 
-        private IDomain GetUmbracoDomain() {
+        private Domain GetUmbracoDomain() {
 
             // Get the Umbraco request (it may be NULL)
-            PublishedContentRequest pcr = UmbracoContext.Current == null ? null : UmbracoContext.Current.PublishedContentRequest;
+            PublishedRequest pcr = Current.UmbracoContext == null ? null : Current.UmbracoContext.PublishedRequest;
 
             // Return the domain of the Umbraco request
-            if (pcr != null) return pcr.UmbracoDomain;
+            if (pcr != null) return pcr.Domain;
 
             // Find domain via DomainService based on current request domain
             var domain = DomainUtils.FindDomainForUri(Request.Url);
@@ -66,10 +67,10 @@ namespace Skybrud.Umbraco.Redirects.Routing {
             if (application.Response.StatusCode != 404) return;
             
             // Get the Umbraco domain of the current request
-            IDomain domain = GetUmbracoDomain();
+            Domain domain = GetUmbracoDomain();
 
             // Get the root node/content ID of the domain (no domain = 0)
-            int rootNodeId = (domain == null || domain.RootContentId == null ? 0 : domain.RootContentId.Value);
+            int rootNodeId = (domain == null ? 0 : domain.ContentId);
 
             // Look for a redirect matching the URL (and domain)
             RedirectItem redirect = null;

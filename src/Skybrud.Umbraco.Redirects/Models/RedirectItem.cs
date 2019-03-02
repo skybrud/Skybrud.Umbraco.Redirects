@@ -8,6 +8,7 @@ using Skybrud.Essentials.Json.Converters.Time;
 using Skybrud.Essentials.Time;
 using Umbraco.Core;
 using Umbraco.Core.Models;
+using Umbraco.Web.Composing;
 
 namespace Skybrud.Umbraco.Redirects.Models {
 
@@ -61,7 +62,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         [JsonProperty("rootNodeName")]
         public string RootNodeName {
             get {
-                if (RootNodeId > 0 && _rootNode == null) _rootNode = ApplicationContext.Current.Services.ContentService.GetById(RootNodeId);
+                if (RootNodeId > 0 && _rootNode == null) _rootNode = Current.Services.ContentService.GetById(RootNodeId);
                 return _rootNode?.Name;
             }
         }
@@ -72,7 +73,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         [JsonProperty("rootNodeIcon")]
         public string RootNodeIcon {
             get {
-                if (RootNodeId > 0 && _rootNode == null) _rootNode = ApplicationContext.Current.Services.ContentService.GetById(RootNodeId);
+                if (RootNodeId > 0 && _rootNode == null) _rootNode = Current.Services.ContentService.GetById(RootNodeId);
                 return _rootNode?.ContentType.Icon;
             }
         }
@@ -84,7 +85,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         public string[] RootNodeDomains {
             get {
                 if (RootNodeId > 0 && _rootNodeDomains == null) {
-                    _rootNodeDomains = ApplicationContext.Current.Services.DomainService.GetAssignedDomains(RootNodeId, false).Select(x => x.DomainName).ToArray();
+                    _rootNodeDomains = Current.Services.DomainService.GetAssignedDomains(RootNodeId, false).Select(x => x.DomainName).ToArray();
                 }
                 return _rootNodeDomains ?? new string[0];
             }
@@ -212,7 +213,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// Gets or sets the timestamp for when the redirect was created.
         /// </summary>
         [JsonProperty("created")]
-        [JsonConverter(typeof(UnixTimeConverter))]
+        [JsonConverter(typeof(TimeConverter))]
         public EssentialsDateTime Created {
             get => _created;
             set { _created = value ?? EssentialsDateTime.Zero; Row.Created = _created.UnixTimestamp; }
@@ -222,7 +223,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// Gets or sets the timestamp for when the redirect was last updated.
         /// </summary>
         [JsonProperty("updated")]
-        [JsonConverter(typeof(UnixTimeConverter))]
+        [JsonConverter(typeof(TimeConverter))]
         public EssentialsDateTime Updated {
             get => _updated;
             set { _updated = value ?? EssentialsDateTime.Zero; Row.Updated = _updated.UnixTimestamp; }

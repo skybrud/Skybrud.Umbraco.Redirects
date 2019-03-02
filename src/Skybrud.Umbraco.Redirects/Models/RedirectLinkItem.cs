@@ -4,7 +4,9 @@ using Newtonsoft.Json.Linq;
 using Skybrud.Essentials.Json;
 using Skybrud.Essentials.Json.Extensions;
 using Umbraco.Core.Models;
+using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Web;
+using Umbraco.Web.Composing;
 
 namespace Skybrud.Umbraco.Redirects.Models {
 
@@ -117,16 +119,16 @@ namespace Skybrud.Umbraco.Redirects.Models {
         protected virtual string GetCalculatedUrl() {
 
             // If we dont have a valid UmbracoContext (eg. during Examine indexing), we simply return the raw URL
-            if (UmbracoContext.Current == null) return RawUrl;
+            if (Current.UmbracoContext == null) return RawUrl;
             
             // Look up the actual URL for content and media
             switch (Mode) {
                 case RedirectLinkMode.Content: {
-                    IPublishedContent content = UmbracoContext.Current.ContentCache.GetById(Id);
+                    IPublishedContent content = Current.UmbracoContext.ContentCache.GetById(Id);
                     return content == null ? RawUrl : content.Url;
                 }
                 case RedirectLinkMode.Media: {
-                    IPublishedContent media = UmbracoContext.Current.MediaCache.GetById(Id);
+                    IPublishedContent media = Current.UmbracoContext.MediaCache.GetById(Id);
                     return media == null ? RawUrl : media.Url;
                 }
             }

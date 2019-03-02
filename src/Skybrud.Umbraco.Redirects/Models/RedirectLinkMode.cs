@@ -6,7 +6,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
     /// <summary>
     /// Enum describing the type of the link.
     /// </summary>
-    [JsonConverter(typeof(EnumLowerCaseConverter))]
+    [JsonConverter(typeof(EnumStringConverter))]
     public enum RedirectLinkMode {
     
         /// <summary>

@@ -1,29 +1,21 @@
 ﻿using Skybrud.Umbraco.Redirects.Models;
 using Umbraco.Core;
 using Umbraco.Core.Logging;
+using Umbraco.Core.Migrations;
 using Umbraco.Core.Persistence;
-using Umbraco.Core.Persistence.Migrations;
 using Umbraco.Core.Persistence.SqlSyntax;
 
 namespace Skybrud.Umbraco.Redirects.Migrations {
 
-    [Migration("0.3.0", 1, Package.Alias)]
     internal class AddIsRegexColumn : MigrationBase {
 
-        private readonly UmbracoDatabase _database = ApplicationContext.Current.DatabaseContext.Database;
-        private readonly DatabaseSchemaHelper _schemaHelper;
-
-        public AddIsRegexColumn(ISqlSyntaxProvider sqlSyntax, ILogger logger) : base(sqlSyntax, logger) {
-            _schemaHelper = new DatabaseSchemaHelper(_database, logger, sqlSyntax);
+        public AddIsRegexColumn(IMigrationContext context) : base(context)
+        {
         }
 
-        public override void Up() {
-            if (!_schemaHelper.TableExist(RedirectItemRow.TableName)) return;
+        public override void Migrate() {
+            if (!TableExists(RedirectItemRow.TableName)) return;
             Alter.Table(RedirectItemRow.TableName).AddColumn("IsRegex").AsBoolean().WithDefaultValue(false);
-        }
-
-        public override void Down() {
-            
         }
 
     }

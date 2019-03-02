@@ -10,6 +10,7 @@ using Skybrud.WebApi.Json;
 using Skybrud.WebApi.Json.Meta;
 using Umbraco.Core;
 using Umbraco.Core.Models;
+using Umbraco.Web.Composing;
 using Umbraco.Web.WebApi;
 
 namespace Skybrud.Umbraco.Redirects.Controllers.Api {
@@ -68,7 +69,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
             foreach (RedirectDomain domain in domains.Where(x => x.RootNodeId > 0).DistinctBy(x => x.RootNodeId)) {
                 
                 // Get the root node from the content service
-                IContent content = ApplicationContext.Services.ContentService.GetById(domain.RootNodeId);
+                IContent content = Current.Services.ContentService.GetById(domain.RootNodeId);
                 
                 // Skip if not found via the content service
                 if (content == null) continue;
@@ -117,7 +118,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
             try {
                 
                 // Get a reference to the content item
-                IContent content = ApplicationContext.Services.ContentService.GetById(contentId);
+                IContent content = Current.Services.ContentService.GetById(contentId);
 
                 // Trigger an exception if the content item couldn't be found
                 if (content == null) throw new RedirectsException(HttpStatusCode.NotFound, Localize("redirects/errorContentNoRedirects"));
@@ -151,7 +152,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
             try {
 
                 // Get a reference to the media item
-                IMedia media = ApplicationContext.Services.MediaService.GetById(contentId);
+                IMedia media = Current.Services.MediaService.GetById(contentId);
 
                 // Trigger an exception if the media item couldn't be found
                 if (media == null) throw new RedirectsException(HttpStatusCode.NotFound, Localize("redirects/errorMediaNoRedirects"));
