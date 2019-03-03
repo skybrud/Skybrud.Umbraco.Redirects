@@ -48,7 +48,6 @@
   "dashboards": [
     {
       "alias": "Skybrud.Umbraco.Redirects",
-      "name": "Redirects",
       "sections": [ "content" ],
       "view": "~/App_Plugins/Skybrud.Umbraco.Redirects/Views/Dashboard.html"
     }
