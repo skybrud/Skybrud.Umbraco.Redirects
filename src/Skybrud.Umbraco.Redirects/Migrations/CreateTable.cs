@@ -13,7 +13,8 @@ namespace Skybrud.Umbraco.Redirects.Migrations
         {
             if (!TableExists(RedirectItemRow.TableName))
             {
-                Create.Table<RedirectItemRow>(false);
+                // TODO: Should not create table based on the model
+                Create.Table<RedirectItemRow>(false).Do();
             }
         }
     }

@@ -15,7 +15,8 @@ namespace Skybrud.Umbraco.Redirects.Migrations {
 
         public override void Migrate() {
             if (!TableExists(RedirectItemRow.TableName)) return;
-            Alter.Table(RedirectItemRow.TableName).AddColumn("IsRegex").AsBoolean().WithDefaultValue(false);
+            if (ColumnExists(RedirectItemRow.TableName, "IsRegex")) return;
+            Alter.Table(RedirectItemRow.TableName).AddColumn("IsRegex").AsBoolean().WithDefaultValue(false).Do();
         }
 
     }

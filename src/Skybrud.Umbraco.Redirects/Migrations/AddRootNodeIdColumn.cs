@@ -11,7 +11,8 @@ namespace Skybrud.Umbraco.Redirects.Migrations {
 
         public override void Migrate() {
             if (!TableExists(RedirectItemRow.TableName)) return;
-            Alter.Table(RedirectItemRow.TableName).AddColumn("RootNodeId").AsInt32().WithDefaultValue(0);
+            if (ColumnExists(RedirectItemRow.TableName, "RootNodeId")) return;
+            Alter.Table(RedirectItemRow.TableName).AddColumn("RootNodeId").AsInt32().WithDefaultValue(0).Do();
         }
     }
 

@@ -12,7 +12,8 @@ namespace Skybrud.Umbraco.Redirects.Migrations {
         public override void Migrate()
         {
             if (!TableExists(RedirectItemRow.TableName)) return;
-            Alter.Table(RedirectItemRow.TableName).AddColumn("ForwardQueryString").AsBoolean().WithDefaultValue(false);
+            if (ColumnExists(RedirectItemRow.TableName, "ForwardQueryString")) return;
+            Alter.Table(RedirectItemRow.TableName).AddColumn("ForwardQueryString").AsBoolean().WithDefaultValue(false).Do();
         }
     }
 
