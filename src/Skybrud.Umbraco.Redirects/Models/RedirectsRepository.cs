@@ -89,19 +89,19 @@ namespace Skybrud.Umbraco.Redirects.Models {
                 if (!SchemaHelper.TableExist(RedirectItemRow.TableName)) {
                     SchemaHelper.CreateTable<RedirectItemRow>(false);
                 }
-			//} catch (Exception ex) {
-			//    LogHelper.Error<RedirectsRepository>("Unable to create database table: " + RedirectItem.TableName, ex);
-			//    throw new Exception("Din opgave kunne ikke oprettes pga. en fejl på serveren");
-			//}
+            //} catch (Exception ex) {
+            //    LogHelper.Error<RedirectsRepository>("Unable to create database table: " + RedirectItem.TableName, ex);
+            //    throw new Exception("Din opgave kunne ikke oprettes pga. en fejl på serveren");
+            //}
 
-			var query = "";
+            var query = "";
 
-			if (!isRegex)
-			{
-				string[] urlParts = url.Split('?');
-				url = urlParts[0].TrimEnd('/');
-				query = urlParts.Length == 2 ? urlParts[1] : "";
-			}
+            if (!isRegex)
+            {
+                string[] urlParts = url.Split('?');
+                url = urlParts[0].TrimEnd('/');
+                query = urlParts.Length == 2 ? urlParts[1] : "";
+            }
 
             if (GetRedirectByUrl(rootNodeId, url, query) != null) {
                 throw new RedirectsException("A redirect with the specified URL already exists.");
@@ -119,8 +119,8 @@ namespace Skybrud.Umbraco.Redirects.Models {
                 Created = DateTime.Now,
                 Updated = DateTime.Now,
                 IsPermanent = permanent,
-				IsRegex = isRegex,
-				ForwardQueryString = forwardQueryString
+                IsRegex = isRegex,
+                ForwardQueryString = forwardQueryString
             };
 
             // Attempt to add the redirect to the database
@@ -253,7 +253,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
             // Some input validation
             if (String.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
 
-			url = url.TrimEnd('/').Trim();
+            url = url.TrimEnd('/').Trim();
             queryString = (queryString ?? "").Trim();
 
             // Just return "null" if the table doesn't exist (since there aren't any redirects anyway)
@@ -265,14 +265,14 @@ namespace Skybrud.Umbraco.Redirects.Models {
             // Make the call to the database
             RedirectItemRow row = Database.FirstOrDefault<RedirectItemRow>(sql);
 
-			if (row == null) {
- 				
-                // no redirect found, try with forwardQueryString = true, and no querystring
- 				sql = new Sql().Select("*").From(RedirectItemRow.TableName).Where<RedirectItemRow>(x => x.RootNodeId == rootNodeId && !x.IsRegex && x.Url == url);
+            if (row == null && !string.IsNullOrEmpty(queryString)) {
+                
+                // No redirect found for the URL including query string, so try only matching on URL
+                sql = new Sql().Select("*").From(RedirectItemRow.TableName).Where<RedirectItemRow>(x => x.RootNodeId == rootNodeId && !x.IsRegex && x.Url == url);
  
- 				// Make the call to the database
- 				row = Database.FirstOrDefault<RedirectItemRow>(sql);
- 			
+                // Make the call to the database
+                row = Database.FirstOrDefault<RedirectItemRow>(sql);
+
             }
 
             // Wrap the database row
@@ -308,9 +308,9 @@ namespace Skybrud.Umbraco.Redirects.Models {
             // Some input validation
             if (String.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
 
-			var fullUrl = url + (queryString.IsNullOrWhiteSpace() ? "" : "?" + queryString);
+            var fullUrl = url + (queryString.IsNullOrWhiteSpace() ? "" : "?" + queryString);
 
-			url = url.TrimEnd('/').Trim();
+            url = url.TrimEnd('/').Trim();
             queryString = (queryString ?? "").Trim();
 
             // Just return "null" if the table doesn't exist (since there aren't any redirects anyway)
@@ -327,7 +327,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
             // Return a combined list of the redirects
             return redirects.OrderBy(x => x.RootNodeId > 0 ? "0" : "1").ToArray();
 
-		}
+        }
 
         /// <summary>
         /// Gets an array of <see cref="RedirectItem"/> for the content item with the specified <paramref name="contentId"/>.
@@ -429,44 +429,44 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
         }
 
-	    public string HandleForwardQueryString(RedirectItem redirect, string rawurl)
-	    {
-		   string newRedirectUrl = "";
+        public string HandleForwardQueryString(RedirectItem redirect, string rawurl)
+        {
+           string newRedirectUrl = "";
 
-			// find querystrings from rawurl
-		    string[] elementsRawurl = rawurl.Split('?');
-			string querystringsRawurl = 1 < elementsRawurl.Length ? elementsRawurl[1] : null;
+            // find querystrings from rawurl
+            string[] elementsRawurl = rawurl.Split('?');
+            string querystringsRawurl = 1 < elementsRawurl.Length ? elementsRawurl[1] : null;
 
-			if (!string.IsNullOrWhiteSpace(querystringsRawurl))
-		    {
-				// we have querystrings in the original url
+            if (!string.IsNullOrWhiteSpace(querystringsRawurl))
+            {
+                // we have querystrings in the original url
 
-				// find querystrings in the redirect url
-			    string[] elementsRedirecturl = redirect.LinkUrl.Split('?');
-			    string querystringsRedirecturl = 1 < elementsRedirecturl.Length ? elementsRedirecturl[1] : null;
+                // find querystrings in the redirect url
+                string[] elementsRedirecturl = redirect.LinkUrl.Split('?');
+                string querystringsRedirecturl = 1 < elementsRedirecturl.Length ? elementsRedirecturl[1] : null;
 
-				// merge querystrings
-				List<string> queryElements = new List<string>();
+                // merge querystrings
+                List<string> queryElements = new List<string>();
 
-				if (!string.IsNullOrWhiteSpace(querystringsRedirecturl))
-			    {
-				    queryElements.Add(querystringsRedirecturl);
-			    }
+                if (!string.IsNullOrWhiteSpace(querystringsRedirecturl))
+                {
+                    queryElements.Add(querystringsRedirecturl);
+                }
 
-				queryElements.Add(querystringsRawurl);
+                queryElements.Add(querystringsRawurl);
 
-				// create new redirect url w. merged querystrings
-			    newRedirectUrl = $"{elementsRedirecturl[0]}?{string.Join("&", queryElements)}";
-		    }
-		    else
-		    {
-			    newRedirectUrl = redirect.LinkUrl;
-		    }
+                // create new redirect url w. merged querystrings
+                newRedirectUrl = $"{elementsRedirecturl[0]}?{string.Join("&", queryElements)}";
+            }
+            else
+            {
+                newRedirectUrl = redirect.LinkUrl;
+            }
 
-			return newRedirectUrl;
-	    }
+            return newRedirectUrl;
+        }
 
-	    //public object GetRedirectsForContent(int contentId) {
+        //public object GetRedirectsForContent(int contentId) {
 
         //    // Just return an empty array if the table doesn't exist (since there aren't any redirects anyway)
         //    if (!SchemaHelper.TableExist(RedirectItemRow.TableName)) return new RedirectItem[0];
