@@ -268,7 +268,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
 			if (row == null) {
  				
                 // no redirect found, try with forwardQueryString = true, and no querystring
- 				sql = new Sql().Select("*").From(RedirectItemRow.TableName).Where<RedirectItemRow>(x => x.RootNodeId == rootNodeId && x.Url == url && x.ForwardQueryString);
+ 				sql = new Sql().Select("*").From(RedirectItemRow.TableName).Where<RedirectItemRow>(x => x.RootNodeId == rootNodeId && !x.IsRegex && x.Url == url);
  
  				// Make the call to the database
  				row = Database.FirstOrDefault<RedirectItemRow>(sql);
