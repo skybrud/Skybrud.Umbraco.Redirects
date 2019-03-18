@@ -254,7 +254,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
             if (String.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
 
             url = url.TrimEnd('/').Trim();
-            queryString = (queryString ?? "").Trim();
+            queryString = (queryString ?? string.Empty).Trim();
 
             // Just return "null" if the table doesn't exist (since there aren't any redirects anyway)
             if (!SchemaHelper.TableExist(RedirectItemRow.TableName)) return null;
@@ -268,7 +268,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
             if (row == null && !string.IsNullOrEmpty(queryString)) {
                 
                 // No redirect found for the URL including query string, so try only matching on URL
-                sql = new Sql().Select("*").From(RedirectItemRow.TableName).Where<RedirectItemRow>(x => x.RootNodeId == rootNodeId && !x.IsRegex && x.Url == url);
+                sql = new Sql().Select("*").From(RedirectItemRow.TableName).Where<RedirectItemRow>(x => x.RootNodeId == rootNodeId && !x.IsRegex && x.Url == url && x.QueryString == string.Empty);
  
                 // Make the call to the database
                 row = Database.FirstOrDefault<RedirectItemRow>(sql);
