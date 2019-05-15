@@ -22,13 +22,9 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
     public class RedirectsController : UmbracoAuthorizedApiController {
 
         private CultureInfo _culture;
+        private readonly IRedirectsService _redirects;
 
         #region Properties
-
-        /// <summary>
-        /// Gets a reference to the current redirects repository.
-        /// </summary>
-        protected RedirectsRepository Repository = RedirectsRepository.Current;
 
         /// <summary>
         /// Gets a reference to the culture of the authenticated user.
@@ -36,6 +32,14 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         public CultureInfo Culture {
             // TODO: Is the language reliable for determining the culture?
             get { return _culture ?? (_culture = new CultureInfo(Security.CurrentUser.Language)); }
+        }
+
+        #endregion
+
+        #region Constructors
+
+        public RedirectsController(IRedirectsService redirectsService) {
+            _redirects = redirectsService;
         }
 
         #endregion
@@ -48,7 +52,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         /// <returns></returns>
         [HttpGet]
         public object GetDomains() {
-            RedirectDomain[] domains = Repository.GetDomains();
+            RedirectDomain[] domains = _redirects.GetDomains();
             return new {
                 total = domains.Length,
                 data = domains
@@ -62,7 +66,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         [HttpGet]
         public object GetRootNodes() {
             
-            RedirectDomain[] domains = Repository.GetDomains();
+            RedirectDomain[] domains = _redirects.GetDomains();
 
             List<RedirectRootNode> temp = new List<RedirectRootNode>();
 
@@ -101,7 +105,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         [HttpGet]
         public object GetRedirects(int page = 1, int limit = 20, string type = null, string text = null, int? rootNodeId = null) {
             try {
-                return Repository.GetRedirects(page, limit, type, text, rootNodeId);
+                return _redirects.GetRedirects(page, limit, type, text, rootNodeId);
             } catch (RedirectsException ex) {
                 return Request.CreateResponse(JsonMetaResponse.GetError(HttpStatusCode.InternalServerError, ex.Message));
             }
@@ -129,7 +133,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                         id = content.Id,
                         name = content.Name
                     },
-                    redirects = Repository.GetRedirectsByContentId(contentId)
+                    redirects = _redirects.GetRedirectsByContentId(contentId)
                 });
             
             } catch (RedirectsException ex) {
@@ -163,7 +167,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                         id = media.Id,
                         name = media.Name
                     },
-                    redirects = Repository.GetRedirectsByMediaId(contentId)
+                    redirects = _redirects.GetRedirectsByMediaId(contentId)
                 });
             
             } catch (RedirectsException ex) {
@@ -211,7 +215,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                 RedirectLinkItem destination = new RedirectLinkItem(linkId, linkName, linkUrl, mode);
 
                 // Add the redirect
-                RedirectItem redirect =  Repository.AddRedirect(rootNodeId, url, destination, permanent, regex, forward);
+                RedirectItem redirect = _redirects.AddRedirect(rootNodeId, url, destination, permanent, regex, forward);
 
                 // Return the redirect
                 return redirect;
@@ -245,7 +249,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
             try {
 
                 // Get a reference to the redirect
-                RedirectItem redirect = Repository.GetRedirectById(redirectId);
+                RedirectItem redirect = _redirects.GetRedirectById(redirectId);
                 if (redirect == null) throw new RedirectNotFoundException();
 
                 // Some input validation
@@ -278,9 +282,9 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                 redirect.IsPermanent = permanent;
 				redirect.IsRegex = regex;
                 redirect.ForwardQueryString = forward;
-                
+
                 // Save/update the redirect
-                Repository.SaveRedirect(redirect);
+                _redirects.SaveRedirect(redirect);
 
                 // Return the redirect
                 return redirect;
@@ -304,11 +308,11 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
             try {
 
                 // Get a reference to the redirect
-                RedirectItem redirect = Repository.GetRedirectById(redirectId);
+                RedirectItem redirect = _redirects.GetRedirectById(redirectId);
                 if (redirect == null) throw new RedirectNotFoundException();
 
                 // Delete the redirect
-                Repository.DeleteRedirect(redirect);
+                _redirects.DeleteRedirect(redirect);
 
                 // Return the redirect
                 return redirect;

@@ -6,26 +6,22 @@ using Umbraco.Core;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Persistence;
 using WebComposing = Umbraco.Web.Composing;
-using CoreComposing = Umbraco.Core.Composing;
 using System.Text.RegularExpressions;
-using NPoco;
+using Umbraco.Core.Services;
 
 namespace Skybrud.Umbraco.Redirects.Models {
 
     /// <summary>
     /// Repository for managing redirects.
     /// </summary>
-    public class RedirectsRepository {
+    public class RedirectsRepository : IRedirectsService {
 
-        #region Properties
+        private readonly IDomainService _domains;
 
-        /// <summary>
-        /// Gets a reference to the corrent repository.
-        /// </summary>
-        /// <remarks>Notice: This property will just initialize and return a new instance each time called.</remarks>
-        public static RedirectsRepository Current {
-            // TODO: Implement as singleton or similar
-            get { return new RedirectsRepository(); }
+        #region Constructors
+
+        public RedirectsRepository(IDomainService domains) {
+            _domains = domains;
         }
 
         #endregion
@@ -37,7 +33,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// </summary>
         /// <returns></returns>
         public RedirectDomain[] GetDomains() {
-            return WebComposing.Current.Services.DomainService.GetAll(false).Select(RedirectDomain.GetFromDomain).ToArray();
+            return _domains.GetAll(false).Select(RedirectDomain.GetFromDomain).ToArray();
         }
 
         /// <summary>

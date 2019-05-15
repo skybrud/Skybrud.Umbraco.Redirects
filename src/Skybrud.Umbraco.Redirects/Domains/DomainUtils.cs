@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using Umbraco.Core;
 using Umbraco.Core.Models;
+using Umbraco.Core.Services;
 using Umbraco.Web.Composing;
 using Umbraco.Web.Routing;
 
@@ -17,10 +18,11 @@ namespace Skybrud.Umbraco.Redirects.Domains {
         /// <summary>
         /// Finds the domain matching the specified uri using the domain service.
         /// </summary>
+        /// <param name="domainService"></param>
         /// <param name="current">The uri, or null.</param>
         /// <returns>The domain</returns>
-        public static Domain FindDomainForUri(Uri current) {
-            var domains = Current.Services.DomainService.GetAll(false);
+        public static Domain FindDomainForUri(IDomainService domainService, Uri current) {
+            var domains = domainService.GetAll(false);
             if (domains == null || !domains.Any()) return null;
             DomainAndUri domain = SelectDomain(domains.Select(x => new Domain(x.Id, x.DomainName, x.RootContentId.GetValueOrDefault(), new System.Globalization.CultureInfo(x.LanguageIsoCode), x.IsWildcard)), current);
             return domain;
