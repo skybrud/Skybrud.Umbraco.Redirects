@@ -1,4 +1,5 @@
-﻿using NPoco;
+﻿using System;
+using NPoco;
 using Umbraco.Core.Persistence;
 using Umbraco.Core.Persistence.DatabaseAnnotations;
 
@@ -44,8 +45,14 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// <summary>
         /// Gets or sets the root node ID of the redirect.
         /// </summary>
-        [Column("RootNodeId")]
-        public int RootNodeId { get; set; }
+        [Column("RootId")]
+        public int RootId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the root node GUID key of the redirect.
+        /// </summary>
+        [Column("RootKey")]
+        public string RootKey { get; set; }
 
         /// <summary>
         /// Gets the inbound URL (path) of the redirect. The value value will not contain the domain or the query
@@ -74,6 +81,12 @@ namespace Skybrud.Umbraco.Redirects.Models {
         public int LinkId { get; set; }
 
         /// <summary>
+        /// Gets or sets the content or media GUID key of the destination link.
+        /// </summary>
+        [Column("LinkKey")]
+        public string LinkKey { get; set; }
+
+        /// <summary>
         /// Gets or sets the URL of the destination link.
         /// </summary>
         [Column("LinkUrl")]
@@ -90,13 +103,13 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// Gets or sets the timestamp for when the redirect was created.
         /// </summary>
         [Column("Created")]
-        public long Created { get; set; }
+        public DateTime Created { get; set; }
 
         /// <summary>
         /// Gets or sets the timestamp for when the redirect was last updated.
         /// </summary>
         [Column("Updated")]
-        public long Updated { get; set; }
+        public DateTime Updated { get; set; }
 
 
         /// <summary>

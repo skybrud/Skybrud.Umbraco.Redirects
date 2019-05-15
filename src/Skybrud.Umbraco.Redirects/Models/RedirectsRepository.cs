@@ -83,7 +83,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
             // Initialize the new redirect and populate the properties
             RedirectItem item = new RedirectItem {
-                RootNodeId = rootNodeId,
+                RootId = rootNodeId,
                 LinkId = destionation.Id,
                 LinkUrl = destionation.Url,
                 LinkMode = destionation.Mode,
@@ -130,7 +130,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
             if (redirect == null) throw new ArgumentNullException(nameof(redirect));
 
             // Check whether another redirect matches the new URL and query string
-            RedirectItem existing = GetRedirectByUrl(redirect.RootNodeId, redirect.Url, redirect.QueryString);
+            RedirectItem existing = GetRedirectByUrl(redirect.RootId, redirect.Url, redirect.QueryString);
             if (existing != null && existing.Id != redirect.Id) {
                 throw new RedirectsException("A redirect with the same URL and query string already exists.");
             }
@@ -277,7 +277,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
             using (var scope = WebComposing.Current.ScopeProvider.CreateScope())
             {
                 // Generate the SQL for the query
-                var sql = scope.SqlContext.Sql().Select<RedirectItemRow>().From<RedirectItemRow>().Where<RedirectItemRow>(x => x.RootNodeId == rootNodeId && !x.IsRegex && x.Url == url && x.QueryString == queryString);
+                var sql = scope.SqlContext.Sql().Select<RedirectItemRow>().From<RedirectItemRow>().Where<RedirectItemRow>(x => x.RootId == rootNodeId && !x.IsRegex && x.Url == url && x.QueryString == queryString);
                 // Make the call to the database
                 row = scope.Database.FirstOrDefault<RedirectItemRow>(sql);
 
@@ -285,7 +285,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
                 {
 
                     // no redirect found, try with forwardQueryString = true, and no querystring
-                    sql = scope.SqlContext.Sql().Select<RedirectItemRow>().From<RedirectItemRow>().Where<RedirectItemRow>(x => x.RootNodeId == rootNodeId && x.Url == url && x.ForwardQueryString);
+                    sql = scope.SqlContext.Sql().Select<RedirectItemRow>().From<RedirectItemRow>().Where<RedirectItemRow>(x => x.RootId == rootNodeId && x.Url == url && x.ForwardQueryString);
 
                     // Make the call to the database
                     row = scope.Database.FirstOrDefault<RedirectItemRow>(sql);
@@ -350,7 +350,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
             }
 
             // Return a combined list of the redirects
-            return redirects.OrderBy(x => x.RootNodeId > 0 ? "0" : "1").ToArray();
+            return redirects.OrderBy(x => x.RootId > 0 ? "0" : "1").ToArray();
 
 		}
 
@@ -420,7 +420,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
                 var sql = scope.SqlContext.Sql().Select<RedirectItemRow>().From<RedirectItemRow>();
 
                 // Search by the rootNodeId
-                if (rootNodeId != null) sql = sql.Where<RedirectItemRow>(x => x.RootNodeId == rootNodeId.Value);
+                if (rootNodeId != null) sql = sql.Where<RedirectItemRow>(x => x.RootId == rootNodeId.Value);
 
                 // Search by the type
                 if (!String.IsNullOrWhiteSpace(type)) sql = sql.Where<RedirectItemRow>(x => x.LinkMode == type);

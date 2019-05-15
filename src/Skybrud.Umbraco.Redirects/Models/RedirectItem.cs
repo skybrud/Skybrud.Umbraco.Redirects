@@ -21,8 +21,8 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
         private IContent _rootNode;
         private string[] _rootNodeDomains;
-        private EssentialsDateTime _created;
-        private EssentialsDateTime _updated;
+        private EssentialsTime _created;
+        private EssentialsTime _updated;
         private RedirectLinkMode _linkMode;
 
         #endregion
@@ -50,10 +50,10 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// <summary>
         /// Gets or sets the root node ID of the redirect.
         /// </summary>
-        [JsonProperty("rootNodeId")]
-        public int RootNodeId {
-            get => Row.RootNodeId;
-            set { Row.RootNodeId = value; _rootNode = null; _rootNodeDomains = null; }
+        [JsonProperty("rootId")]
+        public int RootId {
+            get => Row.RootId;
+            set { Row.RootId = value; _rootNode = null; _rootNodeDomains = null; }
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         [JsonProperty("rootNodeName")]
         public string RootNodeName {
             get {
-                if (RootNodeId > 0 && _rootNode == null) _rootNode = Current.Services.ContentService.GetById(RootNodeId);
+                if (RootId > 0 && _rootNode == null) _rootNode = Current.Services.ContentService.GetById(RootId);
                 return _rootNode?.Name;
             }
         }
@@ -73,7 +73,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         [JsonProperty("rootNodeIcon")]
         public string RootNodeIcon {
             get {
-                if (RootNodeId > 0 && _rootNode == null) _rootNode = Current.Services.ContentService.GetById(RootNodeId);
+                if (RootId > 0 && _rootNode == null) _rootNode = Current.Services.ContentService.GetById(RootId);
                 return _rootNode?.ContentType.Icon;
             }
         }
@@ -84,8 +84,8 @@ namespace Skybrud.Umbraco.Redirects.Models {
         [JsonProperty("rootNodeDomains")]
         public string[] RootNodeDomains {
             get {
-                if (RootNodeId > 0 && _rootNodeDomains == null) {
-                    _rootNodeDomains = Current.Services.DomainService.GetAssignedDomains(RootNodeId, false).Select(x => x.DomainName).ToArray();
+                if (RootId > 0 && _rootNodeDomains == null) {
+                    _rootNodeDomains = Current.Services.DomainService.GetAssignedDomains(RootId, false).Select(x => x.DomainName).ToArray();
                 }
                 return _rootNodeDomains ?? new string[0];
             }
@@ -117,7 +117,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
                 HttpRequest request = HttpContext.Current == null ? null : HttpContext.Current.Request;
 
                 // Return the full URL for each domain of the selected root node
-                if (RootNodeId > 0 && request != null) {
+                if (RootId > 0 && request != null) {
 
                     List<string> temp = new List<string>();
 
@@ -214,9 +214,9 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// </summary>
         [JsonProperty("created")]
         [JsonConverter(typeof(TimeConverter))]
-        public EssentialsDateTime Created {
+        public EssentialsTime Created {
             get => _created;
-            set { _created = value ?? EssentialsDateTime.Zero; Row.Created = _created.UnixTimestamp; }
+            set { _created = value ?? EssentialsTime.Zero; Row.Created = _created.DateTimeOffset.ToUniversalTime().DateTime; }
         }
 
         /// <summary>
@@ -224,9 +224,9 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// </summary>
         [JsonProperty("updated")]
         [JsonConverter(typeof(TimeConverter))]
-        public EssentialsDateTime Updated {
+        public EssentialsTime Updated {
             get => _updated;
-            set { _updated = value ?? EssentialsDateTime.Zero; Row.Updated = _updated.UnixTimestamp; }
+            set { _updated = value ?? EssentialsTime.Zero; Row.Updated = _updated.DateTimeOffset.ToUniversalTime().DateTime; }
 		}
         
         /// <summary>
@@ -261,8 +261,8 @@ namespace Skybrud.Umbraco.Redirects.Models {
 		#region Constructors
 
 		internal RedirectItem(RedirectItemRow row) {
-            _created = EssentialsDateTime.FromUnixTimestamp(row.Created);
-            _updated = EssentialsDateTime.FromUnixTimestamp(row.Updated);
+            _created = new EssentialsTime(row.Created);
+            _updated = new EssentialsTime(row.Updated);
             _linkMode = EnumUtils.ParseEnum(row.LinkMode, RedirectLinkMode.Content);
             Row = row;
         }
@@ -272,8 +272,8 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// </summary>
         public RedirectItem() {
             Row = new RedirectItemRow();
-            _created = EssentialsDateTime.Now;
-            _updated = EssentialsDateTime.Now;
+            _created = EssentialsTime.UtcNow;
+            _updated = EssentialsTime.UtcNow;
             Row.UniqueId = Guid.NewGuid().ToString();
         }
 
