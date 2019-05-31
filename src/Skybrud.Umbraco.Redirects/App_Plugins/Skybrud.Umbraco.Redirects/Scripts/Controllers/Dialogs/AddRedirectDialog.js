@@ -1,17 +1,17 @@
-﻿angular.module('umbraco').controller('SkybrudUmbracoRedirects.AddRedirectDialog.Controller', function ($scope, $http, notificationsService, skybrudRedirectsService, localizationService) {
+﻿angular.module('umbraco').controller('SkybrudUmbracoRedirects.AddRedirectDialog.Controller', function ($scope, $http, notificationsService, skybrudRedirectsService, localizationService, editorService) {
 
-    // Get the Umbraco version
-    var v = Umbraco.Sys.ServerVariables.application.version.split('.');
-    $scope.gte74 = v[0] == 7 && v[1] >= 4;
-    $scope.gte76 = v[0] == 7 && v[1] >= 6;
+    $scope.type = $scope.model.options.media ? 'media' : 'content';
+    $scope.content = $scope.model.options.content;
+    $scope.media = $scope.model.options.media;
+    $scope.options = $scope.model.options || {};
 
-    $scope.options = $scope.dialogOptions.options || {};
+    $scope.close = function () {
+        if ($scope.model.close) {
+            $scope.model.close();
+        }
+    };
 
-    $scope.type = $scope.options.media ? 'media' : 'content';
-    $scope.content = $scope.options.content;
-    $scope.media = $scope.options.media;
-
-    $scope.hideRootNodeOption = $scope.options.hideRootNodeOption === '1' || $scope.options.hideRootNodeOption === true;
+    $scope.hideRootNodeOption = $scope.model.options.hideRootNodeOption === '1' || $scope.model.options.hideRootNodeOption === true;
 
     $scope.redirect = {
         rootNodeId: 0,
@@ -29,12 +29,13 @@
     $scope.rootNode = $scope.rootNodes[0];
 
     if ($scope.content) {
+        console.log($scope.content);
         $scope.redirect.link = {
             id: $scope.content.id,
             name: $scope.content.name,
             url: $scope.content.urls.length > 0 ? $scope.content.urls[0] : '#',
             mode: 'content'
-        }
+        };
     } else if ($scope.media) {
 
         // $scope.media doesn't expose the URL directly, so we need to read it from the "_umb_urls" property
@@ -52,7 +53,7 @@
             name: $scope.media.name,
             url: mediaUrl ? mediaUrl : '#',
             mode: 'media'
-        }
+        };
 
     }
 
@@ -61,44 +62,30 @@
     };
 
     $scope.addLink = function () {
-        if ($scope.gte74) {
-            $scope.linkPickerOverlay = {
-                view: "linkpicker",
-                title: $scope.labels.selectDestination,
-                show: true,
-                hideTarget: true,
-                submit: function (model) {
-                    $scope.linkPickerOverlay.show = false;
-                    $scope.linkPickerOverlay = null;
-                    $scope.redirect.link = skybrudRedirectsService.parseUmbracoLink(model.target);
-                }
-            };
-        } else {
-            skybrudRedirectsService.addLink(function (link) {
-                $scope.redirect.link = link;
-            }, false);
-        }
+        editorService.linkPicker({
+            hideTarget: true,
+            submit: function (model) {
+                $scope.redirect.link = skybrudRedirectsService.parseUmbracoLink(model.target);
+                editorService.close();
+            },
+            close: function (model) {
+                editorService.close();
+            }
+        });
     };
 
     $scope.editLink = function () {
-        if ($scope.gte74) {
-            $scope.linkPickerOverlay = {
-                view: "linkpicker",
-                show: true,
-                currentTarget: $scope.redirect.link,
-                hideTarget: true,
-                title: $scope.labels.selectDestination,
-                submit: function (model) {
-                    $scope.linkPickerOverlay.show = false;
-                    $scope.linkPickerOverlay = null;
-                    $scope.redirect.link = skybrudRedirectsService.parseUmbracoLink(model.target);
-                }
-            };
-        } else {
-            skybrudRedirectsService.editLink($scope.redirect.link, function (link) {
-                $scope.redirect.link = link;
-            }, false);
-        }
+        editorService.linkPicker({
+            currentTarget: $scope.redirect.link,
+            hideTarget: true,
+            submit: function (model) {
+                $scope.redirect.link = skybrudRedirectsService.parseUmbracoLink(model.target);
+                editorService.close();
+            },
+            close: function (model) {
+                editorService.close();
+            }
+        });
     };
 
     $scope.removeLink = function () {
@@ -146,14 +133,18 @@
             method: 'GET',
             url: '/umbraco/backoffice/api/Redirects/AddRedirect',
             params: params
-        }).success(function () {
+        }).then(function success() {
             $scope.loading = false;
             notificationsService.success($scope.labels.saveSuccessful.title, $scope.labels.saveSuccessful.message);
-            $scope.submit($scope.redirect);
-        }).error(function (res) {
+            if ($scope.model.submit) {
+                $scope.$broadcast('formSubmitting', { scope: $scope });
+                $scope.model.submit($scope.model);
+            }
+        }, function error(res) {
             $scope.loading = false;
             notificationsService.error($scope.labels.errorAddFailed.title, res && res.meta ? res.meta.error : $scope.labels.errorAddFailed.message);
-        });
+            });
+
 
     };
 
@@ -193,7 +184,7 @@
 
     initLabels();
 
-    skybrudRedirectsService.getRootNodes().success(function (r) {
+    skybrudRedirectsService.getRootNodes().then(function (r) {
         angular.forEach(r.data, function (rootNode) {
             $scope.rootNodes.push(rootNode);
 

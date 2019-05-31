@@ -1,20 +1,16 @@
 ﻿<div ng-controller="SkybrudUmbracoRedirects.Dashboard.Controller" class="SkybrudUmbracoRedirects">
     <div>
-        <div class="umb-editor-sub-header" umb-sticky-bar="">
-            <h3><localize key="redirects_redirects">Redirects</localize></h3>
-        </div>
-        
 
         <div style="margin-bottom: 20px; display: flex;">
             <select style="margin-right: 10px;" ng-options="item as item.name for item in rootNodes" ng-model="filters.rootNode" no-dirty-check></select>
             <select style="margin-right: 10px;" ng-options="item as item.name for item in types track by item.value" ng-model="filters.type" no-dirty-check></select>
             <input type="text" ng-model="filters.text" no-dirty-check placeholder="typeToSearch" localize="placeholder" style="max-width: initial; flex: 1; margin-right: 100px;" />
-            <a href="#" prevent-default ng-click="addRedirect()" class="umb-era-button umb-button--s">
+            <button type="button" prevent-default ng-click="addRedirect()" class="umb-era-button btn btn-primary">
                 <localize key="redirects_addNewRedirect">Add new redirect</localize>
-            </a>
-            <a href="#" prevent-default ng-click="updateList()" class="umb-era-button umb-button--s">
+            </button>
+            <button type="button" prevent-default ng-click="updateList()" class="umb-era-button btn">
                 <localize key="redirects_reload">Reload</localize>
-            </a>
+            </button>
         </div>
 
         <div ng-class="{loading: loading}">
@@ -59,15 +55,15 @@
                         </div>
 
                         <div class="umb-table-cell col-destination">
-                            <span ng-if="redirect.link.mode == 'content'">
+                            <span ng-if="redirect.link.mode == 'Content'">
                                 <localize key="redirects_content">Content</localize>:
                                 <a href="{{redirect.link.url}}" rel="noopener noreferrer" target="_blank" title="{{redirect.link.name ? redirect.link.name : redirect.link.url}}">{{redirect.link.name ? redirect.link.name : redirect.link.url}}</a>
                             </span>
-                            <span ng-if="redirect.link.mode == 'media'">
+                            <span ng-if="redirect.link.mode == 'Media'">
                                 <localize key="redirects_media">Media</localize>:
                                 <a href="{{redirect.link.url}}" rel="noopener noreferrer" target="_blank" title="{{redirect.link.name ? redirect.link.name : redirect.link.url}}">{{redirect.link.name ? redirect.link.name : redirect.link.url}}</a>
                             </span>
-                            <span ng-if="redirect.link.mode == 'url'">
+                            <span ng-if="redirect.link.mode == 'Url'">
                                 <localize key="redirects_url">URL</localize>:
                                 <a href="{{redirect.link.url}}" rel="noopener noreferrer" target="_blank" title="{{redirect.link.url}}">{{redirect.link.url}}</a>
                             </span>
@@ -75,8 +71,8 @@
                                 &nbsp;?&amp;
                             </small>
                         </div>
-                        <div class="umb-table-cell col-date">{{redirect.created * 1000 | date: 'yyyy-MM-dd HH:mm'}}</div>
-                        <div class="umb-table-cell col-date">{{redirect.updated * 1000 | date: 'yyyy-MM-dd HH:mm'}}</div>
+                        <div class="umb-table-cell col-date">{{redirect.created | date: 'yyyy-MM-dd HH:mm'}}</div>
+                        <div class="umb-table-cell col-date">{{redirect.updated | date: 'yyyy-MM-dd HH:mm'}}</div>
                         <div class="umb-table-cell col-actions justify-end">
                             <a href="#" prevent-default="" ng-click="editRedirect(redirect)" class="umb-era-button umb-button--s"><localize key="redirects_edit">Edit</localize></a>
                             <a href="#" prevent-default="" ng-click="deleteRedirect(redirect)" class="umb-era-button umb-button--s -red"><localize key="redirects_delete">Delete</localize></a>

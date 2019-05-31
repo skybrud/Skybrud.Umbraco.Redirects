@@ -1,15 +1,16 @@
-﻿angular.module('umbraco').controller('SkybrudUmbracoRedirects.EditRedirectDialog.Controller', function ($scope, $http, notificationsService, skybrudRedirectsService, localizationService) {
-
-    // Get the Umbraco version
-    var v = Umbraco.Sys.ServerVariables.application.version.split('.');
-    $scope.gte74 = v[0] == 7 && v[1] >= 4;
-    $scope.gte76 = v[0] == 7 && v[1] >= 6;
+﻿angular.module('umbraco').controller('SkybrudUmbracoRedirects.EditRedirectDialog.Controller', function ($scope, $http, notificationsService, skybrudRedirectsService, localizationService, editorService) {
 
     $scope.loading = false;
-    $scope.options = $scope.dialogOptions.options || {};
+    $scope.options = $scope.model.options || {};
+
+    $scope.close = function () {
+        if ($scope.model.close) {
+            $scope.model.close();
+        }
+    };
 
     // Make a copy of the redirect so we don't modify the object used in the list
-    $scope.redirect = angular.copy($scope.dialogOptions.redirect);
+    $scope.redirect = angular.copy($scope.model.redirect);
 
     // Combine the URL and query string so we can bind to it in a single input field
     $scope.redirectUrl = $scope.redirect.url + ($scope.redirect.queryString ? "?" + $scope.redirect.queryString : "");
@@ -27,44 +28,30 @@
     };
 
     $scope.addLink = function () {
-        if ($scope.gte74) {
-            $scope.linkPickerOverlay = {
-                view: "linkpicker",
-                title: $scope.labels.selectDestination,
-                show: true,
-                hideTarget: true,
-                submit: function (model) {
-                    $scope.linkPickerOverlay.show = false;
-                    $scope.linkPickerOverlay = null;
-                    $scope.redirect.link = skybrudRedirectsService.parseUmbracoLink(model.target);
-                }
-            };
-        } else {
-            skybrudRedirectsService.addLink(function (link) {
-                $scope.redirect.link = link;
-            }, false);
-        }
+        editorService.linkPicker({
+            hideTarget: true,
+            submit: function (model) {
+                $scope.redirect.link = skybrudRedirectsService.parseUmbracoLink(model.target);
+                editorService.close();
+            },
+            close: function (model) {
+                editorService.close();
+            }
+        });
     };
 
     $scope.editLink = function () {
-        if ($scope.gte74) {
-            $scope.linkPickerOverlay = {
-                view: "linkpicker",
-                show: true,
-                currentTarget: $scope.redirect.link,
-                hideTarget: true,
-                title: $scope.labels.selectDestination,
-                submit: function (model) {
-                    $scope.linkPickerOverlay.show = false;
-                    $scope.linkPickerOverlay = null;
-                    $scope.redirect.link = skybrudRedirectsService.parseUmbracoLink(model.target);
-                }
-            };
-        } else {
-            skybrudRedirectsService.editLink($scope.redirect.link, function (link) {
-                $scope.redirect.link = link;
-            }, false);
-        }
+        editorService.linkPicker({
+            currentTarget: $scope.redirect.link,
+            hideTarget: true,
+            submit: function (model) {
+                $scope.redirect.link = skybrudRedirectsService.parseUmbracoLink(model.target);
+                editorService.close();
+            },
+            close: function (model) {
+                editorService.close();
+            }
+        });
     };
 
     $scope.removeLink = function () {
@@ -113,11 +100,14 @@
             method: 'GET',
             url: '/umbraco/backoffice/api/Redirects/EditRedirect',
             params: params
-        }).success(function () {
+        }).then(function success() {
             $scope.loading = false;
             notificationsService.success($scope.labels.saveSuccessful.title, $scope.labels.saveSuccessful.message);
-            $scope.submit($scope.redirect);
-        }).error(function (res) {
+            if ($scope.model.submit) {
+                $scope.$broadcast('formSubmitting', { scope: $scope });
+                $scope.model.submit($scope.model);
+            }
+        }, function error(res) {
             $scope.loading = false;
             notificationsService.error($scope.labels.errorEditFailed.title, res && res.meta ? res.meta.error : $scope.labels.errorEditFailed.message);
         });
@@ -159,7 +149,7 @@
 
     initLabels();
 
-    skybrudRedirectsService.getRootNodes().success(function (r) {
+    skybrudRedirectsService.getRootNodes().then(function (r) {
         angular.forEach(r.data, function (rootNode) {
             $scope.rootNodes.push(rootNode);
 

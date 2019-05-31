@@ -8,57 +8,10 @@
                 name: e.name || '',
                 url: e.url,
                 target: e.target || '_self',
+                isMedia: e.isMedia,
+                udi: e.udi,
                 mode: (e.id ? (e.isMedia || e.mode == 'media' ? 'media' : 'content') : 'url')
             };
-        },
-
-        addLink: function (callback, closeAllDialogs) {
-            closeAllDialogs = closeAllDialogs !== false;
-            if (closeAllDialogs) editorService.closeAll();
-            dialogService.linkPicker({
-                callback: function (e) {
-                    if (!e.id && !e.url && !confirm('The selected link appears to be empty. Do you want to continue anyways?')) return;
-                    if (callback) callback(service.parseUmbracoLink(e));
-                    if (closeAllDialogs) editorService.closeAll();
-                }
-            });
-        },
-
-        editLink: function (link, callback, closeAllDialogs) {
-            closeAllDialogs = closeAllDialogs !== false;
-            if (closeAllDialogs) editorService.closeAll();
-            if (link.mode == 'media') {
-                editorService.linkPicker({
-                    currentTarget: {
-                        name: link.name,
-                        url: link.url,
-                        target: link.target
-                    },
-                    submit: function (e) {
-                        if (!e.id && !e.url && !confirm('The selected link appears to be empty. Do you want to continue anyways?')) return;
-                        if (service.parseUmbracoLink(e).id == 0) {
-                            e.id = link.id;
-                            e.isMedia = true;
-                        }
-                        if (callback) callback(service.parseUmbracoLink(e));
-                        if (closeAllDialogs) editorService.closeAll();
-                    }
-                });
-            } else {
-                editorService.linkPicker({
-                    currentTarget: {
-                        id: link.id,
-                        name: link.name,
-                        url: link.url,
-                        target: link.target
-                    },
-                    submit: function (e) {
-                        if (!e.id && !e.url && !confirm('The selected link appears to be empty. Do you want to continue anyways?')) return;
-                        if (callback) callback(service.parseUmbracoLink(e));
-                        if (closeAllDialogs) editorService.closeAll();
-                    }
-                });
-            }
         },
 
         addRedirect: function (options) {
@@ -66,17 +19,19 @@
             if (!options) options = {};
             if (typeof (options) == 'function') options = { callback: options };
 
-            var d = editorService.open({
-                template: '/App_Plugins/Skybrud.Umbraco.Redirects/Views/Dialogs/Add.html',
-                show: true,
-                options: options,
-                callback: function (value) {
-                    if (options.callback) options.callback(value);
+            editorService.open({
+                view: '/App_Plugins/Skybrud.Umbraco.Redirects/Views/Dialogs/Add.html',
+                size: 'small',
+                options,
+                close: function () {
+                    editorService.close();
+                },
+                submit: function (newData) {
+                    editorService.close();
+
+                    if ('callback' in options) options.callback();
                 }
             });
-
-            // Make the dialog 20px wider than default so it can be seen bhind the linkpicker dialog
-            d.element[0].style = 'display: flex; width: 460px !important; margin-left: -460px';
 
         },
         
@@ -84,19 +39,20 @@
 
             if (!options) options = {};
             if (typeof (options) == 'function') options = { callback: options };
-            
-            var d = editorService.open({
-                template: '/App_Plugins/Skybrud.Umbraco.Redirects/Views/Dialogs/Edit.html',
-                show: true,
-                redirect: redirect,
-                options: options,
-                callback: function (value) {
-                    if (options.callback) options.callback(value);
+
+            editorService.open({
+                view: '/App_Plugins/Skybrud.Umbraco.Redirects/Views/Dialogs/Edit.html',
+                size: 'small',
+                redirect,
+                options,
+                close: function () {
+                    editorService.close();
+                },
+                submit: function (newData) {
+                    editorService.close();
+                    if ('callback' in options) options.callback();
                 }
             });
-
-            // Make the dialog 20px wider than default so it can be seen bhind the linkpicker dialog
-            d.element[0].style = 'display: flex; width: 460px !important; margin-left: -460px';
 
         },
 
@@ -107,10 +63,10 @@
                 params: {
                     redirectId: redirect.uniqueId
                 }
-            }).success(function () {
+            }).then(function success() {
                 notificationsService.success('Redirect deleted', 'Your redirect was successfully deleted.');
                 if (callback) callback(redirect);
-            }).error(function (res) {
+            }, function error(res) {
                 notificationsService.error('Deleting redirect failed', res && res.meta ? res.meta.error : 'The server was unable to delete your redirect.');
             });
         },

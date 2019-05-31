@@ -1,4 +1,4 @@
-﻿angular.module('umbraco').controller('SkybrudUmbracoRedirects.Dashboard.Controller', function ($scope, $http, $q, $timeout, dialogService, notificationsService, localizationService, skybrudRedirectsService) {
+﻿angular.module('umbraco').controller('SkybrudUmbracoRedirects.Dashboard.Controller', function ($scope, $http, $q, $timeout, editorService, notificationsService, localizationService, skybrudRedirectsService) {
 
     $scope.redirects = [];
     $scope.mode = 'list';
@@ -161,7 +161,7 @@
 
     };
 
-    skybrudRedirectsService.getRootNodes().success(function (r) {
+    skybrudRedirectsService.getRootNodes().then(function (r) {
         angular.forEach(r.data, function (rootNode) {
             $scope.rootNodes.push(rootNode);
         });
