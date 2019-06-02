@@ -5,14 +5,14 @@
         </div>
         
 
-        <div style="margin-bottom: 20px; display: flex;">
+        <div class="filters">
             <select style="margin-right: 10px;" ng-options="item as item.name for item in rootNodes" ng-model="filters.rootNode" no-dirty-check></select>
             <select style="margin-right: 10px;" ng-options="item as item.name for item in types track by item.value" ng-model="filters.type" no-dirty-check></select>
             <input type="text" ng-model="filters.text" no-dirty-check placeholder="typeToSearch" localize="placeholder" style="max-width: initial; flex: 1; margin-right: 100px;" />
-            <a href="#" prevent-default ng-click="addRedirect()" class="umb-era-button umb-button--s">
+            <a href="#" prevent-default ng-click="addRedirect()" class="btn btn-success">
                 <localize key="redirects_addNewRedirect">Add new redirect</localize>
             </a>
-            <a href="#" prevent-default ng-click="updateList()" class="umb-era-button umb-button--s">
+            <a href="#" prevent-default ng-click="updateList()" class="btn btn-default">
                 <localize key="redirects_reload">Reload</localize>
             </a>
         </div>
@@ -59,15 +59,15 @@
                         </div>
 
                         <div class="umb-table-cell col-destination">
-                            <span ng-if="redirect.link.mode == 'content'">
+                            <span ng-if="redirect.link.type == 'content'">
                                 <localize key="redirects_content">Content</localize>:
                                 <a href="{{redirect.link.url}}" rel="noopener noreferrer" target="_blank" title="{{redirect.link.name ? redirect.link.name : redirect.link.url}}">{{redirect.link.name ? redirect.link.name : redirect.link.url}}</a>
                             </span>
-                            <span ng-if="redirect.link.mode == 'media'">
+                            <span ng-if="redirect.link.type == 'media'">
                                 <localize key="redirects_media">Media</localize>:
                                 <a href="{{redirect.link.url}}" rel="noopener noreferrer" target="_blank" title="{{redirect.link.name ? redirect.link.name : redirect.link.url}}">{{redirect.link.name ? redirect.link.name : redirect.link.url}}</a>
                             </span>
-                            <span ng-if="redirect.link.mode == 'url'">
+                            <span ng-if="redirect.link.type == 'url'">
                                 <localize key="redirects_url">URL</localize>:
                                 <a href="{{redirect.link.url}}" rel="noopener noreferrer" target="_blank" title="{{redirect.link.url}}">{{redirect.link.url}}</a>
                             </span>
@@ -75,8 +75,8 @@
                                 &nbsp;?&amp;
                             </small>
                         </div>
-                        <div class="umb-table-cell col-date">{{redirect.created * 1000 | date: 'yyyy-MM-dd HH:mm'}}</div>
-                        <div class="umb-table-cell col-date">{{redirect.updated * 1000 | date: 'yyyy-MM-dd HH:mm'}}</div>
+                        <div class="umb-table-cell col-date">{{redirect.created | date: 'yyyy-MM-dd HH:mm'}}</div>
+                        <div class="umb-table-cell col-date">{{redirect.updated | date: 'yyyy-MM-dd HH:mm'}}</div>
                         <div class="umb-table-cell col-actions justify-end">
                             <a href="#" prevent-default="" ng-click="editRedirect(redirect)" class="umb-era-button umb-button--s"><localize key="redirects_edit">Edit</localize></a>
                             <a href="#" prevent-default="" ng-click="deleteRedirect(redirect)" class="umb-era-button umb-button--s -red"><localize key="redirects_delete">Delete</localize></a>

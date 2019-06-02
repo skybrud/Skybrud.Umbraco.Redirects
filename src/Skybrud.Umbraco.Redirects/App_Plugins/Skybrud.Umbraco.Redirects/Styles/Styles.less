@@ -225,3 +225,66 @@
     }
 
 }
+
+.SkybrudUmbracoRedirects {
+
+    .filters {
+        margin-bottom: 20px;
+        display: flex;
+
+        input[type=text], select {
+            margin-bottom: 0;
+        }
+
+        .btn + .btn {
+            margin-left: 10px;
+        }
+    }
+
+    &.RadioGroup {
+        display: flex;
+
+        label {
+            display: flex;
+            cursor: pointer;
+        }
+
+        label + label {
+            margin-left: 20px;
+        }
+
+        input {
+            display: initial;
+            margin-right: 5px;
+        }
+
+        i {
+            display: none;
+            margin-right: 5px;
+            width: 18px;
+            height: 18px;
+            font-size: 10px;
+            line-height: 18px;
+        }
+    }
+
+    &.RedirectsOriginalUrl {
+        input {
+            width: 100%;
+            box-sizing: border-box;
+            line-height: 32px;
+            height: 32px;
+        }
+    }
+
+    .umb-el-wrap .controls {
+        margin-top: 5px;
+    }
+
+    .alert.alert-danger code {
+        padding: 1px 4px;
+        color: #fff;
+        border-color: lighten(#872119, 15%);
+        background-color: lighten(#872119, 15%);
+    }
+}

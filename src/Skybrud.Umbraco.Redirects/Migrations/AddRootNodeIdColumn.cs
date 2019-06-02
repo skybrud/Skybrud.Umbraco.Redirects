@@ -1,19 +1,20 @@
-﻿using Skybrud.Umbraco.Redirects.Models;
-using Umbraco.Core.Migrations;
+﻿//using Skybrud.Umbraco.Redirects.Models;
+//using Skybrud.Umbraco.Redirects.Models.Pocos;
+//using Umbraco.Core.Migrations;
 
-namespace Skybrud.Umbraco.Redirects.Migrations {
+//namespace Skybrud.Umbraco.Redirects.Migrations {
 
-    internal class AddRootNodeIdColumn : MigrationBase {
+//    internal class AddRootNodeIdColumn : MigrationBase {
 
-        public AddRootNodeIdColumn(IMigrationContext context) : base(context)
-        {
-        }
+//        public AddRootNodeIdColumn(IMigrationContext context) : base(context)
+//        {
+//        }
 
-        public override void Migrate() {
-            if (!TableExists(RedirectItemRow.TableName)) return;
-            if (ColumnExists(RedirectItemRow.TableName, "RootNodeId")) return;
-            Alter.Table(RedirectItemRow.TableName).AddColumn("RootNodeId").AsInt32().WithDefaultValue(0).Do();
-        }
-    }
+//        public override void Migrate() {
+//            if (!TableExists(RedirectItemRow.TableName)) return;
+//            if (ColumnExists(RedirectItemRow.TableName, "RootNodeId")) return;
+//            Alter.Table(RedirectItemRow.TableName).AddColumn("RootNodeId").AsInt32().WithDefaultValue(0).Do();
+//        }
+//    }
 
-}
+//}

@@ -4,8 +4,10 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Web.Http;
+using Newtonsoft.Json.Linq;
 using Skybrud.Umbraco.Redirects.Exceptions;
 using Skybrud.Umbraco.Redirects.Models;
+using Skybrud.Umbraco.Redirects.Models.Options;
 using Skybrud.WebApi.Json;
 using Skybrud.WebApi.Json.Meta;
 using Umbraco.Core;
@@ -179,6 +181,32 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
 
         }
 
+        [HttpPost]
+        public object AddRedirect([FromBody] JObject m) {
+
+            var model = m.ToObject<AddRedirectOptions>();
+
+            try {
+                
+                // Some input validation
+                if (string.IsNullOrWhiteSpace(model.OriginalUrl)) throw new RedirectsException(Localize("redirects/errorNoUrl") + "----");
+                if (string.IsNullOrWhiteSpace(model.Destination?.Url)) throw new RedirectsException(Localize("redirects/errorNoDestination") + "\r\n\r\n" + m);
+
+                // Add the redirect
+                RedirectItem redirect = _redirects.AddRedirect(model);
+
+                // Return the redirect
+                return redirect;
+
+            } catch (RedirectsException ex) {
+
+                // Generate the error response
+                return Request.CreateResponse(JsonMetaResponse.GetError(HttpStatusCode.InternalServerError, ex.Message));
+            
+            }
+
+        }
+
         /// <summary>
         /// Adds a new redirect.
         /// </summary>
@@ -186,14 +214,14 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         /// <param name="url">The inbound URL of the redirect.</param>
         /// <param name="linkMode">The mode/type of the destination link.</param>
         /// <param name="linkId">The media or content ID of the destination link.</param>
+        /// <param name="linkKey">The media or content key of the destination link.</param>
         /// <param name="linkUrl">The URL of the destination link.</param>
-        /// <param name="linkName">The name of the destination link.</param>
         /// <param name="permanent">Indicates whether the redirect should be permanent. Default is <c>true</c>.</param>
         /// <param name="regex">Indicates wether the inbound URL is a REGEX pattern. <c>false</c> by default.</param>
         /// <param name="forward">Indicates whether the query string should be forwarded. <c>false</c> by default.</param>
         /// <returns>The created redirect.</returns>
         [HttpGet]
-        public object AddRedirect(int rootNodeId, string url, string linkMode, int linkId, string linkUrl, string linkName = null, bool permanent = true, bool regex = false, bool forward = false) {
+        public object AddRedirect(int rootNodeId, string url, string linkMode, int linkId, Guid linkKey, string linkUrl, bool permanent = true, bool regex = false, bool forward = false) {
 
             try {
                 
@@ -203,16 +231,16 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                 if (string.IsNullOrWhiteSpace(linkMode)) throw new RedirectsException(Localize("redirects/errorNoDestination"));
 
                 // Parse the link mode
-                RedirectLinkMode mode;
+                RedirectDestinationType mode;
                 switch (linkMode) {
-                    case "content": mode = RedirectLinkMode.Content; break;
-                    case "media": mode = RedirectLinkMode.Media; break;
-                    case "url": mode = RedirectLinkMode.Url; break;
+                    case "content": mode = RedirectDestinationType.Content; break;
+                    case "media": mode = RedirectDestinationType.Media; break;
+                    case "url": mode = RedirectDestinationType.Url; break;
                     default: throw new RedirectsException(Localize("redirects/errorUnknownLinkMode"));
                 }
 
                 // Initialize a new link item
-                RedirectLinkItem destination = new RedirectLinkItem(linkId, linkName, linkUrl, mode);
+                RedirectDestination destination = new RedirectDestination(linkId, linkKey, linkUrl, mode);
 
                 // Add the redirect
                 RedirectItem redirect = _redirects.AddRedirect(rootNodeId, url, destination, permanent, regex, forward);
@@ -237,6 +265,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         /// <param name="url">The inbound URL of the redirect.</param>
         /// <param name="linkMode">The mode/type of the destination link.</param>
         /// <param name="linkId">The media or content ID of the destination link.</param>
+        /// <param name="linkKey">The media or content key of the destination link.</param>
         /// <param name="linkUrl">The URL of the destination link.</param>
         /// <param name="linkName">The name of the destination link.</param>
         /// <param name="permanent">Indicates whether the redirect should be permanent. Default is <c>true</c>.</param>
@@ -244,12 +273,12 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         /// <param name="forward">Indicates whether the query string should be forwarded. <c>false</c> by default.</param>
         /// <returns>The updated redirect.</returns>
         [HttpGet]
-        public object EditRedirect(int rootNodeId, string redirectId, string url, string linkMode, int linkId, string linkUrl, string linkName = null, bool permanent = true, bool regex = false, bool forward = false) {
-
+        public object EditRedirect(int rootNodeId, Guid redirectId, string url, string linkMode, int linkId, Guid linkKey, string linkUrl, bool permanent = true, bool regex = false, bool forward = false) {
+            
             try {
 
                 // Get a reference to the redirect
-                RedirectItem redirect = _redirects.GetRedirectById(redirectId);
+                RedirectItem redirect = _redirects.GetRedirectByKey(redirectId);
                 if (redirect == null) throw new RedirectNotFoundException();
 
                 // Some input validation
@@ -258,16 +287,16 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                 if (string.IsNullOrWhiteSpace(linkMode)) throw new RedirectsException(Localize("redirects/errorNoDestination"));
 
                 // Parse the link mode
-                RedirectLinkMode mode;
+                RedirectDestinationType mode;
                 switch (linkMode) {
-                    case "content": mode = RedirectLinkMode.Content; break;
-                    case "media": mode = RedirectLinkMode.Media; break;
-                    case "url": mode = RedirectLinkMode.Url; break;
+                    case "content": mode = RedirectDestinationType.Content; break;
+                    case "media": mode = RedirectDestinationType.Media; break;
+                    case "url": mode = RedirectDestinationType.Url; break;
                     default: throw new RedirectsException(Localize("redirects/errorUnknownLinkMode"));
                 }
 
                 // Initialize a new link item
-                RedirectLinkItem destination = new RedirectLinkItem(linkId, linkName, linkUrl, mode);
+                RedirectDestination destination = new RedirectDestination(linkId, linkKey, linkUrl, mode);
 
                 // Split the URL and query string
                 string[] urlParts = url.Split('?');
@@ -303,12 +332,12 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         /// </summary>
         /// <param name="redirectId">The ID of the redirect.</param>
         [HttpGet]
-        public object DeleteRedirect(string redirectId) {
+        public object DeleteRedirect(Guid redirectId) {
 
             try {
 
                 // Get a reference to the redirect
-                RedirectItem redirect = _redirects.GetRedirectById(redirectId);
+                RedirectItem redirect = _redirects.GetRedirectByKey(redirectId);
                 if (redirect == null) throw new RedirectNotFoundException();
 
                 // Delete the redirect

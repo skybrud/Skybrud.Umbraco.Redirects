@@ -1,0 +1,7 @@
+﻿<div class="SkybrudUmbracoRedirects RadioGroup" ng-controller="SkybrudUmbracoRedirects.Editors.RadioGroup.Controller">
+    <label ng-repeat="option in model.config.options">
+        <input type="radio" name="{{uniqueId}}" ng-model="model.value" ng-value="option.value" />
+        <i class="icon-check umb-checkmark" ng-class="{'umb-checkmark--checked': model.value == option.value}" size="xs"></i>
+        {{option.label}}
+    </label>
+</div>

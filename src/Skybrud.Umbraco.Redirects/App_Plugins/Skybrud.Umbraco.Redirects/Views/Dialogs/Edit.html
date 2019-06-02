@@ -27,7 +27,7 @@
                     <localize key="redirects_labelUrlDescription">Select the URL to match.</localize>
                 </small>
                 <div ng-show="redirectUrl.length > 0 && !hasValidUrl()" class="alert alert-danger">
-                    <localize key="redirects_urlNotValid">The specified URL is not valid. A valid URL should look like <code>/page</code> or <code>/page/subpage</code>. (Keep in mind not to include the domain, this is wrong: <code>https://domains.com/page/subpage</code>)</localize>
+                    <localize key="redirects_urlNotValid">The specified URL is not valid. A valid URL should look like <code>/page</code> or <code>/page/subpage</code>.</localize>
                 </div>
                 <input type="text" ng-model="redirectUrl" style="max-width: initial;" />
             </label>
