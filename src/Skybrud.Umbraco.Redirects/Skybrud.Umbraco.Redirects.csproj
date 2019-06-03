@@ -38,6 +38,7 @@
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\**\*.css" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\**\*.html" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\**\*.js" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Lang\*.xml" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\package.manifest" />
   </ItemGroup>
 
