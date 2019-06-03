@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>2.0.0</Version>
+    <Version>2.0.0-alpha001</Version>
     <Authors>Anders Bjerner</Authors>
     <Company>Skybrud.dk</Company>
     <Description>Redirects manager for Umbraco 8.</Description>
@@ -25,9 +25,20 @@
   <ItemGroup>
     <Reference Include="System.Web" />
     <PackageReference Include="Skybrud.Essentials" Version="1.1.12" />
-    <PackageReference Include="UmbracoCms.Core" Version="8.0.0" />
-    <PackageReference Include="UmbracoCms.Web" Version="8.0.0" />
+    <PackageReference Include="UmbracoCms.Core" Version="8.0.0">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="UmbracoCms.Web" Version="8.0.0">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Skybrud.WebApi.Json" Version="1.0.4" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\**\*.css" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\**\*.html" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\**\*.js" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\package.manifest" />
   </ItemGroup>
 
 </Project>

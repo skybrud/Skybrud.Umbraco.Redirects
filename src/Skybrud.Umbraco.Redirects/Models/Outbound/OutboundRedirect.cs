@@ -19,10 +19,10 @@ namespace Skybrud.Umbraco.Redirects.Models.Outbound {
         public bool IsPermanent { get; }
 
         /// <summary>
-        /// Gets an instance of <see cref="RedirectLinkItem"/> representing the destination.
+        /// Gets an instance of <see cref="RedirectDestination"/> representing the destination.
         /// </summary>
         [JsonProperty("link")]
-        public RedirectLinkItem Link { get; }
+        public RedirectDestination Link { get; }
 
         /// <summary>
         /// Gets the URL of the redirects.
@@ -51,7 +51,7 @@ namespace Skybrud.Umbraco.Redirects.Models.Outbound {
         /// </summary>
         public OutboundRedirect() : base(null) {
             IsPermanent = true;
-            Link = new RedirectLinkItem();
+            Link = new RedirectDestination();
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace Skybrud.Umbraco.Redirects.Models.Outbound {
         /// <param name="obj">An instance of <see cref="JObject"/> representing the redirect.</param>
         protected OutboundRedirect(JObject obj) : base(obj) {
             IsPermanent = obj.GetBoolean("permanent");
-            Link = obj.GetObject(obj.HasValue("items") ? "items.items[0]" : "link", RedirectLinkItem.Parse) ?? new RedirectLinkItem();
+            Link = obj.GetObject(obj.HasValue("items") ? "items.items[0]" : "link", RedirectDestination.Parse) ?? new RedirectDestination();
         }
 
         #endregion

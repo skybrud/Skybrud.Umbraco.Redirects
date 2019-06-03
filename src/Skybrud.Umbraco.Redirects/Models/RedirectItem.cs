@@ -6,6 +6,8 @@ using Newtonsoft.Json;
 using Skybrud.Essentials.Enums;
 using Skybrud.Essentials.Json.Converters.Time;
 using Skybrud.Essentials.Time;
+using Skybrud.Umbraco.Redirects.Models.Options;
+using Skybrud.Umbraco.Redirects.Models.Pocos;
 using Umbraco.Core.Models;
 using Umbraco.Web.Composing;
 
@@ -22,14 +24,14 @@ namespace Skybrud.Umbraco.Redirects.Models {
         private string[] _rootNodeDomains;
         private EssentialsTime _created;
         private EssentialsTime _updated;
-        private RedirectLinkMode _linkMode;
+        private RedirectDestinationType _linkMode;
 
         #endregion
 
         #region Properties
 
         /// <summary>
-        /// Gets a reference to the internal <see cref="RedirectItemRow"/> class used for representing the data as they
+        /// Gets a reference to the internal <see cref="Skybrud.Umbraco.Redirects.Models.Pocos.RedirectItemRow"/> class used for representing the data as they
         /// are stored in the database.
         /// </summary>
         internal RedirectItemRow Row { get; }
@@ -43,8 +45,8 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// <summary>
         /// Gets the unique ID of the redirect.
         /// </summary>
-        [JsonProperty("uniqueId")]
-        public string UniqueId => Row.UniqueId;
+        [JsonProperty("key")]
+        public Guid Key => Row.Key;
 
         /// <summary>
         /// Gets or sets the root node ID of the redirect.
@@ -161,9 +163,9 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// Gets or sets the mode/type of the destination link.
         /// </summary>
         [JsonProperty("linkMode")]
-        public RedirectLinkMode LinkMode {
+        public RedirectDestinationType LinkMode {
             get => _linkMode;
-            set { _linkMode = value; Row.LinkMode = _linkMode.ToString().ToLower(); }
+            set { _linkMode = value; Row.DestinationType = _linkMode.ToString().ToLower(); }
         }
 
         /// <summary>
@@ -171,8 +173,17 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// </summary>
         [JsonProperty("linkId")]
         public int LinkId {
-            get => Row.LinkId;
-            set => Row.LinkId = value;
+            get => Row.DestinationId;
+            set => Row.DestinationId = value;
+        }
+
+        /// <summary>
+        /// Gets or sets the content or media ID of the destination link.
+        /// </summary>
+        [JsonProperty("linkKey")]
+        public Guid LinkKey {
+            get => Row.DestinationKey;
+            set => Row.DestinationKey = value;
         }
 
         /// <summary>
@@ -180,31 +191,22 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// </summary>
         [JsonProperty("linkUrl")]
         public string LinkUrl {
-            get => Row.LinkUrl;
-            set => Row.LinkUrl = value;
+            get => Row.DestinationUrl;
+            set => Row.DestinationUrl = value;
         }
 
         /// <summary>
-        /// Gets or sets the name of the destination link.
-        /// </summary>
-        [JsonProperty("linkName")]
-        public string LinkName {
-            get => Row.LinkName;
-            set => Row.LinkName = value;
-        }
-
-        /// <summary>
-        /// Gets or sets an instance of <see cref="RedirectLinkItem"/> representing the destination link.
+        /// Gets or sets an instance of <see cref="RedirectDestination"/> representing the destination link.
         /// </summary>
         [JsonProperty("link")]
-        public RedirectLinkItem Link {
-            get => new RedirectLinkItem(LinkId, LinkName, LinkUrl, LinkMode);
+        public RedirectDestination Link {
+            get => new RedirectDestination(LinkId, LinkKey, LinkUrl, LinkMode);
             set {
                 if (value == null) throw new ArgumentNullException(nameof(value));
-                LinkMode = value.Mode;
+                LinkMode = value.Type;
+                LinkKey = value.Key;
                 LinkId = value.Id;
                 LinkUrl = value.Url;
-                LinkName = value.Name;
             }
         }
 
@@ -259,10 +261,40 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
 		#region Constructors
 
+        internal RedirectItem(AddRedirectOptions options) {
+
+            string url = options.OriginalUrl;
+            string query = string.Empty;
+
+            if (options.IsRegex == false) {
+                string[] urlParts = url.Split('?');
+                url = urlParts[0].TrimEnd('/');
+                query = urlParts.Length == 2 ? urlParts[1] : string.Empty;
+            }
+
+            RootId = options.RootNodeId;
+
+            LinkId = options.Destination.Id;
+            LinkKey = options.Destination.Key;
+            LinkUrl = options.Destination.Url;
+            LinkMode = options.Destination.Type;
+
+            Url = url;
+            QueryString = query;
+
+            Created = EssentialsTime.UtcNow;
+            Updated = EssentialsTime.UtcNow;
+
+            IsPermanent = options.IsPermanent;
+            IsRegex = options.IsRegex;
+            ForwardQueryString = options.ForwardQueryString;
+
+        }
+
 		internal RedirectItem(RedirectItemRow row) {
             _created = new EssentialsTime(row.Created);
             _updated = new EssentialsTime(row.Updated);
-            _linkMode = EnumUtils.ParseEnum(row.LinkMode, RedirectLinkMode.Content);
+            _linkMode = EnumUtils.ParseEnum(row.DestinationType, RedirectDestinationType.Content);
             Row = row;
         }
 
@@ -273,7 +305,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
             Row = new RedirectItemRow();
             _created = EssentialsTime.UtcNow;
             _updated = EssentialsTime.UtcNow;
-            Row.UniqueId = Guid.NewGuid().ToString();
+            Row.Key = Guid.NewGuid();
         }
 
         #endregion

@@ -7,21 +7,39 @@ using Umbraco.Core.Logging;
 using Umbraco.Core.Persistence;
 using WebComposing = Umbraco.Web.Composing;
 using System.Text.RegularExpressions;
+using NPoco;
+using Skybrud.Essentials.Time;
+using Skybrud.Umbraco.Redirects.Models.Options;
+using Skybrud.Umbraco.Redirects.Models.Pocos;
+using Umbraco.Core.Composing;
+using Umbraco.Core.Scoping;
 using Umbraco.Core.Services;
 
 namespace Skybrud.Umbraco.Redirects.Models {
 
     /// <summary>
-    /// Repository for managing redirects.
+    /// Service for managing redirects.
     /// </summary>
-    public class RedirectsRepository : IRedirectsService {
+    public class RedirectsService : IRedirectsService {
+
+        private readonly IScopeProvider _scopeProvider;
 
         private readonly IDomainService _domains;
 
+        private readonly ILogger _logger;
+
         #region Constructors
 
-        public RedirectsRepository(IDomainService domains) {
+        public RedirectsService() {
+            _scopeProvider = Current.ScopeProvider;
+            _domains = Current.Services.DomainService;
+            _logger = Current.Logger;
+        }
+
+        public RedirectsService(IScopeProvider scopeProvider, IDomainService domains, ILogger logger) {
+            _scopeProvider = scopeProvider;
             _domains = domains;
+            _logger = logger;
         }
 
         #endregion
@@ -36,6 +54,55 @@ namespace Skybrud.Umbraco.Redirects.Models {
             return _domains.GetAll(false).Select(RedirectDomain.GetFromDomain).ToArray();
         }
 
+        public RedirectItem AddRedirect(AddRedirectOptions model) {
+
+            if (model == null) throw new ArgumentNullException(nameof(model));
+
+            string url = model.OriginalUrl;
+            string query = string.Empty;
+
+            if (model.IsRegex == false) {
+				string[] urlParts = url.Split('?');
+                url = urlParts[0].TrimEnd('/');
+				query = urlParts.Length == 2 ? urlParts[1] : "";
+			}
+
+            if (GetRedirectByUrl(model.RootNodeId, url, query) != null) {
+                throw new RedirectsException("A redirect with the specified URL already exists.");
+            }
+
+            // Initialize the new redirect and populate the properties
+            RedirectItem item = new RedirectItem {
+                RootId = model.RootNodeId,
+                LinkId = model.Destination.Id,
+                LinkKey = model.Destination.Key,
+                LinkUrl = model.Destination.Url,
+                LinkMode = model.Destination.Type,
+                Url = url,
+                QueryString = query,
+                Created = EssentialsTime.UtcNow,
+                Updated = EssentialsTime.UtcNow,
+                IsPermanent = model.IsPermanent,
+				IsRegex = model.IsRegex,
+				ForwardQueryString = model.ForwardQueryString
+            };
+
+            // Attempt to add the redirect to the database
+            using (IScope scope = _scopeProvider.CreateScope()) {
+                try {
+                    scope.Database.Insert(item.Row);
+                } catch (Exception ex) {
+                    _logger.Error<RedirectsService>("Unable to insert redirect into the database", ex);
+                    throw new Exception("Unable to insert redirect into the database", ex);
+                }
+                scope.Complete();
+            }
+
+            // Make the call to the database
+            return GetRedirectById(item.Id);
+
+        }
+
         /// <summary>
         /// Adds a new permanent redirect matching the specified inbound <paramref name="url"/>. A request to
         /// <paramref name="url"/> will automatically be redirected to the URL of the specified
@@ -43,9 +110,9 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// </summary>
         /// <param name="rootNodeId">THe ID of the root/side node. Use <c>0</c> for a global redirect.</param>
         /// <param name="url">The inbound URL to match.</param>
-        /// <param name="destionation">An instance of <see cref="RedirectLinkItem"/> representing the destination link.</param>
+        /// <param name="destionation">An instance of <see cref="RedirectDestination"/> representing the destination link.</param>
         /// <returns>An instance of <see cref="RedirectItem"/> representing the created redirect.</returns>
-        public RedirectItem AddRedirect(int rootNodeId, string url, RedirectLinkItem destionation) {
+        public RedirectItem AddRedirect(int rootNodeId, string url, RedirectDestination destionation) {
             return AddRedirect(rootNodeId, url, destionation, true, false, false);
         }
 
@@ -56,12 +123,12 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// </summary>
         /// <param name="rootNodeId">THe ID of the root/side node. Use <c>0</c> for a global redirect.</param>
         /// <param name="url">The inbound URL to match.</param>
-        /// <param name="destionation">An instance of <see cref="RedirectLinkItem"/> representing the destination link.</param>
+        /// <param name="destionation">An instance of <see cref="RedirectDestination"/> representing the destination link.</param>
         /// <param name="permanent">Whether the redirect should be permanent (301) or temporary (302).</param>
         /// <param name="isRegex">Whether regex should be enabled for the redirect.</param>
         /// <param name="forwardQueryString">Whether the redirect should forward the original query string.</param>
         /// <returns>An instance of <see cref="RedirectItem"/> representing the created redirect.</returns>
-        public RedirectItem AddRedirect(int rootNodeId, string url, RedirectLinkItem destionation, bool permanent, bool isRegex, bool forwardQueryString) {
+        public RedirectItem AddRedirect(int rootNodeId, string url, RedirectDestination destionation, bool permanent, bool isRegex, bool forwardQueryString) {
 
 
 			var query = "";
@@ -82,8 +149,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
                 RootId = rootNodeId,
                 LinkId = destionation.Id,
                 LinkUrl = destionation.Url,
-                LinkMode = destionation.Mode,
-                LinkName = destionation.Name,
+                LinkMode = destionation.Type,
                 Url = url,
                 QueryString = query,
                 Created = DateTime.Now,
@@ -93,18 +159,15 @@ namespace Skybrud.Umbraco.Redirects.Models {
 				ForwardQueryString = forwardQueryString
             };
 
-            using (var scope = WebComposing.Current.ScopeProvider.CreateScope())
-            {
+            using (var scope = _scopeProvider.CreateScope()) {
+
                 var database = scope.Database;
 
-                try
-                {
+                try {
                     // Attempt to add the redirect to the database
                     database.Insert(item.Row);
-                }
-                catch (Exception ex)
-                {
-                    WebComposing.Current.Logger.Error<RedirectsRepository>("Unable to insert redirect into the database", ex);
+                } catch (Exception ex) {
+                    _logger.Error<RedirectsService>("Unable to insert redirect into the database", ex);
                     throw new Exception("Unable to insert redirect into the database");
                 }
                 scope.Complete();
@@ -134,19 +197,13 @@ namespace Skybrud.Umbraco.Redirects.Models {
             // Update the timestamp for when the redirect was modified
             redirect.Updated = DateTime.Now;
 
-            using (var scope = WebComposing.Current.ScopeProvider.CreateScope())
-            {
-                var database = scope.Database;
-
-                try
-                {
-                    // Update the redirect in the database
-                    database.Update(redirect.Row);
-                }
-                catch (Exception ex)
-                {
-                    WebComposing.Current.Logger.Error<RedirectsRepository>("Unable to update redirect into the database", ex);
-                    throw new Exception("Unable to update redirect into the database");
+            // Update the redirect in the database
+            using (var scope = _scopeProvider.CreateScope()) {
+                try {
+                    scope.Database.Update(redirect.Row);
+                } catch (Exception ex) {
+                    _logger.Error<RedirectsService>("Unable to update redirect into the database", ex);
+                    throw new Exception("Unable to update redirect into the database", ex);
                 }
                 scope.Complete();
             }
@@ -164,20 +221,13 @@ namespace Skybrud.Umbraco.Redirects.Models {
             // Some input validation
             if (redirect == null) throw new ArgumentNullException(nameof(redirect));
 
-
-            using (var scope = WebComposing.Current.ScopeProvider.CreateScope())
-            {
-                var database = scope.Database;
-
-                try
-                {
-                    // Remove the redirect from the database
-                    database.Delete(redirect.Row);
-                }
-                catch (Exception ex)
-                {
-                    WebComposing.Current.Logger.Error<RedirectsRepository>("Unable to delete redirect from database", ex);
-                    throw new Exception("Unable to delete redirect from database");
+            // Remove the redirect from the database
+            using (var scope = _scopeProvider.CreateScope()) {
+                try {
+                    scope.Database.Delete(redirect.Row);
+                } catch (Exception ex) {
+                    _logger.Error<RedirectsService>("Unable to delete redirect from database", ex);
+                    throw new Exception("Unable to delete redirect from database", ex);
                 }
                 scope.Complete();
             }
@@ -196,13 +246,18 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
             RedirectItemRow row;
 
-            using (var scope = WebComposing.Current.ScopeProvider.CreateScope())
-            {
+            using (IScope scope = _scopeProvider.CreateScope()) {
+                
                 // Generate the SQL for the query
-                var sql = scope.SqlContext.Sql().Select<RedirectItemRow>().From<RedirectItemRow>().Where<RedirectItemRow>(x => x.Id == redirectId);
+                var sql = scope.SqlContext.Sql()
+                    .Select<RedirectItemRow>()
+                    .From<RedirectItemRow>()
+                    .Where<RedirectItemRow>(x => x.Id == redirectId);
+                
                 // Make the call to the database
                 row = scope.Database.FirstOrDefault<RedirectItemRow>(sql);
                 scope.Complete();
+
             }
 
             // Wrap the database row
@@ -211,24 +266,26 @@ namespace Skybrud.Umbraco.Redirects.Models {
         }
 
         /// <summary>
-        /// Gets the redirect mathing the specified unique <paramref name="redirectId"/>.
+        /// Gets the redirect mathing the specified GUID <paramref name="key"/>.
         /// </summary>
-        /// <param name="redirectId">The unique ID of the redirect.</param>
+        /// <param name="key">The GUID key of the redirect.</param>
         /// <returns>An instance of <see cref="RedirectItem"/>, or <c>null</c> if not found.</returns>
-        public RedirectItem GetRedirectById(string redirectId) {
-
-            // Validate the input
-            if (String.IsNullOrWhiteSpace(redirectId)) throw new ArgumentNullException(nameof(redirectId));
+        public RedirectItem GetRedirectByKey(Guid key) {
 
             RedirectItemRow row;
 
-            using (var scope = WebComposing.Current.ScopeProvider.CreateScope())
-            {
+            using (var scope = _scopeProvider.CreateScope()) {
+                
                 // Generate the SQL for the query
-                var sql = scope.SqlContext.Sql().Select<RedirectItemRow>().From<RedirectItemRow>().Where<RedirectItemRow>(x => x.UniqueId == redirectId);
+                var sql = scope.SqlContext.Sql()
+                    .Select<RedirectItemRow>()
+                    .From<RedirectItemRow>()
+                    .Where<RedirectItemRow>(x => x.Key == key);
+                
                 // Make the call to the database
                 row = scope.Database.FirstOrDefault<RedirectItemRow>(sql);
                 scope.Complete();
+
             }
 
             // Wrap the database row
@@ -245,14 +302,14 @@ namespace Skybrud.Umbraco.Redirects.Models {
         public RedirectItem GetRedirectByUrl(int rootNodeId, string url) {
 
             // Some input validation
-            if (String.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
+            if (string.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
 
             // Split the URL
             string[] parts = url.Split('?');
             return GetRedirectByUrl(rootNodeId, parts[0], parts.Length == 2 ? parts[1] : null);
 
         }
-
+        
         /// <summary>
         /// Gets the redirect mathing the specified <paramref name="url"/> and <paramref name="queryString"/>.
         /// </summary>
@@ -263,25 +320,31 @@ namespace Skybrud.Umbraco.Redirects.Models {
         public RedirectItem GetRedirectByUrl(int rootNodeId, string url, string queryString) {
 
             // Some input validation
-            if (String.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
+            if (string.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
 
 			url = url.TrimEnd('/').Trim();
-            queryString = (queryString ?? "").Trim();
+            queryString = (queryString ?? string.Empty).Trim();
 
             RedirectItemRow row;
 
-            using (var scope = WebComposing.Current.ScopeProvider.CreateScope())
-            {
+            using (IScope scope = _scopeProvider.CreateScope()) {
+
                 // Generate the SQL for the query
-                var sql = scope.SqlContext.Sql().Select<RedirectItemRow>().From<RedirectItemRow>().Where<RedirectItemRow>(x => x.RootId == rootNodeId && !x.IsRegex && x.Url == url && x.QueryString == queryString);
+                var sql = scope.SqlContext.Sql()
+                    .Select<RedirectItemRow>()
+                    .From<RedirectItemRow>()
+                    .Where<RedirectItemRow>(x => x.RootId == rootNodeId && !x.IsRegex && x.Url == url && x.QueryString == queryString);
+                
                 // Make the call to the database
                 row = scope.Database.FirstOrDefault<RedirectItemRow>(sql);
 
-                if (row == null)
-                {
+                if (row == null) {
 
                     // no redirect found, try with forwardQueryString = true, and no querystring
-                    sql = scope.SqlContext.Sql().Select<RedirectItemRow>().From<RedirectItemRow>().Where<RedirectItemRow>(x => x.RootId == rootNodeId && x.Url == url && x.ForwardQueryString);
+                    sql = scope.SqlContext.Sql()
+                        .Select<RedirectItemRow>()
+                        .From<RedirectItemRow>()
+                        .Where<RedirectItemRow>(x => x.RootId == rootNodeId && x.Url == url && x.ForwardQueryString);
 
                     // Make the call to the database
                     row = scope.Database.FirstOrDefault<RedirectItemRow>(sql);
@@ -322,27 +385,38 @@ namespace Skybrud.Umbraco.Redirects.Models {
         public RedirectItem[] GetRedirectsByUrl(string url, string queryString) {
 
             // Some input validation
-            if (String.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
+            if (string.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
 
-			var fullUrl = url + (queryString.IsNullOrWhiteSpace() ? "" : "?" + queryString);
+			var fullUrl = url + (queryString.IsNullOrWhiteSpace() ? string.Empty : "?" + queryString);
 
 			url = url.TrimEnd('/').Trim();
             queryString = (queryString ?? "").Trim();
 
-            List<RedirectItem> redirects = new List<RedirectItem>();
+            List<RedirectItem> redirects;
 
-            using (var scope = WebComposing.Current.ScopeProvider.CreateScope())
-            {
+            using (IScope scope = _scopeProvider.CreateScope()) {
+                
                 // Fetch non-regex redirects from the database
-                var sql = scope.SqlContext.Sql().Select<RedirectItemRow>().From<RedirectItemRow>().Where<RedirectItemRow>(x => !x.IsRegex && x.Url == url && x.QueryString == queryString || x.ForwardQueryString);
+                var sql = scope.SqlContext.Sql()
+                    .Select<RedirectItemRow>()
+                    .From<RedirectItemRow>()
+                    .Where<RedirectItemRow>(x => !x.IsRegex && x.Url == url && x.QueryString == queryString || x.ForwardQueryString);
+                
                 // Make the call to the database
-                redirects = scope.Database.Fetch<RedirectItemRow>(sql).Select(RedirectItem.GetFromRow).ToList();
+                redirects = scope.Database.Fetch<RedirectItemRow>(sql)
+                    .Select(RedirectItem.GetFromRow)
+                    .ToList();
 
                 // Fetch regex redirects from the database
-                sql = scope.SqlContext.Sql().Select<RedirectItemRow>().From<RedirectItemRow>().Where<RedirectItemRow>(x => x.IsRegex);
+                sql = scope.SqlContext.Sql()
+                    .Select<RedirectItemRow>()
+                    .From<RedirectItemRow>()
+                    .Where<RedirectItemRow>(x => x.IsRegex);
+
                 redirects.AddRange(scope.Database.Fetch<RedirectItemRow>(sql).Where(x => Regex.IsMatch(fullUrl, x.Url)).Select(RedirectItem.GetFromRow));
 
                 scope.Complete();
+
             }
 
             // Return a combined list of the redirects
@@ -359,13 +433,18 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
             RedirectItem[] rows;
 
-            using (var scope = WebComposing.Current.ScopeProvider.CreateScope())
-            {
+            using (IScope scope = _scopeProvider.CreateScope()) {
+                
                 // Generate the SQL for the query
-                var sql = scope.SqlContext.Sql().Select<RedirectItemRow>().From<RedirectItemRow>().Where<RedirectItemRow>(x => x.LinkMode == "content" && x.LinkId == contentId);
+                Sql<ISqlContext> sql = scope.SqlContext.Sql()
+                    .Select<RedirectItemRow>().From<RedirectItemRow>()
+                    .Where<RedirectItemRow>(x => x.DestinationType == "content" && x.DestinationId == contentId);
+                
                 // Make the call to the database
                 rows = scope.Database.Fetch<RedirectItemRow>(sql).Select(RedirectItem.GetFromRow).ToArray();
+
                 scope.Complete();
+
             }
 
             return rows;
@@ -381,13 +460,19 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
             RedirectItem[] rows;
 
-            using (var scope = WebComposing.Current.ScopeProvider.CreateScope())
-            {
+            using (IScope scope = _scopeProvider.CreateScope()) {
+                
                 // Generate the SQL for the query
-                var sql = scope.SqlContext.Sql().Select<RedirectItemRow>().From<RedirectItemRow>().Where<RedirectItemRow>(x => x.LinkMode == "media" && x.LinkId == mediaId);
+                Sql<ISqlContext> sql = scope.SqlContext.Sql()
+                    .Select<RedirectItemRow>()
+                    .From<RedirectItemRow>()
+                    .Where<RedirectItemRow>(x => x.DestinationType == "media" && x.DestinationId == mediaId);
+                
                 // Make the call to the database
                 rows = scope.Database.Fetch<RedirectItemRow>(sql).Select(RedirectItem.GetFromRow).ToArray();
+
                 scope.Complete();
+
             }
 
             return rows;
@@ -408,10 +493,10 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// <returns>An instance of <see cref="RedirectsSearchResult"/>.</returns>
         public RedirectsSearchResult GetRedirects(int page = 1, int limit = 20, string type = null, string text = null, int? rootNodeId = null) {
 
-            var result = new RedirectsSearchResult(0, limit, 0, 0, 0, new RedirectItem[0]);
+            RedirectsSearchResult result;
 
-            using (var scope = WebComposing.Current.ScopeProvider.CreateScope())
-            {
+            using (var scope = _scopeProvider.CreateScope()) {
+                
                 // Generate the SQL for the query
                 var sql = scope.SqlContext.Sql().Select<RedirectItemRow>().From<RedirectItemRow>();
 
@@ -419,23 +504,19 @@ namespace Skybrud.Umbraco.Redirects.Models {
                 if (rootNodeId != null) sql = sql.Where<RedirectItemRow>(x => x.RootId == rootNodeId.Value);
 
                 // Search by the type
-                if (!String.IsNullOrWhiteSpace(type)) sql = sql.Where<RedirectItemRow>(x => x.LinkMode == type);
+                if (string.IsNullOrWhiteSpace(type) == false) sql = sql.Where<RedirectItemRow>(x => x.DestinationType == type);
 
                 // Search by the text
-                if (!String.IsNullOrWhiteSpace(text))
-                {
+                if (string.IsNullOrWhiteSpace(text) == false) {
+
                     string[] parts = text.Split('?');
-                    if (parts.Length == 1)
-                    {
-                        sql = sql.Where<RedirectItemRow>(x => x.LinkName.Contains(text) || x.Url.Contains(text) || x.QueryString.Contains(text));
-                    }
-                    else
-                    {
+
+                    if (parts.Length == 1) {
+                        sql = sql.Where<RedirectItemRow>(x => x.Url.Contains(text) || x.QueryString.Contains(text));
+                    } else {
                         string url = parts[0];
                         string query = parts[1];
                         sql = sql.Where<RedirectItemRow>(x => (
-                            x.LinkName.Contains(text)
-                            ||
                             x.Url.Contains(text)
                             ||
                             (x.Url.Contains(url) && x.QueryString.Contains(query))
@@ -460,24 +541,26 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
                 // Return the items (on the requested page)
                 result = new RedirectsSearchResult(all.Length, limit, offset, page, pages, items);
+
                 scope.Complete();
+
             }
 
             return result;
 
         }
 
-	    public string HandleForwardQueryString(RedirectItem redirect, string rawurl)
-	    {
-		   string newRedirectUrl = "";
+	    public string HandleForwardQueryString(RedirectItem redirect, string rawurl) {
+
+            string newRedirectUrl;
 
 			// find querystrings from rawurl
 		    string[] elementsRawurl = rawurl.Split('?');
 			string querystringsRawurl = 1 < elementsRawurl.Length ? elementsRawurl[1] : null;
 
-			if (!string.IsNullOrWhiteSpace(querystringsRawurl))
-		    {
-				// we have querystrings in the original url
+			if (!string.IsNullOrWhiteSpace(querystringsRawurl)) {
+				
+                // we have querystrings in the original url
 
 				// find querystrings in the redirect url
 			    string[] elementsRedirecturl = redirect.LinkUrl.Split('?');

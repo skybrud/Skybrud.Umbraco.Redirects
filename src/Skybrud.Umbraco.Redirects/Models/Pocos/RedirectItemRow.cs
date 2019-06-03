@@ -1,9 +1,8 @@
 ﻿using System;
 using NPoco;
-using Umbraco.Core.Persistence;
 using Umbraco.Core.Persistence.DatabaseAnnotations;
 
-namespace Skybrud.Umbraco.Redirects.Models {
+namespace Skybrud.Umbraco.Redirects.Models.Pocos {
 
     /// <summary>
     /// Class representing the database row of a redirect.
@@ -23,7 +22,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// <summary>
         /// Gets the primary key of the redirects table.
         /// </summary>
-        public const string PrimaryKey = "RedirectId";
+        public const string PrimaryKey = "Id";
 
         #endregion
 
@@ -39,8 +38,8 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// <summary>
         /// Gets or sets the unique ID of the redirect.
         /// </summary>
-        [Column("RedirectUniqueId")]
-        public string UniqueId { get; set; }
+        [Column("Key")]
+        public Guid Key { get; set; }
 
         /// <summary>
         /// Gets or sets the root node ID of the redirect.
@@ -52,7 +51,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// Gets or sets the root node GUID key of the redirect.
         /// </summary>
         [Column("RootKey")]
-        public string RootKey { get; set; }
+        public Guid RootKey { get; set; }
 
         /// <summary>
         /// Gets the inbound URL (path) of the redirect. The value value will not contain the domain or the query
@@ -65,39 +64,31 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// Gets or sets the inbound query string of the redirect.
         /// </summary>
         [Column("QueryString")]
-        [NullSetting(NullSetting = NullSettings.Null)]
         public string QueryString { get; set; }
 
         /// <summary>
         /// Gets or sets the mode/type of the destination link.
         /// </summary>
-        [Column("LinkMode")]
-        public string LinkMode { get; set; }
+        [Column("DestinationType")]
+        public string DestinationType { get; set; }
 
         /// <summary>
         /// Gets or sets the content or media ID of the destination link.
         /// </summary>
-        [Column("LinkId")]
-        public int LinkId { get; set; }
+        [Column("DestinationId")]
+        public int DestinationId { get; set; }
 
         /// <summary>
         /// Gets or sets the content or media GUID key of the destination link.
         /// </summary>
-        [Column("LinkKey")]
-        public string LinkKey { get; set; }
+        [Column("DestinationKey")]
+        public Guid DestinationKey { get; set; }
 
         /// <summary>
         /// Gets or sets the URL of the destination link.
         /// </summary>
-        [Column("LinkUrl")]
-        public string LinkUrl { get; set; }
-
-        /// <summary>
-        /// Gets or sets the name of the destination link.
-        /// </summary>
-        [Column("LinkName")]
-        [NullSetting(NullSetting = NullSettings.Null)]
-        public string LinkName { get; set; }
+        [Column("DestinationUrl")]
+        public string DestinationUrl { get; set; }
 
         /// <summary>
         /// Gets or sets the timestamp for when the redirect was created.

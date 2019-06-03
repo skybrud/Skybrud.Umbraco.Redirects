@@ -1,0 +1,42 @@
+﻿<div class="SkybrudUmbracoRedirects" ng-controller="SkybrudUmbracoRedirects.RedirectDialog.Controller">
+    <form name="propertiesForm" ng-submit="save()" novalidate val-form-manager>
+        <umb-editor-view>
+            <umb-editor-header
+                name="model.title"
+                name-locked="true"
+                hide-alias="true"
+                hide-icon="true"
+                hide-description="true">
+            </umb-editor-header>
+            <umb-editor-container>
+                <umb-box>
+                    <umb-box-content>
+                        <div class="redirects-basic-options">
+                            <umb-property property="property" ng-repeat="property in model.properties">
+                                <umb-property-editor model="property"></umb-property-editor>
+                            </umb-property>
+                        </div>
+                        <div class="redirects-advanced-options">
+                            <h4>
+                                <localize key="redirects_labelAdvancedOptions">Advanced options</localize>
+                            </h4>
+                            <umb-property property="property" ng-repeat="property in model.advancedProperties">
+                                <umb-property-editor model="property"></umb-property-editor>
+                            </umb-property>
+                        </div>
+                    </umb-box-content>
+                </umb-box>
+            </umb-editor-container>
+            <umb-editor-footer>
+                <umb-editor-footer-content-right>
+                    <umb-button ng-if="model.infiniteMode" action="close()" button-style="link" label="{{model.closeButtonLabel || 'Close'}}" type="button"></umb-button>
+                    <umb-button
+                        type="submit"
+                        button-style="success"
+                        label="{{model.submitButtonLabel || 'Add'}}">
+                    </umb-button>
+                </umb-editor-footer-content-right>
+            </umb-editor-footer>
+        </umb-editor-view>
+    </form>
+</div>

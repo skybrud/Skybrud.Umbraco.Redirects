@@ -9,7 +9,7 @@ namespace Skybrud.Umbraco.Redirects.Composers {
 
         public void Compose(Composition composition)
         {
-            composition.Register<IRedirectsService, RedirectsRepository>();
+            composition.Register<IRedirectsService, RedirectsService>();
             composition.Register<RedirectsInjectedModule, RedirectsInjectedModule>(); 
         }
 

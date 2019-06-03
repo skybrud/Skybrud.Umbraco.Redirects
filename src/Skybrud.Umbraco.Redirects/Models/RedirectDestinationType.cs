@@ -1,13 +1,14 @@
 ﻿using Newtonsoft.Json;
 using Skybrud.Essentials.Json.Converters.Enums;
+using Skybrud.Essentials.Strings;
 
 namespace Skybrud.Umbraco.Redirects.Models {
     
     /// <summary>
     /// Enum describing the type of the link.
     /// </summary>
-    [JsonConverter(typeof(EnumStringConverter))]
-    public enum RedirectLinkMode {
+    [JsonConverter(typeof(EnumStringConverter), TextCasing.CamelCase)]
+    public enum RedirectDestinationType {
     
         /// <summary>
         /// Describes a link that is an external URL.

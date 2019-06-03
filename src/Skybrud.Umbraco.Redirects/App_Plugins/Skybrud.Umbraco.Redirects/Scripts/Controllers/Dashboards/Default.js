@@ -1,4 +1,4 @@
-﻿angular.module('umbraco').controller('SkybrudUmbracoRedirects.Dashboard.Controller', function ($scope, $http, $q, $timeout, dialogService, notificationsService, localizationService, skybrudRedirectsService) {
+﻿angular.module('umbraco').controller('SkybrudUmbracoRedirects.Dashboard.Controller', function ($scope, $http, $q, $timeout, editorService, notificationsService, localizationService, skybrudRedirectsService) {
 
     $scope.redirects = [];
     $scope.mode = 'list';
@@ -61,7 +61,7 @@
     
     // Initial pagination options
     $scope.pagination = {
-        text: '',
+        text: "",
         page: 1,
         pages: 0,
         limit: 11,
@@ -161,8 +161,8 @@
 
     };
 
-    skybrudRedirectsService.getRootNodes().success(function (r) {
-        angular.forEach(r.data, function (rootNode) {
+    skybrudRedirectsService.getRootNodes().then(function (r) {
+        angular.forEach(r.data.items, function (rootNode) {
             $scope.rootNodes.push(rootNode);
         });
     });

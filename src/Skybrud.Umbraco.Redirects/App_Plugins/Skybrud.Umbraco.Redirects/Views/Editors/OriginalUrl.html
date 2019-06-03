@@ -1,0 +1,6 @@
+﻿<div class="SkybrudUmbracoRedirects RedirectsOriginalUrl" ng-controller="SkybrudUmbracoRedirects.Editors.OriginalUrl.Controller">
+    <div ng-show="model.value && !isValidUrl(model.value)" class="alert alert-danger">
+        <localize key="redirects_urlNotValid">The specified URL is not valid.</localize>
+    </div>
+    <input type="text" ng-model="model.value" required redirects-validate-url="isValidUrl(model.value)" />
+</div>
