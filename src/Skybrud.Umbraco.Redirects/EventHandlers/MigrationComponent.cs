@@ -26,7 +26,7 @@ namespace Skybrud.Umbraco.Redirects.EventHandlers
         {
             var plan = new MigrationPlan("Skybrud.Umbraco.Redirects");
             plan.From(string.Empty)
-                .To<CreateTable>("0.1.0")
+                .To<CreateTable>("2.0.0-alpha001")
                 //.To<AddRootNodeIdColumn>("0.2.5")
                 //.To<AddForwardQueryStringColumn>("0.3.0.a")
                 //.To<AddIsRegexColumn>("0.3.0")
