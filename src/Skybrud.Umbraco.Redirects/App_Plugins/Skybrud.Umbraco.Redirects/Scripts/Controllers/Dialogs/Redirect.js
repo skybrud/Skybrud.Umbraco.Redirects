@@ -1,9 +1,45 @@
-﻿angular.module("umbraco").controller("SkybrudUmbracoRedirects.AddRedirectDialog.Controller", function ($scope, $http, editorService, notificationsService, skybrudRedirectsService, localizationService, formHelper) {
+﻿angular.module("umbraco").controller("SkybrudUmbracoRedirects.RedirectDialog.Controller", function ($scope, $http, editorService, notificationsService, skybrudRedirectsService, localizationService, formHelper) {
 
     $scope.options = $scope.model.options || {};
 
     $scope.model.title = "Add new redirect";
     localizationService.localize("redirects_addNewRedirect").then(function (value) { $scope.model.title = value; });
+
+    var destionation = null;
+
+
+
+
+
+
+
+    $scope.model.hiddenProperties = [];
+
+    if ($scope.model.redirect) {
+
+        $scope.model.title = "Edit redirect";
+        localizationService.localize("redirects_editRedirect").then(function (value) { $scope.model.title = value; });
+
+        $scope.model.submitButtonLabel = "Save";
+
+        destionation = {
+            id: $scope.model.redirect.linkId,
+            key: $scope.model.redirect.linkKey,
+            url: $scope.model.redirect.linkUrl,
+            type: $scope.model.redirect.linkMode
+        };
+
+        $scope.model.hiddenProperties.push({
+            alias: "id",
+            value: $scope.model.redirect.id
+        });
+
+        $scope.model.hiddenProperties.push({
+            alias: "key",
+            value: $scope.model.redirect.key
+        });
+
+    }
 
     $scope.model.properties = [
         {
@@ -11,6 +47,7 @@
             label: "Original URL",
             description: "Specify the original URL to match from which the user should be redirected to the destination.",
             view: "/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/OriginalUrl.html",
+            value: $scope.model.redirect ? $scope.model.redirect.url + ($scope.model.redirect.queryString ? "?" + $scope.model.redirect.queryString : "") : "",
             validation: {
                 mandatory: true
             }
@@ -20,6 +57,7 @@
             label: "Destination",
             description: "Select the page or URL the user should be redirected to.",
             view: "/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/Destination.html",
+            value: destionation,
             validation: {
                 mandatory: true
             }
@@ -34,7 +72,7 @@
             description: "Select the type of the redirect. Notice that browsers will remember permanent redirects.",
             descriptionKey: "redirects_propertyRedirectTypeDescription",
             view: "/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/RadioGroup.html",
-            value: true,
+            value: $scope.model.redirect ? $scope.model.redirect.permanent : true,
             config: {
                 options: [
                     {
@@ -57,7 +95,7 @@
             description: "When enabled, the query string of the original request is forwarded to the redirect location (pass through).",
             descriptionKey: "redirects_forwardQueryStringDescription",
             view: "/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/RadioGroup.html",
-            value: false,
+            value: $scope.model.redirect ? $scope.model.redirect.forward : false,
             config: {
                 options: [
                     {
@@ -76,6 +114,7 @@
     ];
 
     var allProperties = $scope.model.properties.concat($scope.model.advancedProperties);
+    allProperties = allProperties.concat($scope.model.hiddenProperties);
 
     angular.forEach(allProperties, function (p) {
         if (p.labelKey) localizationService.localize(p.labelKey).then(function (value) { p.label = value; });
@@ -124,19 +163,36 @@
         // Make sure we set a loading state
         $scope.loading = true;
 
-        $http({
-            method: "POST",
-            url: "/umbraco/backoffice/api/Redirects/AddRedirect",
-            data: redirect
-        }).then(function (r) {
-            $scope.loading = false;
-            notificationsService.success($scope.labels.saveSuccessfulTitle, $scope.labels.saveSuccessfulMessage);
-            $scope.model.submit(r);
-        }, function (res) {
-            $scope.loading = false;
-            notificationsService.error($scope.labels.errorAddFailedTitle, res && res.data && res.data.meta ? res.data.meta.error : $scope.labels.errorAddFailedMessage);
-        });
-
+        if (redirect.key) {
+            $http({
+                method: "POST",
+                url: "/umbraco/backoffice/api/Redirects/EditRedirect",
+                params: {
+                    redirectId: redirect.key
+                },
+                data: redirect
+            }).then(function (r) {
+                $scope.loading = false;
+                notificationsService.success($scope.labels.saveSuccessfulTitle, $scope.labels.saveSuccessfulMessage);
+                $scope.model.submit(r);
+            }, function (res) {
+                $scope.loading = false;
+                notificationsService.error($scope.labels.errorAddFailedTitle, res && res.data && res.data.meta ? res.data.meta.error : $scope.labels.errorAddFailedMessage);
+            });
+        } else {
+            $http({
+                method: "POST",
+                url: "/umbraco/backoffice/api/Redirects/AddRedirect",
+                data: redirect
+            }).then(function (r) {
+                $scope.loading = false;
+                notificationsService.success($scope.labels.saveSuccessfulTitle, $scope.labels.saveSuccessfulMessage);
+                $scope.model.submit(r);
+            }, function (res) {
+                $scope.loading = false;
+                notificationsService.error($scope.labels.errorAddFailedTitle, res && res.data && res.data.meta ? res.data.meta.error : $scope.labels.errorAddFailedMessage);
+            });
+        }
 
     };
 

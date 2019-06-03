@@ -78,14 +78,14 @@
 
             editorService.open({
                 size: "small",
-                view: "/App_Plugins/Skybrud.Umbraco.Redirects/Views/Dialogs/Add.html",
+                view: "/App_Plugins/Skybrud.Umbraco.Redirects/Views/Dialogs/Redirect.html",
                 options: options,
                 submit: function (value) {
                     if (options.callback) options.callback(value);
                     editorService.close();
                 },
                 close: function () {
-	                editorService.close();
+                    editorService.close();
                 }
             });
 
@@ -94,20 +94,21 @@
         editRedirect: function (redirect, options) {
 
             if (!options) options = {};
-            if (typeof (options) == 'function') options = { callback: options };
+            if (typeof options === "function") options = { callback: options };
 
-            var d = editorService.open({
-                template: '/App_Plugins/Skybrud.Umbraco.Redirects/Views/Dialogs/Edit.html',
-                show: true,
+            editorService.open({
+	            size: "small",
+                view: "/App_Plugins/Skybrud.Umbraco.Redirects/Views/Dialogs/Redirect.html",
                 redirect: redirect,
                 options: options,
-                callback: function (value) {
+                submit: function (value) {
                     if (options.callback) options.callback(value);
+                    editorService.close();
+                },
+                close: function () {
+                    editorService.close();
                 }
             });
-
-            // Make the dialog 20px wider than default so it can be seen bhind the linkpicker dialog
-            d.element[0].style = 'display: flex; width: 460px !important; margin-left: -460px';
 
         },
 
@@ -122,7 +123,7 @@
                 notificationsService.success("Redirect deleted", "Your redirect was successfully deleted.");
                 if (callback) callback(redirect);
             }, function (res) {
-                    notificationsService.error("Deleting redirect failed", res && res.data && res.data.meta ? res.data.meta.error : "The server was unable to delete your redirect.");
+                notificationsService.error("Deleting redirect failed", res && res.data && res.data.meta ? res.data.meta.error : "The server was unable to delete your redirect.");
             });
         },
 
@@ -136,13 +137,13 @@
 
         },
 
-        propertiesToObject: function(array) {
+        propertiesToObject: function (array) {
 
-			var result = {};
+            var result = {};
 
-			angular.forEach(array, function (p) {
-				result[p.alias] = p.value === undefined ? null : p.value;
-			});
+            angular.forEach(array, function (p) {
+                result[p.alias] = p.value === undefined ? null : p.value;
+            });
 
             return result;
 

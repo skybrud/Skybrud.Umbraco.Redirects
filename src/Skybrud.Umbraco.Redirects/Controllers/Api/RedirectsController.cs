@@ -57,7 +57,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
             RedirectDomain[] domains = _redirects.GetDomains();
             return new {
                 total = domains.Length,
-                data = domains
+                items = domains
             };
         }
 
@@ -90,7 +90,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
 
             return new {
                 total = temp.Count,
-                data = temp.OrderBy(x => x.Id)
+                items = temp.OrderBy(x => x.Id)
             };
         
         }
@@ -244,6 +244,48 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
 
                 // Add the redirect
                 RedirectItem redirect = _redirects.AddRedirect(rootNodeId, url, destination, permanent, regex, forward);
+
+                // Return the redirect
+                return redirect;
+
+            } catch (RedirectsException ex) {
+
+                // Generate the error response
+                return Request.CreateResponse(JsonMetaResponse.GetError(HttpStatusCode.InternalServerError, ex.Message));
+            
+            }
+
+        }
+
+        [HttpPost]
+        public object EditRedirect(Guid redirectId, [FromBody] EditRedirectOptions model) {
+            
+            try {
+                
+                // Get a reference to the redirect
+                RedirectItem redirect = _redirects.GetRedirectByKey(redirectId);
+                if (redirect == null) throw new RedirectNotFoundException();
+
+                // Some input validation
+                if (string.IsNullOrWhiteSpace(model.OriginalUrl)) throw new RedirectsException(Localize("redirects/errorNoUrl"));
+                if (string.IsNullOrWhiteSpace(model.Destination?.Url)) throw new RedirectsException(Localize("redirects/errorNoDestination"));
+
+                // Split the URL and query string
+                string[] urlParts = model.OriginalUrl.Split('?');
+                string url = urlParts[0].TrimEnd('/');
+                string query = urlParts.Length == 2 ? urlParts[1] : string.Empty;
+
+                redirect.Url = url;
+                redirect.QueryString = query;
+                redirect.LinkId = model.Destination.Id;
+                redirect.LinkKey = model.Destination.Key;
+                redirect.LinkUrl = model.Destination.Url;
+                redirect.LinkMode = model.Destination.Type;
+                redirect.IsPermanent = model.IsPermanent;
+                redirect.ForwardQueryString = model.ForwardQueryString;
+
+                // Save/update the redirect
+                _redirects.SaveRedirect(redirect);
 
                 // Return the redirect
                 return redirect;

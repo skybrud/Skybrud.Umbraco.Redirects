@@ -162,7 +162,7 @@
     };
 
     skybrudRedirectsService.getRootNodes().then(function (r) {
-        angular.forEach(r.data, function (rootNode) {
+        angular.forEach(r.data.items, function (rootNode) {
             $scope.rootNodes.push(rootNode);
         });
     });

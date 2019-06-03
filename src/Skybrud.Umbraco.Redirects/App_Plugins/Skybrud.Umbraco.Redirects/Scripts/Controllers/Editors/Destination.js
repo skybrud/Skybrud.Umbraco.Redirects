@@ -22,4 +22,8 @@
         editLink($scope.model.value);
     };
 
+    $scope.removeLink = function () {
+        $scope.model.value = null;
+    };
+
 });
