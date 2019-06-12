@@ -308,25 +308,19 @@ namespace Skybrud.Umbraco.Redirects.Models {
             // Some input validation
             if (String.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
 
-			var fullUrl = url + (queryString.IsNullOrWhiteSpace() ? string.Empty : '?' + queryString);
-
-			url = url.TrimEnd('/').Trim();
-            queryString = (queryString ?? string.Empty).Trim();
-
             // Just return "null" if the table doesn't exist (since there aren't any redirects anyway)
             if (!SchemaHelper.TableExist(RedirectItemRow.TableName)) return null;
 
-            // Fetch non-regex redirects from the database
-            Sql sql = new Sql().Select("*").From(RedirectItemRow.TableName).Where<RedirectItemRow>(x => !x.IsRegex && x.Url == url && x.QueryString == queryString);
-            List<RedirectItem> redirects = Database.Fetch<RedirectItemRow>(sql).Select(RedirectItem.GetFromRow).ToList();
+			url = url.TrimEnd('/').Trim();
+			queryString = (queryString ?? string.Empty).Trim();
+			var fullUrl = url + (queryString.IsNullOrWhiteSpace() ? string.Empty : '?' + queryString);
 
-            // Fetch regex redirects from the database
-            sql = new Sql().Select("*").From(RedirectItemRow.TableName).Where<RedirectItemRow>(x => x.IsRegex);
-            redirects.AddRange(Database.Fetch<RedirectItemRow>(sql).Where(x => Regex.IsMatch(fullUrl, x.Url)).Select(RedirectItem.GetFromRow));
+			// Fetch redirects from the database and filter regex
+			Sql sql = new Sql().Select("*").From(RedirectItemRow.TableName).Where<RedirectItemRow>(x => (!x.IsRegex && x.Url == url && x.QueryString == queryString) || x.IsRegex);
+            List<RedirectItem> redirects = Database.Fetch<RedirectItemRow>(sql).Where(x => !x.IsRegex || Regex.IsMatch(fullUrl, x.Url)).Select(RedirectItem.GetFromRow).ToList();
 
             // Return a combined list of the redirects
             return redirects.OrderBy(x => x.RootNodeId > 0 ? "0" : "1").ToArray();
-
 		}
 
         /// <summary>
