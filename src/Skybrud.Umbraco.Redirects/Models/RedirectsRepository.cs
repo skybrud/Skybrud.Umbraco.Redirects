@@ -308,16 +308,16 @@ namespace Skybrud.Umbraco.Redirects.Models {
             // Some input validation
             if (String.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
 
-			var fullUrl = url + (queryString.IsNullOrWhiteSpace() ? "" : "?" + queryString);
+			var fullUrl = url + (queryString.IsNullOrWhiteSpace() ? string.Empty : '?' + queryString);
 
 			url = url.TrimEnd('/').Trim();
-            queryString = (queryString ?? "").Trim();
+            queryString = (queryString ?? string.Empty).Trim();
 
             // Just return "null" if the table doesn't exist (since there aren't any redirects anyway)
             if (!SchemaHelper.TableExist(RedirectItemRow.TableName)) return null;
 
             // Fetch non-regex redirects from the database
-            Sql sql = new Sql().Select("*").From(RedirectItemRow.TableName).Where<RedirectItemRow>(x => !x.IsRegex && x.Url == url && x.QueryString == queryString || x.ForwardQueryString);
+            Sql sql = new Sql().Select("*").From(RedirectItemRow.TableName).Where<RedirectItemRow>(x => !x.IsRegex && x.Url == url && x.QueryString == queryString);
             List<RedirectItem> redirects = Database.Fetch<RedirectItemRow>(sql).Select(RedirectItem.GetFromRow).ToList();
 
             // Fetch regex redirects from the database
