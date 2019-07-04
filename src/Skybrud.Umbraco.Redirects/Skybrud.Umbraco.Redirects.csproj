@@ -15,7 +15,7 @@
   <PropertyGroup>
     <PackageId>Skybrud.Umbraco.Redirects</PackageId>
     <PackageTags>Umbraco, Redirects, 301, Content, Url</PackageTags>
-    <PackageLicenseUrl>https://github.com/skybrud/Skybrud.Umbraco.Redirects/blob/master/LICENSE.md</PackageLicenseUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/skybrud/Skybrud.Umbraco.Redirects</PackageProjectUrl>
     <PackageIconUrl>http://www.skybrud.dk/img/5431sk/icon/favicon.ico</PackageIconUrl>
     <RepositoryType>git</RepositoryType>
@@ -41,5 +41,9 @@
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Lang\*.xml" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\package.manifest" />
   </ItemGroup>
+  
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(ConfigurationName)'=='Release'">
+    <Exec Command="&quot;$(ProjectDir)..\build\Skybrud.BuildTools.Tasks.exe&quot; &quot;postBuild&quot; &quot;$(ConfigurationName)&quot; &quot;$(ProjectPath)&quot; &quot;$(TargetPath)&quot;" />
+  </Target>
 
 </Project>

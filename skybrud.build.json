@@ -1,0 +1,35 @@
+{
+  "tasks": {
+    "postBuild": [
+      {
+        "alias": "zip",
+        "destination": "releases/github/{packageName}.v{version}.zip",
+        "files": [
+          {
+            "source": "src/{packageName}/bin/Release/net472/",
+            "destination": "bin/",
+            "patterns": [
+              "{packageName}.dll",
+              "{packageName}.xml",
+              "Skybrud.Essentials.dll",
+              "Skybrud.Essentials.xml",
+              "Skybrud.WebApi.Json.dll",
+              "Skybrud.WebApi.Json.xml"
+            ]
+          },
+          {
+            "source": "src/{packageName}/App_Plugins/Skybrud.Umbraco.Redirects",
+            "destination": "App_Plugins/Skybrud.Umbraco.Redirects/",
+            "patterns": [
+              "**/*.js",
+              "**/*.css",
+              "**/*.html",
+              "**/*.xml",
+              "package.manifest"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
