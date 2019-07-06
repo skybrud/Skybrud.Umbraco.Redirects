@@ -5,10 +5,10 @@ using Umbraco.Core.Composing;
 
 namespace Skybrud.Umbraco.Redirects.Composers {
 
+    [RuntimeLevel(MinLevel = RuntimeLevel.Boot)]
     public class RedirectsComposer : IUserComposer {
 
-        public void Compose(Composition composition)
-        {
+        public void Compose(Composition composition) {
             composition.Register<IRedirectsService, RedirectsService>();
             composition.Register<RedirectsInjectedModule, RedirectsInjectedModule>(); 
         }
