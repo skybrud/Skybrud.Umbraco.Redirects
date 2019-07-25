@@ -317,7 +317,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
             if (!SchemaHelper.TableExist(RedirectItemRow.TableName)) return null;
 
             // Fetch non-regex redirects from the database
-            Sql sql = new Sql().Select("*").From(RedirectItemRow.TableName).Where<RedirectItemRow>(x => !x.IsRegex && x.Url == url && x.QueryString == queryString || x.ForwardQueryString);
+            Sql sql = new Sql().Select("*").From(RedirectItemRow.TableName).Where<RedirectItemRow>(x => !x.IsRegex && x.Url == url && (x.QueryString == queryString || x.ForwardQueryString));
             List<RedirectItem> redirects = Database.Fetch<RedirectItemRow>(sql).Select(RedirectItem.GetFromRow).ToList();
 
             // Fetch regex redirects from the database
