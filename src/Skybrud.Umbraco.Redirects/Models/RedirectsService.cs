@@ -400,7 +400,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
                 var sql = scope.SqlContext.Sql()
                     .Select<RedirectItemRow>()
                     .From<RedirectItemRow>()
-                    .Where<RedirectItemRow>(x => !x.IsRegex && x.Url == url && x.QueryString == queryString || x.ForwardQueryString);
+                    .Where<RedirectItemRow>(x => !x.IsRegex && x.Url == url && (x.QueryString == queryString || x.ForwardQueryString));
                 
                 // Make the call to the database
                 redirects = scope.Database.Fetch<RedirectItemRow>(sql)
