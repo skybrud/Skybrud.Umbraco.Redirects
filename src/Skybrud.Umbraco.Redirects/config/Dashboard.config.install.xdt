@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<dashBoard xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
+  <section alias="StartupDashboardSection" xdt:Locator="Match(alias)">
+    <tab caption="Redirects" xdt:Transform="InsertIfMissing" xdt:Locator="Match(caption)">
+      <access>
+        <grant>admin</grant>
+      </access>
+      <control showOnce="true" addPanel="true" panelCaption="">/App_Plugins/Skybrud.Umbraco.Redirects/Views/Dashboard.html</control>
+    </tab>
+  </section>
+</dashBoard>
