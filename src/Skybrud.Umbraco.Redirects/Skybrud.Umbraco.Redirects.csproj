@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>2.0.0-alpha004</Version>
+    <Version>2.0.0</Version>
     <Authors>Anders Bjerner</Authors>
     <Company>Skybrud.dk</Company>
     <Description>Redirects manager for Umbraco 8.</Description>
@@ -16,7 +16,7 @@
     <PackageId>Skybrud.Umbraco.Redirects</PackageId>
     <PackageTags>Umbraco, Redirects, 301, Content, Url</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/skybrud/Skybrud.Umbraco.Redirects</PackageProjectUrl>
+    <PackageProjectUrl>https://packages.skybrud.dk/skybrud.umbraco.redirects/</PackageProjectUrl>
     <PackageIconUrl>http://www.skybrud.dk/img/5431sk/icon/favicon.ico</PackageIconUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/skybrud/Skybrud.Umbraco.Redirects</RepositoryUrl>
