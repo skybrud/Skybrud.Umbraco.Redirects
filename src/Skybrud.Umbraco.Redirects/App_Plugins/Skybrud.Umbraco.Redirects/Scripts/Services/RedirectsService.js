@@ -115,7 +115,7 @@
         deleteRedirect: function (redirect, callback) {
             $http({
                 method: "GET",
-                url: "/umbraco/backoffice/api/Redirects/DeleteRedirect",
+                url: "/umbraco/backoffice/Skybrud/Redirects/DeleteRedirect",
                 params: {
                     redirectId: redirect.key
                 }
@@ -152,7 +152,7 @@
     };
 
     service.getRootNodes = function () {
-        return $http.get("/umbraco/backoffice/api/Redirects/GetRootNodes");
+        return $http.get("/umbraco/backoffice/Skybrud/Redirects/GetRootNodes");
     };
 
     return service;

@@ -166,7 +166,7 @@
         if (redirect.key) {
             $http({
                 method: "POST",
-                url: "/umbraco/backoffice/api/Redirects/EditRedirect",
+                url: "/umbraco/backoffice/Skybrud/Redirects/EditRedirect",
                 params: {
                     redirectId: redirect.key
                 },
@@ -182,7 +182,7 @@
         } else {
             $http({
                 method: "POST",
-                url: "/umbraco/backoffice/api/Redirects/AddRedirect",
+                url: "/umbraco/backoffice/Skybrud/Redirects/AddRedirect",
                 data: redirect
             }).then(function (r) {
                 $scope.loading = false;

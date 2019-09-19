@@ -57,7 +57,7 @@
         // Make the call to the redirects API
         var http = $http({
             method: 'GET',
-            url: '/umbraco/backoffice/api/Redirects/GetRedirectsFor' + $scope.type,
+            url: '/umbraco/backoffice/Skybrud/Redirects/GetRedirectsFor' + $scope.type,
             params: {
                 contentId: $routeParams.id
             }

@@ -115,7 +115,7 @@
         // Declare the HTTP options
         var http = $http({
             method: 'GET',
-            url: '/umbraco/backoffice/api/Redirects/GetRedirects',
+            url: '/umbraco/backoffice/Skybrud/Redirects/GetRedirects',
             params: args
         });
 

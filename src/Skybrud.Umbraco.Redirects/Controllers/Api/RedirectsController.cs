@@ -13,6 +13,7 @@ using Skybrud.WebApi.Json.Meta;
 using Umbraco.Core;
 using Umbraco.Core.Models;
 using Umbraco.Web.Composing;
+using Umbraco.Web.Mvc;
 using Umbraco.Web.WebApi;
 
 namespace Skybrud.Umbraco.Redirects.Controllers.Api {
@@ -21,6 +22,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
     /// WebAPI controller for managing redirects.
     /// </summary>
     [JsonOnlyConfiguration]
+    [PluginController("Skybrud")]
     public class RedirectsController : UmbracoAuthorizedApiController {
 
         private CultureInfo _culture;
