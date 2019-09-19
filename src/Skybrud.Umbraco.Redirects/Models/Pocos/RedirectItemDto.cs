@@ -8,21 +8,16 @@ namespace Skybrud.Umbraco.Redirects.Models.Pocos {
     /// Class representing the database row of a redirect.
     /// </summary>
     [TableName(TableName)]
-    [PrimaryKey(PrimaryKey, AutoIncrement = true)]
+    [PrimaryKey("Id", AutoIncrement = true)]
     [ExplicitColumns]
-    public class RedirectItemRow {
+    public class RedirectItemDto {
 
         #region Constants
 
         /// <summary>
         /// Gets the name of the table used in the database.
         /// </summary>
-        public const string TableName = "SkybrudRedirects";
-
-        /// <summary>
-        /// Gets the primary key of the redirects table.
-        /// </summary>
-        public const string PrimaryKey = "Id";
+        public const string TableName = RedirectItemSchema.TableName;
 
         #endregion
 
@@ -31,7 +26,7 @@ namespace Skybrud.Umbraco.Redirects.Models.Pocos {
         /// <summary>
         /// Gets or sets the numeric ID (primary key) of the redirect.
         /// </summary>
-        [Column(PrimaryKey)]
+        [Column("Id")]
         [PrimaryKeyColumn(AutoIncrement = true)]
         public int Id { get; set; }
 

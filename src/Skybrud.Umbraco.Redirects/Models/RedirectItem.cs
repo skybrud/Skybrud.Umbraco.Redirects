@@ -31,30 +31,30 @@ namespace Skybrud.Umbraco.Redirects.Models {
         #region Properties
 
         /// <summary>
-        /// Gets a reference to the internal <see cref="Skybrud.Umbraco.Redirects.Models.Pocos.RedirectItemRow"/> class used for representing the data as they
+        /// Gets a reference to the internal <see cref="RedirectItemDto"/> class used for representing the data as they
         /// are stored in the database.
         /// </summary>
-        internal RedirectItemRow Row { get; }
+        internal RedirectItemDto Dto { get; }
 
         /// <summary>
         /// Gets the ID of the redirect.
         /// </summary>
         [JsonProperty("id")]
-        public int Id => Row.Id;
+        public int Id => Dto.Id;
 
         /// <summary>
         /// Gets the unique ID of the redirect.
         /// </summary>
         [JsonProperty("key")]
-        public Guid Key => Row.Key;
+        public Guid Key => Dto.Key;
 
         /// <summary>
         /// Gets or sets the root node ID of the redirect.
         /// </summary>
         [JsonProperty("rootId")]
         public int RootId {
-            get => Row.RootId;
-            set { Row.RootId = value; _rootNode = null; _rootNodeDomains = null; }
+            get => Dto.RootId;
+            set { Dto.RootId = value; _rootNode = null; _rootNodeDomains = null; }
         }
 
         /// <summary>
@@ -98,8 +98,8 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// </summary>
         [JsonProperty("url")]
         public string Url {
-            get => Row.Url;
-            set => Row.Url = value;
+            get => Dto.Url;
+            set => Dto.Url = value;
         }
 
         /// <summary>
@@ -155,8 +155,8 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// </summary>
         [JsonProperty("queryString")]
         public string QueryString {
-            get => Row.QueryString;
-            set => Row.QueryString = value;
+            get => Dto.QueryString;
+            set => Dto.QueryString = value;
         }
 
         /// <summary>
@@ -165,7 +165,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         [JsonProperty("linkMode")]
         public RedirectDestinationType LinkMode {
             get => _linkMode;
-            set { _linkMode = value; Row.DestinationType = _linkMode.ToString().ToLower(); }
+            set { _linkMode = value; Dto.DestinationType = _linkMode.ToString().ToLower(); }
         }
 
         /// <summary>
@@ -173,8 +173,8 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// </summary>
         [JsonProperty("linkId")]
         public int LinkId {
-            get => Row.DestinationId;
-            set => Row.DestinationId = value;
+            get => Dto.DestinationId;
+            set => Dto.DestinationId = value;
         }
 
         /// <summary>
@@ -182,8 +182,8 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// </summary>
         [JsonProperty("linkKey")]
         public Guid LinkKey {
-            get => Row.DestinationKey;
-            set => Row.DestinationKey = value;
+            get => Dto.DestinationKey;
+            set => Dto.DestinationKey = value;
         }
 
         /// <summary>
@@ -191,8 +191,8 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// </summary>
         [JsonProperty("linkUrl")]
         public string LinkUrl {
-            get => Row.DestinationUrl;
-            set => Row.DestinationUrl = value;
+            get => Dto.DestinationUrl;
+            set => Dto.DestinationUrl = value;
         }
 
         /// <summary>
@@ -217,7 +217,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         [JsonConverter(typeof(TimeConverter))]
         public EssentialsTime Created {
             get => _created;
-            set { _created = value ?? EssentialsTime.Zero; Row.Created = _created.DateTimeOffset.ToUniversalTime().DateTime; }
+            set { _created = value ?? EssentialsTime.Zero; Dto.Created = _created.DateTimeOffset.ToUniversalTime().DateTime; }
         }
 
         /// <summary>
@@ -227,7 +227,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         [JsonConverter(typeof(TimeConverter))]
         public EssentialsTime Updated {
             get => _updated;
-            set { _updated = value ?? EssentialsTime.Zero; Row.Updated = _updated.DateTimeOffset.ToUniversalTime().DateTime; }
+            set { _updated = value ?? EssentialsTime.Zero; Dto.Updated = _updated.DateTimeOffset.ToUniversalTime().DateTime; }
 		}
         
         /// <summary>
@@ -235,8 +235,8 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// </summary>
 		[JsonProperty("permanent")]
 		public bool IsPermanent {
-			get => Row.IsPermanent;
-		    set => Row.IsPermanent = value;
+			get => Dto.IsPermanent;
+		    set => Dto.IsPermanent = value;
 		}
 
         /// <summary>
@@ -244,8 +244,8 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// </summary>
         [JsonProperty("regex")]
 		public bool IsRegex {
-			get => Row.IsRegex;
-		    set => Row.IsRegex = value;
+			get => Dto.IsRegex;
+		    set => Dto.IsRegex = value;
 		}
 
         /// <summary>
@@ -253,8 +253,8 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// </summary>
 		[JsonProperty("forward")]
 		public bool ForwardQueryString {
-			get => Row.ForwardQueryString;
-		    set => Row.ForwardQueryString = value;
+			get => Dto.ForwardQueryString;
+		    set => Dto.ForwardQueryString = value;
 		}
 
 		#endregion
@@ -291,29 +291,29 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
         }
 
-		internal RedirectItem(RedirectItemRow row) {
-            _created = new EssentialsTime(row.Created);
-            _updated = new EssentialsTime(row.Updated);
-            _linkMode = EnumUtils.ParseEnum(row.DestinationType, RedirectDestinationType.Content);
-            Row = row;
+		internal RedirectItem(RedirectItemDto dto) {
+            _created = new EssentialsTime(dto.Created);
+            _updated = new EssentialsTime(dto.Updated);
+            _linkMode = EnumUtils.ParseEnum(dto.DestinationType, RedirectDestinationType.Content);
+            Dto = dto;
         }
 
         /// <summary>
         /// Initializes an empty redirect.
         /// </summary>
         public RedirectItem() {
-            Row = new RedirectItemRow();
+            Dto = new RedirectItemDto();
             _created = EssentialsTime.UtcNow;
             _updated = EssentialsTime.UtcNow;
-            Row.Key = Guid.NewGuid();
+            Dto.Key = Guid.NewGuid();
         }
 
         #endregion
 
         #region Static methods
 
-        internal static RedirectItem GetFromRow(RedirectItemRow row) {
-            return row == null ? null : new RedirectItem(row);
+        internal static RedirectItem GetFromRow(RedirectItemDto dto) {
+            return dto == null ? null : new RedirectItem(dto);
         }
 
         #endregion
