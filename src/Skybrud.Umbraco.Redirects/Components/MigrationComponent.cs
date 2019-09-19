@@ -1,12 +1,12 @@
 ﻿using Skybrud.Umbraco.Redirects.Migrations;
 using Umbraco.Core.Composing;
+using Umbraco.Core.Logging;
 using Umbraco.Core.Migrations;
 using Umbraco.Core.Migrations.Upgrade;
 using Umbraco.Core.Scoping;
 using Umbraco.Core.Services;
-using Umbraco.Core.Logging;
 
-namespace Skybrud.Umbraco.Redirects.EventHandlers
+namespace Skybrud.Umbraco.Redirects.Components
 {
     public class MigrationComponent : IComponent
     {
