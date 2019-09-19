@@ -6,8 +6,8 @@ using Newtonsoft.Json;
 using Skybrud.Essentials.Enums;
 using Skybrud.Essentials.Json.Converters.Time;
 using Skybrud.Essentials.Time;
+using Skybrud.Umbraco.Redirects.Models.Database;
 using Skybrud.Umbraco.Redirects.Models.Options;
-using Skybrud.Umbraco.Redirects.Models.Pocos;
 using Umbraco.Core.Models;
 using Umbraco.Web.Composing;
 

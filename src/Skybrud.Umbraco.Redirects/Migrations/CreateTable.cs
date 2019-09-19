@@ -1,4 +1,4 @@
-﻿using Skybrud.Umbraco.Redirects.Models.Pocos;
+﻿using Skybrud.Umbraco.Redirects.Models.Database;
 using Umbraco.Core.Migrations;
 
 namespace Skybrud.Umbraco.Redirects.Migrations {

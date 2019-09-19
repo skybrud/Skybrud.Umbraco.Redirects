@@ -2,22 +2,22 @@
 using NPoco;
 using Umbraco.Core.Persistence.DatabaseAnnotations;
 
-namespace Skybrud.Umbraco.Redirects.Models.Pocos {
+namespace Skybrud.Umbraco.Redirects.Models.Database {
 
     /// <summary>
-    /// Class representing the schema of the redirects database table.
+    /// Class representing the database row of a redirect.
     /// </summary>
     [TableName(TableName)]
-    [PrimaryKey(nameof(Id), AutoIncrement = true)]
+    [PrimaryKey("Id", AutoIncrement = true)]
     [ExplicitColumns]
-    public class RedirectItemSchema {
+    public class RedirectItemDto {
 
         #region Constants
 
         /// <summary>
         /// Gets the name of the table used in the database.
         /// </summary>
-        public const string TableName = "SkybrudRedirects";
+        public const string TableName = RedirectItemSchema.TableName;
 
         #endregion
 
@@ -26,7 +26,7 @@ namespace Skybrud.Umbraco.Redirects.Models.Pocos {
         /// <summary>
         /// Gets or sets the numeric ID (primary key) of the redirect.
         /// </summary>
-        [Column(nameof(Id))]
+        [Column("Id")]
         [PrimaryKeyColumn(AutoIncrement = true)]
         public int Id { get; set; }
 

@@ -2,7 +2,7 @@
 using NPoco;
 using Umbraco.Core.Persistence.DatabaseAnnotations;
 
-namespace Skybrud.Umbraco.Redirects.Models.Pocos {
+namespace Skybrud.Umbraco.Redirects.Models.Database {
 
     /// <summary>
     /// Class representing the database row of a redirect.
