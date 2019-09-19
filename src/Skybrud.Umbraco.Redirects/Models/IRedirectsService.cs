@@ -1,5 +1,4 @@
 ﻿using System;
-using Skybrud.Umbraco.Redirects.Models;
 using Skybrud.Umbraco.Redirects.Models.Options;
 
 namespace Skybrud.Umbraco.Redirects.Models {

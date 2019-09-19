@@ -311,7 +311,6 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         /// <param name="linkId">The media or content ID of the destination link.</param>
         /// <param name="linkKey">The media or content key of the destination link.</param>
         /// <param name="linkUrl">The URL of the destination link.</param>
-        /// <param name="linkName">The name of the destination link.</param>
         /// <param name="permanent">Indicates whether the redirect should be permanent. Default is <c>true</c>.</param>
         /// <param name="regex">Indicates wether the inbound URL is a REGEX pattern. <c>false</c> by default.</param>
         /// <param name="forward">Indicates whether the query string should be forwarded. <c>false</c> by default.</param>
@@ -345,7 +344,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                 // Split the URL and query string
                 string[] urlParts = url.Split('?');
                 url = urlParts[0].TrimEnd('/');
-                string query = urlParts.Length == 2 ? urlParts[1] : "";
+                string query = urlParts.Length == 2 ? urlParts[1] : string.Empty;
 
                 // Update the properties of the redirect
                 redirect.RootId = rootNodeId;

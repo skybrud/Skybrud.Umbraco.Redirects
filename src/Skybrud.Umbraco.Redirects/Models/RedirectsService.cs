@@ -64,7 +64,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
             if (model.IsRegex == false) {
 				string[] urlParts = url.Split('?');
                 url = urlParts[0].TrimEnd('/');
-				query = urlParts.Length == 2 ? urlParts[1] : "";
+				query = urlParts.Length == 2 ? urlParts[1] : string.Empty;
 			}
 
             if (GetRedirectByUrl(model.RootNodeId, url, query) != null) {
@@ -368,7 +368,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         public RedirectItem[] GetRedirectsByUrl(string url) {
 
             // Some input validation
-            if (String.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
+            if (string.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
 
             // Split the URL
             string[] parts = url.Split('?');
@@ -390,7 +390,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
 			var fullUrl = url + (queryString.IsNullOrWhiteSpace() ? string.Empty : "?" + queryString);
 
 			url = url.TrimEnd('/').Trim();
-            queryString = (queryString ?? "").Trim();
+            queryString = (queryString ?? string.Empty).Trim();
 
             List<RedirectItem> redirects;
 

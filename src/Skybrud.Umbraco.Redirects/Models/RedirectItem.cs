@@ -113,7 +113,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
             get {
 
                 // Get the URL (path and query string) of the redirect
-                string url = Url + (String.IsNullOrWhiteSpace(QueryString) ? "" : "?" + QueryString);
+                string url = Url + (string.IsNullOrWhiteSpace(QueryString) ? string.Empty : "?" + QueryString);
 
                 HttpRequest request = HttpContext.Current == null ? null : HttpContext.Current.Request;
 
@@ -127,7 +127,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
                     foreach (string domain in RootNodeDomains) {
 
-                        string prefix = "";
+                        string prefix = string.Empty;
 
                         // Prepend the protocol if not already specified
                         if (!domain.StartsWith("http://") && !domain.StartsWith("https://")) {

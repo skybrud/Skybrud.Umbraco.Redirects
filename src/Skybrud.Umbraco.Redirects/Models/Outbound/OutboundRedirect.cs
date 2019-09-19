@@ -28,7 +28,7 @@ namespace Skybrud.Umbraco.Redirects.Models.Outbound {
         /// Gets the URL of the redirects.
         /// </summary>
         [JsonIgnore]
-        public string Url => HasLink ? Link.Url : "";
+        public string Url => HasLink ? Link.Url : string.Empty;
 
         /// <summary>
         /// Same as <see cref="IsValid"/>.
