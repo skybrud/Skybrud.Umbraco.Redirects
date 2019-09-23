@@ -9,12 +9,12 @@ URLs can be added to redirect to either a content item, media item or a custom U
 
 ## Installation
 
-## Install via NuGet
+### Install via NuGet
 This is the recommend approach, as you install the NuGet package in your Visual Studio project, and NuGet takes care of the rest.
 
 1. [**NuGet Package**][NuGetPackage]
 
-## Manual install
+### Manual install
 You can also download a ZIP file of the latest release directly from GitHub, unzip, and move the contents to the root directory of your web application.
 
 1. [**Download ZIP file**][GitHubRelease]  
