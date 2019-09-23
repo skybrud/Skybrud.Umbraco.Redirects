@@ -17,26 +17,26 @@ This is the recommend approach, as you install the NuGet package in your Visual 
 ## Manual install
 You can also download a ZIP file of the latest release directly from GitHub, unzip, and move the contents to the root directory of your web application.
 
-1. [**Download ZIP file**][GitHubRelease]
-  The ZIP contains all necessary files to run the package.
+1. [**Download ZIP file**][GitHubRelease]  
+  Download the ZIP file directly from here on GitHub. The ZIP contains all necessary files to run the package.
 
-2. **Unzip**
+2. **Unzip**  
   Unzip and move the contents to the root directory of your web application.
 
-3. **Install HTTP module**
-  The package feature a HTTP module. When downloading the ZIP file, you must install this manually. In your root `Web.config` file, search for the `<system.webServer>` element. Then add the following to the `<modules>` child element:
+3. **Install HTTP module**  
+  The package features a HTTP module. When downloading the ZIP file, you must install this manually. In your root `Web.config` file, search for the `<system.webServer>` element. Then add the following to the `<modules>` child element:
   
-  ```xml
-  <remove name="RedirectsModule" />
-  <add name="RedirectsModule" type="Skybrud.Umbraco.Redirects.Routing.RedirectsModule, Skybrud.Umbraco.Redirects" />
-  ```
+     ```xml
+    <remove name="RedirectsModule" />
+    <add name="RedirectsModule" type="Skybrud.Umbraco.Redirects.Routing.RedirectsModule, Skybrud.Umbraco.Redirects" />
+    ```
 
-  The order shouldn't matter that much, but we typically add it right after:
+    The order shouldn't matter that much, but we typically add it right after:
 
-  ```xml
-  <remove name="UmbracoModule" />
-  <add name="UmbracoModule" type="Umbraco.Web.UmbracoModule,umbraco" />
-  ```
+    ```xml
+    <remove name="UmbracoModule" />
+    <add name="UmbracoModule" type="Umbraco.Web.UmbracoModule,umbraco" />
+    ```
 
 
 
