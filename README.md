@@ -10,9 +10,19 @@ URLs can be added to redirect to either a content item, media item or a custom U
 ## Installation
 
 ### Install via NuGet
-This is the recommend approach, as you install the NuGet package in your Visual Studio project, and NuGet takes care of the rest.
+This is the recommend approach, as you install the [**NuGet Package**][NuGetPackage] in your Visual Studio project, and NuGet takes care of the rest.
 
-1. [**NuGet Package**][NuGetPackage]
+- **Umbraco 8**  
+
+    ```
+    Install-Package Skybrud.Umbraco.Redirects -Version 2.0.0
+    ```
+
+- **Umbraco 7**  
+
+    ```
+    Install-Package Skybrud.Umbraco.Redirects -Version 0.3.5
+    ```
 
 ### Manual install
 You can also download a ZIP file of the latest release directly from GitHub, unzip, and move the contents to the root directory of your web application.
@@ -51,7 +61,7 @@ You can also download a ZIP file of the latest release directly from GitHub, unz
 - Includes a `RedirectsRepository` for managing the redirects from your own code
 
 [NuGetPackage]: https://www.nuget.org/packages/Skybrud.Umbraco.Redirects
-[GitHubRelease]: https://github.com/skybrud/Skybrud.Umbraco.Redirects
+[GitHubRelease]: https://github.com/skybrud/Skybrud.Umbraco.Redirects/releases
 
 
 
