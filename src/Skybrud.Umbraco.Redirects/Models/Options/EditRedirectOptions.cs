@@ -11,8 +11,8 @@ namespace Skybrud.Umbraco.Redirects.Models.Options {
 
         [JsonProperty("key")]
         public string Key { get; set; }
-
-        [JsonIgnore]
+		
+        [JsonProperty("rootNodeId")]
         public int RootNodeId { get; set; }
 
         [JsonProperty("originalurl")]

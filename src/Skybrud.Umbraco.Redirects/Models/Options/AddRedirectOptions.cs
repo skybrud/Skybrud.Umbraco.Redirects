@@ -5,8 +5,8 @@ namespace Skybrud.Umbraco.Redirects.Models.Options {
     public class AddRedirectOptions {
 
         #region Properties
-
-        [JsonIgnore]
+		
+        [JsonProperty("rootNodeId")]
         public int RootNodeId { get; set; }
 
         [JsonProperty("originalurl")]

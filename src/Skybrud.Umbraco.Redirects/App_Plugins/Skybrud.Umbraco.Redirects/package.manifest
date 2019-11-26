@@ -34,16 +34,17 @@
       }
     }
   ],
-  "javascript": [
-    "/App_Plugins/Skybrud.Umbraco.Redirects/Scripts/Services/RedirectsService.js",
-    "/App_Plugins/Skybrud.Umbraco.Redirects/Scripts/Controllers/Dashboards/Default.js",
-    "/App_Plugins/Skybrud.Umbraco.Redirects/Scripts/Controllers/Dialogs/Redirect.js",
-    "/App_Plugins/Skybrud.Umbraco.Redirects/Scripts/Controllers/Editors/Inbound.js",
-    "/App_Plugins/Skybrud.Umbraco.Redirects/Scripts/Controllers/Editors/Destination.js",
-    "/App_Plugins/Skybrud.Umbraco.Redirects/Scripts/Controllers/Editors/Outbound.js",
-    "/App_Plugins/Skybrud.Umbraco.Redirects/Scripts/Controllers/Editors/OriginalUrl.js",
-    "/App_Plugins/Skybrud.Umbraco.Redirects/Scripts/Controllers/Editors/RadioGroup.js"
-  ],
+	"javascript": [
+		"/App_Plugins/Skybrud.Umbraco.Redirects/Scripts/Services/RedirectsService.js",
+		"/App_Plugins/Skybrud.Umbraco.Redirects/Scripts/Controllers/Dashboards/Default.js",
+		"/App_Plugins/Skybrud.Umbraco.Redirects/Scripts/Controllers/Dialogs/Redirect.js",
+		"/App_Plugins/Skybrud.Umbraco.Redirects/Scripts/Controllers/Editors/Inbound.js",
+		"/App_Plugins/Skybrud.Umbraco.Redirects/Scripts/Controllers/Editors/Destination.js",
+		"/App_Plugins/Skybrud.Umbraco.Redirects/Scripts/Controllers/Editors/Outbound.js",
+		"/App_Plugins/Skybrud.Umbraco.Redirects/Scripts/Controllers/Editors/OriginalUrl.js",
+		"/App_Plugins/Skybrud.Umbraco.Redirects/Scripts/Controllers/Editors/RadioGroup.js",
+		"/App_Plugins/Skybrud.Umbraco.Redirects/Scripts/Controllers/Editors/Site.js"
+	],
   "css": [
     "/App_Plugins/Skybrud.Umbraco.Redirects/Styles/Styles.css"
   ],

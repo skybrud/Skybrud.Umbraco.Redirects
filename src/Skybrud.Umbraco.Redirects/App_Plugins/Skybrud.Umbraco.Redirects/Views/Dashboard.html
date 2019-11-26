@@ -40,10 +40,10 @@
                         <div class="umb-table-cell col-id">{{redirect.id}}</div>
                         
                         <div class="umb-table-cell">
-                            <span ng-show="redirect.rootNodeId">
-                                <a href="/umbraco/#/content/content/edit/{{redirect.rootNodeId}}" title="{{redirect.rootNodeName}}">{{redirect.rootNodeName}}</a>
+                            <span ng-show="redirect.rootId">
+                                <a href="/umbraco/#/content/content/edit/{{redirect.rootId}}" title="{{redirect.rootNodeName}}">{{redirect.rootNodeName}}</a>
                             </span>
-                            <span ng-hide="redirect.rootNodeId">All sites</span>
+                            <span ng-hide="redirect.rootId">All sites</span>
                         </div>
 
                         <div class="umb-table-cell">
