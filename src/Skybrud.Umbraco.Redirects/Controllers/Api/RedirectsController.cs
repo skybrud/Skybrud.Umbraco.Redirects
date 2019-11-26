@@ -276,7 +276,8 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                 string[] urlParts = model.OriginalUrl.Split('?');
                 string url = urlParts[0].TrimEnd('/');
                 string query = urlParts.Length == 2 ? urlParts[1] : string.Empty;
-
+				
+                redirect.RootId = model.RootNodeId;
                 redirect.Url = url;
                 redirect.QueryString = query;
                 redirect.LinkId = model.Destination.Id;

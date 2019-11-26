@@ -38,6 +38,7 @@
     // Since we don't have any sorting, we can assume the added redirect will be shown last
     $scope.addRedirect = function () {
         skybrudRedirectsService.addRedirect({
+						rootNodes: $scope.rootNodes,
             callback: function () {
                 $scope.updateList(1);
             }
@@ -46,8 +47,11 @@
 
     // Opens a dialog for adding a new redirect. When a callback received, the list is updated.
     $scope.editRedirect = function (redirect) {
-        skybrudRedirectsService.editRedirect(redirect, function () {
-            $scope.updateList();
+        skybrudRedirectsService.editRedirect(redirect, {
+	        rootNodes: $scope.rootNodes,
+					callback: function () {
+		        $scope.updateList();
+	        }
         });
     };
 
