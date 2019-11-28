@@ -42,19 +42,19 @@
     }
 
     $scope.model.properties = [
-		    {
-				    alias: "rootNodeId",
-				    label: "Site",
-				    description: "Specify the site that the original URL to match from belongs to.",
-				    view: "/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/Site.html",
-						value: {
-							rootNodeId: $scope.model.redirect && $scope.model.redirect.rootId ? $scope.model.redirect.rootId : 0,
-							rootNodes: $scope.options.rootNodes
-						},
-				    validation: {
-					    mandatory: false
-				    }
-		    },
+        {
+            alias: "rootNodeId",
+            label: "Site",
+            description: "Specify the site that the original URL to match from belongs to.",
+            view: "/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/Site.html",
+            value: {
+                rootNodeId: $scope.model.redirect && $scope.model.redirect.rootId ? $scope.model.redirect.rootId : 0,
+                rootNodes: $scope.options.rootNodes
+            },
+            validation: {
+                mandatory: false
+            }
+        },
         {
             alias: "originalUrl",
             label: "Original URL",
