@@ -4,7 +4,7 @@
             <h3><localize key="redirects_redirects">Redirects</localize></h3>
         </div>
         <div class="filters">
-            <select style="margin-right: 10px;" ng-options="item as item.name for item in rootNodes track by item.value" ng-model="filters.rootNode" no-dirty-check></select>
+            <select style="margin-right: 10px;" ng-options="item as item.name for item in rootNodes track by item.id" ng-model="filters.rootNode" no-dirty-check></select>
             <select style="margin-right: 10px;" ng-options="item as item.name for item in types track by item.value" ng-model="filters.type" no-dirty-check></select>
             <input type="text" ng-model="filters.text" no-dirty-check placeholder="typeToSearch" localize="placeholder" style="max-width: initial; flex: 1; margin-right: 100px;" />
             <a href="#" prevent-default ng-click="addRedirect()" class="btn btn-success">
