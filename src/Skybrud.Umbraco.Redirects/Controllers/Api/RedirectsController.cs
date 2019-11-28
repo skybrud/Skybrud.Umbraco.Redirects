@@ -104,7 +104,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         /// <param name="limit">The maximum amount of redirects to be returned per page.</param>
         /// <param name="type">The type of redirects that should be returned.</param>
         /// <param name="text">The text that the returned redirects should match.</param>
-        /// <param name="rootNodeId">The root node ID that the returned redirects should match. <c>null</c> means all redirects. <code>0</code> means all global redirects.</param>
+        /// <param name="rootNodeId">The root node ID that the returned redirects should match. <c>null</c> means all redirects. <c>0</c> means all global redirects.</param>
         /// <returns>A list of redirects.</returns>
         [HttpGet]
         public object GetRedirects(int page = 1, int limit = 20, string type = null, string text = null, int? rootNodeId = null) {
