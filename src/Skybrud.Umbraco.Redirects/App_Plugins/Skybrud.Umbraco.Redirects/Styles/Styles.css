@@ -334,6 +334,12 @@
   font-size: 10px;
   line-height: 18px;
 }
+.SkybrudUmbracoRedirects.RedirectsRootId select {
+  width: 100%;
+  box-sizing: border-box;
+  line-height: 32px;
+  height: 32px;
+}
 .SkybrudUmbracoRedirects.RedirectsOriginalUrl input {
   width: 100%;
   box-sizing: border-box;
