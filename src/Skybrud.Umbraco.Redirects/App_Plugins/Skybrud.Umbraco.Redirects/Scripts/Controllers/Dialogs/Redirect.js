@@ -45,7 +45,7 @@
 		    {
 				    alias: "rootNodeId",
 				    label: "Site",
-				    description: "Specify the site that the original URL to match from belongs to",
+				    description: "Specify the site that the original URL to match from belongs to.",
 				    view: "/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/Site.html",
 						value: {
 							rootNodeId: $scope.model.redirect && $scope.model.redirect.rootId ? $scope.model.redirect.rootId : 0,
