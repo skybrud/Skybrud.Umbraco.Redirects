@@ -7,12 +7,6 @@
 
     var destionation = null;
 
-
-
-
-
-
-
     $scope.model.hiddenProperties = [];
 
     if ($scope.model.redirect) {
@@ -39,43 +33,49 @@
             value: $scope.model.redirect.key
         });
 
+    } else if ($scope.model.destination) {
+
+        destionation = $scope.model.destination;
+
     }
 
-    $scope.model.properties = [
-        {
-            alias: "rootNodeId",
-            label: "Site",
-            description: "Specify the site that the original URL to match from belongs to.",
-            view: "/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/Site.html",
-            value: {
-                rootNodeId: $scope.model.redirect && $scope.model.redirect.rootId ? $scope.model.redirect.rootId : 0,
-                rootNodes: $scope.options.rootNodes
-            },
-            validation: {
-                mandatory: false
-            }
+    $scope.model.properties = [];
+
+    $scope.model.properties.push({
+        alias: "rootNodeId",
+        label: "Site",
+        description: "Specify the site that the original URL to match from belongs to.",
+        view: "/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/Site.html",
+        value: $scope.model.redirect && $scope.model.redirect.rootId ? $scope.model.redirect.rootId : 0,
+        config: {
+            rootNodes: $scope.options.rootNodes
         },
-        {
-            alias: "originalUrl",
-            label: "Original URL",
-            description: "Specify the original URL to match from which the user should be redirected to the destination.",
-            view: "/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/OriginalUrl.html",
-            value: $scope.model.redirect ? $scope.model.redirect.url + ($scope.model.redirect.queryString ? "?" + $scope.model.redirect.queryString : "") : "",
-            validation: {
-                mandatory: true
-            }
-        },
-        {
-            alias: "destination",
-            label: "Destination",
-            description: "Select the page or URL the user should be redirected to.",
-            view: "/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/Destination.html",
-            value: destionation,
-            validation: {
-                mandatory: true
-            }
+        validation: {
+            mandatory: false
         }
-    ];
+    });
+
+    $scope.model.properties.push({
+        alias: "originalUrl",
+        label: "Original URL",
+        description: "Specify the original URL to match from which the user should be redirected to the destination.",
+        view: "/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/OriginalUrl.html",
+        value: $scope.model.redirect ? $scope.model.redirect.url + ($scope.model.redirect.queryString ? "?" + $scope.model.redirect.queryString : "") : "",
+        validation: {
+            mandatory: true
+        }
+    });
+
+    $scope.model.properties.push({
+        alias: "destination",
+        label: "Destination",
+        description: "Select the page or URL the user should be redirected to.",
+        view: "/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/Destination.html",
+        value: destionation,
+        validation: {
+            mandatory: true
+        }
+    });
 
     $scope.model.advancedProperties = [
         {

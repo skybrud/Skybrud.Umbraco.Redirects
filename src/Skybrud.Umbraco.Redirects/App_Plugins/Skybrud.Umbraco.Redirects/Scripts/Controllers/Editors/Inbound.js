@@ -1,4 +1,4 @@
-﻿angular.module('umbraco').controller('SkybrudUmbracoRedirects.PropertyEditor.Controller', function ($scope, $routeParams, $http, $q, $timeout, dialogService, notificationsService, skybrudRedirectsService) {
+﻿angular.module('umbraco').controller('SkybrudUmbracoRedirects.PropertyEditor.Controller', function ($scope, $routeParams, $http, $q, $timeout, notificationsService, skybrudRedirectsService, editorState) {
 
     $scope.route = $routeParams;
     $scope.redirects = [];
@@ -9,28 +9,39 @@
     $scope.loading = false;
 
     $scope.showTitle = $scope.model.config !== '1';
-
+    
     // If we're neither in the content or media section, we stop further execution (eg. property editor preview)
     if ($scope.type != 'content' && $scope.type != 'media') return;
 
     $scope.addRedirect = function () {
-        if ($scope.type == 'content') {
-            skybrudRedirectsService.addRedirect({
-                content: $scope.$parent.$parent.$parent.content,
-                hideRootNodeOption: $scope.model.config.hideRootNodeOption,
-                callback: function () {
-                    $scope.updateList();
-                }
-            });
-        } else if ($scope.type == 'media') {
-            skybrudRedirectsService.addRedirect({
-                hideRootNodeOption: $scope.model.config.hideRootNodeOption,
-                media: $scope.$parent.$parent.$parent.content,
-                callback: function () {
-                    $scope.updateList();
-                }
-            });
+
+        // Get the current editor state (the content or media being edited)
+        var state = editorState.getCurrent();
+
+        // An item should have an URL before we can create a redirect to it
+        if (state.urls.length === 0) {
+            // TODO: Introduce more user friendly error handling
+            alert("NOPE!");
+            return;
         }
+
+        // Initialize a new object representing the destination
+        var destination = {
+            id: state.id,
+            key: state.key,
+            name: state.variants[0].name,
+            url: state.urls[0].text,
+            type: state.udi.split("/")[2] === "media" ? "media" : "content"
+        };
+
+        skybrudRedirectsService.addRedirect({
+            destination: destination,
+            hideRootNodeOption: $scope.model.config.hideRootNodeOption,
+            callback: function () {
+                $scope.updateList();
+            }
+        });
+
     };
 
     $scope.editRedirect = function (redirect) {

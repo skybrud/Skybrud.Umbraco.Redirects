@@ -44,6 +44,9 @@ namespace Skybrud.Umbraco.Redirects.Models {
             set => _url = value;
         }
 
+        [JsonProperty("name")]
+        public string Name => GetCalculatedName();
+
         /// <summary>
         /// Gets the type of the destination.
         /// </summary>
@@ -119,6 +122,28 @@ namespace Skybrud.Umbraco.Redirects.Models {
         #endregion
 
         #region Member methods
+
+        protected virtual string GetCalculatedName() {
+
+            // If we dont have a valid UmbracoContext (eg. during Examine indexing), we return null instead (no name)
+            if (Current.UmbracoContext == null) return null;
+
+            // Look up the actual URL for content and media
+            switch (Type) {
+                case RedirectDestinationType.Content: {
+                    IPublishedContent content = Current.UmbracoContext.ContentCache.GetById(Id);
+                    return content?.Name;
+                }
+                case RedirectDestinationType.Media: {
+                    IPublishedContent media = Current.UmbracoContext.MediaCache.GetById(Id);
+                    return media?.Name;
+                }
+            }
+
+            // Use the raw URL as a fallback
+            return null;
+
+        }
 
         /// <summary>
         /// Method for calculating the current destination URL of the redirect if the destination is either a content item or media item.

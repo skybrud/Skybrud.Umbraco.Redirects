@@ -76,18 +76,22 @@
             if (!options) options = {};
             if (typeof options === "function") options = { callback: options };
 
-            editorService.open({
+            var o = {
                 size: "small",
                 view: "/App_Plugins/Skybrud.Umbraco.Redirects/Views/Dialogs/Redirect.html",
                 options: options,
-                submit: function (value) {
+                submit: function(value) {
                     if (options.callback) options.callback(value);
                     editorService.close();
                 },
-                close: function () {
+                close: function() {
                     editorService.close();
                 }
-            });
+            };
+
+            if (options.destination) o.destination = options.destination;
+
+            editorService.open(o);
 
         },
 

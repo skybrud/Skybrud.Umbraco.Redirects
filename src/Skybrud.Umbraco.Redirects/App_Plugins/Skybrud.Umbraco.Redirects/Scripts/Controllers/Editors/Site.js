@@ -1,22 +1,25 @@
-﻿angular.module("umbraco").controller("SkybrudUmbracoRedirects.Editors.Site.Controller", function ($scope) {
-	
-	$scope.sitepicker = {
-		rootNodes: []
-	};
-	
-	if ($scope.model.value.rootNodes) {
-		for (var i = 0; i < $scope.model.value.rootNodes.length; i++) {
-			var rootNode = $scope.model.value.rootNodes[i];
+﻿angular.module("umbraco").controller("SkybrudUmbracoRedirects.Editors.Site.Controller", function ($scope, localizationService, skybrudRedirectsService, editorState) {
 
-			(function (node) {
-				if (typeof node.id === "undefined") {
-					node.id = 0;
-				}
+    $scope.current = editorState.getCurrent();
 
-				$scope.sitepicker.rootNodes.push(node);
-			})(rootNode);
-		}
+    $scope.rootNodes = [
+        { id: 0, name: "All sites" }
+    ];
 
-		$scope.model.value = $scope.model.value.rootNodeId;
-	}
+    $scope.loading = true;
+
+    localizationService.localize('redirects_allSites').then(function (value) {
+        $scope.rootNodes[0].name = value;
+    });
+
+    skybrudRedirectsService.getRootNodes().then(function (r) {
+        angular.forEach(r.data.items, function (rootNode) {
+            $scope.rootNodes.push(rootNode);
+            if ($scope.current && (',' + $scope.current.path + ',').indexOf(',' + rootNode.id + ',') > 0) {
+                $scope.model.value = rootNode.id;
+            }
+        });
+        $scope.loading = false;
+    });
+
 });

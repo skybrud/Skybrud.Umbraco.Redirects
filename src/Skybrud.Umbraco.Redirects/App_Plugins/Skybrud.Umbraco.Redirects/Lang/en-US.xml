@@ -86,5 +86,7 @@
     <key alias="errorNoDestination">You must specify a destination link for the redirect.</key>
     <key alias="errorUnknownLinkMode">Specified link mode is not valid.</key>
 
+    <key alias="pageNoRedirects">This page has not been created yet. You must save and publish the page in order to be able to add redirects to it.</key>
+
   </area>
 </language>

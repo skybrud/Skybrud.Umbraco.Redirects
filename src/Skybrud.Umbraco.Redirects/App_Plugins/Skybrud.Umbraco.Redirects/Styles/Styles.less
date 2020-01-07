@@ -91,13 +91,12 @@
             display: block;
         }
 
-        .umb-table {
-            opacity: 0.75;
+        .umb-table, .table {
+            opacity: 0.50;
         }
     }
 
-    .list {
-        min-height: 120px;
+    div.list {
         position: relative;
     }
 
@@ -121,6 +120,26 @@
 
     @import '_table';
     @import '_pagination';
+
+    > .header {
+        display: flex;
+        margin-bottom: 10px;
+
+        label.control-label {
+            width: auto;
+            float: none;
+        }
+
+        div.filters {
+            margin-left: auto;
+
+            .btn {
+                padding: 6px 10px;
+                font-size: 12px;
+                line-height: 16px;
+            }
+        }
+    }
 }
 
 @import '_dialogs';
@@ -269,12 +288,19 @@
     }
 
     &.RedirectsRootId {
+
+        div {
+            position: relative;
+            height: 32px;
+        }
+
         select {
             width: 100%;
             box-sizing: border-box;
             line-height: 32px;
             height: 32px;
         }
+
     }
 
     &.RedirectsOriginalUrl {
