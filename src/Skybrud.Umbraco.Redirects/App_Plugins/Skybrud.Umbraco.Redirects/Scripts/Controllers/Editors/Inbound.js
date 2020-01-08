@@ -13,24 +13,17 @@
     // If we're neither in the content or media section, we stop further execution (eg. property editor preview)
     if ($scope.type != 'content' && $scope.type != 'media') return;
 
+    // Get the current editor state (the content or media being edited)
+    var state = editorState.getCurrent();
+
     $scope.addRedirect = function () {
-
-        // Get the current editor state (the content or media being edited)
-        var state = editorState.getCurrent();
-
-        // An item should have an URL before we can create a redirect to it
-        if (state.urls.length === 0) {
-            // TODO: Introduce more user friendly error handling
-            alert("NOPE!");
-            return;
-        }
 
         // Initialize a new object representing the destination
         var destination = {
             id: state.id,
             key: state.key,
-            name: state.variants[0].name,
-            url: state.urls[0].text,
+            name: state.variants ? state.variants[0].name : state.name,
+            url: state.mediaLink ? state.mediaLink : state.urls[0].text,
             type: state.udi.split("/")[2] === "media" ? "media" : "content"
         };
 
