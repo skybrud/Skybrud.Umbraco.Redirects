@@ -1,33 +1,40 @@
-﻿angular.module('umbraco').controller('SkybrudUmbracoRedirects.OutboundRedirectEditor.Controller', function ($scope) {
+﻿angular.module('umbraco').controller('SkybrudUmbracoRedirects.OutboundRedirectEditor.Controller', function ($scope, editorService, skybrudRedirectsService) {
 
     if (!$scope.model.value) $scope.model.value = {};
     if ($scope.model.value.permanent === undefined) $scope.model.value.permanent = true;
 
-    $scope.linkpicker = { items: [] };
+    
+    $scope.mode = $scope.model.value.permanent ? "permanent" : "temporary";
 
-    if ($scope.model.value.items) {
-        $scope.linkpicker = $scope.model.value.items;
-        delete $scope.model.value.items;
-    } else if ($scope.model.value.link) {
-        if ($scope.model.value.link.url) {
-            $scope.linkpicker = { items: [$scope.model.value.link] };
-        } else {
-            $scope.model.value.link = null;
-        }
+    function editLink(link) {
+        editorService.linkPicker({
+            currentTarget: link,
+            hideTarget: true,
+            submit: function (m) {
+                $scope.model.value.destination = skybrudRedirectsService.parseUmbracoLink(m.target);
+                editorService.close();
+            },
+            close: function () {
+                editorService.close();
+            }
+        });
     }
 
-    $scope.mode = $scope.model.value.permanent ? 'permanent' : 'temporary';
-
-    $scope.config = {
-        limit: 1
+    $scope.addLink = function () {
+        editLink();
     };
 
-    $scope.changed = function () {
-        $scope.model.value.permanent = $scope.mode === 'permanent';
+    $scope.editLink = function () {
+        editLink($scope.model.value.destination);
     };
 
-    $scope.$watch('linkpicker', function () {
-        $scope.model.value.link = $scope.linkpicker.items.length > 0 ? $scope.linkpicker.items[0] : null;
-    }, true);
+    $scope.removeLink = function () {
+        $scope.model.value.destination = null;
+    };
+
+    $scope.changed = function() {
+        $scope.model.value.permanent = $scope.mode === "permanent";
+    };
+
 
 });

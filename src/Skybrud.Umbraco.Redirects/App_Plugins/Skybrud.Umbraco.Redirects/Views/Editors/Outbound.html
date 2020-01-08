@@ -11,6 +11,21 @@
             </label>
         </div>
         <hr style="margin: 10px 0;" />
-        <skybrud-linkpicker value="linkpicker" config="config"></skybrud-linkpicker>
+        <div ng-if="model.value.destination" class="umb-node-preview" style="max-width: initial;">
+            <i ng-if="model.value.destination.type == 'content'" class="umb-node-preview__icon icon-document"></i>
+            <i ng-if="model.value.destination.type == 'media'" class="umb-node-preview__icon icon-picture"></i>
+            <i ng-if="model.value.destination.type == 'url'" class="umb-node-preview__icon icon-link"></i>
+            <div class="umb-node-preview__content">
+                <div class="umb-node-preview__name">{{model.value.destination.name}}</div>
+                <div class="umb-node-preview__description">{{model.value.destination.url}}</div>
+            </div>
+            <div class="umb-node-preview__actions">
+                <a class="umb-node-preview__action" href="" ng-click="editLink()"><localize key="general_edit">Edit</localize></a>
+                <a class="umb-node-preview__action umb-node-preview__action--red" href="" ng-click="removeLink()"><localize key="general_remove">Remove</localize></a>
+            </div>
+        </div>
+        <a ng-if="!model.value.destination" class="umb-node-preview-add" href="#" prevent-default="" ng-click="addLink()" style="max-width: initial;">
+            <localize key="redirects_selectDestination">Select destination</localize>
+        </a>
     </div>
 </div>

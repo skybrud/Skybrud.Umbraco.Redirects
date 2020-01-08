@@ -16,6 +16,7 @@
                 id: e.id || 0,
                 key: key,
                 url: e.url,
+                name: e.name,
                 type: type === "document" ? "content" : type
             };
 
