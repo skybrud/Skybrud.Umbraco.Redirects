@@ -2,7 +2,7 @@
   "propertyEditors": [
     {
       "alias": "Skybrud.Umbraco.Redirects",
-      "name": "Skybrud Redirects - Inbound redirects",
+      "name": "Inbound redirects",
       "group": "Skybrud.dk Redirects",
       "editor": {
         "view": "~/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/Inbound.html?v=0.3.1",
@@ -27,7 +27,7 @@
     },
     {
       "alias": "Skybrud.Umbraco.Redirects.OutboundRedirect",
-      "name": "Skybrud Redirects - Outbound redirect",
+      "name": "Outbound redirect",
       "group": "Skybrud.dk Redirects",
       "editor": {
         "view": "~/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/Outbound.html?v=0.3.1"
