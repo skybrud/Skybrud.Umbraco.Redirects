@@ -1,5 +1,6 @@
-Skybrud.Umbraco.Redirects
-=========================
+# Skybrud.Umbraco.Redirects [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md) [![NuGet](https://img.shields.io/nuget/v/Skybrud.Umbraco.Redirects.svg)](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects) [![NuGet](https://img.shields.io/nuget/dt/Skybrud.Umbraco.Redirects.svg)](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects)
+
+
 
 [Looking for the Umbraco 7 version of the package?](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/dev-v7)
 
@@ -13,10 +14,10 @@ URLs can be added to redirect to either a content item, media item or a custom U
 This is the recommend approach, as you install the [**NuGet Package**][NuGetPackage] in your Visual Studio project, and NuGet takes care of the rest.
 
 **Umbraco 8**  
-Latest release for Umbraco 8 is [**v2.0.2**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/releases/tag/v2.0.0):
+Latest release for Umbraco 8 is [**v2.0.3**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/releases/tag/v2.0.3):
 
 ```
-Install-Package Skybrud.Umbraco.Redirects -Version 2.0.2
+Install-Package Skybrud.Umbraco.Redirects -Version 2.0.3
 ```
 
 **Umbraco 7**  
@@ -25,6 +26,16 @@ Latest release for Umbraco 7 is [**v0.3.5**](https://github.com/skybrud/Skybrud.
 ```
 Install-Package Skybrud.Umbraco.Redirects -Version 0.3.5
 ```
+
+### Umbraco package
+
+**Umbraco 8**  
+Download the package from Our Umbraco - the Umbraco cummunity website:
+
+- <a href="https://our.umbraco.com/packages/website-utilities/skybrud-redirects/" target="_blank"><strong>Download Umbraco package</strong></a>
+
+**Umbraco 7**  
+There is no Umbraco package available for Umbraco 7. Please see either the [Install via NuGet](#install-via-nuget) option above or the [#manual-install] option below.
 
 ### Manual install
 You can also download a ZIP file of the latest release directly from GitHub, unzip, and move the contents to the root directory of your web application.
