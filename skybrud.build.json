@@ -29,6 +29,58 @@
             ]
           }
         ]
+      },
+      {
+        "alias": "umbraco",
+        "destination": "releases/umbraco/{packageName}.v{version}.zip",
+        "info": {
+          "name": "{packageName}",
+          "version": "{version}",
+          "url": "{projectUrl}",
+          "license": "{license}",
+          "licenseUrl": "{licenseUrl}",
+          "readme": "{description}",
+          "requirements": "8.1.0",
+          "author": {
+            "name": "{company}",
+            "url": "https://www.skybrud.dk/"
+          },
+          "contributors": [
+            "Anders Bjerner",
+            "René Pjengaard"
+          ],
+          "actions": [
+            {
+              "runat": "install",
+              "alias": "AddSkybrudRedirectsModule"
+            }
+          ]
+        },
+        "files": [
+          {
+            "source": "src/{packageName}/bin/Release/net472",
+            "destination": "bin/",
+            "patterns": [
+              "Skybrud.Essentials.dll",
+              "Skybrud.Essentials.xml",
+              "Skybrud.WebApi.Json.dll",
+              "Skybrud.WebApi.Json.xml",
+              "{packageName}.dll",
+              "{packageName}.xml"
+            ]
+          },
+          {
+            "source": "src/{packageName}/App_Plugins/Skybrud.Umbraco.Redirects",
+            "destination": "App_Plugins/Skybrud.Umbraco.Redirects/",
+            "patterns": [
+              "**/*.js",
+              "**/*.css",
+              "**/*.html",
+              "**/*.xml",
+              "package.manifest"
+            ]
+          }
+        ]
       }
     ]
   }
