@@ -131,11 +131,11 @@ namespace Skybrud.Umbraco.Redirects.Models {
             // Look up the actual URL for content and media
             switch (Type) {
                 case RedirectDestinationType.Content: {
-                    IPublishedContent content = Current.UmbracoContext.ContentCache.GetById(Id);
+                    IPublishedContent content = Current.UmbracoContext.Content.GetById(Id);
                     return content?.Name;
                 }
                 case RedirectDestinationType.Media: {
-                    IPublishedContent media = Current.UmbracoContext.MediaCache.GetById(Id);
+                    IPublishedContent media = Current.UmbracoContext.Media.GetById(Id);
                     return media?.Name;
                 }
             }
@@ -159,11 +159,11 @@ namespace Skybrud.Umbraco.Redirects.Models {
             // Look up the actual URL for content and media
             switch (Type) {
                 case RedirectDestinationType.Content: {
-                    IPublishedContent content = Current.UmbracoContext.ContentCache.GetById(Id);
+                    IPublishedContent content = Current.UmbracoContext.Content.GetById(Id);
                     return content == null ? RawUrl : content.Url;
                 }
                 case RedirectDestinationType.Media: {
-                    IPublishedContent media = Current.UmbracoContext.MediaCache.GetById(Id);
+                    IPublishedContent media = Current.UmbracoContext.Media.GetById(Id);
                     return media == null ? RawUrl : media.Url;
                 }
             }
