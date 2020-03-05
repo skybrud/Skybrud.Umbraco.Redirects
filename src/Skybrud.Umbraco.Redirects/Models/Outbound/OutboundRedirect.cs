@@ -21,26 +21,26 @@ namespace Skybrud.Umbraco.Redirects.Models.Outbound {
         /// <summary>
         /// Gets an instance of <see cref="RedirectDestination"/> representing the destination.
         /// </summary>
-        [JsonProperty("link")]
-        public RedirectDestination Link { get; }
+        [JsonProperty("destination")]
+        public RedirectDestination Destination { get; }
 
         /// <summary>
         /// Gets the URL of the redirects.
         /// </summary>
         [JsonIgnore]
-        public string Url => HasLink ? Link.Url : string.Empty;
+        public string Url => HasDestination ? Destination.Url : string.Empty;
 
         /// <summary>
         /// Same as <see cref="IsValid"/>.
         /// </summary>
         [JsonIgnore]
-        public bool HasLink => IsValid;
+        public bool HasDestination => IsValid;
 
         /// <summary>
         /// Gets whether the redirects has a valid link.
         /// </summary>
         [JsonIgnore]
-        public bool IsValid => Link != null && Link.IsValid;
+        public bool IsValid => Destination != null && Destination.IsValid;
 
         #endregion
 
@@ -51,7 +51,7 @@ namespace Skybrud.Umbraco.Redirects.Models.Outbound {
         /// </summary>
         public OutboundRedirect() : base(null) {
             IsPermanent = true;
-            Link = new RedirectDestination();
+            Destination = new RedirectDestination();
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace Skybrud.Umbraco.Redirects.Models.Outbound {
         /// <param name="obj">An instance of <see cref="JObject"/> representing the redirect.</param>
         protected OutboundRedirect(JObject obj) : base(obj) {
             IsPermanent = obj.GetBoolean("permanent");
-            Link = obj.GetObject(obj.HasValue("items") ? "items.items[0]" : "link", RedirectDestination.Parse) ?? new RedirectDestination();
+            Destination = obj.GetObject("destination", RedirectDestination.Parse) ?? new RedirectDestination();
         }
 
         #endregion
