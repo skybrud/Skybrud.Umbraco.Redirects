@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Skybrud.Essentials.Json;
 using Skybrud.Essentials.Json.Extensions;
@@ -37,6 +38,20 @@ namespace Skybrud.Umbraco.Redirects.Models.Outbound {
         public bool HasDestination => IsValid;
 
         /// <summary>
+        /// Same as <see cref="Destination"/>.
+        /// </summary>
+        [JsonIgnore]
+        [Obsolete("Use Destination instead.")]
+        public RedirectDestination Link => Destination;
+
+        /// <summary>
+        /// Same as <see cref="IsValid"/>.
+        /// </summary>
+        [JsonIgnore]
+        [Obsolete("Use HasDestination instead.")]
+        public bool HasLink => IsValid;
+
+        /// <summary>
         /// Gets whether the redirects has a valid link.
         /// </summary>
         [JsonIgnore]
@@ -60,7 +75,7 @@ namespace Skybrud.Umbraco.Redirects.Models.Outbound {
         /// <param name="obj">An instance of <see cref="JObject"/> representing the redirect.</param>
         protected OutboundRedirect(JObject obj) : base(obj) {
             IsPermanent = obj.GetBoolean("permanent");
-            Destination = obj.GetObject("destination", RedirectDestination.Parse) ?? new RedirectDestination();
+            Destination = RedirectDestination.Parse(obj.GetObject("destination") ?? obj.GetObject("link")) ?? new RedirectDestination();
         }
 
         #endregion
