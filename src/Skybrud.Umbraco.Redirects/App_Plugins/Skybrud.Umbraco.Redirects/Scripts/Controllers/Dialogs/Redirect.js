@@ -176,6 +176,14 @@
         // Make sure we set a loading state
         $scope.loading = true;
 
+        // Make sure we set the "rootNodeKey" property as well
+        if (redirect.rootNodeId > 0) {
+            var rootNode = $scope.options.rootNodes.find(x => x.id === redirect.rootNodeId);
+            redirect.rootNodeKey = rootNode ? rootNode.key : "00000000-0000-0000-0000-000000000000";
+        } else {
+            redirect.rootNodeKey = "00000000-0000-0000-0000-000000000000";
+        }
+
         if (redirect.key) {
             $http({
                 method: "POST",

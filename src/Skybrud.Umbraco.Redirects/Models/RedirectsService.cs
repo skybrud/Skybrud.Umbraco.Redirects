@@ -74,6 +74,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
             // Initialize the new redirect and populate the properties
             RedirectItem item = new RedirectItem {
                 RootId = model.RootNodeId,
+                RootKey = model.RootNodeKey,
                 LinkId = model.Destination.Id,
                 LinkKey = model.Destination.Key,
                 LinkUrl = model.Destination.Url,

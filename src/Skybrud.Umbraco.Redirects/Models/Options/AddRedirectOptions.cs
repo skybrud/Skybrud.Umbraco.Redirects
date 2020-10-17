@@ -1,13 +1,17 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace Skybrud.Umbraco.Redirects.Models.Options {
 
     public class AddRedirectOptions {
 
         #region Properties
-		
+
         [JsonProperty("rootNodeId")]
         public int RootNodeId { get; set; }
+
+        [JsonProperty("rootNodeKey")]
+        public Guid RootNodeKey { get; set; }
 
         [JsonProperty("originalurl")]
         public string OriginalUrl { get; set; }

@@ -58,6 +58,15 @@ namespace Skybrud.Umbraco.Redirects.Models {
         }
 
         /// <summary>
+        /// Gets or sets the root node ID of the redirect.
+        /// </summary>
+        [JsonProperty("rootKey")]
+        public Guid RootKey {
+            get => Dto.RootKey;
+            set { Dto.RootKey = value; _rootNode = null; _rootNodeDomains = null; }
+        }
+
+        /// <summary>
         /// Gets the name of the root node, or <c>null</c> if a global redirect.
         /// </summary>
         [JsonProperty("rootNodeName")]

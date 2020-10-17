@@ -1,3 +1,4 @@
+using System;
 using Newtonsoft.Json;
 using Umbraco.Core.Models;
 
@@ -15,6 +16,12 @@ namespace Skybrud.Umbraco.Redirects.Models {
         public int Id { get; }
 
         /// <summary>
+        /// Gets the GUID of the root node.
+        /// </summary>
+        [JsonProperty("key")]
+        public Guid Key { get; }
+
+        /// <summary>
         /// Gets the name of the root node.
         /// </summary>
         [JsonProperty("name")]
@@ -28,6 +35,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
         private RedirectRootNode(IContent content) {
             Id = content.Id;
+            Key = content.Key;
             Name = content.Name;
             Icon = content.ContentType.Icon;
         }
