@@ -1,4 +1,4 @@
-﻿angular.module('umbraco').controller('SkybrudUmbracoRedirects.Dashboard.Controller', function ($scope, $http, $q, $timeout, editorService, notificationsService, localizationService, skybrudRedirectsService) {
+﻿angular.module('umbraco').controller('SkybrudUmbracoRedirects.Dashboard.Controller', function ($scope, $http, $q, $timeout, editorService, notificationsService, localizationService, skybrudRedirectsService, eventsService) {
 
     $scope.redirects = [];
     $scope.mode = 'list';
@@ -176,5 +176,29 @@
     $scope.$watch('filters', function () {
         $scope.updateList();
     }, true);
+
+    $scope.buttonGroups = [
+        {
+            alias: "add",
+            buttonStyle: "success",
+            defaultButton: {
+                labelKey: "redirects_addNewRedirect",
+                handler: $scope.addRedirect
+            },
+            subButtons: []
+        },
+        {
+            alias: "refresh",
+            defaultButton: {
+                labelKey: "redirects_reload",
+                handler: $scope.updateList
+            },
+            subButtons: []
+        }
+    ];
+
+    eventsService.emit("skybrud.umbraco.redirects.dashboard.init", {
+        buttonGroups: $scope.buttonGroups
+    });
 
 });

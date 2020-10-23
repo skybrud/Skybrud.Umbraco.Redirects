@@ -7,12 +7,14 @@
             <select style="margin-right: 10px;" ng-options="item as item.name for item in rootNodes track by item.id" ng-model="filters.rootNode" no-dirty-check></select>
             <select style="margin-right: 10px;" ng-options="item as item.name for item in types track by item.value" ng-model="filters.type" no-dirty-check></select>
             <input type="text" ng-model="filters.text" no-dirty-check placeholder="typeToSearch" localize="placeholder" style="max-width: initial; flex: 1; margin-right: 100px;" />
-            <a href="#" prevent-default ng-click="addRedirect()" class="btn btn-success">
-                <localize key="redirects_addNewRedirect">Add new redirect</localize>
-            </a>
-            <a href="#" prevent-default ng-click="updateList()" class="btn btn-default">
-                <localize key="redirects_reload">Reload</localize>
-            </a>
+            <umb-button-group
+                ng-repeat="bg in buttonGroups"
+                              button-style="{{bg.buttonStyle}}"
+                              default-button="bg.defaultButton"
+                              sub-buttons="bg.subButtons"
+                              direction="down"
+                              float="right">
+            </umb-button-group>
         </div>
         <div ng-class="{loading: loading}">
             <umb-load-indicator></umb-load-indicator>
