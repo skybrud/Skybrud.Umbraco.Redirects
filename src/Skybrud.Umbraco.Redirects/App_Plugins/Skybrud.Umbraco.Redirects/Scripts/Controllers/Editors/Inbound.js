@@ -1,4 +1,4 @@
-﻿angular.module('umbraco').controller('SkybrudUmbracoRedirects.PropertyEditor.Controller', function ($scope, $routeParams, $http, $q, $timeout, notificationsService, skybrudRedirectsService, editorState) {
+﻿angular.module('umbraco').controller('SkybrudUmbracoRedirects.PropertyEditor.Controller', function ($scope, $routeParams, $http, $q, $timeout, localizationService, notificationsService, skybrudRedirectsService, editorState) {
 
     $scope.route = $routeParams;
     $scope.redirects = [];
@@ -16,6 +16,23 @@
     // Get the current editor state (the content or media being edited)
     var state = editorState.getCurrent();
 
+
+
+    $scope.rootNodes = [
+        { name: "All sites", value: "" }
+    ];
+
+    localizationService.localize("redirects_allSites").then(function (value) {
+        $scope.rootNodes[0].name = value;
+    });
+
+    skybrudRedirectsService.getRootNodes().then(function (r) {
+        r.data.items.forEach(function (rootNode) {
+            $scope.rootNodes.push(rootNode);
+        });
+    });
+
+
     $scope.addRedirect = function () {
 
         // Initialize a new object representing the destination
@@ -30,6 +47,7 @@
         skybrudRedirectsService.addRedirect({
             destination: destination,
             hideRootNodeOption: $scope.model.config.hideRootNodeOption,
+            rootNodes: $scope.rootNodes,
             callback: function () {
                 $scope.updateList();
             }
@@ -40,6 +58,7 @@
     $scope.editRedirect = function (redirect) {
         skybrudRedirectsService.editRedirect(redirect, {
             hideRootNodeOption: $scope.model.config.hideRootNodeOption,
+            rootNodes: $scope.rootNodes,
             callback: function () {
                 $scope.updateList();
             }
