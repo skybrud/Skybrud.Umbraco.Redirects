@@ -2,7 +2,7 @@
 
 
 
-[Looking for the Umbraco 7 version of the package?](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/dev-v7)
+[Looking for the Umbraco 7 version of the package?](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v1/latest)
 
 **Skybrud.Umbraco.Redirects** is a redirects manager for Umbraco 8. The package features a dashboard and property editor that let's users manage inbound redirects from within the Umbraco backoffice.
 
@@ -14,17 +14,17 @@ URLs can be added to redirect to either a content item, media item or a custom U
 This is the recommend approach, as you install the [**NuGet Package**][NuGetPackage] in your Visual Studio project, and NuGet takes care of the rest.
 
 **Umbraco 8**  
-Latest release for Umbraco 8 is [**v2.0.5**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/releases/tag/v2.0.5):
+Latest release for Umbraco 8 is [**v2.0.6**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/releases/tag/v2.0.6):
 
 ```
-Install-Package Skybrud.Umbraco.Redirects -Version 2.0.5
+Install-Package Skybrud.Umbraco.Redirects -Version 2.0.6
 ```
 
 **Umbraco 7**  
-Latest release for Umbraco 7 is [**v0.3.5**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/releases/tag/v0.3.5):
+Latest release for Umbraco 7 is [**v1.0.0**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/releases/tag/v1.0.0):
 
 ```
-Install-Package Skybrud.Umbraco.Redirects -Version 0.3.5
+Install-Package Skybrud.Umbraco.Redirects -Version 1.0.0
 ```
 
 ### Umbraco package
@@ -69,9 +69,9 @@ You can also download a ZIP file of the latest release directly from GitHub, unz
 
 - Property editor that can be added to either a content item or media item to show inbound redirects
 
-- Package only handles custom redirecs - eg. added manually by an editor. The will let Umbraco 7.5+ handle redirects for renamed pages
+- Package only handles custom redirecs - eg. added manually by an editor. The package will let Umbraco 7.5+ handle redirects for renamed pages
 
-- Includes a `RedirectsRepository` for managing the redirects from your own code
+- Includes a `RedirectsService` for managing the redirects from your own code
 
 [NuGetPackage]: https://www.nuget.org/packages/Skybrud.Umbraco.Redirects
 [GitHubRelease]: https://github.com/skybrud/Skybrud.Umbraco.Redirects/releases
