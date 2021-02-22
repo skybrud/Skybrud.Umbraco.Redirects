@@ -16,27 +16,27 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// <summary>
         /// Adds a new permanent redirect matching the specified inbound <paramref name="url"/>. A request to
         /// <paramref name="url"/> will automatically be redirected to the URL of the specified
-        /// <paramref name="destionation"/> link.
+        /// <paramref name="destination"/> link.
         /// </summary>
         /// <param name="rootNodeId">THe ID of the root/side node. Use <c>0</c> for a global redirect.</param>
         /// <param name="url">The inbound URL to match.</param>
-        /// <param name="destionation">An instance of <see cref="RedirectDestination"/> representing the destination link.</param>
+        /// <param name="destination">An instance of <see cref="RedirectDestination"/> representing the destination link.</param>
         /// <returns>An instance of <see cref="RedirectItem"/> representing the created redirect.</returns>
-        RedirectItem AddRedirect(int rootNodeId, string url, RedirectDestination destionation);
+        RedirectItem AddRedirect(int rootNodeId, string url, RedirectDestination destination);
 
         /// <summary>
         /// Adds a new redirect matching the specified inbound <paramref name="url"/>. A request to
         /// <paramref name="url"/> will automatically be redirected to the URL of the specified
-        /// <paramref name="destionation"/> link.
+        /// <paramref name="destination"/> link.
         /// </summary>
         /// <param name="rootNodeId">THe ID of the root/side node. Use <c>0</c> for a global redirect.</param>
         /// <param name="url">The inbound URL to match.</param>
-        /// <param name="destionation">An instance of <see cref="RedirectDestination"/> representing the destination link.</param>
+        /// <param name="destination">An instance of <see cref="RedirectDestination"/> representing the destination link.</param>
         /// <param name="permanent">Whether the redirect should be permanent (301) or temporary (302).</param>
         /// <param name="isRegex">Whether regex should be enabled for the redirect.</param>
         /// <param name="forwardQueryString">Whether the redirect should forward the original query string.</param>
         /// <returns>An instance of <see cref="RedirectItem"/> representing the created redirect.</returns>
-        RedirectItem AddRedirect(int rootNodeId, string url, RedirectDestination destionation, bool permanent, bool isRegex, bool forwardQueryString);
+        RedirectItem AddRedirect(int rootNodeId, string url, RedirectDestination destination, bool permanent, bool isRegex, bool forwardQueryString);
 
         /// <summary>
         /// Saves the specified <paramref name="redirect"/>.
