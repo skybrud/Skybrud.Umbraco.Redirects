@@ -23,7 +23,7 @@
 }
 .SkybrudUmbracoRedirects .umb-table-cell.col-id {
   max-width: 50px;
-  padding: 6px 2px;
+  padding: 6px 16px;
 }
 .SkybrudUmbracoRedirects .umb-table-cell.col-arrow {
   max-width: 25px;
@@ -88,6 +88,9 @@
 }
 .SkybrudUmbracoRedirects .umb-table {
   background: #fff;
+  box-shadow: none;
+  border: 1px solid #e9e9eb;
+  border-radius: 0;
 }
 .SkybrudUmbracoRedirects .umb-table-body .umb-table-row.-no-hover:hover {
   background-color: #fff;
@@ -98,6 +101,7 @@
 }
 .SkybrudUmbracoRedirects .umb-table-foot .umb-table-row {
   border-top: 1px solid #d9d9d9;
+  padding-left: 16px;
 }
 .SkybrudUmbracoRedirects .umb-table-foot .umb-table-cell:first-of-type {
   padding: initial;
