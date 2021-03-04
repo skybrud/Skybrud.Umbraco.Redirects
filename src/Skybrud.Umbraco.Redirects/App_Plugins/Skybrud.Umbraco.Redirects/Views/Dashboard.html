@@ -77,8 +77,8 @@
                         <div class="umb-table-cell col-date">{{redirect.created | date: 'yyyy-MM-dd HH:mm'}}</div>
                         <div class="umb-table-cell col-date">{{redirect.updated | date: 'yyyy-MM-dd HH:mm'}}</div>
                         <div class="umb-table-cell col-actions justify-end">
-                            <a href="#" prevent-default="" ng-click="editRedirect(redirect)" class="umb-era-button umb-button--s"><localize key="redirects_edit">Edit</localize></a>
-                            <a href="#" prevent-default="" ng-click="deleteRedirect(redirect)" class="umb-era-button umb-button--s -red"><localize key="redirects_delete">Delete</localize></a>
+                            <button type="button" prevent-default="" ng-click="editRedirect(redirect)" class="umb-era-button umb-button--s"><localize key="redirects_edit">Edit</localize></button>
+                            <button type="button" ng-click="deleteRedirect(redirect)" class="umb-era-button umb-button--s -red"><localize key="redirects_delete">Delete</localize></button>
                         </div>
                     </div>
                 </div>
