@@ -5,7 +5,7 @@
       "name": "Inbound redirects",
       "group": "Skybrud.dk Redirects",
       "editor": {
-        "view": "~/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/Inbound.html?v=2.0.6",
+        "view": "~/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/Inbound.html?v=2.0.7",
         "hideLabel": true
       },
       "prevalues": {
@@ -30,7 +30,7 @@
       "name": "Outbound redirect",
       "group": "Skybrud.dk Redirects",
       "editor": {
-        "view": "~/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/Outbound.html?v=2.0.6"
+        "view": "~/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/Outbound.html?v=2.0.7"
       }
     }
   ],
@@ -52,7 +52,7 @@
     {
       "alias": "Skybrud.Umbraco.Redirects",
       "sections": [ "content" ],
-      "view": "~/App_Plugins/Skybrud.Umbraco.Redirects/Views/Dashboard.html?v=2.0.6"
+      "view": "~/App_Plugins/Skybrud.Umbraco.Redirects/Views/Dashboard.html?v=2.0.7"
     }
   ]
 }

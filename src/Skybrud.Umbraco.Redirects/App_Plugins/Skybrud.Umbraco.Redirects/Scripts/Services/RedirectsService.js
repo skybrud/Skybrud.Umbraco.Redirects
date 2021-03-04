@@ -79,7 +79,7 @@
 
             var o = {
                 size: "small",
-                view: "/App_Plugins/Skybrud.Umbraco.Redirects/Views/Dialogs/Redirect.html",
+                view: "/App_Plugins/Skybrud.Umbraco.Redirects/Views/Dialogs/Redirect.html?v=2.0.7",
                 options: options,
                 submit: function(value) {
                     if (options.callback) options.callback(value);
