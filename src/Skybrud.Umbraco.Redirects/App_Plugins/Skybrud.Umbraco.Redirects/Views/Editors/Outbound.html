@@ -24,8 +24,8 @@
                 <a class="umb-node-preview__action umb-node-preview__action--red" href="" ng-click="removeLink()"><localize key="general_remove">Remove</localize></a>
             </div>
         </div>
-        <a ng-if="!model.value.destination" class="umb-node-preview-add" href="#" prevent-default="" ng-click="addLink()" style="max-width: initial;">
+        <button type="button" ng-if="!model.value.destination" class="umb-node-preview-add" ng-click="addLink()" style="max-width: initial;">
             <localize key="redirects_selectDestination">Select destination</localize>
-        </a>
+        </button>
     </div>
 </div>
