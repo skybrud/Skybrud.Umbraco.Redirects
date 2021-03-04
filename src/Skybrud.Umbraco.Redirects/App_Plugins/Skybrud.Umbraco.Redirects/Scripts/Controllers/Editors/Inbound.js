@@ -1,4 +1,4 @@
-﻿angular.module('umbraco').controller('SkybrudUmbracoRedirects.PropertyEditor.Controller', function ($scope, $routeParams, $http, $q, $timeout, localizationService, notificationsService, skybrudRedirectsService, editorState) {
+﻿angular.module('umbraco').controller('SkybrudUmbracoRedirects.PropertyEditor.Controller', function ($scope, $routeParams, $http, $q, $timeout, localizationService, notificationsService, overlayService, skybrudRedirectsService, editorState) {
 
     $scope.route = $routeParams;
     $scope.redirects = [];
@@ -66,11 +66,36 @@
     };
 
     $scope.deleteRedirect = function (redirect) {
-        var url = redirect.url + (redirect.queryString ? '?' + redirect.queryString : '');
-        if (!confirm('Are you sure you want do delete the redirect at "' + url + '" ?')) return;
-        skybrudRedirectsService.deleteRedirect(redirect, function () {
-            $scope.updateList();
-        });
+
+        const url = redirect.url + (redirect.queryString ? `?${redirect.queryString}` : "");
+
+        // TODO: Localize overlay labels
+
+        const overlay = {
+            title: "Confirm delete",
+            content: `Are you sure you want to delete the redirect at "${url}" ?`,
+            submit: function () {
+
+                // Update the button state in the UI
+                overlay.submitButtonState = "busy";
+
+                // Delete the redirect
+                skybrudRedirectsService.deleteRedirect(redirect, function () {
+                    overlayService.close();
+                    $scope.updateList();
+                }, function () {
+                    overlay.submitButtonState = "error";
+                });
+
+            },
+            close: function () {
+                overlayService.close();
+            }
+        };
+
+        // Open the overlay
+        overlayService.confirmDelete(overlay);
+
     };
 
     $scope.updateList = function () {

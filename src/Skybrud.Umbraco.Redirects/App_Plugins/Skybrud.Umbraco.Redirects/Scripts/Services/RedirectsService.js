@@ -117,7 +117,7 @@
 
         },
 
-        deleteRedirect: function (redirect, callback) {
+        deleteRedirect: function (redirect, success, failed) {
             $http({
                 method: "GET",
                 url: "/umbraco/backoffice/Skybrud/Redirects/DeleteRedirect",
@@ -126,9 +126,10 @@
                 }
             }).then(function () {
                 notificationsService.success("Redirect deleted", "Your redirect was successfully deleted.");
-                if (callback) callback(redirect);
+                if (success) success(redirect);
             }, function (res) {
                 notificationsService.error("Deleting redirect failed", res && res.data && res.data.meta ? res.data.meta.error : "The server was unable to delete your redirect.");
+                if (failed) failed(redirect);
             });
         },
 
