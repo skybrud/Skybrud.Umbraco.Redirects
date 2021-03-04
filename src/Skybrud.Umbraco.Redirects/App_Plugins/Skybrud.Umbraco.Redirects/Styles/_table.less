@@ -1,8 +1,25 @@
-﻿.umb-table {
+﻿
+@table-border-color: #d9d9d9;
+
+.umb-table {
     background: #fff;
     box-shadow: none;
-    border: 1px solid #e9e9eb;
+    border: 1px solid @table-border-color;
     border-radius: 0;
+
+    .umb-table-head {
+        color: #515054;
+    }
+
+    .umb-table-body {
+        .umb-table-row {
+            border-top: 1px solid @table-border-color;
+        }
+    }
+
+    .btn.red {
+        color: @red;
+    }
 }
 
 .umb-table-body .umb-table-row.-no-hover:hover {
@@ -15,7 +32,7 @@
     background-color: #f8f8f8;
 
     .umb-table-row {
-        border-top: 1px solid #d9d9d9;
+        border-top: 1px solid @table-border-color;
         padding-left: 16px;
     }
 
