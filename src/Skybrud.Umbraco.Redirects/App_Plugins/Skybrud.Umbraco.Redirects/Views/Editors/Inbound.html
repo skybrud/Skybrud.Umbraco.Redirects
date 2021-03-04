@@ -7,12 +7,12 @@
         </label>
         <div ng-if="mode == 'list'" class="filters">
             <div>
-                <a href="#" prevent-default ng-click="addRedirect()" class="btn btn-success">
+                <button type="button" ng-click="addRedirect()" class="btn btn-success">
                     <localize key="redirects_addNewRedirect">Add new redirect</localize>
-                </a>
-                <a href="#" prevent-default ng-click="updateList()" class="btn btn-default">
+                </button>
+                <button type="button" ng-click="updateList()" class="btn btn-default">
                     <localize key="redirects_reload">Reload</localize>
-                </a>
+                </button>
             </div>
         </div>
     </div>
@@ -76,8 +76,8 @@
                         <td class="col-date">{{redirect.created | date: 'yyyy-MM-dd HH:mm'}}</td>
                         <td class="col-date">{{redirect.updated | date: 'yyyy-MM-dd HH:mm'}}</td>
                         <td class="col-actions">
-                            <a href="#" prevent-default="" ng-click="editRedirect(redirect)" class="btn btn-link"><localize key="redirects_edit">Edit</localize></a>
-                            <a href="#" prevent-default="" ng-click="deleteRedirect(redirect)" class="btn btn-link red"><localize key="redirects_delete">Delete</localize></a>
+                            <button type="button" ng-click="editRedirect(redirect)" class="btn btn-link"><localize key="redirects_edit">Edit</localize></button>
+                            <button type="button" ng-click="deleteRedirect(redirect)" class="btn btn-link red"><localize key="redirects_delete">Delete</localize></button>
                         </td>
                     </tr>
                 </tbody>
