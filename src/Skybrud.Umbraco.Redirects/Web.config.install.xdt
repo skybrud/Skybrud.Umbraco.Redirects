@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<configuration xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
-  <system.webServer>
-    <modules>
-      <remove name="RedirectsModule" xdt:Transform="InsertIfMissing" xdt:Locator="Match(name)" />
-      <add name="RedirectsModule" type="Skybrud.Umbraco.Redirects.Routing.RedirectsModule, Skybrud.Umbraco.Redirects" xdt:Transform="InsertIfMissing" xdt:Locator="Match(name)" />
-    </modules>
-  </system.webServer>
-</configuration>

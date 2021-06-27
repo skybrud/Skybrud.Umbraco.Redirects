@@ -39,6 +39,10 @@ namespace Skybrud.Umbraco.Redirects.Exceptions {
             StatusCode = statusCode;
         }
 
+        public RedirectsException(string message, Exception innerException) : base(message, innerException) {
+            StatusCode = HttpStatusCode.InternalServerError;
+        }
+
     }
 
 }

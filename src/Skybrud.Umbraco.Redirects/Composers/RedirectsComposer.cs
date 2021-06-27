@@ -1,16 +1,26 @@
-﻿using Skybrud.Umbraco.Redirects.Models;
-using Skybrud.Umbraco.Redirects.Routing;
-using Umbraco.Core;
-using Umbraco.Core.Composing;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Skybrud.Umbraco.Redirects.Components;
+using Skybrud.Umbraco.Redirects.Services;
+using Skybrud.Umbraco.Redirects.Startup;
+using Umbraco.Cms.Core.Composing;
+using Umbraco.Cms.Core.DependencyInjection;
+using Umbraco.Extensions;
 
 namespace Skybrud.Umbraco.Redirects.Composers {
-
-    [RuntimeLevel(MinLevel = RuntimeLevel.Boot)]
+    
     public class RedirectsComposer : IUserComposer {
+        
+        public void Compose(IUmbracoBuilder builder) {
 
-        public void Compose(Composition composition) {
-            composition.Register<IRedirectsService, RedirectsService>();
-            composition.Register<RedirectsInjectedModule, RedirectsInjectedModule>(); 
+            builder.Services.AddUnique<IRedirectsService, RedirectsService>();
+            
+            builder.Components().Append<MigrationComponent>();
+
+            builder.Services.Insert(0,
+                new ServiceDescriptor(typeof(IStartupFilter), _ => new RedirectsStartupFilter(),
+                    ServiceLifetime.Transient));
+
         }
 
     }

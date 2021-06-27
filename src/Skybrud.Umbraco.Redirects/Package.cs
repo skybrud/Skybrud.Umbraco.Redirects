@@ -1,5 +1,5 @@
 ﻿using System;
-using Semver;
+using Umbraco.Cms.Core.Semver;
 
 namespace Skybrud.Umbraco.Redirects {
 
@@ -26,7 +26,7 @@ namespace Skybrud.Umbraco.Redirects {
         /// <summary>
         /// Gets the semantic version of the package.
         /// </summary>
-        public static readonly SemVersion SemVersion = new SemVersion(Version.Major, Version.Minor, Version.Build);
+        public static readonly SemVersion SemVersion = new(Version.Major, Version.Minor, Version.Build);
 
     }
 

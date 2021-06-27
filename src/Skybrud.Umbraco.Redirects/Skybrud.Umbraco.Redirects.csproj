@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>2.0.7</Version>
+    <Version>3.0.0-alpha001</Version>
     <Authors>Anders Bjerner</Authors>
     <Company>Skybrud.dk</Company>
-    <Description>Redirects manager for Umbraco 8.</Description>
+    <Description>Redirects manager for Umbraco 9.</Description>
     <Copyright>Copyright © 2021</Copyright>
   </PropertyGroup>
 
@@ -23,15 +23,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="System.Web" />
-    <PackageReference Include="Skybrud.Essentials" Version="1.1.26" />
-    <PackageReference Include="UmbracoCms.Core" Version="8.1.0">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="UmbracoCms.Web" Version="8.1.0">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Skybrud.WebApi.Json" Version="1.0.4" />
+    <PackageReference Include="Skybrud.Essentials" Version="1.1.29" />
+    <PackageReference Include="Umbraco.Cms.Core" Version="9.0.0-beta001" />
+    <PackageReference Include="Umbraco.Cms.Web.Website" Version="9.0.0-beta001" />
+    <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="9.0.0-beta001" />
   </ItemGroup>
   
   <ItemGroup>
@@ -39,11 +34,7 @@
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\**\*.html" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\**\*.js" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Lang\*.xml" />
-    <None Remove="Web.config.install.xdt" />
-    <None Remove="Web.config.uninstall.xdt" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\package.manifest" />
-    <Content Include="Web.config.install.xdt" />
-    <Content Include="Web.config.uninstall.xdt" />
   </ItemGroup>
   
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(ConfigurationName)'=='Release' AND '$(BuildTools)'=='1'">

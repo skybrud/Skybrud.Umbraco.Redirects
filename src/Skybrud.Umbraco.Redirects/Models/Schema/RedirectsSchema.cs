@@ -1,23 +1,23 @@
 ﻿using System;
 using NPoco;
-using Umbraco.Core.Persistence.DatabaseAnnotations;
+using Umbraco.Cms.Infrastructure.Persistence.DatabaseAnnotations;
 
-namespace Skybrud.Umbraco.Redirects.Models.Database {
+namespace Skybrud.Umbraco.Redirects.Models.Dtos {
 
     /// <summary>
-    /// Class representing the database row of a redirect.
+    /// Class representing the schema of the redirects database table.
     /// </summary>
     [TableName(TableName)]
-    [PrimaryKey("Id", AutoIncrement = true)]
+    [PrimaryKey(nameof(Id), AutoIncrement = true)]
     [ExplicitColumns]
-    public class RedirectItemDto {
+    public class RedirectSchema {
 
         #region Constants
 
         /// <summary>
         /// Gets the name of the table used in the database.
         /// </summary>
-        public const string TableName = RedirectItemSchema.TableName;
+        public const string TableName = "SkybrudRedirects";
 
         #endregion
 
@@ -26,7 +26,7 @@ namespace Skybrud.Umbraco.Redirects.Models.Database {
         /// <summary>
         /// Gets or sets the numeric ID (primary key) of the redirect.
         /// </summary>
-        [Column("Id")]
+        [Column(nameof(Id))]
         [PrimaryKeyColumn(AutoIncrement = true)]
         public int Id { get; set; }
 
@@ -102,22 +102,22 @@ namespace Skybrud.Umbraco.Redirects.Models.Database {
         /// Gets or sets whether the redirect is permanent.
         /// </summary>
         [Column("IsPermanent")]
-		public bool IsPermanent { get; set; }
+        public bool IsPermanent { get; set; }
 
         /// <summary>
         /// Gets or sets whether <see cref="Url"/> is a REGEX pattern.
         /// </summary>
         [Column("IsRegex")]
-		public bool IsRegex { get; set; }
+        public bool IsRegex { get; set; }
 
         /// <summary>
         /// Gets or sets whether the query string should be forwarded.
         /// </summary>
         [Column("ForwardQueryString")]
-		public bool ForwardQueryString { get; set; }
+        public bool ForwardQueryString { get; set; }
 
-		#endregion
+        #endregion
 
-	}
+    }
 
 }
