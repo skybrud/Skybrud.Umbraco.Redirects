@@ -1,4 +1,5 @@
 ﻿using System;
+using Skybrud.Umbraco.Redirects.Events;
 using Skybrud.Umbraco.Redirects.Models.Options;
 
 namespace Skybrud.Umbraco.Redirects.Models {
@@ -127,6 +128,15 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
         string HandleForwardQueryString(RedirectItem redirect, string rawurl);
 
+        /// <summary>
+        /// Updates the last used date for the specified <paramref name="redirect"/>.
+        /// </summary>
+        /// <param name="redirect">The redirect to be updated.</param>
+        void UpdateLastUsedDate(RedirectItem redirect);
+
+        void OnRedirectServed(RedirectServedEventArgs e);
+
+        event EventHandler<RedirectServedEventArgs> RedirectServed;
     }
 
 }

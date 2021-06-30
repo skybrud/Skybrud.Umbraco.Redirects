@@ -9,6 +9,7 @@ using WebComposing = Umbraco.Web.Composing;
 using System.Text.RegularExpressions;
 using NPoco;
 using Skybrud.Essentials.Time;
+using Skybrud.Umbraco.Redirects.Events;
 using Skybrud.Umbraco.Redirects.Models.Database;
 using Skybrud.Umbraco.Redirects.Models.Options;
 using Umbraco.Core.Composing;
@@ -587,6 +588,51 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
 			return newRedirectUrl;
 	    }
+
+        /// <summary>
+        /// Updates the last used date for the specified <paramref name="redirect"/>.
+        /// </summary>
+        /// <param name="redirect">The redirect to be updated.</param>
+        public void UpdateLastUsedDate(RedirectItem redirect)
+        {
+            // Some input validation
+            if (redirect == null) throw new ArgumentNullException(nameof(redirect));
+
+            redirect.Dto.LastUsed = DateTime.UtcNow;
+
+            // Remove the redirect from the database
+            using (var scope = _scopeProvider.CreateScope())
+            {
+                try
+                {
+                    scope.Database.Update(redirect.Dto);
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error<RedirectsService>("Unable to update last used date for the redirect in the database", ex);
+                    throw new Exception("Unable to update the last used date for the redirect in the database", ex);
+                }
+                scope.Complete();
+            }
+
+        }
+
+        /// <summary>
+        /// Event which gets called when a redirect has been served.
+        /// This allows you to hook into the event and do things like
+        /// logging when the redirect was last used
+        /// </summary>
+        /// <param name="e">The event args</param>
+        public virtual void OnRedirectServed(RedirectServedEventArgs e)
+        {
+            EventHandler<RedirectServedEventArgs> handler = RedirectServed;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        public event EventHandler<RedirectServedEventArgs> RedirectServed;
 
         #endregion
 

@@ -24,6 +24,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         private string[] _rootNodeDomains;
         private EssentialsTime _created;
         private EssentialsTime _updated;
+        private DateTime? _lastUsed;
         private RedirectDestinationType _linkMode;
 
         #endregion
@@ -266,9 +267,20 @@ namespace Skybrud.Umbraco.Redirects.Models {
 		    set => Dto.ForwardQueryString = value;
 		}
 
-		#endregion
+        /// <summary>
+        /// Gets or sets the timestamp for when the redirect was last used.
+        /// </summary>
+        [JsonProperty("lastUsed")]
+        [JsonConverter(typeof(TimeConverter))]
+        public DateTime? LastUsed
+        {
+            get => _lastUsed;
+            set { _lastUsed = value; }
+        }
 
-		#region Constructors
+        #endregion
+
+        #region Constructors
 
         internal RedirectItem(AddRedirectOptions options) {
 
@@ -297,7 +309,6 @@ namespace Skybrud.Umbraco.Redirects.Models {
             IsPermanent = options.IsPermanent;
             IsRegex = options.IsRegex;
             ForwardQueryString = options.ForwardQueryString;
-
         }
 
 		internal RedirectItem(RedirectItemDto dto) {

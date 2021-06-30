@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web;
 using Skybrud.Umbraco.Redirects.Domains;
+using Skybrud.Umbraco.Redirects.Events;
 using Skybrud.Umbraco.Redirects.Models;
 using Umbraco.Core.Services;
 using Umbraco.Web;
@@ -74,23 +75,27 @@ namespace Skybrud.Umbraco.Redirects.Routing {
 
 			if (redirect.ForwardQueryString) redirectUrl = _redirects.HandleForwardQueryString(redirect, application.Request.RawUrl);
 
-			//if (redirect.IsRegex)
-			//{
-			//    var regex = new Regex(redirect.Url);
+            //if (redirect.IsRegex)
+            //{
+            //    var regex = new Regex(redirect.Url);
 
-			//    if (_capturingGroupsRegex.IsMatch(redirectUrl))
-			//    {
-			//        redirectUrl = regex.Replace(redirect.Url, redirectUrl);
-			//    }
-			//}
+            //    if (_capturingGroupsRegex.IsMatch(redirectUrl))
+            //    {
+            //        redirectUrl = regex.Replace(redirect.Url, redirectUrl);
+            //    }
+            //}
 
-			// Redirect to the URL
-			if (redirect.IsPermanent) {
+            _redirects.OnRedirectServed(new RedirectServedEventArgs()
+            {
+                Redirect = redirect
+            });
+
+            // Redirect to the URL
+            if (redirect.IsPermanent) {
                 application.Response.RedirectPermanent(redirectUrl);
             } else {
                 application.Response.Redirect(redirectUrl);
             }
-
         }
 
         private Domain GetUmbracoDomain(HttpRequest request) {
@@ -109,7 +114,6 @@ namespace Skybrud.Umbraco.Redirects.Routing {
         }
 
         #endregion
-
     }
 
 }
