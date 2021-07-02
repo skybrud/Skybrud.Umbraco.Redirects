@@ -49,11 +49,11 @@ namespace Skybrud.Umbraco.Redirects.Models.Dtos {
         public Guid RootKey { get; set; }
 
         /// <summary>
-        /// Gets the inbound URL (path) of the redirect. The value value will not contain the domain or the query
+        /// Gets the inbound path of the redirect. The value value will not contain the domain or the query.
         /// string.
         /// </summary>
         [Column("Url")]
-        public string Url { get; set; }
+        public string Path { get; set; }
 
         /// <summary>
         /// Gets or sets the inbound query string of the redirect.
@@ -105,7 +105,7 @@ namespace Skybrud.Umbraco.Redirects.Models.Dtos {
         public bool IsPermanent { get; set; }
 
         /// <summary>
-        /// Gets or sets whether <see cref="Url"/> is a REGEX pattern.
+        /// Gets or sets whether <see cref="Path"/> is a REGEX pattern.
         /// </summary>
         [Column("IsRegex")]
         public bool IsRegex { get; set; }

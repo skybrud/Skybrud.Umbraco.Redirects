@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.Extensions.Logging;
 using Skybrud.Essentials.Time;
 using Skybrud.Umbraco.Redirects.Exceptions;
+using Skybrud.Umbraco.Redirects.Extensions;
 using Skybrud.Umbraco.Redirects.Models;
 using Skybrud.Umbraco.Redirects.Models.Dtos;
 using Skybrud.Umbraco.Redirects.Models.Options;
 using Umbraco.Cms.Core.Models.PublishedContent;
+using Umbraco.Cms.Core.Routing;
 using Umbraco.Cms.Core.Scoping;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
@@ -18,81 +20,93 @@ namespace Skybrud.Umbraco.Redirects.Services {
     
     public class RedirectsService : IRedirectsService {
         
+        private readonly ILogger<RedirectsService> _logger;
         private readonly IScopeProvider _scopeProvider;
         private readonly IDomainService _domains;
         private readonly IUmbracoContextAccessor _umbracoContextAccessor;
 
-        public RedirectsService(IScopeProvider scopeProvider, IDomainService domains, IUmbracoContextAccessor umbracoContextAccessor) {
+        public RedirectsService(ILogger<RedirectsService> logger, IScopeProvider scopeProvider, IDomainService domains, IUmbracoContextAccessor umbracoContextAccessor) {
+            _logger = logger;
             _scopeProvider = scopeProvider;
             _domains = domains;
             _umbracoContextAccessor = umbracoContextAccessor;
         }
+        
+        /// <summary>
+        /// Gets the redirect mathing the specified <paramref name="url"/>.
+        /// </summary>
+        /// <param name="rootNodeKey">The key of the root node. Use <see cref="Guid.Empty"/> for a global redirect.</param>
+        /// <param name="url">The URL of the redirect.</param>
+        /// <returns>An instance of <see cref="Redirect"/>, or <c>null</c> if not found.</returns>
+        public virtual Redirect GetRedirectByUrl(Guid rootNodeKey, string url) {
+            url.Split('?', out string path, out string query);
+            return GetRedirectByPathAndQuery(rootNodeKey, path, query);
+        }
+        
+        /// <summary>
+        /// Gets the redirect mathing the specified <paramref name="path"/> and <paramref name="query"/>.
+        /// </summary>
+        /// <param name="rootNodeKey">The key of the root node. Use <see cref="Guid.Empty"/> for a global redirect.</param>
+        /// <param name="path">The path of the redirect.</param>
+        /// <param name="query">The query string of the redirect.</param>
+        /// <returns>An instance of <see cref="Redirect"/>, or <c>null</c> if not found.</returns>
+        public virtual Redirect GetRedirectByPathAndQuery(Guid rootNodeKey, string path, string query) {
 
-        public Redirect GetRedirectByUrl(int rootNodeId, string url) {
-            
-            string path = url.Split('?')[0];
-            string query = url.Split('?').Skip(1).FirstOrDefault();
+            query ??= string.Empty;
 
-            switch (path) {
+            RedirectDto dto;
+    
+            using (IScope scope = _scopeProvider.CreateScope()) {
+        
+                // Generate the SQL for the query
+                var sql = scope.SqlContext.Sql()
+                    .Select<RedirectDto>()
+                    .From<RedirectDto>()
+                    .Where<RedirectDto>(x => x.RootKey == rootNodeKey && x.Path == path && x.QueryString == (query ?? string.Empty));
 
-                case "/hello":
-
-                    var dest = new RedirectDestination {
-                        Url = "/hello-world",
-                        Type = RedirectDestinationType.Url
-                    };
-
-                    return new Redirect()
-                        .SetDestination(dest);
-
-                case "/media/hest.jpeg":
-
-                    var dest2 = new RedirectDestination {
-                        Url = "/media/horsey.jpeg",
-                        Type = RedirectDestinationType.Url
-                    };
-
-                    return new Redirect()
-                        .SetDestination(dest2);
-
-                default:
-                    return null;
+                // Make the call to the database
+                dto = scope.Database.FirstOrDefault<RedirectDto>(sql);
+                scope.Complete();
 
             }
 
+            return dto == null ? null : new Redirect(dto);
 
         }
 
-        public Redirect GetRedirectByRequest(HttpRequest request)  {
+        public Redirect GetRedirectByRequest(HttpRequest request) {
             
-            return GetRedirectByUrl(0, request.GetEncodedPathAndQuery());
+            // Get the URI from the request
+            Uri uri = request.GetUri();
+
+            // Look for redirects by the URI
+            return GetRedirectByUri(uri);
 
         }
         
         public Redirect GetRedirectByUri(Uri uri) {
-            return GetRedirectByUrl(0, uri.PathAndQuery);
-        }
-        
-        public virtual string GetDestinationUrl(Redirect redirect) {
-
-            string url = redirect.Destination.Url;
-
-            switch (redirect.Destination.Type) {
-
-                case RedirectDestinationType.Content:
-                    IPublishedContent content = _umbracoContextAccessor.UmbracoContext.Content.GetById(redirect.Destination.Key);
-                    if (content != null) return content.Url();
-                    break;
-
-                case RedirectDestinationType.Media:
-                    IPublishedContent media = _umbracoContextAccessor.UmbracoContext.Media.GetById(redirect.Destination.Key);
-                    if (media != null) return media.Url();
-                    break;
-
+            
+            // Determine the root node via domain of the request
+            Guid rootKey = Guid.Empty;
+            if (TryGetDomain(uri, out Domain domain)) {
+                IPublishedContent root = _umbracoContextAccessor.UmbracoContext.Content.GetById(domain.ContentId);
+                if (root != null) rootKey = root.Key;
             }
 
-            return url;
+            // Look for a site specific redirect
+            if (rootKey != Guid.Empty) {
+                var redirect = GetRedirectByUrl(rootKey, uri.PathAndQuery);
+                if (redirect != null) return redirect;
+            }
+            
+            // Look for a global redirect
+            return GetRedirectByUrl(Guid.Empty, uri.PathAndQuery);
 
+        }
+        
+        public bool TryGetDomain(Uri uri, out Domain domain) {
+            domain = DomainUtils.FindDomainForUri(_domains, uri);
+            return domain != null;
         }
 
         /// <summary>
@@ -177,7 +191,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
                 var sql = scope.SqlContext.Sql()
                     .Select<RedirectDto>()
                     .From<RedirectDto>()
-                    .Where<RedirectDto>(x => x.RootKey == rootNodeKey && !x.IsRegex && x.Url == url && x.QueryString == queryString);
+                    .Where<RedirectDto>(x => x.RootKey == rootNodeKey && !x.IsRegex && x.Path == url && x.QueryString == queryString);
 
                 // Make the call to the database
                 dto = scope.Database.FirstOrDefault<RedirectDto>(sql);
@@ -188,7 +202,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
                     sql = scope.SqlContext.Sql()
                         .Select<RedirectDto>()
                         .From<RedirectDto>()
-                        .Where<RedirectDto>(x => x.RootKey == rootNodeKey && x.Url == url && x.ForwardQueryString);
+                        .Where<RedirectDto>(x => x.RootKey == rootNodeKey && x.Path == url && x.ForwardQueryString);
 
                     // Make the call to the database
                     dto = scope.Database.FirstOrDefault<RedirectDto>(sql);
@@ -252,6 +266,52 @@ namespace Skybrud.Umbraco.Redirects.Services {
 
         }
         
+        
+        /// <summary>
+        /// Saves the specified <paramref name="redirect"/>.
+        /// </summary>
+        /// <param name="redirect">The redirected to be saved.</param>
+        /// <returns>The saved <paramref name="redirect"/>.</returns>
+        public Redirect SaveRedirect(Redirect redirect) {
+
+            // Some input validation
+            if (redirect == null) throw new ArgumentNullException(nameof(redirect));
+
+            // Check whether another redirect matches the new URL and query string
+            Redirect existing = GetRedirectByUrl(redirect.RootKey, redirect.Url, redirect.QueryString);
+            if (existing != null && existing.Id != redirect.Id) {
+                throw new RedirectsException("A redirect with the same URL and query string already exists.");
+            }
+
+            // Update the timestamp for when the redirect was modified
+            redirect.UpdateDate = DateTime.UtcNow;
+
+            // Update the redirect in the database
+            using (var scope = _scopeProvider.CreateScope()) {
+                try {
+                    scope.Database.Update(redirect.Dto);
+                } catch (Exception ex) {
+                    _logger.LogError(ex, "Unable to update redirect into the database.");
+                    throw new RedirectsException("Unable to update redirect into the database.", ex);
+                }
+                scope.Complete();
+            }
+
+            return redirect;
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
         /// <summary>
         /// Gets an instance of <see cref="RedirectsSearchResult"/> representing a paginated search for redirects.
         /// </summary>
@@ -285,14 +345,14 @@ namespace Skybrud.Umbraco.Redirects.Services {
                     string[] parts = text.Split('?');
 
                     if (parts.Length == 1) {
-                        sql = sql.Where<RedirectDto>(x => x.Url.Contains(text) || x.QueryString.Contains(text));
+                        sql = sql.Where<RedirectDto>(x => x.Path.Contains(text) || x.QueryString.Contains(text));
                     } else {
                         string url = parts[0];
                         string query = parts[1];
                         sql = sql.Where<RedirectDto>(x => (
-                            x.Url.Contains(text)
+                            x.Path.Contains(text)
                             ||
-                            (x.Url.Contains(url) && x.QueryString.Contains(query))
+                            (x.Path.Contains(url) && x.QueryString.Contains(query))
                         ));
                     }
                 }
@@ -337,6 +397,74 @@ namespace Skybrud.Umbraco.Redirects.Services {
             scope.Complete();
 
             return redirects;
+
+        }
+
+        
+        
+        public virtual string GetDestinationUrl(Redirect redirect) {
+
+            string url = redirect.Destination.Url;
+
+            switch (redirect.Destination.Type) {
+
+                case RedirectDestinationType.Content:
+                    IPublishedContent content = _umbracoContextAccessor.UmbracoContext.Content.GetById(redirect.Destination.Key);
+                    if (content != null) return content.Url();
+                    break;
+
+                case RedirectDestinationType.Media:
+                    IPublishedContent media = _umbracoContextAccessor.UmbracoContext.Media.GetById(redirect.Destination.Key);
+                    if (media != null) return media.Url();
+                    break;
+
+            }
+
+            return url;
+
+        }
+
+        public virtual string GetDestinationUrl(Redirect redirect, string inboundUrl) {
+
+            // Resolve the current URL for content and media
+            string destinationUrl = redirect.Destination.Url;
+            
+            switch (redirect.Destination.Type) {
+                
+                case RedirectDestinationType.Content:
+                    var content = _umbracoContextAccessor.UmbracoContext.Content.GetById(redirect.Destination.Key);
+                    if (content != null) destinationUrl = content.Url();
+                    break;
+
+                case RedirectDestinationType.Media:
+                    var media = _umbracoContextAccessor.UmbracoContext.Media.GetById(redirect.Destination.Key);
+                    if (media != null) destinationUrl = media.Url();
+                    break;
+  
+            }
+
+            return redirect.ForwardQueryString ? MergeQueryString(inboundUrl, destinationUrl) : destinationUrl;
+
+        }
+
+        protected virtual string MergeQueryString(string inboundUrl, string destinationUrl) {
+            
+            // Split the inbound URL
+            inboundUrl.Split('?', out string _, out string inboundQuery);
+            if (string.IsNullOrWhiteSpace(inboundQuery)) return destinationUrl;
+
+            // Split the destination URL
+            destinationUrl.Split('?', out string destinationPath, out string destinationQuery);
+
+            // Merge the two query strings
+            List<string> queryElements = new List<string>();
+            if (!string.IsNullOrWhiteSpace(destinationQuery)) {
+                queryElements.Add(destinationQuery);
+            }
+            queryElements.Add(inboundQuery);
+
+            // Put the URL back together
+            return $"{destinationPath}?{string.Join("&", queryElements)}";
 
         }
 

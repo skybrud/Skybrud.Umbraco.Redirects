@@ -7,7 +7,9 @@ namespace Skybrud.Umbraco.Redirects.Services {
     
     public interface IRedirectsService {
 
-        Redirect GetRedirectByUrl(int rootNodeId, string url);
+        Redirect GetRedirectByUrl(Guid rootNodeKey, string url);
+
+        Redirect GetRedirectByPathAndQuery(Guid rootNodeKey, string path, string query);
 
         Redirect GetRedirectByRequest(HttpRequest request);
 
@@ -32,6 +34,19 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// </summary>
         /// <returns>An instance of <see cref="IEnumerable{Redirect}"/>.</returns>
         public IEnumerable<Redirect> GetAllRedirects();
+        
+        /// <summary>
+        /// Returns the calculated destination URL.
+        ///
+        /// For content and media, this method will attempt to resolve the current URL - eg. in case the URL has
+        /// changed since the redirect was created. If query string forwarding is enabled for the redirect, the query
+        /// string of the redirect is merged with the query string of <paramref name="inboundUrl"/>.
+        ///
+        /// </summary>
+        /// <param name="redirect">The redirect.</param>
+        /// <param name="inboundUrl">The raw URL of the request.</param>
+        /// <returns>The calculated destination URL.</returns>
+        public string GetDestinationUrl(Redirect redirect, string inboundUrl);
 
     }
 

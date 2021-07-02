@@ -4,6 +4,7 @@ using Skybrud.Essentials.Enums;
 using Skybrud.Essentials.Json.Converters.Time;
 using Skybrud.Essentials.Time;
 using Skybrud.Umbraco.Redirects.Exceptions;
+using Skybrud.Umbraco.Redirects.Extensions;
 using Skybrud.Umbraco.Redirects.Models.Dtos;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
@@ -46,12 +47,12 @@ namespace Skybrud.Umbraco.Redirects.Models {
         }
 
         /// <summary>
-        /// Gets or sets the inbound URL (path) of the redirect. The value value will not contain the domain or the query string.
+        /// Gets or sets the inbound path of the redirect. The value value will not contain the domain or the query string.
         /// </summary>
-        [JsonProperty("url")]
-        public string Url {
-            get => Dto.Url;
-            set => Dto.Url = value;
+        [JsonProperty("path")]
+        public string Path {
+            get => Dto.Path;
+            set => Dto.Path = value;
         }
 
         /// <summary>
@@ -61,6 +62,32 @@ namespace Skybrud.Umbraco.Redirects.Models {
         public string QueryString {
             get => Dto.QueryString;
             set => Dto.QueryString = value;
+        }
+
+        /// <summary>
+        /// Gets or sets the inbound URL of the redirect.
+        /// </summary>
+        [JsonProperty("url")]
+        public string Url {
+            
+            get => Dto.Path + (string.IsNullOrWhiteSpace(Dto.QueryString) ? null : "?" + QueryString);
+
+            set  {
+
+                if (string.IsNullOrWhiteSpace(value)) throw new ArgumentNullException(nameof(value));
+
+                // Remove the fragment
+                value.Split('#', out value);
+
+                // Split the path and query
+                value.Split('?', out string path, out string query);
+
+                // Update the DTO properties
+                Dto.Path = path;
+                Dto.QueryString = query;
+
+            }
+
         }
 
         public RedirectDestination Destination { get; private set; }
