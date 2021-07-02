@@ -21,19 +21,13 @@ namespace Skybrud.Umbraco.Redirects.Composers {
             builder.Services.Configure<UmbracoPipelineOptions>(options => {
                 options.AddFilter(new UmbracoPipelineFilter(
                     "SkybrudRedirects",
-                    applicationBuilder => { },
+                    _ => { },
                     applicationBuilder => {
                         applicationBuilder.UseMiddleware<RedirectsMiddleware>();
                     },
-                    applicationBuilder => { }
+                    _ => { }
                 ));
             });
-            
-            //builder.AddNotificationHandler<RoutingRequestNotification, RoutingRequestNotificationHandler>();
-
-            //builder.Services.Insert(0,
-            //    new ServiceDescriptor(typeof(IStartupFilter), _ => new RedirectsStartupFilter(),
-            //        ServiceLifetime.Transient));
 
         }
 
