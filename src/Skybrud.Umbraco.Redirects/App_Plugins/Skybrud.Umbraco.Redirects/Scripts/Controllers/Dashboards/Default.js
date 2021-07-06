@@ -141,10 +141,12 @@
             $scope.activeFilters++;
         }
 
+        var umbracoPath = Umbraco.Sys.ServerVariables.umbracoSettings.umbracoPath;
+
         // Declare the HTTP options
         var http = $http({
             method: 'GET',
-            url: '/umbraco/backoffice/Skybrud/Redirects/GetRedirects',
+            url: `${umbracoPath}/backoffice/Skybrud/Redirects/GetRedirects`,
             params: args
         });
 

@@ -118,9 +118,10 @@
         },
 
         deleteRedirect: function (redirect, success, failed) {
+            var umbracoPath = Umbraco.Sys.ServerVariables.umbracoSettings.umbracoPath;
             $http({
                 method: "GET",
-                url: "/umbraco/backoffice/Skybrud/Redirects/DeleteRedirect",
+                url: `${umbracoPath}/backoffice/Skybrud/Redirects/DeleteRedirect`,
                 params: {
                     redirectId: redirect.key
                 }
@@ -158,7 +159,8 @@
     };
 
     service.getRootNodes = function () {
-        return $http.get("/umbraco/backoffice/Skybrud/Redirects/GetRootNodes");
+      var umbracoPath = Umbraco.Sys.ServerVariables.umbracoSettings.umbracoPath;
+      return $http.get(`${umbracoPath}/backoffice/Skybrud/Redirects/GetRootNodes`);
     };
 
     return service;
