@@ -102,10 +102,12 @@
 
         $scope.loading = true;
 
+        var umbracoPath = Umbraco.Sys.ServerVariables.umbracoSettings.umbracoPath;
+
         // Make the call to the redirects API
         var http = $http({
             method: 'GET',
-            url: '/umbraco/backoffice/Skybrud/Redirects/GetRedirectsFor' + $scope.type,
+            url: `${umbracoPath}/backoffice/Skybrud/Redirects/GetRedirectsFor` + $scope.type,
             params: {
                 contentId: $routeParams.id
             }

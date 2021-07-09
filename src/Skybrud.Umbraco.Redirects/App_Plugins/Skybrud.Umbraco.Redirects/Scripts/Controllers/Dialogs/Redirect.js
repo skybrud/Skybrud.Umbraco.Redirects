@@ -184,10 +184,12 @@
             redirect.rootNodeKey = "00000000-0000-0000-0000-000000000000";
         }
 
+        var umbracoPath = Umbraco.Sys.ServerVariables.umbracoSettings.umbracoPath;
+
         if (redirect.key) {
             $http({
                 method: "POST",
-                url: "/umbraco/backoffice/Skybrud/Redirects/EditRedirect",
+                url: `${umbracoPath}/backoffice/Skybrud/Redirects/EditRedirect`,
                 params: {
                     redirectId: redirect.key
                 },
@@ -203,7 +205,7 @@
         } else {
             $http({
                 method: "POST",
-                url: "/umbraco/backoffice/Skybrud/Redirects/AddRedirect",
+                url: `${umbracoPath}/backoffice/Skybrud/Redirects/AddRedirect`,
                 data: redirect
             }).then(function (r) {
                 $scope.loading = false;
