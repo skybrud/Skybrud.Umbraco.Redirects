@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
 using ClientDependency.Core.Config;
 using Skybrud.Essentials.Reflection;
 using Skybrud.Umbraco.Redirects.Controllers.Api;
+using Skybrud.Umbraco.Redirects.Dashboards;
 using Umbraco.Core;
+using Umbraco.Core.Dashboards;
 using Umbraco.Web;
 
 namespace Skybrud.Umbraco.Redirects.Helpers {
@@ -17,6 +20,14 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
         public RedirectsBackOfficeHelper(IRuntimeState runtimeState, IUmbracoContextAccessor umbracoContextAccessor) {
             _runtimeState = runtimeState;
             _umbracoContextAccessor = umbracoContextAccessor;
+        }
+
+        /// <summary>
+        /// Returns the access rules for <see cref="RedirectsDashboard"/>.
+        /// </summary>
+        /// <returns>An array of <see cref="IAccessRule"/>.</returns>
+        public virtual IAccessRule[] GetDashboardAccessRules() {
+            return Array.Empty<IAccessRule>();
         }
 
         /// <summary>

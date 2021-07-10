@@ -1,7 +1,7 @@
 ﻿angular.module('umbraco.services').factory('skybrudRedirectsService', function ($http, editorService, notificationsService) {
 
     // Get the cache buster value
-    const cacheBuster = Umbraco.Sys.ServerVariables.application.cacheBuster;
+    const cacheBuster = Umbraco.Sys.ServerVariables.skybrud.redirects.cacheBuster;
 
     // Get the base URL for the API controller
     const baseUrl = Umbraco.Sys.ServerVariables.skybrud.redirects.baseUrl;
