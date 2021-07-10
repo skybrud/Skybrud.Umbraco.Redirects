@@ -1,5 +1,8 @@
 ﻿angular.module("umbraco").controller("SkybrudUmbracoRedirects.RedirectDialog.Controller", function ($scope, $http, editorService, notificationsService, skybrudRedirectsService, localizationService, formHelper) {
 
+    // Get the base URL for the API controller
+    const baseUrl = Umbraco.Sys.ServerVariables.skybrud.redirects.baseUrl;
+
     $scope.options = $scope.model.options || {};
 
     $scope.model.title = "Add new redirect";
@@ -184,12 +187,10 @@
             redirect.rootNodeKey = "00000000-0000-0000-0000-000000000000";
         }
 
-        var umbracoPath = Umbraco.Sys.ServerVariables.umbracoSettings.umbracoPath;
-
         if (redirect.key) {
             $http({
                 method: "POST",
-                url: `${umbracoPath}/backoffice/Skybrud/Redirects/EditRedirect`,
+                url: `${baseUrl}EditRedirect`,
                 params: {
                     redirectId: redirect.key
                 },
@@ -205,7 +206,7 @@
         } else {
             $http({
                 method: "POST",
-                url: `${umbracoPath}/backoffice/Skybrud/Redirects/AddRedirect`,
+                url: `${baseUrl}AddRedirect`,
                 data: redirect
             }).then(function (r) {
                 $scope.loading = false;

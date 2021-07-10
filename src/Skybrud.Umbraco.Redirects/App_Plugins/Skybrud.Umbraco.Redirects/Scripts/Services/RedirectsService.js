@@ -1,5 +1,8 @@
 ﻿angular.module('umbraco.services').factory('skybrudRedirectsService', function ($http, editorService, notificationsService) {
 
+    // Get the base URL for the API controller
+    const baseUrl = Umbraco.Sys.ServerVariables.skybrud.redirects.baseUrl;
+
     var service = {
 
         parseUmbracoLink: function (e) {
@@ -118,10 +121,9 @@
         },
 
         deleteRedirect: function (redirect, success, failed) {
-            var umbracoPath = Umbraco.Sys.ServerVariables.umbracoSettings.umbracoPath;
             $http({
                 method: "GET",
-                url: `${umbracoPath}/backoffice/Skybrud/Redirects/DeleteRedirect`,
+                url: `${baseUrl}DeleteRedirect`,
                 params: {
                     redirectId: redirect.key
                 }
@@ -159,8 +161,7 @@
     };
 
     service.getRootNodes = function () {
-      var umbracoPath = Umbraco.Sys.ServerVariables.umbracoSettings.umbracoPath;
-      return $http.get(`${umbracoPath}/backoffice/Skybrud/Redirects/GetRootNodes`);
+        return $http.get(`${baseUrl}GetRootNodes`);
     };
 
     return service;

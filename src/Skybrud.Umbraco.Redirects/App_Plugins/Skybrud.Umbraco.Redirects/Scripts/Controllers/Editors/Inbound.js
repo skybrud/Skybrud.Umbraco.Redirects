@@ -1,5 +1,8 @@
 ﻿angular.module('umbraco').controller('SkybrudUmbracoRedirects.PropertyEditor.Controller', function ($scope, $routeParams, $http, $q, $timeout, localizationService, notificationsService, overlayService, skybrudRedirectsService, editorState) {
 
+    // Get the base URL for the API controller
+    const baseUrl = Umbraco.Sys.ServerVariables.skybrud.redirects.baseUrl;
+
     $scope.route = $routeParams;
     $scope.redirects = [];
 
@@ -102,12 +105,10 @@
 
         $scope.loading = true;
 
-        var umbracoPath = Umbraco.Sys.ServerVariables.umbracoSettings.umbracoPath;
-
         // Make the call to the redirects API
         var http = $http({
             method: 'GET',
-            url: `${umbracoPath}/backoffice/Skybrud/Redirects/GetRedirectsFor` + $scope.type,
+            url: `${baseUrl}GetRedirectsFor${$scope.type}`,
             params: {
                 contentId: $routeParams.id
             }
