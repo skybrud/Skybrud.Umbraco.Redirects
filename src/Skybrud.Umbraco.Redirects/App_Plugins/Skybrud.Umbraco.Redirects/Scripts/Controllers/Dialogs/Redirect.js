@@ -1,5 +1,8 @@
 ﻿angular.module("umbraco").controller("SkybrudUmbracoRedirects.RedirectDialog.Controller", function ($scope, $http, editorService, notificationsService, skybrudRedirectsService, localizationService, formHelper) {
 
+    // Get the cache buster value
+    const cacheBuster = Umbraco.Sys.ServerVariables.application.cacheBuster;
+
     // Get the base URL for the API controller
     const baseUrl = Umbraco.Sys.ServerVariables.skybrud.redirects.baseUrl;
 
@@ -48,7 +51,7 @@
         alias: "rootNodeId",
         label: "Site",
         description: "Specify the site that the original URL to match from belongs to.",
-        view: "/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/Site.html",
+        view: `/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/Site.html?v=${cacheBuster}`,
         value: $scope.model.redirect && $scope.model.redirect.rootId ? $scope.model.redirect.rootId : 0,
         config: {
             rootNodes: $scope.options.rootNodes
@@ -62,7 +65,7 @@
         alias: "originalUrl",
         label: "Original URL",
         description: "Specify the original URL to match from which the user should be redirected to the destination.",
-        view: "/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/OriginalUrl.html",
+        view: `/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/OriginalUrl.html?v=${cacheBuster}`,
         value: $scope.model.redirect ? $scope.model.redirect.url + ($scope.model.redirect.queryString ? "?" + $scope.model.redirect.queryString : "") : "",
         validation: {
             mandatory: true
@@ -73,7 +76,7 @@
         alias: "destination",
         label: "Destination",
         description: "Select the page or URL the user should be redirected to.",
-        view: "/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/Destination.html",
+        view: `/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/Destination.html?v=${cacheBuster}`,
         value: destionation,
         validation: {
             mandatory: true
@@ -87,7 +90,7 @@
             labelKey: "redirects_propertyRedirectTypeName",
             description: "Select the type of the redirect. Notice that browsers will remember permanent redirects.",
             descriptionKey: "redirects_propertyRedirectTypeDescription",
-            view: "/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/RadioGroup.html",
+            view: `/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/RadioGroup.html?v=${cacheBuster}`,
             value: $scope.model.redirect ? $scope.model.redirect.permanent : true,
             config: {
                 options: [
@@ -110,7 +113,7 @@
             labelKey: "redirects_forwardQueryString",
             description: "When enabled, the query string of the original request is forwarded to the redirect location (pass through).",
             descriptionKey: "redirects_forwardQueryStringDescription",
-            view: "/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/RadioGroup.html",
+            view: `/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/RadioGroup.html?v=${cacheBuster}`,
             value: $scope.model.redirect ? $scope.model.redirect.forward : false,
             config: {
                 options: [

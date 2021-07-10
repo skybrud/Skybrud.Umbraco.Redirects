@@ -1,4 +1,5 @@
 ﻿using Skybrud.Umbraco.Redirects.Components;
+using Skybrud.Umbraco.Redirects.Helpers;
 using Skybrud.Umbraco.Redirects.Models;
 using Skybrud.Umbraco.Redirects.Routing;
 using Umbraco.Core;
@@ -12,7 +13,8 @@ namespace Skybrud.Umbraco.Redirects.Composers {
         public void Compose(Composition composition) {
             composition.Components().Append<RedirectsComponent>();
             composition.Register<IRedirectsService, RedirectsService>();
-            composition.Register<RedirectsInjectedModule, RedirectsInjectedModule>(); 
+            composition.Register<RedirectsInjectedModule, RedirectsInjectedModule>();
+            composition.Register<RedirectsBackOfficeHelper>();
         }
 
     }

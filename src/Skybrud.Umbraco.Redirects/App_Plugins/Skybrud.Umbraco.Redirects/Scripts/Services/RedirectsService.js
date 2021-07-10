@@ -1,5 +1,8 @@
 ﻿angular.module('umbraco.services').factory('skybrudRedirectsService', function ($http, editorService, notificationsService) {
 
+    // Get the cache buster value
+    const cacheBuster = Umbraco.Sys.ServerVariables.application.cacheBuster;
+
     // Get the base URL for the API controller
     const baseUrl = Umbraco.Sys.ServerVariables.skybrud.redirects.baseUrl;
 
@@ -83,6 +86,7 @@
             var o = {
                 size: "small",
                 view: "/App_Plugins/Skybrud.Umbraco.Redirects/Views/Dialogs/Redirect.html?v=2.0.7",
+                view: `/App_Plugins/Skybrud.Umbraco.Redirects/Views/Dialogs/Redirect.html?v=${cacheBuster}`,
                 options: options,
                 submit: function(value) {
                     if (options.callback) options.callback(value);
@@ -106,7 +110,7 @@
 
             editorService.open({
 	            size: "small",
-                view: "/App_Plugins/Skybrud.Umbraco.Redirects/Views/Dialogs/Redirect.html",
+                view: `/App_Plugins/Skybrud.Umbraco.Redirects/Views/Dialogs/Redirect.html?v=${cacheBuster}`,
                 redirect: redirect,
                 options: options,
                 submit: function (value) {

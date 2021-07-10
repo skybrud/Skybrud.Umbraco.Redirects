@@ -1,20 +1,16 @@
 ﻿using System.Collections.Generic;
-using System.Web;
-using System.Web.Mvc;
-using Skybrud.Umbraco.Redirects.Controllers.Api;
-using Umbraco.Core;
+using Skybrud.Umbraco.Redirects.Helpers;
 using Umbraco.Core.Composing;
-using Umbraco.Web;
 using Umbraco.Web.JavaScript;
 
 namespace Skybrud.Umbraco.Redirects.Components {
     
     public class RedirectsComponent : IComponent {
         
-        private readonly IUmbracoContextAccessor _umbracoContextAccessor;
+        private readonly RedirectsBackOfficeHelper _backoffice;
 
-        public RedirectsComponent(IUmbracoContextAccessor umbracoContextAccessor) {
-            _umbracoContextAccessor = umbracoContextAccessor;
+        public RedirectsComponent(RedirectsBackOfficeHelper backoffice) {
+            _backoffice = backoffice;
         }
         
         public void Initialize() {
@@ -32,31 +28,8 @@ namespace Skybrud.Umbraco.Redirects.Components {
                 e["skybrud"] = skybrud = new Dictionary<string, object>();
             }
 
-            // Determine the API base URL
-            string baseUrl = null;
-            if (TryCreateUrlHelper(out UrlHelper url)) {
-                baseUrl = url.GetUmbracoApiService<RedirectsController>("Dummy").TrimEnd("Dummy");
-            }
-
             // Append the "redirects" dictionary to "skybrud"
-            skybrud.Add("redirects", new Dictionary<string, object> {
-                { "baseUrl", baseUrl }
-            });
-
-        }
-
-        private bool TryCreateUrlHelper(out UrlHelper helper) {
-
-            // Get the current HTTP context via the Umbraco context accessor
-            HttpContextBase http = _umbracoContextAccessor.UmbracoContext.HttpContext;
-            if (http == null) {
-                helper = null;
-                return false;
-            }
-
-            // Initialize a new URL helper
-            helper = new UrlHelper(http.Request.RequestContext);
-            return true;
+            skybrud.Add("redirects", _backoffice.GetServerVariables());
 
         }
 
