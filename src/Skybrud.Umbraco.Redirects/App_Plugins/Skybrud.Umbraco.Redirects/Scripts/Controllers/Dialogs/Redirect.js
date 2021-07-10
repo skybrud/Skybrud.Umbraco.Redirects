@@ -135,11 +135,11 @@
     var allProperties = $scope.model.properties.concat($scope.model.advancedProperties);
     allProperties = allProperties.concat($scope.model.hiddenProperties);
 
-    angular.forEach(allProperties, function (p) {
+    allProperties.forEach(function (p) {
         if (p.labelKey) localizationService.localize(p.labelKey).then(function (value) { p.label = value; });
         if (p.descriptionKey) localizationService.localize(p.descriptionKey).then(function (value) { p.description = value; });
         if (p.config && p.config.options) {
-            angular.forEach(p.config.options, function (o) {
+            p.config.options.forEach(function (o) {
                 if (o.labelKey) localizationService.localize(o.labelKey).then(function (value) { o.label = value; });
             });
         }
@@ -159,7 +159,7 @@
         };
 
         angular.forEach($scope.labels, function (value, key) {
-            localizationService.localize("redirects_" + key).then(function (value) {
+            localizationService.localize(`redirects_${key}`).then(function (value) {
                 $scope.labels[key] = value;
             });
         });
@@ -184,7 +184,7 @@
 
         // Make sure we set the "rootNodeKey" property as well
         if (redirect.rootNodeId > 0) {
-            var rootNode = $scope.options.rootNodes.find(x => x.id === redirect.rootNodeId);
+            const rootNode = $scope.options.rootNodes.find(x => x.id === redirect.rootNodeId);
             redirect.rootNodeKey = rootNode ? rootNode.key : "00000000-0000-0000-0000-000000000000";
         } else {
             redirect.rootNodeKey = "00000000-0000-0000-0000-000000000000";
