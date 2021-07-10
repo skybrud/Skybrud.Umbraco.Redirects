@@ -59,9 +59,6 @@
   z-index: 9001;
   display: none;
 }
-.SkybrudUmbracoRedirects .loading {
-  position: relative;
-}
 .SkybrudUmbracoRedirects .loading > .umb-load-indicator {
   display: block;
 }
@@ -135,6 +132,7 @@
   padding: 7px 10px;
   color: #817f85;
   vertical-align: top;
+  line-height: 26px;
 }
 .SkybrudUmbracoRedirects .table.list td a {
   color: #000;
@@ -145,8 +143,14 @@
 .SkybrudUmbracoRedirects .table.list tr > td:last-child {
   border-right: 1px solid #e9e9eb;
 }
+.SkybrudUmbracoRedirects .table.list td.col-original {
+  min-width: 150px;
+}
 .SkybrudUmbracoRedirects .table.list td.col-destination {
   width: 100%;
+}
+.SkybrudUmbracoRedirects .table.list .col-site {
+  white-space: nowrap;
 }
 .SkybrudUmbracoRedirects .table.list .col-original,
 .SkybrudUmbracoRedirects .table.list .col-date,
@@ -154,7 +158,7 @@
   white-space: nowrap;
 }
 .SkybrudUmbracoRedirects .table.list .col-actions .btn.btn-link {
-  font-size: 12px;
+  /*font-size: 12px;*/
   padding: 0;
 }
 .SkybrudUmbracoRedirects .table.list .col-actions .btn.btn-link + .btn.btn-link {
@@ -162,6 +166,14 @@
 }
 .SkybrudUmbracoRedirects .table.list .col-actions .btn.btn-link.red {
   color: red;
+}
+.SkybrudUmbracoRedirects .table.list .col-site a {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+  display: inline-block;
+  vertical-align: middle;
 }
 .SkybrudUmbracoRedirects .table.list .col-original a {
   white-space: nowrap;
@@ -175,6 +187,33 @@
   padding: 35px 0;
   font-size: 15px;
   text-align: center;
+}
+.SkybrudUmbracoRedirects .table.list th.tar,
+.SkybrudUmbracoRedirects .table.list td.tar {
+  text-align: right;
+}
+.SkybrudUmbracoRedirects .table.list > tfoot > tr > th {
+  background: #F8F8F8;
+  font-size: 11px;
+  line-height: 13px;
+}
+.SkybrudUmbracoRedirects.skybrud-redirects-dashboard table.table.list {
+  border-color: #d9d9d9;
+}
+.SkybrudUmbracoRedirects.skybrud-redirects-dashboard table.table.list tr td:first-child {
+  border-left-color: #d9d9d9;
+}
+.SkybrudUmbracoRedirects.skybrud-redirects-dashboard table.table.list tr td:last-child {
+  border-right-color: #d9d9d9;
+}
+.SkybrudUmbracoRedirects.skybrud-redirects-dashboard table.table.list tbody > tr:first-child td {
+  border-top-color: #d9d9d9;
+}
+.SkybrudUmbracoRedirects.skybrud-redirects-dashboard table.table.list tbody > tr:last-child td {
+  border-bottom-color: #d9d9d9;
+}
+.SkybrudUmbracoRedirects .pagination {
+  margin: 0;
 }
 .SkybrudUmbracoRedirects .pagination ul {
   background: 0;
