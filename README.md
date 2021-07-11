@@ -35,7 +35,7 @@ Download the package from Our Umbraco - the Umbraco community website:
 - <a href="https://our.umbraco.com/packages/website-utilities/skybrud-redirects/" target="_blank"><strong>Download Umbraco package</strong></a>
 
 **Umbraco 7**  
-There is no Umbraco package available for Umbraco 7. Please see either the [Install via NuGet](#install-via-nuget) option above or the [#manual-install] option below.
+There is no Umbraco package available for Umbraco 7. Please see either the [Install via NuGet](#install-via-nuget) option above or the [Manual install](#manual-install) option below.
 
 ### Manual install
 You can also download a ZIP file of the latest release directly from GitHub, unzip, and move the contents to the root directory of your web application.
