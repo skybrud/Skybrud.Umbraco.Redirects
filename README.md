@@ -30,7 +30,7 @@ Install-Package Skybrud.Umbraco.Redirects -Version 1.0.0
 ### Umbraco package
 
 **Umbraco 8**  
-Download the package from Our Umbraco - the Umbraco cummunity website:
+Download the package from Our Umbraco - the Umbraco community website:
 
 - <a href="https://our.umbraco.com/packages/website-utilities/skybrud-redirects/" target="_blank"><strong>Download Umbraco package</strong></a>
 
