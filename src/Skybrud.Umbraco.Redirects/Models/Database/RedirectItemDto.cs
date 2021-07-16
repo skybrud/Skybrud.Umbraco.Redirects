@@ -116,12 +116,6 @@ namespace Skybrud.Umbraco.Redirects.Models.Database {
         [Column("ForwardQueryString")]
 		public bool ForwardQueryString { get; set; }
 
-        /// <summary>
-        /// Gets or sets the timestamp for when the redirect was last used.
-        /// </summary>
-        [Column("LastUsed")]
-        public DateTime? LastUsed { get; set; }
-
         #endregion
 
     }

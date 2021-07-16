@@ -128,15 +128,13 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
         string HandleForwardQueryString(RedirectItem redirect, string rawurl);
 
-        /// <summary>
-        /// Updates the last used date for the specified <paramref name="redirect"/>.
-        /// </summary>
-        /// <param name="redirect">The redirect to be updated.</param>
-        void UpdateLastUsedDate(RedirectItem redirect);
+        void OnPreLookup(RedirectPreLookupEventArgs e);
 
-        void OnRedirectServed(RedirectServedEventArgs e);
+        event EventHandler<RedirectPreLookupEventArgs> PreLookup;
 
-        event EventHandler<RedirectServedEventArgs> RedirectServed;
+        void OnPostLookup(RedirectPostLookupEventArgs e);
+
+        event EventHandler<RedirectPostLookupEventArgs> PostLookup;
     }
 
 }

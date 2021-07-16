@@ -27,8 +27,7 @@ namespace Skybrud.Umbraco.Redirects.Components
             var plan = new MigrationPlan("Skybrud.Umbraco.Redirects");
             plan.From(string.Empty)
                 .To<CreateTable>("2.0.0-alpha001")
-                .To<FixRootKeyValue>("2.0.5")
-                .To<AddLastUsedDate>("2.1.0");
+                .To<FixRootKeyValue>("2.0.5");
 
             var upgrader = new Upgrader(plan);
             upgrader.Execute(_scopeProvider, _migrationBuilder, _keyValueService, _logger);
