@@ -1,4 +1,10 @@
-﻿angular.module('umbraco.services').factory('skybrudRedirectsService', function ($http, editorService, notificationsService) {
+﻿angular.module("umbraco.services").factory("skybrudRedirectsService", function ($http, editorService, notificationsService) {
+
+    // Get the cache buster value
+    const cacheBuster = Umbraco.Sys.ServerVariables.skybrud.redirects.cacheBuster;
+
+    // Get the base URL for the API controller
+    const baseUrl = Umbraco.Sys.ServerVariables.skybrud.redirects.baseUrl;
 
     var service = {
 
@@ -38,7 +44,7 @@
         editLink: function (link, callback, closeAllDialogs) {
             closeAllDialogs = closeAllDialogs !== false;
             if (closeAllDialogs) editorService.closeAll();
-            if (link.mode == 'media') {
+            if (link.mode === "media") {
                 editorService.linkPicker({
                     currentTarget: {
                         name: link.name,
@@ -46,8 +52,8 @@
                         target: link.target
                     },
                     submit: function (e) {
-                        if (!e.id && !e.url && !confirm('The selected link appears to be empty. Do you want to continue anyways?')) return;
-                        if (service.parseUmbracoLink(e).id == 0) {
+                        if (!e.id && !e.url && !confirm("The selected link appears to be empty. Do you want to continue anyways?")) return;
+                        if (service.parseUmbracoLink(e).id === 0) {
                             e.id = link.id;
                             e.isMedia = true;
                         }
@@ -64,7 +70,7 @@
                         target: link.target
                     },
                     submit: function (e) {
-                        if (!e.id && !e.url && !confirm('The selected link appears to be empty. Do you want to continue anyways?')) return;
+                        if (!e.id && !e.url && !confirm("The selected link appears to be empty. Do you want to continue anyways?")) return;
                         if (callback) callback(service.parseUmbracoLink(e));
                         if (closeAllDialogs) editorService.closeAll();
                     }
@@ -77,9 +83,9 @@
             if (!options) options = {};
             if (typeof options === "function") options = { callback: options };
 
-            var o = {
+            const o = {
                 size: "small",
-                view: "/App_Plugins/Skybrud.Umbraco.Redirects/Views/Dialogs/Redirect.html?v=2.0.7",
+                view: `/App_Plugins/Skybrud.Umbraco.Redirects/Views/Dialogs/Redirect.html?v=${cacheBuster}`,
                 options: options,
                 submit: function(value) {
                     if (options.callback) options.callback(value);
@@ -103,7 +109,7 @@
 
             editorService.open({
 	            size: "small",
-                view: "/App_Plugins/Skybrud.Umbraco.Redirects/Views/Dialogs/Redirect.html",
+                view: `/App_Plugins/Skybrud.Umbraco.Redirects/Views/Dialogs/Redirect.html?v=${cacheBuster}`,
                 redirect: redirect,
                 options: options,
                 submit: function (value) {
@@ -120,7 +126,7 @@
         deleteRedirect: function (redirect, success, failed) {
             $http({
                 method: "GET",
-                url: "/umbraco/backoffice/Skybrud/Redirects/DeleteRedirect",
+                url: `${baseUrl}DeleteRedirect`,
                 params: {
                     redirectId: redirect.key
                 }
@@ -147,7 +153,7 @@
 
             var result = {};
 
-            angular.forEach(array, function (p) {
+            array.forEach(function (p) {
                 result[p.alias] = p.value === undefined ? null : p.value;
             });
 
@@ -158,7 +164,7 @@
     };
 
     service.getRootNodes = function () {
-        return $http.get("/umbraco/backoffice/Skybrud/Redirects/GetRootNodes");
+        return $http.get(`${baseUrl}GetRootNodes`);
     };
 
     return service;

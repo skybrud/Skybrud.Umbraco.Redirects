@@ -8,14 +8,14 @@
 
     $scope.loading = true;
 
-    localizationService.localize('redirects_allSites').then(function (value) {
+    localizationService.localize("redirects_allSites").then(function (value) {
         $scope.rootNodes[0].name = value;
     });
 
     skybrudRedirectsService.getRootNodes().then(function (r) {
-        angular.forEach(r.data.items, function (rootNode) {
+        r.data.items.forEach(function (rootNode) {
             $scope.rootNodes.push(rootNode);
-            if ($scope.current && (',' + $scope.current.path + ',').indexOf(',' + rootNode.id + ',') > 0) {
+            if ($scope.current && (`,${$scope.current.path},`).indexOf(`,${rootNode.id},`) > 0) {
                 $scope.model.value = rootNode.id;
             }
         });

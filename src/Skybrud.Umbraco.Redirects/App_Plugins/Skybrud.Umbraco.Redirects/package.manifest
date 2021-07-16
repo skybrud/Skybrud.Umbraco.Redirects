@@ -47,12 +47,5 @@
 	],
   "css": [
     "/App_Plugins/Skybrud.Umbraco.Redirects/Styles/Styles.css"
-  ],
-  "dashboards": [
-    {
-      "alias": "Skybrud.Umbraco.Redirects",
-      "sections": [ "content" ],
-      "view": "~/App_Plugins/Skybrud.Umbraco.Redirects/Views/Dashboard.html?v=2.0.7"
-    }
   ]
 }

@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>2.0.7</Version>
+    <Version>2.0.8</Version>
     <Authors>Anders Bjerner</Authors>
     <Company>Skybrud.dk</Company>
     <Description>Redirects manager for Umbraco 8.</Description>
@@ -24,7 +24,7 @@
 
   <ItemGroup>
     <Reference Include="System.Web" />
-    <PackageReference Include="Skybrud.Essentials" Version="1.1.26" />
+    <PackageReference Include="Skybrud.Essentials" Version="1.1.29" />
     <PackageReference Include="UmbracoCms.Core" Version="8.1.0">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
