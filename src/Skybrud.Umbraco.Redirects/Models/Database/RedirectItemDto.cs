@@ -116,8 +116,8 @@ namespace Skybrud.Umbraco.Redirects.Models.Database {
         [Column("ForwardQueryString")]
 		public bool ForwardQueryString { get; set; }
 
-		#endregion
+        #endregion
 
-	}
+    }
 
 }

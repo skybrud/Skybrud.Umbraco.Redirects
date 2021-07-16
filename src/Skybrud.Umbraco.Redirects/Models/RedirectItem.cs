@@ -266,9 +266,9 @@ namespace Skybrud.Umbraco.Redirects.Models {
 		    set => Dto.ForwardQueryString = value;
 		}
 
-		#endregion
+        #endregion
 
-		#region Constructors
+        #region Constructors
 
         internal RedirectItem(AddRedirectOptions options) {
 
@@ -297,7 +297,6 @@ namespace Skybrud.Umbraco.Redirects.Models {
             IsPermanent = options.IsPermanent;
             IsRegex = options.IsRegex;
             ForwardQueryString = options.ForwardQueryString;
-
         }
 
 		internal RedirectItem(RedirectItemDto dto) {

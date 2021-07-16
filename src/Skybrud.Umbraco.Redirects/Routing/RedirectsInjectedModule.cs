@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web;
 using Skybrud.Umbraco.Redirects.Domains;
+using Skybrud.Umbraco.Redirects.Events;
 using Skybrud.Umbraco.Redirects.Models;
 using Umbraco.Core.Services;
 using Umbraco.Web;
@@ -56,41 +57,44 @@ namespace Skybrud.Umbraco.Redirects.Routing {
             // Ignore if not a 404 response
             if (application.Response.StatusCode != 404) return;
 
-            var request = application.Request;
-            
             // Get the Umbraco domain of the current request
             Domain domain = GetUmbracoDomain(application.Request);
 
             // Get the root node/content ID of the domain (no domain = 0)
             int rootNodeId = domain?.ContentId ?? 0;
 
+            var rawUrl = application.Request.RawUrl;
+
+            _redirects.OnPreLookup(new RedirectPreLookupEventArgs(HttpContext.Current, rawUrl));
+
             // Look for a redirect matching the URL (and domain)
             RedirectItem redirect = null;
-            if (rootNodeId > 0) redirect = _redirects.GetRedirectByUrl(rootNodeId, application.Request.RawUrl);
-            redirect = redirect ?? _redirects.GetRedirectByUrl(0, application.Request.RawUrl);
+            if (rootNodeId > 0) redirect = _redirects.GetRedirectByUrl(rootNodeId, rawUrl);
+            redirect = redirect ?? _redirects.GetRedirectByUrl(0, rawUrl);
             if (redirect == null) return;
 
 			var redirectUrl = redirect.LinkUrl;
 
-			if (redirect.ForwardQueryString) redirectUrl = _redirects.HandleForwardQueryString(redirect, application.Request.RawUrl);
+			if (redirect.ForwardQueryString) redirectUrl = _redirects.HandleForwardQueryString(redirect, rawUrl);
 
-			//if (redirect.IsRegex)
-			//{
-			//    var regex = new Regex(redirect.Url);
+            //if (redirect.IsRegex)
+            //{
+            //    var regex = new Regex(redirect.Url);
 
-			//    if (_capturingGroupsRegex.IsMatch(redirectUrl))
-			//    {
-			//        redirectUrl = regex.Replace(redirect.Url, redirectUrl);
-			//    }
-			//}
+            //    if (_capturingGroupsRegex.IsMatch(redirectUrl))
+            //    {
+            //        redirectUrl = regex.Replace(redirect.Url, redirectUrl);
+            //    }
+            //}
 
-			// Redirect to the URL
-			if (redirect.IsPermanent) {
+            _redirects.OnPostLookup(new RedirectPostLookupEventArgs(HttpContext.Current, redirect));
+
+            // Redirect to the URL
+            if (redirect.IsPermanent) {
                 application.Response.RedirectPermanent(redirectUrl);
             } else {
                 application.Response.Redirect(redirectUrl);
             }
-
         }
 
         private Domain GetUmbracoDomain(HttpRequest request) {
@@ -109,7 +113,6 @@ namespace Skybrud.Umbraco.Redirects.Routing {
         }
 
         #endregion
-
     }
 
 }
