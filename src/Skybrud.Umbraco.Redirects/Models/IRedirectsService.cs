@@ -135,6 +135,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         void OnPostLookup(RedirectPostLookupEventArgs e);
 
         event EventHandler<RedirectPostLookupEventArgs> PostLookup;
+
     }
 
 }

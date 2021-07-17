@@ -594,13 +594,8 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// This allows you to do something after the package has hit the database.
         /// </summary>
         /// <param name="e">The event args</param>
-        public virtual void OnPreLookup(RedirectPreLookupEventArgs e)
-        {
-            EventHandler<RedirectPreLookupEventArgs> handler = PreLookup;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+        public virtual void OnPreLookup(RedirectPreLookupEventArgs e) {
+            PreLookup?.Invoke(this, e);
         }
 
         public event EventHandler<RedirectPreLookupEventArgs> PreLookup;
@@ -610,13 +605,8 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// This allows you to do something after the package has hit the database.
         /// </summary>
         /// <param name="e">The event args</param>
-        public virtual void OnPostLookup(RedirectPostLookupEventArgs e)
-        {
-            EventHandler<RedirectPostLookupEventArgs> handler = PostLookup;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+        public virtual void OnPostLookup(RedirectPostLookupEventArgs e) {
+            PostLookup?.Invoke(this, e);
         }
 
         public event EventHandler<RedirectPostLookupEventArgs> PostLookup;
