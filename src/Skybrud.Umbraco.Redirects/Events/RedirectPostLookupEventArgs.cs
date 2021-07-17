@@ -10,8 +10,8 @@ namespace Skybrud.Umbraco.Redirects.Events {
 
         public RedirectItem Redirect { get; set; }
 
-        public RedirectPostLookupEventArgs(HttpContext context, RedirectItem redirect) {
-            HttpContext = new HttpContextWrapper(context);
+        public RedirectPostLookupEventArgs(HttpContextBase context, RedirectItem redirect) {
+            HttpContext = context;
             Redirect = redirect;
         }
 

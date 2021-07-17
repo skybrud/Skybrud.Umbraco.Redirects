@@ -9,9 +9,8 @@ namespace Skybrud.Umbraco.Redirects.Events {
 
         public string RawUrl { get; set; }
 
-        public RedirectPreLookupEventArgs(HttpContext context, string rawUrl) {
-            HttpContext = new HttpContextWrapper(context);
-            RawUrl = rawUrl;
+        public RedirectPreLookupEventArgs(HttpContextBase context) {
+            HttpContext = context;
         }
 
     }
