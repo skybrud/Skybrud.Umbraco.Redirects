@@ -9,6 +9,7 @@ using WebComposing = Umbraco.Web.Composing;
 using System.Text.RegularExpressions;
 using NPoco;
 using Skybrud.Essentials.Time;
+using Skybrud.Umbraco.Redirects.Events;
 using Skybrud.Umbraco.Redirects.Models.Database;
 using Skybrud.Umbraco.Redirects.Models.Options;
 using Umbraco.Core.Composing;
@@ -587,6 +588,38 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
 			return newRedirectUrl;
 	    }
+
+        /// <summary>
+        /// Event which gets called before the redirect lookup has happened.
+        /// This allows you to do something after the package has hit the database.
+        /// </summary>
+        /// <param name="e">The event args</param>
+        public virtual void OnPreLookup(RedirectPreLookupEventArgs e)
+        {
+            EventHandler<RedirectPreLookupEventArgs> handler = PreLookup;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        public event EventHandler<RedirectPreLookupEventArgs> PreLookup;
+
+        /// <summary>
+        /// Event which gets called after the redirect lookup has happened.
+        /// This allows you to do something after the package has hit the database.
+        /// </summary>
+        /// <param name="e">The event args</param>
+        public virtual void OnPostLookup(RedirectPostLookupEventArgs e)
+        {
+            EventHandler<RedirectPostLookupEventArgs> handler = PostLookup;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        public event EventHandler<RedirectPostLookupEventArgs> PostLookup;
 
         #endregion
 

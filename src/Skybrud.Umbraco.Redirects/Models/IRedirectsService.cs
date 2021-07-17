@@ -1,4 +1,5 @@
 ﻿using System;
+using Skybrud.Umbraco.Redirects.Events;
 using Skybrud.Umbraco.Redirects.Models.Options;
 
 namespace Skybrud.Umbraco.Redirects.Models {
@@ -127,6 +128,13 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
         string HandleForwardQueryString(RedirectItem redirect, string rawurl);
 
+        void OnPreLookup(RedirectPreLookupEventArgs e);
+
+        event EventHandler<RedirectPreLookupEventArgs> PreLookup;
+
+        void OnPostLookup(RedirectPostLookupEventArgs e);
+
+        event EventHandler<RedirectPostLookupEventArgs> PostLookup;
     }
 
 }
