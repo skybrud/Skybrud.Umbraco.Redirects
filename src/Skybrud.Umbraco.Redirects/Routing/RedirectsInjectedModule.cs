@@ -74,16 +74,19 @@ namespace Skybrud.Umbraco.Redirects.Routing {
 
             // Look for a redirect matching the URL (and domain)
             if (redirect == null) {
+                
+                // Look for redirects via the redirects service
                 if (rootNodeId > 0) redirect = _redirects.GetRedirectByUrl(rootNodeId, context.Request.RawUrl);
                 redirect = redirect ?? _redirects.GetRedirectByUrl(0, context.Request.RawUrl);
-            }
-            
-            // Invoke the post lookup event
-            RedirectPostLookupEventArgs postLookUpEventArgs = new RedirectPostLookupEventArgs(context, redirect);
-            _redirects.OnPostLookup(postLookUpEventArgs);
 
-            // Update the local variable with the redirect from the event
-            redirect = postLookUpEventArgs.Redirect;
+                // Invoke the post lookup event
+                RedirectPostLookupEventArgs postLookUpEventArgs = new RedirectPostLookupEventArgs(context, redirect);
+                _redirects.OnPostLookup(postLookUpEventArgs);
+
+                // Update the local variable with the redirect from the event
+                redirect = postLookUpEventArgs.Redirect;
+
+            }
 
             // Return if we don't have a redirect at this point
             if (redirect == null) return;
