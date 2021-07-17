@@ -48,7 +48,6 @@ namespace Skybrud.Umbraco.Redirects.Routing {
         #endregion
 
         #region Private member methods
-        
 
         private void ContextOnEndRequest(object sender, EventArgs eventArgs) {
 
@@ -95,6 +94,7 @@ namespace Skybrud.Umbraco.Redirects.Routing {
             } else {
                 application.Response.Redirect(redirectUrl);
             }
+
         }
 
         private Domain GetUmbracoDomain(HttpRequest request) {
