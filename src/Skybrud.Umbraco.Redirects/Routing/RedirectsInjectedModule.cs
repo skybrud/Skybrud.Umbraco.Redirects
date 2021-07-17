@@ -73,7 +73,7 @@ namespace Skybrud.Umbraco.Redirects.Routing {
             RedirectItem redirect = preLookupEventArgs.Redirect;
 
             // Look for a redirect matching the URL (and domain)
-            if (redirect != null) {
+            if (redirect == null) {
                 if (rootNodeId > 0) redirect = _redirects.GetRedirectByUrl(rootNodeId, context.Request.RawUrl);
                 redirect = redirect ?? _redirects.GetRedirectByUrl(0, context.Request.RawUrl);
             }
