@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web;
+using Skybrud.Umbraco.Redirects.Models;
 
 namespace Skybrud.Umbraco.Redirects.Events {
     
@@ -7,10 +8,15 @@ namespace Skybrud.Umbraco.Redirects.Events {
         
         public HttpContextBase HttpContext { get; }
 
-        public string RawUrl { get; set; }
+        public RedirectItem Redirect { get; set; }
 
         public RedirectPreLookupEventArgs(HttpContextBase context) {
             HttpContext = context;
+        }
+
+        public RedirectPreLookupEventArgs(HttpContextBase context, RedirectItem redirect) {
+            HttpContext = context;
+            Redirect = redirect;
         }
 
     }

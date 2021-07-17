@@ -65,15 +65,30 @@ namespace Skybrud.Umbraco.Redirects.Routing {
             // Get the root node/content ID of the domain (no domain = 0)
             int rootNodeId = domain?.ContentId ?? 0;
 
-            _redirects.OnPreLookup(new RedirectPreLookupEventArgs(context));
+            // Invoke the pre lookup event
+            RedirectPreLookupEventArgs preLookupEventArgs = new RedirectPreLookupEventArgs(context);
+            _redirects.OnPreLookup(preLookupEventArgs);
+            
+            // Declare a variable for the redirect (pre lookup event may alreadu have set one)
+            RedirectItem redirect = preLookupEventArgs.Redirect;
 
             // Look for a redirect matching the URL (and domain)
-            RedirectItem redirect = null;
-            if (rootNodeId > 0) redirect = _redirects.GetRedirectByUrl(rootNodeId, context.Request.RawUrl);
-            redirect = redirect ?? _redirects.GetRedirectByUrl(0, context.Request.RawUrl);
+            if (redirect != null) {
+                if (rootNodeId > 0) redirect = _redirects.GetRedirectByUrl(rootNodeId, context.Request.RawUrl);
+                redirect = redirect ?? _redirects.GetRedirectByUrl(0, context.Request.RawUrl);
+            }
+            
+            // Invoke the post lookup event
+            RedirectPostLookupEventArgs postLookUpEventArgs = new RedirectPostLookupEventArgs(context, redirect);
+            _redirects.OnPostLookup(postLookUpEventArgs);
+
+            // Update the local variable with the redirect from the event
+            redirect = postLookUpEventArgs.Redirect;
+
+            // Return if we don't have a redirect at this point
             if (redirect == null) return;
 
-			var redirectUrl = redirect.LinkUrl;
+			string redirectUrl = redirect.LinkUrl;
 
 			if (redirect.ForwardQueryString) redirectUrl = _redirects.HandleForwardQueryString(redirect, context.Request.RawUrl);
 
@@ -87,7 +102,6 @@ namespace Skybrud.Umbraco.Redirects.Routing {
             //    }
             //}
 
-            _redirects.OnPostLookup(new RedirectPostLookupEventArgs(context, redirect));
 
             // Redirect to the URL
             if (redirect.IsPermanent) {
