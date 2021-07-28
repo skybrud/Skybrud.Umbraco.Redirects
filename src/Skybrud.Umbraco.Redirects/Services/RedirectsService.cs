@@ -31,6 +31,52 @@ namespace Skybrud.Umbraco.Redirects.Services {
             _domains = domains;
             _umbracoContextAccessor = umbracoContextAccessor;
         }
+
+        /// <summary>
+        /// Gets an array of all domains (<see cref="RedirectDomain"/>) registered in Umbraco.
+        /// </summary>
+        /// <returns></returns>
+        public RedirectDomain[] GetDomains() {
+            return _domains.GetAll(false).Select(RedirectDomain.GetFromDomain).ToArray();
+        }
+
+
+
+
+
+
+
+        
+
+        /// <summary>
+        /// Deletes the specified <paramref name="redirect"/>.
+        /// </summary>
+        /// <param name="redirect">The redirect to be deleted.</param>
+        public void DeleteRedirect(Redirect redirect) {
+
+            // Some input validation
+            if (redirect == null) throw new ArgumentNullException(nameof(redirect));
+
+            // Create a new scope
+            using IScope scope = _scopeProvider.CreateScope();
+
+            // Remove the redirect from the database
+            try {
+                scope.Database.Delete(redirect.Dto);
+            } catch (Exception ex) {
+                throw new RedirectsException("Unable to delete redirect from database.", ex);
+            }
+
+            // Complete the scope
+            scope.Complete();
+
+        }
+
+
+
+
+
+
         
         /// <summary>
         /// Gets the redirect mathing the specified <paramref name="url"/>.
@@ -104,13 +150,13 @@ namespace Skybrud.Umbraco.Redirects.Services {
 
         }
         
-        public bool TryGetDomain(Uri uri, out Domain domain) {
+        private bool TryGetDomain(Uri uri, out Domain domain) {
             domain = DomainUtils.FindDomainForUri(_domains, uri);
             return domain != null;
         }
 
         /// <summary>
-        /// Gets the redirect mathing the specified numeric <paramref name="redirectId"/>.
+        /// Returns the redirect with the  specified numeric <paramref name="redirectId"/>.
         /// </summary>
         /// <param name="redirectId">The numeric ID of the redirect.</param>
         /// <returns>An instance of <see cref="Redirect"/>, or <c>null</c> if not found.</returns>
@@ -216,9 +262,9 @@ namespace Skybrud.Umbraco.Redirects.Services {
             // Wrap the database row
             return dto == null ? null : new Redirect(dto);
 
-
         }
 
+        /// <inheritdoc />
         public Redirect AddRedirect(AddRedirectOptions options) {
 
             if (options == null) throw new ArgumentNullException(nameof(options));
@@ -265,8 +311,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
             return GetRedirectById(item.Id);
 
         }
-        
-        
+
         /// <summary>
         /// Saves the specified <paramref name="redirect"/>.
         /// </summary>

@@ -1,65 +1,68 @@
 ﻿//using Newtonsoft.Json;
-//using Umbraco.Core.Models;
 
-//namespace Skybrud.Umbraco.Redirects.Models {
-    
-//    /// <summary>
-//    /// Class representing a domain.
-//    /// </summary>
-//    public class RedirectDomain {
+using Newtonsoft.Json;
+using Umbraco.Cms.Core.Models;
 
-//        #region Properties
+namespace Skybrud.Umbraco.Redirects.Models {
 
-//        /// <summary>
-//        /// Gets a reference to the underlying <see cref="IDomain"/>.
-//        /// </summary>
-//        [JsonIgnore]
-//        public IDomain Domain { get; }
+    /// <summary>
+    /// Class representing a domain.
+    /// </summary>
+    public class RedirectDomain {
 
-//        /// <summary>
-//        /// Gets the ID of the domain.
-//        /// </summary>
-//        [JsonProperty("id")]
-//        public int Id { get; }
+        #region Properties
 
-//        /// <summary>
-//        /// Gets the name of the domain.
-//        /// </summary>
-//        [JsonProperty("name")]
-//        public string Name { get; }
+        /// <summary>
+        /// Gets a reference to the underlying <see cref="IDomain"/>.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonIgnore]
+        [JsonIgnore]
+        public IDomain Domain { get; }
 
-//        /// <summary>
-//        /// Gets the root node ID of the domain.
-//        /// </summary>
-//        [JsonProperty("rootNodeId")]
-//        public int RootNodeId { get; }
+        /// <summary>
+        /// Gets the ID of the domain.
+        /// </summary>
+        [JsonProperty("id")]
+        public int Id { get; }
 
-//        #endregion
+        /// <summary>
+        /// Gets the name of the domain.
+        /// </summary>
+        [JsonProperty("name")]
+        public string Name { get; }
 
-//        #region Constructors
+        /// <summary>
+        /// Gets the root node ID of the domain.
+        /// </summary>
+        [JsonProperty("rootNodeId")]
+        public int RootNodeId { get; }
 
-//        private RedirectDomain(IDomain domain) {
-//            Domain = domain;
-//            Id = domain.Id;
-//            Name = domain.DomainName;
-//            RootNodeId = domain.RootContentId ?? 0;
-//        }
+        #endregion
 
-//        #endregion
+        #region Constructors
 
-//        #region Constructors
+        private RedirectDomain(IDomain domain) {
+            Domain = domain;
+            Id = domain.Id;
+            Name = domain.DomainName;
+            RootNodeId = domain.RootContentId ?? 0;
+        }
 
-//        /// <summary>
-//        /// Initializes a new instance from the specified Umbraco <paramref name="domain"/>.
-//        /// </summary>
-//        /// <param name="domain">The Umbraco domain.</param>
-//        /// <returns>An instance of <see cref="RedirectDomain"/>.</returns>
-//        public static RedirectDomain GetFromDomain(IDomain domain) {
-//            return domain == null ? null : new RedirectDomain(domain);
-//        }
+        #endregion
 
-//        #endregion
+        #region Constructors
 
-//    }
+        /// <summary>
+        /// Initializes a new instance from the specified Umbraco <paramref name="domain"/>.
+        /// </summary>
+        /// <param name="domain">The Umbraco domain.</param>
+        /// <returns>An instance of <see cref="RedirectDomain"/>.</returns>
+        public static RedirectDomain GetFromDomain(IDomain domain) {
+            return domain == null ? null : new RedirectDomain(domain);
+        }
 
-//}
+        #endregion
+
+    }
+
+}

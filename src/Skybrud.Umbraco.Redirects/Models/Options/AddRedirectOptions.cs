@@ -25,9 +25,6 @@ namespace Skybrud.Umbraco.Redirects.Models.Options {
         [JsonProperty("forward")]
         public bool ForwardQueryString { get; set; }
 
-        [JsonProperty("regex")]
-        public bool IsRegex { get; set; }
-
         #endregion
 
     }
