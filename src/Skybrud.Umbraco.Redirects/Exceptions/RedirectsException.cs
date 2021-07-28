@@ -14,6 +14,11 @@ namespace Skybrud.Umbraco.Redirects.Exceptions {
         public HttpStatusCode StatusCode { get; }
 
         /// <summary>
+        /// Returns whether the exception representins a 404 error.
+        /// </summary>
+        public bool Is404 => StatusCode == HttpStatusCode.NotFound;
+
+        /// <summary>
         /// Initializes a new exception with the specified <paramref name="message"/>. <see cref="StatusCode"/> will be <see cref="HttpStatusCode.InternalServerError"/>.
         /// </summary>
         /// <param name="message">The error message.</param>
