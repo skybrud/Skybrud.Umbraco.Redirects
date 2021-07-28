@@ -1,4 +1,4 @@
-﻿angular.module('umbraco').controller('SkybrudUmbracoRedirects.OutboundRedirectEditor.Controller', function ($scope, editorService, skybrudRedirectsService) {
+﻿angular.module("umbraco").controller("SkybrudUmbracoRedirects.OutboundRedirectEditor.Controller", function ($scope, editorService, skybrudRedirectsService) {
 
     if (!$scope.model.value) $scope.model.value = {};
     if ($scope.model.value.permanent === undefined) $scope.model.value.permanent = true;

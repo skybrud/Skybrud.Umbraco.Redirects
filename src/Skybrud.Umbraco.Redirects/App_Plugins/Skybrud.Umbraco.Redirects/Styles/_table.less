@@ -70,6 +70,9 @@
         a {
             color: #000;
         }
+
+        line-height: 26px;
+
     }
 
     tr > td:first-child {
@@ -80,8 +83,16 @@
         border-right: 1px solid #e9e9eb;
     }
 
+    td.col-original {
+        min-width: 150px;
+    }
+
     td.col-destination {
         width: 100%;
+    }
+
+    .col-site {
+        white-space: nowrap;
     }
 
     .col-original,
@@ -92,7 +103,7 @@
 
     .col-actions {
         .btn.btn-link {
-            font-size: 12px;
+            /*font-size: 12px;*/
             padding: 0;
 
             & + .btn.btn-link {
@@ -102,6 +113,17 @@
             &.red {
                 color: red;
             }
+        }
+    }
+    
+    .col-site {
+        a {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 150px;
+            display: inline-block;
+            vertical-align: middle;
         }
     }
 
@@ -122,4 +144,37 @@
         text-align: center;
     }
 
+    th, td {
+        &.tar { text-align: right; }
+    }
+
+    > tfoot > tr > th {
+        background: #F8F8F8;
+        font-size: 11px;
+        line-height: 13px;
+    }
+
+}
+
+&.skybrud-redirects-dashboard {
+    @border: #d9d9d9;
+    table.table.list {
+        border-color: @border;
+        tr {
+            td {
+                &:first-child {
+                    border-left-color: @border;
+                }
+                &:last-child {
+                    border-right-color: @border;
+                }
+            }
+        }
+        tbody > tr:first-child td {
+                border-top-color: @border;
+        }
+        tbody > tr:last-child td {
+                border-bottom-color: @border;
+        }
+    }
 }

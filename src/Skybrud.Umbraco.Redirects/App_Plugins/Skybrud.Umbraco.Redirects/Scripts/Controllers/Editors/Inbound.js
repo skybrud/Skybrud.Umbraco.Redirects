@@ -1,17 +1,20 @@
-﻿angular.module('umbraco').controller('SkybrudUmbracoRedirects.PropertyEditor.Controller', function ($scope, $routeParams, $http, $q, $timeout, localizationService, notificationsService, overlayService, skybrudRedirectsService, editorState) {
+﻿angular.module("umbraco").controller("SkybrudUmbracoRedirects.PropertyEditor.Controller", function ($scope, $routeParams, $http, $q, $timeout, localizationService, notificationsService, overlayService, skybrudRedirectsService, editorState) {
+
+    // Get the base URL for the API controller
+    const baseUrl = Umbraco.Sys.ServerVariables.skybrud.redirects.baseUrl;
 
     $scope.route = $routeParams;
     $scope.redirects = [];
 
-    $scope.mode = $routeParams.create ? 'create' : 'list';
+    $scope.mode = $routeParams.create ? "create" : "list";
     $scope.type = $scope.route.section;
 
     $scope.loading = false;
 
-    $scope.showTitle = $scope.model.config !== '1';
+    $scope.showTitle = $scope.model.config !== "1";
     
-    // If we're neither in the content or media section, we stop further execution (eg. property editor preview)
-    if ($scope.type != 'content' && $scope.type != 'media') return;
+    // If we"re neither in the content or media section, we stop further execution (eg. property editor preview)
+    if ($scope.type !== "content" && $scope.type !== "media") return;
 
     // Get the current editor state (the content or media being edited)
     var state = editorState.getCurrent();
@@ -103,16 +106,16 @@
         $scope.loading = true;
 
         // Make the call to the redirects API
-        var http = $http({
-            method: 'GET',
-            url: '/umbraco/backoffice/Skybrud/Redirects/GetRedirectsFor' + $scope.type,
+        const http = $http({
+            method: "GET",
+            url: `${baseUrl}GetRedirectsFor${$scope.type}`,
             params: {
                 contentId: $routeParams.id
             }
         });
 
         // Show the loader for at least 200 ms
-        var timer = $timeout(function () { }, 200);
+        const timer = $timeout(function () { }, 200);
 
         // Wait for both the AJAX call and the timeout
         $q.all([http, timer]).then(function (array) {
@@ -120,13 +123,13 @@
             $scope.redirects = array[0].data.data.redirects;
             $scope.loading = false;
         }, function () {
-            notificationsService.error('Unable to load redirects', 'The list of redirects could not be loaded.');
+            notificationsService.error("Unable to load redirects", "The list of redirects could not be loaded.");
             $scope.loading = false;
         });
 
     };
 
-    if ($scope.mode == 'list') {
+    if ($scope.mode === "list") {
         $scope.updateList();
     }
 

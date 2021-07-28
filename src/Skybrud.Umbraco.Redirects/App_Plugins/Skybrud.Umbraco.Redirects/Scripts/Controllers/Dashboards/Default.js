@@ -1,25 +1,28 @@
-﻿angular.module('umbraco').controller('SkybrudUmbracoRedirects.Dashboard.Controller', function ($scope, $http, $q, $timeout, overlayService, notificationsService, localizationService, skybrudRedirectsService, eventsService) {
+﻿angular.module("umbraco").controller("SkybrudUmbracoRedirects.Dashboard.Controller", function ($scope, $http, $q, $timeout, overlayService, notificationsService, localizationService, skybrudRedirectsService, eventsService) {
+
+    // Get the base URL for the API controller
+    const baseUrl = Umbraco.Sys.ServerVariables.skybrud.redirects.baseUrl;
 
     $scope.redirects = [];
-    $scope.mode = 'list';
+    $scope.mode = "list";
 
     $scope.rootNodes = [
-        { name: 'All sites', value: '' }
+        { name: "All sites", value: "" }
     ];
 
-    localizationService.localize('redirects_allSites').then(function (value) {
+    localizationService.localize("redirects_allSites").then(function (value) {
         $scope.rootNodes[0].name = value;
     });
 
     $scope.types = [
-        { name: 'All types', value: 'all' },
-        { name: 'Content', value: 'content' },
-        { name: 'Media', value: 'media' },
-        { name: 'URL', value: 'url' }
+        { name: "All types", value: "all" },
+        { name: "Content", value: "content" },
+        { name: "Media", value: "media" },
+        { name: "URL", value: "url" }
     ];
 
-    angular.forEach($scope.types, function (type) {
-        localizationService.localize('redirects_media_' + type.value).then(function (value) {
+    $scope.types.forEach(function (type) {
+        localizationService.localize(`redirects_media_${type.value}`).then(function (value) {
             type.name = value;
         });
     });
@@ -27,7 +30,7 @@
     $scope.filters = {
         rootNode: $scope.rootNodes[0],
         type: $scope.types[0],
-        text: ''
+        text: ""
     };
 
     $scope.activeFilters = 0;
@@ -117,7 +120,7 @@
         page = (page ? page : $scope.pagination.page);
 
         // Declare the arguments (making up the query string) for the call to the API
-        var args = {
+        const args = {
             limit: $scope.pagination.limit,
             page: page
         };
@@ -126,12 +129,12 @@
 
         // Any filters?
         if ($scope.filters.rootNode && $scope.filters.rootNode.id > 0) {
-            args.rootNodeId = $scope.filters.rootNode.id;
+            args.rootNodeKey = $scope.filters.rootNode.key;
             $scope.activeFilters++;
         }
 
         // Any filters?
-        if ($scope.filters.type.value != 'all') {
+        if ($scope.filters.type.value !== "all") {
             args.type = $scope.filters.type.value;
             $scope.activeFilters++;
         }
@@ -142,14 +145,14 @@
         }
 
         // Declare the HTTP options
-        var http = $http({
-            method: 'GET',
-            url: '/umbraco/backoffice/Skybrud/Redirects/GetRedirects',
+        const http = $http({
+            method: "GET",
+            url: `${baseUrl}GetRedirects`,
             params: args
         });
 
         // Show the loader for at least 200 ms
-        var timer = $timeout(function () { }, 200);
+        const timer = $timeout(function () { }, 200);
 
         // Wait for both the AJAX call and the timeout
         $q.all([http, timer]).then(function (array) {
@@ -161,17 +164,17 @@
             $scope.pagination = array[0].data.pagination;
             $scope.pagination.pagination = [];
 
-            var from = Math.max(1, $scope.pagination.page - 7);
-            var to = Math.min($scope.pagination.pages, $scope.pagination.page + 7);
+            const from = Math.max(1, $scope.pagination.page - 7);
+            const to = Math.min($scope.pagination.pages, $scope.pagination.page + 7);
 
-            for (var i = from; i <= to; i++) {
+            for (let i = from; i <= to; i++) {
                 $scope.pagination.pagination.push({
                     page: i,
-                    active: $scope.pagination.page == i
+                    active: $scope.pagination.page === i
                 });
             }
 
-            var tokens = [
+            const tokens = [
                 $scope.pagination.from,
                 $scope.pagination.to,
                 $scope.pagination.total,
@@ -179,26 +182,26 @@
                 $scope.pagination.pages
             ];
 
-            localizationService.localize('redirects_pagination', tokens).then(function (value) {
+            localizationService.localize("redirects_pagination", tokens).then(function (value) {
                 $scope.pagination.text = value;
             });
 
         }, function () {
-            notificationsService.error('Unable to load redirects', 'The list of redirects could not be loaded.');
+            notificationsService.error("Unable to load redirects", "The list of redirects could not be loaded.");
             $scope.loading.list = false;
         });
 
     };
 
     skybrudRedirectsService.getRootNodes().then(function (r) {
-        angular.forEach(r.data.items, function (rootNode) {
+        r.data.items.forEach(function (rootNode) {
             $scope.rootNodes.push(rootNode);
         });
     });
 
     $scope.updateList();
 
-    $scope.$watch('filters', function () {
+    $scope.$watch("filters", function () {
         $scope.updateList();
     }, true);
 

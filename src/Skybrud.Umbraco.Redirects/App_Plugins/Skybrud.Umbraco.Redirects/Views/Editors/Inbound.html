@@ -36,7 +36,7 @@
                         <th class="col-actions"></th>
                     </tr>
                 </thead>
-                <tbody ng-show="redirects.length == 0">
+                <tbody ng-if="redirects.length == 0">
                     <tr>
                         <td colspan="7" class="empty">
                             <span ng-if="type == 'content'">

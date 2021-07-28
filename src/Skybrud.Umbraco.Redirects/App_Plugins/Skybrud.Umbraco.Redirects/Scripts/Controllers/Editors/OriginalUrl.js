@@ -1,4 +1,4 @@
-﻿angular.module("umbraco").controller("SkybrudUmbracoRedirects.Editors.OriginalUrl.Controller", function ($scope, $element, editorService) {
+﻿angular.module("umbraco").controller("SkybrudUmbracoRedirects.Editors.OriginalUrl.Controller", function ($scope) {
 
     $scope.isValidUrl = function (url, isRegex) {
 
