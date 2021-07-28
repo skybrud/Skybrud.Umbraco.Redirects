@@ -1,15 +1,15 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 using Skybrud.Essentials.Enums;
-using Skybrud.Essentials.Json.Converters.Time;
 using Skybrud.Essentials.Time;
 using Skybrud.Umbraco.Redirects.Exceptions;
 using Skybrud.Umbraco.Redirects.Extensions;
 using Skybrud.Umbraco.Redirects.Models.Dtos;
+using Skybrud.Umbraco.Redirects.Text.Json;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Extensions;
-using UnixTimeConverter = Skybrud.Umbraco.Redirects.Text.Json.UnixTimeConverter;
 
 namespace Skybrud.Umbraco.Redirects.Models {
 
@@ -96,8 +96,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// Gets or sets the timestamp for when the redirect was created.
         /// </summary>
         [JsonProperty("createDate")]
-        [JsonConverter(typeof(TimeConverter))]
-        [System.Text.Json.Serialization.JsonConverter(typeof(UnixTimeConverter))]
+        [System.Text.Json.Serialization.JsonConverter(typeof(Iso8601TimeConverter))]
         public EssentialsTime CreateDate {
             get => _createDate;
             set { _createDate = value ?? EssentialsTime.Zero; Dto.Created = _createDate.DateTimeOffset.ToUniversalTime().DateTime; }
@@ -107,8 +106,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// Gets or sets the timestamp for when the redirect was last updated.
         /// </summary>
         [JsonProperty("updateDate")]
-        [JsonConverter(typeof(TimeConverter))]
-        [System.Text.Json.Serialization.JsonConverter(typeof(UnixTimeConverter))]
+        [System.Text.Json.Serialization.JsonConverter(typeof(Iso8601TimeConverter))]
         public EssentialsTime UpdateDate {
             get => _updateDate;
             set { _updateDate = value ?? EssentialsTime.Zero; Dto.Updated = _updateDate.DateTimeOffset.ToUniversalTime().DateTime; }
@@ -118,6 +116,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// Gets or sets whether the redirect is permanent.
         /// </summary>
         [JsonProperty("permanent")]
+        [JsonPropertyName("permanent")]
         public bool IsPermanent {
             get => Dto.IsPermanent;
             set => Dto.IsPermanent = value;
@@ -127,6 +126,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// Gets or sets whether the query string should be forwarded.
         /// </summary>
         [JsonProperty("forward")]
+        [JsonPropertyName("forward")]
         public bool ForwardQueryString {
             get => Dto.ForwardQueryString;
             set => Dto.ForwardQueryString = value;

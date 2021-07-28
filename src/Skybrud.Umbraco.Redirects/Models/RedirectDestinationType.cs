@@ -1,13 +1,13 @@
-﻿using Newtonsoft.Json;
-using Skybrud.Essentials.Json.Converters.Enums;
-using Skybrud.Essentials.Strings;
+﻿using NewtonsoftJsonConverter = Newtonsoft.Json.JsonConverterAttribute;
+using MicrosoftJsonConverter = System.Text.Json.Serialization.JsonConverterAttribute;
 
 namespace Skybrud.Umbraco.Redirects.Models {
     
     /// <summary>
     /// Enum describing the type of the link.
     /// </summary>
-    [JsonConverter(typeof(EnumStringConverter), TextCasing.CamelCase)]
+    [NewtonsoftJsonConverter(typeof(Essentials.Json.Converters.Enums.EnumCamelCaseConverter))]
+    [MicrosoftJsonConverter(typeof(Text.Json.Enums.EnumCamelCaseConverter))]
     public enum RedirectDestinationType {
     
         /// <summary>
