@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Skybrud.Essentials.Strings.Extensions;
 using Skybrud.Essentials.Time;
 using Skybrud.Umbraco.Redirects.Exceptions;
 using Skybrud.Umbraco.Redirects.Extensions;
@@ -349,30 +350,14 @@ namespace Skybrud.Umbraco.Redirects.Services {
 
         }
 
-
-
-
-
-
-
-
-
-
-
-
         /// <summary>
-        /// Gets an instance of <see cref="RedirectsSearchResult"/> representing a paginated search for redirects.
+        /// Returns a paginated list of redirects matching the specified <paramref name="options"/>.
         /// </summary>
-        /// <param name="page">The page to be returned (default is <c>1</c>)</param>
-        /// <param name="limit">The maximum amount of redirects to be returned per page (default is <c>20</c>).</param>
-        /// <param name="type">The type of the redirects to be returned. Possible values are <c>url</c>,
-        ///     <c>content</c> or <c>media</c>. If not specified, all types of redirects will be returned.
-        ///     Default is <c>null</c>.</param>
-        /// <param name="text">A string value that should be present in either the text or URL of the returned
-        ///     redirects. Default is <c>null</c>.</param>
-        /// <param name="rootNodeId"></param>
+        /// <param name="options">The options the returned redirects should match.</param>
         /// <returns>An instance of <see cref="RedirectsSearchResult"/>.</returns>
-        public RedirectsSearchResult GetRedirects(int page = 1, int limit = 20, string type = null, string text = null, int? rootNodeId = null) {
+        public RedirectsSearchResult GetRedirects(RedirectsSearchOptions options) {
+
+            if (options == null) throw new ArgumentNullException(nameof(options));
 
             RedirectsSearchResult result;
 
@@ -382,23 +367,26 @@ namespace Skybrud.Umbraco.Redirects.Services {
                 var sql = scope.SqlContext.Sql().Select<RedirectDto>().From<RedirectDto>();
 
                 // Search by the rootNodeId
-                if (rootNodeId != null) sql = sql.Where<RedirectDto>(x => x.RootId == rootNodeId.Value);
+                if (options.RootNodeKey != null) sql = sql.Where<RedirectDto>(x => x.RootKey == options.RootNodeKey.Value);
 
                 // Search by the type
-                if (string.IsNullOrWhiteSpace(type) == false) sql = sql.Where<RedirectDto>(x => x.DestinationType == type);
+                if (options.Type != RedirectType.All) {
+                    string type = options.Type.ToPascalCase();
+                    sql = sql.Where<RedirectDto>(x => x.DestinationType == type);
+                }
 
                 // Search by the text
-                if (string.IsNullOrWhiteSpace(text) == false) {
+                if (string.IsNullOrWhiteSpace(options.Text) == false) {
 
-                    string[] parts = text.Split('?');
+                    string[] parts = options.Text.Split('?');
 
                     if (parts.Length == 1) {
-                        sql = sql.Where<RedirectDto>(x => x.Path.Contains(text) || x.QueryString.Contains(text));
+                        sql = sql.Where<RedirectDto>(x => x.Path.Contains(options.Text) || x.QueryString.Contains(options.Text));
                     } else {
                         string url = parts[0];
                         string query = parts[1];
                         sql = sql.Where<RedirectDto>(x => (
-                            x.Path.Contains(text)
+                            x.Path.Contains(options.Text)
                             ||
                             (x.Path.Contains(url) && x.QueryString.Contains(query))
                         ));
@@ -412,9 +400,9 @@ namespace Skybrud.Umbraco.Redirects.Services {
                 RedirectDto[] all = scope.Database.Fetch<RedirectDto>(sql).ToArray();
 
                 // Calculate variables used for the pagination
-                int pages = (int) Math.Ceiling(all.Length / (double)limit);
-                page = Math.Max(1, Math.Min(page, pages));
-
+                int limit = options.Limit;
+                int pages = (int) Math.Ceiling(all.Length / (double) limit);
+                int page = Math.Max(1, Math.Min(options.Page, pages));
                 int offset = (page * limit) - limit;
 
                 // Apply pagination and wrap the database rows

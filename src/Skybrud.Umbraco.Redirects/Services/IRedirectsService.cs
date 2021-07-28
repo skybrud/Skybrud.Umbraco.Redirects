@@ -101,18 +101,11 @@ namespace Skybrud.Umbraco.Redirects.Services {
         string GetDestinationUrl(Redirect redirect);
         
         /// <summary>
-        /// Returns an instance of <see cref="RedirectsSearchResult"/> representing a paginated search for redirects.
+        /// Returns a paginated list of redirects matching the specified <paramref name="options"/>.
         /// </summary>
-        /// <param name="page">The page to be returned (default is <c>1</c>)</param>
-        /// <param name="limit">The maximum amount of redirects to be returned per page (default is <c>20</c>).</param>
-        /// <param name="type">The type of the redirects to be returned. Possible values are <c>url</c>,
-        ///     <c>content</c> or <c>media</c>. If not specified, all types of redirects will be returned.
-        ///     Default is <c>null</c>.</param>
-        /// <param name="text">A string value that should be present in either the text or URL of the returned
-        ///     redirects. Default is <c>null</c>.</param>
-        /// <param name="rootNodeId"></param>
+        /// <param name="options">The options the returned redirects should match.</param>
         /// <returns>An instance of <see cref="RedirectsSearchResult"/>.</returns>
-        RedirectsSearchResult GetRedirects(int page = 1, int limit = 20, string type = null, string text = null, int? rootNodeId = null);
+        RedirectsSearchResult GetRedirects(RedirectsSearchOptions options);
 
         /// <summary>
         /// Returns a collection with all redirects.

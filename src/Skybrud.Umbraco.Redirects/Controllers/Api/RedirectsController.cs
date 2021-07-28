@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
+using Skybrud.Essentials.Enums;
 using Skybrud.Umbraco.Redirects.Exceptions;
 using Skybrud.Umbraco.Redirects.Helpers;
 using Skybrud.Umbraco.Redirects.Models;
@@ -237,16 +238,27 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         /// <param name="limit">The maximum amount of redirects to be returned per page.</param>
         /// <param name="type">The type of redirects that should be returned.</param>
         /// <param name="text">The text that the returned redirects should match.</param>
-        /// <param name="rootNodeId">The root node ID that the returned redirects should match. <c>null</c> means all redirects. <c>0</c> means all global redirects.</param>
+        /// <param name="rootNodeKey">The root node key that the returned redirects should match. <c>null</c> means all redirects. <see cref="Guid.Empty"/> means all global redirects.</param>
         /// <returns>A list of redirects.</returns>
         [HttpGet]
-        public object GetRedirects(int page = 1, int limit = 20, string type = null, string text = null, int? rootNodeId = null) {
+        public object GetRedirects(int page = 1, int limit = 20, string type = null, string text = null, Guid? rootNodeKey = null) {
 
             try {
-                
-                RedirectsSearchResult hej =  _redirects.GetRedirects(page, limit, type, text, rootNodeId);
 
-                return _backOffice.Map(hej);
+                // Initialize the search options
+                RedirectsSearchOptions options = new() {
+                    Page = page,
+                    Limit = limit,
+                    Type = EnumUtils.ParseEnum(type, RedirectType.All),
+                    Text = text,
+                    RootNodeKey = rootNodeKey
+                };
+                
+                // Make the search for redirects via the redirects service
+                RedirectsSearchResult result = _redirects.GetRedirects(options);
+
+                // Map the result for the API
+                return _backOffice.Map(result);
 
             } catch (RedirectsException ex) {
 
