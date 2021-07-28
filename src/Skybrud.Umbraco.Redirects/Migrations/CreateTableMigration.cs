@@ -7,7 +7,7 @@ namespace Skybrud.Umbraco.Redirects.Migrations {
 
         public CreateTableMigration(IMigrationContext context) : base(context) { }
 
-        public override void Migrate() {
+        protected override void Migrate() {
             if (TableExists(RedirectSchema.TableName)) return;
             Create.Table<RedirectSchema>().Do();
         }
