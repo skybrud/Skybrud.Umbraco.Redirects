@@ -13,6 +13,8 @@ namespace Skybrud.Umbraco.Redirects.Models.Api {
 
         public string Icon { get; }
 
+        public string BackOfficeUrl => $"/umbraco/#/content/content/edit/{Id}";
+
         public string[] Domains { get; }
 
         public RedirectRootNodeModel(Redirect redirect, IContent content, string[] domains) {
