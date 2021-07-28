@@ -133,6 +133,12 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// <returns>The calculated destination URL.</returns>
         string GetDestinationUrl(Redirect redirect, string inboundUrl);
 
+        /// <summary>
+        /// Returns an array of all rode nodes configured in Umbraco.
+        /// </summary>
+        /// <returns>An array of <see cref="RedirectRootNode"/> representing the root nodes.</returns>
+        RedirectRootNode[] GetRootNodes();
+
     }
 
 }

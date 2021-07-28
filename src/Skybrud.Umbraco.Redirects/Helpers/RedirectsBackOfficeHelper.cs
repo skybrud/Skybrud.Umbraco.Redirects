@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
 using Skybrud.Essentials.Reflection;
 using Skybrud.Umbraco.Redirects.Dashboards;
+using Skybrud.Umbraco.Redirects.Models;
+using Skybrud.Umbraco.Redirects.Models.Api;
 using Umbraco.Cms.Core.Dashboards;
+using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Services;
-using Umbraco.Cms.Core.Web;
 using Umbraco.Extensions;
 
 namespace Skybrud.Umbraco.Redirects.Helpers {
@@ -17,11 +19,38 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
         private readonly IRuntimeState _runtimeState;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly LinkGenerator _linkGenerator;
+        private readonly IDomainService _domainService;
+        private readonly IContentService _contentService;
+        private readonly IMediaService _mediaService;
+        private readonly ILocalizedTextService _textService;
 
-        public RedirectsBackOfficeHelper(IRuntimeState runtimeState, IHttpContextAccessor httpContextAccessor, LinkGenerator linkGenerator) {
+        public RedirectsBackOfficeHelper(IRuntimeState runtimeState, IHttpContextAccessor httpContextAccessor, LinkGenerator linkGenerator, IDomainService domainService, IContentService contentService, IMediaService mediaService, ILocalizedTextService textService) {
             _runtimeState = runtimeState;
             _httpContextAccessor = httpContextAccessor;
             _linkGenerator = linkGenerator;
+            _domainService = domainService;
+            _contentService = contentService;
+            _mediaService = mediaService;
+            _textService = textService;
+        }
+        
+        /// <summary>
+        /// Returns the localized value for the key with the specified <paramref name="alias"/> within the <c>redirects</c> area.
+        /// </summary>
+        /// <param name="alias">The alias of the key.</param>
+        /// <returns>The localized value.</returns>
+        public string Localize(string alias) {
+            return Localize(alias, "redirects");
+        }
+        
+        /// <summary>
+        /// Returns the localized value for the key with the specified <paramref name="alias"/> and <paramref name="area"/>.
+        /// </summary>
+        /// <param name="alias">The alias of the key.</param>
+        /// <param name="area">The area in which the key is located.</param>
+        /// <returns>The localized value.</returns>
+        public string Localize(string alias, string area) {
+            return _textService.Localize(area, alias);
         }
 
         /// <summary>
@@ -86,6 +115,61 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
         //    return true;
 
         //}
+
+        public virtual object Map(RedirectsSearchResult result) {
+
+            List<RedirectModel> items = new List<RedirectModel>();
+            
+            Dictionary<Guid, RedirectRootNodeModel> rootNodeLookup = new Dictionary<Guid, RedirectRootNodeModel>();
+            Dictionary<Guid, IContent> contentLookup = new Dictionary<Guid, IContent>();
+            Dictionary<Guid, IMedia> mediaLookup = new Dictionary<Guid, IMedia>();
+
+            foreach (var redirect in result.Items) {
+
+                RedirectRootNodeModel rootNode = null;
+                if (redirect.RootKey != Guid.Empty) {
+
+                    if (!rootNodeLookup.TryGetValue(redirect.RootKey, out rootNode)) {
+
+                        if (!contentLookup.TryGetValue(redirect.RootKey, out IContent content)) {
+                            content = _contentService.GetById(redirect.RootKey);
+                            if (content != null) contentLookup.Add(content.Key, content);
+                        }
+                        var domains = content == null ? null :_domainService.GetAssignedDomains(content.Id, false).Select(x => x.DomainName).ToArray();
+                        rootNode = new RedirectRootNodeModel(redirect, content, domains);
+
+                        rootNodeLookup.Add(rootNode.Key, rootNode);
+
+                    }
+                }
+
+                RedirectDestinationModel destination;
+                if (redirect.Destination.Type == RedirectDestinationType.Content) {
+                    if (!contentLookup.TryGetValue(redirect.Destination.Key, out IContent content)) {
+                        content = _contentService.GetById(redirect.Destination.Key);
+                        if (content != null) contentLookup.Add(content.Key, content);
+                    }
+                    destination = new RedirectDestinationModel(redirect, content);
+                } else if (redirect.Destination.Type == RedirectDestinationType.Media) {
+                    if (!mediaLookup.TryGetValue(redirect.Destination.Key, out IMedia media)) {
+                        media = _mediaService.GetById(redirect.Destination.Key);
+                        if (media != null) mediaLookup.Add(media.Key, media);
+                    }
+                    destination = new RedirectDestinationModel(redirect, media);
+                } else {
+                    destination = new RedirectDestinationModel(redirect);
+                }
+
+                items.Add(new RedirectModel(redirect, rootNode, destination));
+
+            }
+
+            return new {
+                result.Pagination,
+                items
+            };
+
+        }
 
     }
 

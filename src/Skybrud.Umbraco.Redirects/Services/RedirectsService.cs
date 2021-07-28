@@ -9,6 +9,7 @@ using Skybrud.Umbraco.Redirects.Extensions;
 using Skybrud.Umbraco.Redirects.Models;
 using Skybrud.Umbraco.Redirects.Models.Dtos;
 using Skybrud.Umbraco.Redirects.Models.Options;
+using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Routing;
 using Umbraco.Cms.Core.Scoping;
@@ -23,12 +24,14 @@ namespace Skybrud.Umbraco.Redirects.Services {
         private readonly ILogger<RedirectsService> _logger;
         private readonly IScopeProvider _scopeProvider;
         private readonly IDomainService _domains;
+        private readonly IContentService _contentService;
         private readonly IUmbracoContextAccessor _umbracoContextAccessor;
 
-        public RedirectsService(ILogger<RedirectsService> logger, IScopeProvider scopeProvider, IDomainService domains, IUmbracoContextAccessor umbracoContextAccessor) {
+        public RedirectsService(ILogger<RedirectsService> logger, IScopeProvider scopeProvider, IDomainService domains, IContentService contentService, IUmbracoContextAccessor umbracoContextAccessor) {
             _logger = logger;
             _scopeProvider = scopeProvider;
             _domains = domains;
+            _contentService = contentService;
             _umbracoContextAccessor = umbracoContextAccessor;
         }
 
@@ -489,6 +492,21 @@ namespace Skybrud.Umbraco.Redirects.Services {
             }
 
             return redirect.ForwardQueryString ? MergeQueryString(inboundUrl, destinationUrl) : destinationUrl;
+
+        }
+
+        public RedirectRootNode[] GetRootNodes()  {
+
+            // Multiple domains may be configured for a single node, so we need to group the domains before proceeding
+            var domainsByRootNodeId = GetDomains().GroupBy(x => x.RootNodeId);
+
+            return (
+                from domainGroup in domainsByRootNodeId
+                let content =  _contentService.GetById(domainGroup.First().RootNodeId)
+                where content != null && !content.Trashed
+                orderby content.Id
+                select RedirectRootNode.GetFromContent(content, domainGroup)
+            ).ToArray();
 
         }
 

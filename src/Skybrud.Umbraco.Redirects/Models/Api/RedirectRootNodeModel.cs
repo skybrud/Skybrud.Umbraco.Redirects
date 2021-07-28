@@ -23,6 +23,14 @@ namespace Skybrud.Umbraco.Redirects.Models.Api {
             Domains = domains ?? Array.Empty<string>();
         }
 
+        public RedirectRootNodeModel(RedirectRootNode rootNode) {
+            Id = rootNode.Id;
+            Key = rootNode.Key;
+            Name = rootNode.Name;
+            Icon = rootNode.Icon;
+            Domains = rootNode.Domains;
+        }
+
     }
 
 }
