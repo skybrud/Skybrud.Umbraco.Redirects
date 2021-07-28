@@ -7,7 +7,6 @@ using Skybrud.Umbraco.Redirects.Exceptions;
 using Skybrud.Umbraco.Redirects.Extensions;
 using Skybrud.Umbraco.Redirects.Models.Dtos;
 using Skybrud.Umbraco.Redirects.Text.Json;
-using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Extensions;
 
@@ -15,11 +14,8 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
     public class Redirect {
 
-        private IContent _rootNode;
-        private string[] _rootNodeDomains;
         private EssentialsTime _createDate;
         private EssentialsTime _updateDate;
-        private RedirectDestinationType _type;
 
         #region Properties
 
@@ -38,12 +34,12 @@ namespace Skybrud.Umbraco.Redirects.Models {
         public Guid Key => Dto.Key;
 
         /// <summary>
-        /// Gets or sets the root node ID of the redirect.
+        /// Gets or sets the root node key of the redirect.
         /// </summary>
         [JsonProperty("rootKey")]
         public Guid RootKey {
             get => Dto.RootKey;
-            set { Dto.RootKey = value; _rootNode = null; _rootNodeDomains = null; }
+            set => Dto.RootKey = value;
         }
 
         /// <summary>
