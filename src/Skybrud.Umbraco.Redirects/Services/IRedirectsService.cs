@@ -117,9 +117,10 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// Returns the calculated destination URL.
         ///
         /// For content and media, this method will attempt to resolve the current URL - eg. in case the URL has
-        /// changed since the redirect was created. If query string forwarding is enabled for the redirect, the query
-        /// string of the redirect is merged with the query string of <paramref name="inboundUrl"/>.
+        /// changed since the redirect was created.
         ///
+        /// If query string forwarding is enabled for the redirect, the query
+        /// string of the redirect is merged with the query string of <paramref name="inboundUrl"/>.
         /// </summary>
         /// <param name="redirect">The redirect.</param>
         /// <param name="inboundUrl">The raw URL of the request.</param>
@@ -131,6 +132,22 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// </summary>
         /// <returns>An array of <see cref="RedirectRootNode"/> representing the root nodes.</returns>
         RedirectRootNode[] GetRootNodes();
+        
+        /// <summary>
+        /// Returns an array of redirects where the destination matches the specified <paramref name="nodeType"/> and <paramref name="nodeId"/>.
+        /// </summary>
+        /// <param name="nodeType">The type of the destination node.</param>
+        /// <param name="nodeId">The numeric ID of the destination node.</param>
+        /// <returns>An array of <see cref="Redirect"/>.</returns>
+        Redirect[] GetRedirectsByNodeId(RedirectDestinationType nodeType, int nodeId);
+        
+        /// <summary>
+        /// Returns an array of redirects where the destination matches the specified <paramref name="nodeType"/> and <paramref name="nodeKey"/>.
+        /// </summary>
+        /// <param name="nodeType">The type of the destination node.</param>
+        /// <param name="nodeKey">The key (GUID) of the destination node.</param>
+        /// <returns>An array of <see cref="Redirect"/>.</returns>
+        Redirect[] GetRedirectsByNodeKey(RedirectDestinationType nodeType, Guid nodeKey);
 
     }
 

@@ -7,8 +7,11 @@ using Skybrud.Essentials.Reflection;
 using Skybrud.Umbraco.Redirects.Dashboards;
 using Skybrud.Umbraco.Redirects.Models;
 using Skybrud.Umbraco.Redirects.Models.Api;
+using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Dashboards;
 using Umbraco.Cms.Core.Models;
+using Umbraco.Cms.Core.Models.ContentEditing;
+using Umbraco.Cms.Core.Models.Membership;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Extensions;
 
@@ -167,6 +170,87 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
             return new {
                 result.Pagination,
                 items
+            };
+
+        }
+
+        public virtual IEnumerable<RedirectModel> Map(IEnumerable<Redirect> redirects) {
+
+            List<RedirectModel> items = new List<RedirectModel>();
+            
+            Dictionary<Guid, RedirectRootNodeModel> rootNodeLookup = new Dictionary<Guid, RedirectRootNodeModel>();
+            Dictionary<Guid, IContent> contentLookup = new Dictionary<Guid, IContent>();
+            Dictionary<Guid, IMedia> mediaLookup = new Dictionary<Guid, IMedia>();
+
+            foreach (var redirect in redirects) {
+
+                RedirectRootNodeModel rootNode = null;
+                if (redirect.RootKey != Guid.Empty) {
+
+                    if (!rootNodeLookup.TryGetValue(redirect.RootKey, out rootNode)) {
+
+                        if (!contentLookup.TryGetValue(redirect.RootKey, out IContent content)) {
+                            content = _contentService.GetById(redirect.RootKey);
+                            if (content != null) contentLookup.Add(content.Key, content);
+                        }
+                        var domains = content == null ? null :_domainService.GetAssignedDomains(content.Id, false).Select(x => x.DomainName).ToArray();
+                        rootNode = new RedirectRootNodeModel(redirect, content, domains);
+
+                        rootNodeLookup.Add(rootNode.Key, rootNode);
+
+                    }
+                }
+
+                RedirectDestinationModel destination;
+                if (redirect.Destination.Type == RedirectDestinationType.Content) {
+                    if (!contentLookup.TryGetValue(redirect.Destination.Key, out IContent content)) {
+                        content = _contentService.GetById(redirect.Destination.Key);
+                        if (content != null) contentLookup.Add(content.Key, content);
+                    }
+                    destination = new RedirectDestinationModel(redirect, content);
+                } else if (redirect.Destination.Type == RedirectDestinationType.Media) {
+                    if (!mediaLookup.TryGetValue(redirect.Destination.Key, out IMedia media)) {
+                        media = _mediaService.GetById(redirect.Destination.Key);
+                        if (media != null) mediaLookup.Add(media.Key, media);
+                    }
+                    destination = new RedirectDestinationModel(redirect, media);
+                } else {
+                    destination = new RedirectDestinationModel(redirect);
+                }
+
+                items.Add(new RedirectModel(redirect, rootNode, destination));
+
+            }
+
+            return items;
+
+        }
+
+        public virtual ContentApp GetContentAppFor(object source, IEnumerable<IReadOnlyUserGroup> userGroups)  {
+
+            switch (source) {
+
+                case IContent content:
+                    return content.ContentType.IsElement ? null : GetDefaultContentApp();
+
+                case IMedia media:
+                    return media.ContentType.Alias == Constants.Conventions.MediaTypes.Folder ? null : GetDefaultContentApp();
+
+                default:
+                    return null;
+                
+            }
+
+        }
+
+        public virtual ContentApp GetDefaultContentApp() {
+
+            return new() {
+                Alias = "redirects",
+                Name = "Redirects",
+                Icon = "icon-arrow-right",
+                View = $"/App_Plugins/Skybrud.Umbraco.Redirects/Views/ContentApp.html?v={GetCacheBuster()}",
+                Weight = 99
             };
 
         }

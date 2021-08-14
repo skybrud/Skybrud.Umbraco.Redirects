@@ -4,6 +4,8 @@ namespace Skybrud.Umbraco.Redirects.Services {
     
     public class RedirectsSearchOptions {
 
+        #region Properties
+
         /// <summary>
         /// Gets or sets the page to be returned. Default is <c>1</c>.
         /// </summary>
@@ -34,10 +36,16 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// </summary>
         public Guid? RootNodeKey { get; set; }
 
+        #endregion
+        
+        #region Constructors
+
         public RedirectsSearchOptions() {
             Page = 1;
             Limit = 20;
         }
+
+        #endregion
 
     }
 

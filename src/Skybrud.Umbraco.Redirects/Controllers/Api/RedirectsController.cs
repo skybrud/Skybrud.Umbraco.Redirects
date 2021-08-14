@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
@@ -10,6 +11,10 @@ using Skybrud.Umbraco.Redirects.Models;
 using Skybrud.Umbraco.Redirects.Models.Api;
 using Skybrud.Umbraco.Redirects.Models.Options;
 using Skybrud.Umbraco.Redirects.Services;
+using Umbraco.Cms.Core.Models;
+using Umbraco.Cms.Core.Models.PublishedContent;
+using Umbraco.Cms.Core.Services;
+using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Web.BackOffice.Controllers;
 using Umbraco.Cms.Web.Common.Attributes;
 
@@ -18,7 +23,7 @@ using Umbraco.Cms.Web.Common.Attributes;
 namespace Skybrud.Umbraco.Redirects.Controllers.Api {
     
     /// <summary>
-    /// WebAPI controller for managing redirects.
+    /// API controller for managing redirects.
     /// </summary>
     [PluginController("Skybrud")]
     public class RedirectsController : UmbracoAuthorizedApiController {
@@ -26,13 +31,22 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         private readonly ILogger<RedirectsController> _logger;
         private readonly IRedirectsService _redirects;
         private readonly RedirectsBackOfficeHelper _backOffice;
+        private readonly IContentService _contentService;
+        private readonly IMediaService _mediaService;
+        private readonly IUmbracoContextAccessor _umbracoContextAccessor;
 
         #region Constructors
 
-        public RedirectsController(ILogger<RedirectsController> logger, IRedirectsService redirectsService, RedirectsBackOfficeHelper backOffice) {
+        public RedirectsController(ILogger<RedirectsController> logger, IRedirectsService redirectsService, RedirectsBackOfficeHelper backOffice,
+            IContentService contentService,
+            IMediaService mediaService,
+            IUmbracoContextAccessor umbracoContextAccessor) {
             _logger = logger;
             _redirects = redirectsService;
             _backOffice = backOffice;
+            _contentService = contentService;
+            _mediaService = mediaService;
+            _umbracoContextAccessor = umbracoContextAccessor;
         }
 
         #endregion
@@ -269,6 +283,67 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
 
             }
 
+        }
+        
+        [HttpGet]
+        public object GetRedirectsForNode(string type, Guid key) {
+
+            try {
+
+                RedirectNodeModel node;
+
+                switch (type) {
+
+                    case "content":
+                        
+                        // Get a reference to the content item
+                        IContent content1 = _contentService.GetById(key);
+
+                        // Trigger an exception if the content item couldn't be found
+                        if (content1 == null) throw new RedirectsException(HttpStatusCode.NotFound, _backOffice.Localize("errorContentNoRedirects"));
+
+                        IPublishedContent content2 = _umbracoContextAccessor.UmbracoContext.Content.GetById(key);
+
+                        node = new RedirectNodeModel(content1, content2);
+
+                        break;
+
+                    case "media":
+                        
+                        // Get a reference to the media item
+                        IMedia media1 = _mediaService.GetById(key);
+
+                        // Trigger an exception if the media item couldn't be found
+                        if (media1 == null) throw new RedirectsException(HttpStatusCode.NotFound, _backOffice.Localize("errorContentNoRedirects"));
+
+                        IPublishedContent media2 = _umbracoContextAccessor.UmbracoContext.Media.GetById(key);
+
+                        node = new RedirectNodeModel(media1, media2);
+
+                        break;
+
+                    default:
+                        throw new RedirectsException(HttpStatusCode.BadRequest, $"Unsupported node type: {type}");
+
+                    
+                }
+                
+                // get the redirects via the redirects service
+                Redirect[] redirects = _redirects.GetRedirectsByNodeKey(node.Type, key);
+                
+                // Generate the response
+                return new {
+                    node,
+                    redirects = _backOffice.Map(redirects)
+                };
+            
+            } catch (RedirectsException ex) {
+                
+                // Generate the error response
+                return Error(ex);
+            
+            }
+        
         }
 
         private ObjectResult Error(RedirectsException ex) {

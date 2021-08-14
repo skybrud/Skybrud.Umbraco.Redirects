@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using NPoco;
 using Skybrud.Essentials.Strings.Extensions;
 using Skybrud.Essentials.Time;
 using Skybrud.Umbraco.Redirects.Exceptions;
@@ -10,12 +11,12 @@ using Skybrud.Umbraco.Redirects.Extensions;
 using Skybrud.Umbraco.Redirects.Models;
 using Skybrud.Umbraco.Redirects.Models.Dtos;
 using Skybrud.Umbraco.Redirects.Models.Options;
-using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Routing;
 using Umbraco.Cms.Core.Scoping;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
+using Umbraco.Cms.Infrastructure.Persistence;
 using Umbraco.Extensions;
 
 namespace Skybrud.Umbraco.Redirects.Services {
@@ -516,6 +517,68 @@ namespace Skybrud.Umbraco.Redirects.Services {
 
             // Put the URL back together
             return $"{destinationPath}?{string.Join("&", queryElements)}";
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+        public virtual Redirect[] GetRedirectsByNodeId(RedirectDestinationType nodeType, int nodeId) {
+            if (nodeType == RedirectDestinationType.Url) throw new RedirectsException($"Unsupported node type: {nodeType}");
+            return GetRedirectsByNodeId(nodeType.ToString(), nodeId);
+        }
+
+        public virtual Redirect[] GetRedirectsByNodeKey(RedirectDestinationType nodeType, Guid nodeKey) {
+            if (nodeType == RedirectDestinationType.Url) throw new RedirectsException($"Unsupported node type: {nodeType}");
+            return GetRedirectsByNodeKey(nodeType.ToString(), nodeKey);
+        }
+        
+        protected virtual Redirect[] GetRedirectsByNodeId(string nodeType, int nodeId) {
+            
+            // Create a new scope
+            using IScope scope = _scopeProvider.CreateScope();
+            
+            // Generate the SQL for the query
+            Sql<ISqlContext> sql = scope.SqlContext.Sql()
+                .Select<RedirectDto>().From<RedirectDto>()
+                .Where<RedirectDto>(x => x.DestinationType == nodeType && x.DestinationId == nodeId);
+                
+            // Make the call to the database
+            var rows = scope.Database.Fetch<RedirectDto>(sql).Select(Redirect.CreateFromDto).ToArray();
+
+            // Complete the scope
+            scope.Complete();
+
+            return rows;
+
+        }
+        
+        protected virtual Redirect[] GetRedirectsByNodeKey(string nodeType, Guid nodeKey) {
+            
+            // Create a new scope
+            using IScope scope = _scopeProvider.CreateScope();
+            
+            // Generate the SQL for the query
+            Sql<ISqlContext> sql = scope.SqlContext.Sql()
+                .Select<RedirectDto>().From<RedirectDto>()
+                .Where<RedirectDto>(x => x.DestinationType == nodeType && x.DestinationKey == nodeKey);
+                
+            // Make the call to the database
+            var rows = scope.Database.Fetch<RedirectDto>(sql).Select(Redirect.CreateFromDto).ToArray();
+
+            // Complete the scope
+            scope.Complete();
+
+            return rows;
 
         }
 

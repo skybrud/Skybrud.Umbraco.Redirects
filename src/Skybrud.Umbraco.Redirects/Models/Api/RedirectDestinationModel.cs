@@ -32,6 +32,7 @@ namespace Skybrud.Umbraco.Redirects.Models.Api {
         public RedirectDestinationModel(Redirect redirect) : this(redirect.Destination) { }
 
         public RedirectDestinationModel(RedirectDestination destination) {
+            
             _destination = destination;
 
             switch (Type) {
@@ -42,10 +43,12 @@ namespace Skybrud.Umbraco.Redirects.Models.Api {
                 
                 case RedirectDestinationType.Media:
                     Icon = "icon-picture";
+                    IsPublished = true;
                     break;
                 
                 default:
                     Icon = "icon-link";
+                    IsPublished = true;
                     break;
 
             }
