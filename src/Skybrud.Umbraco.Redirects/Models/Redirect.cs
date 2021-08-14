@@ -109,6 +109,16 @@ namespace Skybrud.Umbraco.Redirects.Models {
         }
 
         /// <summary>
+        /// Gets or sets the type of the redirect. Possible values are <see cref="RedirectType.Permanent"/> and <see cref="RedirectType.Temporary"/>.
+        /// </summary>
+        [JsonProperty("type")]
+        [JsonPropertyName("type")]
+        public RedirectType Type {
+            get => Dto.IsPermanent ? RedirectType.Permanent : RedirectType.Temporary;
+            set => Dto.IsPermanent = value == RedirectType.Permanent;
+        }
+
+        /// <summary>
         /// Gets or sets whether the redirect is permanent.
         /// </summary>
         [JsonProperty("permanent")]

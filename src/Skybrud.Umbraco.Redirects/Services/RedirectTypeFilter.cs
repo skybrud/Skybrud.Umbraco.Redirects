@@ -1,6 +1,6 @@
 ﻿namespace Skybrud.Umbraco.Redirects.Services {
     
-    public enum RedirectType {
+    public enum RedirectTypeFilter {
         All,
         Content,
         Media,

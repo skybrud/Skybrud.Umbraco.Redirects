@@ -29,6 +29,8 @@ namespace Skybrud.Umbraco.Redirects.Models.Api {
         [JsonConverter(typeof(Iso8601TimeConverter))]
         public EssentialsTime UpdateDate => _redirect.UpdateDate;
         
+        public RedirectType Type => _redirect.Type;
+        
         [JsonPropertyName("permanent")]
         public bool IsPermanent => _redirect.IsPermanent;
 

@@ -16,11 +16,11 @@ namespace Skybrud.Umbraco.Redirects.Services {
 
         /// <summary>
         /// Gets or sets the type of redirects to be returned. Possible values are
-        /// <see RedirectTypetsType.All"/>, <see RedirectTypetsType.Content"/>,
-        /// <see RedirectTypetsType.Media"/> or <see RedirectTypetsType.Url"/>. Default is
-        /// <see RedirectTypetsType.All"/>.
+        /// <see cref="RedirectTypeFilter.All"/>, <see cref="RedirectTypeFilter.Content"/>,
+        /// <see cref="RedirectTypeFilter.Media"/> or <see cref="RedirectTypeFilter.Url"/>. Default is
+        /// <see cref="RedirectTypeFilter.All"/>.
         /// </summary>
-        public RedirectType Type { get; set; }
+        public RedirectTypeFilter Type { get; set; }
 
         /// <summary>
         /// Gets or sets a string value that should be present in either the text or URL of the returned redirects.

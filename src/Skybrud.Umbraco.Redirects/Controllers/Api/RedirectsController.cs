@@ -249,7 +249,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                 RedirectsSearchOptions options = new() {
                     Page = page,
                     Limit = limit,
-                    Type = EnumUtils.ParseEnum(type, RedirectType.All),
+                    Type = EnumUtils.ParseEnum(type, RedirectTypeFilter.All),
                     Text = text,
                     RootNodeKey = rootNodeKey
                 };

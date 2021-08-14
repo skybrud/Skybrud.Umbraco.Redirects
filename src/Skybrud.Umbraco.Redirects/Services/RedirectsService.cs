@@ -370,7 +370,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
                 if (options.RootNodeKey != null) sql = sql.Where<RedirectDto>(x => x.RootKey == options.RootNodeKey.Value);
 
                 // Search by the type
-                if (options.Type != RedirectType.All) {
+                if (options.Type != RedirectTypeFilter.All) {
                     string type = options.Type.ToPascalCase();
                     sql = sql.Where<RedirectDto>(x => x.DestinationType == type);
                 }
