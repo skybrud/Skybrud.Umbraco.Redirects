@@ -19,7 +19,8 @@ namespace Skybrud.Umbraco.Redirects.Extensions {
         public static Uri GetUri(this HttpRequest request) {
             return new UriBuilder {
                 Scheme = request.Scheme,
-                Host = request.Host.Value,
+                Host = request.Host.Host,
+                Port = request.Host.Port ?? (request.Scheme == "https" ? 80 : 443),
                 Path = request.Path,
                 Query = request.QueryString.ToUriComponent()
             }.Uri;
