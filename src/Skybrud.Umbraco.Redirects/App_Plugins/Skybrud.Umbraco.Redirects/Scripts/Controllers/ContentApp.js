@@ -1,4 +1,4 @@
-﻿angular.module("umbraco").controller("Skybrud.Umbraco.Redirects.InboundRedirects.Controller", function ($routeParams, editorState) {
+﻿angular.module("umbraco").controller("Skybrud.Umbraco.Redirects.ContentApp.Controller", function($scope, $routeParams, editorState) {
 
     // Declare the view model
     const vm = this;

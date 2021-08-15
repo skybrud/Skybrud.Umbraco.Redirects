@@ -70,6 +70,8 @@
                                 <localize key="redirects_url">URL</localize>:
                                 <a href="{{redirect.destination.url}}" rel="noopener noreferrer" target="_blank" title="{{redirect.destination.url}}">{{redirect.destination.url}}</a>
                             </span>
+                            <small ng-if="redirect.destination.trashed" class="color-red">(trashed)</small>
+                            <small ng-if="!redirect.destination.trashed && !redirect.destination.published" class="color-red">(unpublished)</small>
                             <small ng-if="redirect.forward" title="Forward query string is enabled">
                                 &nbsp;?&amp;
                             </small>

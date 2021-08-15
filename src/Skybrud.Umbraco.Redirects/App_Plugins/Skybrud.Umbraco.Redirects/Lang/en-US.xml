@@ -87,6 +87,9 @@
     <key alias="errorUnknownLinkMode">Specified link mode is not valid.</key>
 
     <key alias="pageNoRedirects">This page has not been created yet. You must save and publish the page in order to be able to add redirects to it.</key>
+    <key alias="pageIsUnpublished">This page is currently not published. Redirects to unpublished pages may result in unexpected behaviour - eg. where the visitors are redirected to non-existing URLs.</key>
+    <key alias="pageIsTrashed">This page is in the recycle bin. Redirects to this page may therefore result in unexpected behaviour - eg. where the visitors are redirected to non-existing URLs.</key>
+    <key alias="mediaIsTrashed">This media is in the recycle bin. Redirects to this media may therefore result in unexpected behaviour - eg. where the visitors are redirected to non-existing URLs.</key>
 
   </area>
 </language>

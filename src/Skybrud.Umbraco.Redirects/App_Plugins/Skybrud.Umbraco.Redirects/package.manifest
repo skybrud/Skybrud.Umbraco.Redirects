@@ -8,7 +8,9 @@
     "/App_Plugins/Skybrud.Umbraco.Redirects/Scripts/Controllers/Editors/Outbound.js",
     "/App_Plugins/Skybrud.Umbraco.Redirects/Scripts/Controllers/Editors/OriginalUrl.js",
     "/App_Plugins/Skybrud.Umbraco.Redirects/Scripts/Controllers/Editors/RadioGroup.js",
-    "/App_Plugins/Skybrud.Umbraco.Redirects/Scripts/Controllers/Editors/Site.js"
+    "/App_Plugins/Skybrud.Umbraco.Redirects/Scripts/Controllers/Editors/Site.js",
+    "/App_Plugins/Skybrud.Umbraco.Redirects/Scripts/Controllers/ContentApp.js",
+    "/App_Plugins/Skybrud.Umbraco.Redirects/Scripts/Controllers/Directives/Node.js"
   ],
   "css": [
     "/App_Plugins/Skybrud.Umbraco.Redirects/Styles/Styles.css"

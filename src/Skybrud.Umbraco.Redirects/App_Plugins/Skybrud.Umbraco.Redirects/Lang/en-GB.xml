@@ -87,6 +87,7 @@
     <key alias="errorUnknownLinkMode">Specified link mode is not valid.</key>
 
     <key alias="pageNoRedirects">This page has not been created yet. You must save and publish the page in order to be able to add redirects to it.</key>
+    <key alias="pageIsUnpublished">This page is currently not published. Redirects to unpublished pages may result in unexpected - eg. where the visitors see a 404 page instead.</key>
     
   </area>
 </language>

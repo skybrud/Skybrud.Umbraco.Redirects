@@ -1,0 +1,96 @@
+﻿<div class="SkybrudUmbracoRedirects skybrud-redirects-node">
+    <div class="header">
+        <label class="control-label" ng-if="!config.hideTitle">
+            {{title}}
+            <small>{{description}}</small>
+        </label>
+        <div ng-if="node.mode == 'list'" class="filters">
+            <div>
+                <button type="button" ng-click="addRedirect()" class="btn btn-success">
+                    <localize key="redirects_addNewRedirect">Add new redirect</localize>
+                </button>
+                <button type="button" ng-click="updateList()" class="btn btn-default">
+                    <localize key="redirects_reload">Reload</localize>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div ng-if="node.create" class="alert alert-info">
+        <localize key="redirects_pageNoRedirects">Din side er endnu ikke oprettet. Du skal gemme eller publicere siden for, at kunne tilføje redirects.</localize>
+    </div>
+    <div ng-if="node.trashed" class="alert alert-danger">
+        <localize ng-if="node.type == 'content'" key="redirects_pageIsTrashed"></localize>
+        <localize ng-if="node.type == 'media'" key="redirects_mediaIsTrashed"></localize>
+    </div>
+    <div ng-if="!node.create && !node.published && !node.trashed" class="alert alert-info">
+        <localize key="redirects_pageIsUnpublished">Den valgte side er ikke udgivet, og redirects til denne side vil derfor ikke virke efter hensigten.</localize>
+    </div>
+    <div ng-if="node.mode == 'list'">
+        <div class="list" ng-class="{loading: loading}">
+            <umb-load-indicator></umb-load-indicator>
+            <table class="table list">
+                <thead>
+                    <tr>
+                        <th class="col-id"><localize key="redirects_id">ID</localize></th>
+                        <th class="col-original"><localize key="redirects_originalUrl">Original URL</localize></th>
+                        <th class="col-arrow"></th>
+                        <th>Type</th>
+                        <th class="col-destination"><localize key="redirectUrls_redirectedTo">Redirected to</localize></th>
+                        <th class="col-date"><localize key="redirects_created">Created</localize></th>
+                        <th class="col-date"><localize key="redirects_updated">Updated</localize></th>
+                        <th class="col-actions"></th>
+                    </tr>
+                </thead>
+                <tbody ng-if="redirects.length == 0">
+                    <tr>
+                        <td colspan="8" class="empty">
+                            <span ng-if="node.type == 'content'">
+                                <localize key="redirects_labelNoContentRedirects">There has not yet been added any redirects to this page.</localize>
+                            </span>
+                            <span ng-if="node.type == 'media'">
+                                <localize key="redirects_labelNoMediaRedirects">There has not yet been added any redirects to this media.</localize>
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+                <tbody>
+                    <tr ng-repeat="redirect in redirects">
+                        <td class="col-id">{{redirect.id}}</td>
+                        <td class="col-original">
+                            <a href="{{redirect.url}}" rel="noopener noreferrer" target="_blank" title="{{redirect.path}}{{redirect.queryString ? '?' + redirect.queryString : ''}}">{{redirect.url}}{{redirect.queryString ? '?' + redirect.queryString : ''}}</a>
+                        </td>
+                        <td class="col-arrow">
+                            <i class="umb-table-body__icon umb-table-body__fileicon icon-arrow-right" style="font-size: 12px; line-height: 1;"></i>
+                        </td>
+                        <td class="col-type">
+                            <span ng-show="redirect.permanent">Permanent</span>
+                            <span ng-show="!redirect.permanent">Temporary</span>
+                        </td>
+                        <td class="col-destination">
+                            <span ng-if="redirect.destination.type == 'content'">
+                                <localize key="redirects_content">Content</localize>:
+                                <a href="{{redirect.destination.url}}" rel="noopener noreferrer" target="_blank" title="{{redirect.destination.name ? redirect.destination.name : redirect.destination.url}}">{{redirect.destination.name ? redirect.destination.name : redirect.destination.url}}</a>
+                            </span>
+                            <span ng-if="redirect.destination.type == 'media'">
+                                <localize key="redirects_media">Media</localize>:
+                                <a href="{{redirect.destination.url}}" rel="noopener noreferrer" target="_blank" title="{{redirect.destination.name ? redirect.destination.name : redirect.destination.url}}">{{redirect.destination.name ? redirect.destination.name : redirect.destination.url}}</a>
+                            </span>
+                            <span ng-if="redirect.destination.type == 'url'">
+                                <localize key="redirects_url">URL</localize>:
+                                <a href="{{redirect.destination.url}}" rel="noopener noreferrer" target="_blank" title="{{redirect.destination.url}}">{{redirect.destination.url}}</a>
+                            </span>
+                            <small ng-if="redirect.forward">&nbsp;?&amp;</small>
+                        </td>
+                        <td class="col-date">{{redirect.createDate | date: 'yyyy-MM-dd HH:mm'}}</td>
+                        <td class="col-date">{{redirect.updateDate | date: 'yyyy-MM-dd HH:mm'}}</td>
+                        <td class="col-actions">
+                            <button type="button" ng-click="editRedirect(redirect)" class="btn btn-link"><localize key="redirects_edit">Edit</localize></button>
+                            <button type="button" ng-click="deleteRedirect(redirect)" class="btn btn-link red"><localize key="redirects_delete">Delete</localize></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>

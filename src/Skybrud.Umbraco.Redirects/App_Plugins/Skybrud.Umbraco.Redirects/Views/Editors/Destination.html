@@ -1,7 +1,5 @@
 ﻿<div ng-controller="SkybrudUmbracoRedirects.Editors.Destination.Controller">
-    
     <input type="hidden" ng-model="model.value" required />
-
     <div ng-if="model.value" class="umb-node-preview" style="max-width: initial;">
         <i ng-if="icon" class="umb-node-preview__icon icon-shopping-basket"></i>
         <div class="umb-node-preview__content">
@@ -13,9 +11,7 @@
             <a class="umb-node-preview__action umb-node-preview__action--red" title="Remove" href="" ng-click="removeLink()"><localize key="general_remove">Remove</localize></a>
         </div>
     </div>
-    
     <button type="button" ng-if="!model.value" class="umb-node-preview-add" ng-click="addLink()" style="max-width: initial;">
         <localize key="redirects_selectDestination">Select destination</localize>
     </button>
-
 </div>
