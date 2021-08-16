@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Web;
 using Skybrud.Umbraco.Redirects.Domains;
 using Skybrud.Umbraco.Redirects.Models;
@@ -53,8 +54,8 @@ namespace Skybrud.Umbraco.Redirects.Routing {
 
             HttpApplication application = (HttpApplication) sender;
 
-            // Ignore if not a 404 response
-            if (application.Response.StatusCode != 404) return;
+            // Ignore if a successful response (HTTP 2xx, 3xx)
+            if (application.Response.StatusCode > 399) return;
 
             var request = application.Request;
             
@@ -84,8 +85,10 @@ namespace Skybrud.Umbraco.Redirects.Routing {
 			//    }
 			//}
 
-			// Redirect to the URL
-			if (redirect.IsPermanent) {
+            application.Response.TrySkipIisCustomErrors = true;
+            application.Response.Clear();
+
+            if (redirect.IsPermanent) {
                 application.Response.RedirectPermanent(redirectUrl);
             } else {
                 application.Response.Redirect(redirectUrl);
