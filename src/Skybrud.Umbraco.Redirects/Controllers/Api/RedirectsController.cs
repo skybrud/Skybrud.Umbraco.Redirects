@@ -302,8 +302,13 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                         // Trigger an exception if the content item couldn't be found
                         if (content1 == null) throw new RedirectsException(HttpStatusCode.NotFound, _backOffice.Localize("errorContentNoRedirects"));
 
-                        IPublishedContent content2 = _umbracoContextAccessor.UmbracoContext.Content.GetById(key);
-
+                        // Look up the content via the content cahce
+                        IPublishedContent content2 = null;
+                        if (_umbracoContextAccessor.TryGetUmbracoContext(out IUmbracoContext umbraco)) {
+                            content2 = umbraco.Content.GetById(key);
+                        }
+                        
+                        // Initialize a new model instance
                         node = new RedirectNodeModel(content1, content2);
 
                         break;
@@ -316,8 +321,13 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                         // Trigger an exception if the media item couldn't be found
                         if (media1 == null) throw new RedirectsException(HttpStatusCode.NotFound, _backOffice.Localize("errorContentNoRedirects"));
 
-                        IPublishedContent media2 = _umbracoContextAccessor.UmbracoContext.Media.GetById(key);
-
+                        // Look up the media via the content cahce
+                        IPublishedContent media2 = null;
+                        if (_umbracoContextAccessor.TryGetUmbracoContext(out umbraco)) {
+                            media2 = umbraco.Content.GetById(key);
+                        }
+                        
+                        // Initialize a new model instance
                         node = new RedirectNodeModel(media1, media2);
 
                         break;

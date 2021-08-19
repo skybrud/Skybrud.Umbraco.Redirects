@@ -30,9 +30,12 @@ namespace Skybrud.Umbraco.Redirects.Middleware {
                 await _next(context);
                 return;
             }
+
+            // Get the current Umbraco context
+            _umbracoContextAccessor.TryGetUmbracoContext(out IUmbracoContext umbracoContext);
             
             // Get a reference to the published request (may be null)
-            var publishedRequest = _umbracoContextAccessor?.UmbracoContext?.PublishedRequest;
+            var publishedRequest = umbracoContext?.PublishedRequest;
 
             // If we're inside the Umbraco request pipeline, and an IPublishedContent has been set, we don't do anything
             if (publishedRequest is not null && publishedRequest.HasPublishedContent()) {

@@ -136,11 +136,14 @@ namespace Skybrud.Umbraco.Redirects.Services {
         }
         
         public Redirect GetRedirectByUri(Uri uri) {
+
+            // Get the current Umbraco context
+            _umbracoContextAccessor.TryGetUmbracoContext(out IUmbracoContext umbracoContext);
             
             // Determine the root node via domain of the request
             Guid rootKey = Guid.Empty;
             if (TryGetDomain(uri, out Domain domain)) {
-                IPublishedContent root = _umbracoContextAccessor.UmbracoContext.Content.GetById(domain.ContentId);
+                IPublishedContent root = umbracoContext?.Content.GetById(domain.ContentId);
                 if (root != null) rootKey = root.Key;
             }
 
@@ -441,17 +444,21 @@ namespace Skybrud.Umbraco.Redirects.Services {
         
         public virtual string GetDestinationUrl(Redirect redirect) {
 
+            // Initialize "url" with the destination URL as saved in the database
             string url = redirect.Destination.Url;
+
+            // Get the current Umbraco context
+            _umbracoContextAccessor.TryGetUmbracoContext(out IUmbracoContext umbracoContext);
 
             switch (redirect.Destination.Type) {
 
                 case RedirectDestinationType.Content:
-                    IPublishedContent content = _umbracoContextAccessor.UmbracoContext.Content.GetById(redirect.Destination.Key);
+                    IPublishedContent content = umbracoContext?.Content.GetById(redirect.Destination.Key);
                     if (content != null) return content.Url();
                     break;
 
                 case RedirectDestinationType.Media:
-                    IPublishedContent media = _umbracoContextAccessor.UmbracoContext.Media.GetById(redirect.Destination.Key);
+                    IPublishedContent media = umbracoContext?.Media.GetById(redirect.Destination.Key);
                     if (media != null) return media.Url();
                     break;
 
@@ -465,16 +472,19 @@ namespace Skybrud.Umbraco.Redirects.Services {
 
             // Resolve the current URL for content and media
             string destinationUrl = redirect.Destination.Url;
+
+            // Get the current Umbraco context
+            _umbracoContextAccessor.TryGetUmbracoContext(out IUmbracoContext umbracoContext);
             
             switch (redirect.Destination.Type) {
                 
                 case RedirectDestinationType.Content:
-                    var content = _umbracoContextAccessor.UmbracoContext.Content.GetById(redirect.Destination.Key);
+                    var content = umbracoContext?.Content.GetById(redirect.Destination.Key);
                     if (content != null) destinationUrl = content.Url();
                     break;
 
                 case RedirectDestinationType.Media:
-                    var media = _umbracoContextAccessor.UmbracoContext.Media.GetById(redirect.Destination.Key);
+                    var media = umbracoContext?.Media.GetById(redirect.Destination.Key);
                     if (media != null) destinationUrl = media.Url();
                     break;
   
