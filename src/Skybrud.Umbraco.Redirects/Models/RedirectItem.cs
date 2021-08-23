@@ -320,7 +320,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
         #region Static methods
 
-        internal static RedirectItem GetFromRow(RedirectItemDto dto) {
+        public static RedirectItem GetFromRow(RedirectItemDto dto) {
             return dto == null ? null : new RedirectItem(dto);
         }
 

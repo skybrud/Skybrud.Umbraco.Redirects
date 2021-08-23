@@ -47,6 +47,24 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
         #region Member methods
 
+        public RedirectItem[] GetAllRedirects() {
+            
+            using (IScope scope = _scopeProvider.CreateScope(autoComplete: true)) {
+
+                // Fetch non-regex redirects from the database
+                var sql = scope.SqlContext.Sql()
+                        .Select<RedirectItemDto>()
+                        .From<RedirectItemDto>();
+                
+                // Make the call to the database
+                return scope.Database.Fetch<RedirectItemDto>(sql)
+                    .Select(RedirectItem.GetFromRow)
+                    .ToArray();
+
+            }
+
+        }
+
         /// <summary>
         /// Gets an array of all domains (<see cref="RedirectDomain"/>) registered in Umbraco.
         /// </summary>

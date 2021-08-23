@@ -66,7 +66,7 @@ namespace Skybrud.Umbraco.Redirects.Routing {
             int rootNodeId = domain?.ContentId ?? 0;
 
             // Invoke the pre lookup event
-            RedirectPreLookupEventArgs preLookupEventArgs = new RedirectPreLookupEventArgs(context);
+            RedirectPreLookupEventArgs preLookupEventArgs = new RedirectHttpContextPreLookupEventArgs(context);
             _redirects.OnPreLookup(preLookupEventArgs);
             
             // Declare a variable for the redirect (pre lookup event may alreadu have set one)
