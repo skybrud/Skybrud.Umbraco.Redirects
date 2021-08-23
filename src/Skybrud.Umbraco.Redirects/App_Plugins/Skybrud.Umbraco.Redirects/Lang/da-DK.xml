@@ -23,8 +23,6 @@
     <key alias="siteDescription">Vælg det site (eller rodnode) som redirectet skal gælde for. Vælges der ikke noget site, vil redirectet virke for alle domæner/sites i Umbraco-løsningen.</key>
     <key alias="allSites">Alle sites</key>
     <key alias="originalUrl">Oprindelig URL</key>
-    <key alias="isRegex">Brug regular expressions</key>
-    <key alias="isRegexDestinationDescription">Du kan bruge capture group referencer, når du bruger regular expressions (f.eks. $1, $2 osv.)</key>
     <key alias="destination">Destination</key>
     <key alias="redirectedTo">Viderestillet til</key>
     <key alias="selectDestination">Vælg destination</key>

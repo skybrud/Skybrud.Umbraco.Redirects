@@ -21,8 +21,6 @@
     <key alias="siteDescription">Selecteer de site (of hoofdnode) waar de redirect over gaat. Als er geen site geselecteerd is, geldt dit voor alle domeinen/sites binnen deze Umbraco.</key>
     <key alias="allSites">Alle sites</key>
     <key alias="originalUrl">Originele URL</key>
-    <key alias="isRegex">Gebruik Regex</key>
-    <key alias="isRegexDestinationDescription">Je kunt groepen gebruiken met regex: $1, $2 etc.</key>
     <key alias="destination">Bestemming</key>
     <key alias="redirectedTo">Verwijst naar</key>
     <key alias="selectDestination">Selecteer bestemming</key>
