@@ -42,49 +42,19 @@
     <key alias="media_content">Indhold</key>
     <key alias="media_media">Medier</key>
     <key alias="media_url">URLs</key>
-
     <key alias="labelPermanent">Permanent</key>
     <key alias="labelTemporary">Midlertidig</key>
     <key alias="labelPermanentRedirect">Permanent redirect</key>
     <key alias="labelTemporaryRedirect">Midlertidig redirect</key>
-    
     <key alias="labelEnabled">Aktiveret</key>
     <key alias="labelDisabled">Deaktiveret</key>
     <key alias="labelAdvancedOptions">Avancerede indstillinger</key>
-
     <key alias="labelDeleteRedirectConfirm">Er du sikker på at du vil slette det valgte redirect på %0% ?</key>
-
     <key alias="addSuccessfulTitle">Redirect oprettet</key>
     <key alias="addSuccessfulMessage">Dit redirect er nu blevet oprettet.</key>
-
     <key alias="saveSuccessfulTitle">Redirect gemt</key>
     <key alias="saveSuccessfulMessage">Dit redirect er nu blevet gemt.</key>
-
-    <key alias="errorNoUrlTitle">Ingen URL</key>
-    <key alias="errorNoUrlMessage">Du skal angive den oprindelige URL.</key>
-
-    <key alias="errorInvalidUrlTitle">Ugyldig værdi</key>
-    <key alias="errorInvalidUrlMessage">Den angivne URL er ikke gyldig.</key>
-
-    <key alias="errorNoLinkTitle">Intet link</key>
-    <key alias="errorNoLinkMessage">Du skal angive en destinationsside eller -link.</key>
-
-    <key alias="errorAddFailedTitle">Oprettelse fejlede</key>
-    <key alias="errorAddFailedMessage">Grundet en fejl på serveren kunne dit redirect ikke oprettes.</key>
-
-    <key alias="errorEditFailedTitle">Redigering fejlede</key>
-    <key alias="errorEditFailedMessage">Grundet en fejl på serveren kunne dit redirect ikke gemmes.</key>
-
-    <key alias="errorContentNoRedirects">En side med det angivne ID blev ikke fundet.</key>
-    <key alias="errorMediaNoRedirects">Et medie med det angivne ID blev ikke fundet.</key>
-    <key alias="errorNoUrl">Du skal angive en URL for dit redirect.</key>
-    <key alias="errorNoDestination">Du skal angive en destination for dit redirect.</key>
-    <key alias="errorUnknownLinkMode">Den angivne linktype er ikke gyldig.</key>
-
     <key alias="pageNoRedirects">Din side er endnu ikke oprettet. Du skal gemme eller publicere siden for, at kunne tilføje redirects.</key>
-
-
-
   </area>
   <area alias="redirects">
     <key alias="propertyRootNode">Site</key>
@@ -97,5 +67,22 @@
     <key alias="propertyRedirectTypeDescription">Vælg typen for dit redirect. Bemærk at browsere vil huske et permanent redirect.</key>
     <key alias="propertyForwardQueryString">Videresend query string</key>
     <key alias="propertyForwardQueryStringDescription">Når slået til, tilføjes en evt. query string fra det oprindelige request til redirect destinationen.</key>
+  </area>
+  <area alias="redirects">
+    <key alias="errorNoUrlTitle">Ingen URL</key>
+    <key alias="errorNoUrlMessage">Du skal angive den oprindelige URL.</key>
+    <key alias="errorInvalidUrlTitle">Ugyldig værdi</key>
+    <key alias="errorInvalidUrlMessage">Den angivne URL er ikke gyldig.</key>
+    <key alias="errorNoLinkTitle">Intet link</key>
+    <key alias="errorNoLinkMessage">Du skal angive en destinationsside eller -link.</key>
+    <key alias="errorAddFailedTitle">Oprettelse fejlede</key>
+    <key alias="errorAddFailedMessage">Grundet en fejl på serveren kunne dit redirect ikke oprettes.</key>
+    <key alias="errorEditFailedTitle">Redigering fejlede</key>
+    <key alias="errorEditFailedMessage">Grundet en fejl på serveren kunne dit redirect ikke gemmes.</key>
+    <key alias="errorContentNoRedirects">En side med det angivne ID blev ikke fundet.</key>
+    <key alias="errorMediaNoRedirects">Et medie med det angivne ID blev ikke fundet.</key>
+    <key alias="errorNoUrl">Du skal angive en URL for dit redirect.</key>
+    <key alias="errorNoDestination">Du skal angive en destination for dit redirect.</key>
+    <key alias="errorUnknownLinkMode">Den angivne linktype er ikke gyldig.</key>
   </area>
 </language>

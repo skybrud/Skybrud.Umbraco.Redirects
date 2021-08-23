@@ -29,10 +29,6 @@
     <key alias="created">Gemaakt</key>
     <key alias="updated">Bijgewerkt</key>
     <key alias="id">ID</key>
-    <key alias="forwardQueryString">Stuur ook QueryString mee</key>
-    <key alias="forwardQueryStringDescription">Als aangevinkt, dan onthoudt de browser de querystring van de gebruiker mee (bijv ?test=123).</key>
-    <key alias="labelUrlDescription">Geef de originele URL in, vanaf waar er doorgestuurd moet worden.</key>
-    <key alias="labelDestinationDescription">Selecteer de pagina of URL waar naartoe gestuurd moet worden.</key>
     <key alias="labelNoRedirects">Er zijn nog geen redirects.</key>
     <key alias="labelNoContentRedirects">Er is nog geen redirect naar deze pagina gemaakt.</key>
     <key alias="labelNoMediaRedirects">Er zijn nog geen redirects naar dit media-item gemaakt.</key>
@@ -44,49 +40,49 @@
     <key alias="media_content">Content</key>
     <key alias="media_media">Media</key>
     <key alias="media_url">URLs</key>
-
     <key alias="labelPermanent">Permanent</key>
     <key alias="labelTemporary">Tijdelijk</key>
     <key alias="labelPermanentRedirect">Permanente redirect</key>
     <key alias="labelTemporaryRedirect">Tijdelijke redirect</key>
-
     <key alias="labelEnabled">Actief</key>
     <key alias="labelDisabled">Inactief</key>
     <key alias="labelAdvancedOptions">Geavanceerde opties</key>
-
     <key alias="labelDeleteRedirectConfirm">Weet je zeker dat je de redirect van %0% wilt verwijderen?</key>
-
     <key alias="propertyRedirectTypeName">Redirect type</key>
     <key alias="propertyRedirectTypeDescription">Selecteer het redirect type. Nb: browsers onthouden de permanente redirects.</key>
-
     <key alias="addSuccessfulTitle">Redirect toegevoegd</key>
     <key alias="addSuccessfulMessage">De redirect is toegevoegd.</key>
-
     <key alias="saveSuccessfulTitle">Redirect opgeslagen</key>
     <key alias="saveSuccessfulMessage">Je redirect is opgeslagen.</key>
-
+    <key alias="pageNoRedirects">Deze pagina bestaat nog niet. Is deze wel opgeslagen en gepubliceerd?</key>
+  </area>
+  <area alias="redirects">
+    <key alias="propertyRootNode">Site</key>
+    <!--<key alias="propertyRootNodeDescription">missing</key>-->
+    <!--<key alias="propertyOriginalUrl">missing</key>-->
+    <key alias="propertyOriginalUrlDescription">Geef de originele URL in, vanaf waar er doorgestuurd moet worden.</key>
+    <key alias="propertyDestination">Bestemming</key>
+    <key alias="propertyDestinationDescription">Selecteer de pagina of URL waar naartoe gestuurd moet worden.</key>
+    <key alias="propertyRedirectType">Redirect type</key>
+    <key alias="propertyRedirectTypeDescription">Selecteer het redirect type. Nb: browsers onthouden de permanente redirects.</key>
+    <key alias="propertyForwardQueryString">Stuur ook QueryString mee</key>
+    <key alias="propertyForwardQueryStringDescription">Als aangevinkt, dan onthoudt de browser de querystring van de gebruiker mee (bijv ?test=123).</key>
+  </area>
+  <area alias="redirects">
     <key alias="errorNoUrlTitle">Geen URL</key>
     <key alias="errorNoUrlMessage">Je moet wel een originele URL ingeven.</key>
-
     <key alias="errorInvalidUrlTitle">Ongeldige URL</key>
     <key alias="errorInvalidUrlMessage">Dit is geen geldige URL.</key>
-
     <key alias="errorNoLinkTitle">Geen link</key>
     <key alias="errorNoLinkMessage">Je moet wel een bestemmingslink toevoegen.</key>
-
     <key alias="errorAddFailedTitle">Opslaan mislukt</key>
     <key alias="errorAddFailedMessage">De redirect kan niet opgeslagen worden door een serverfout.</key>
-
     <key alias="errorEditFailedTitle">Opslaan mislukt</key>
     <key alias="errorEditFailedMessage">De redirect kan niet opgeslagen worden door een serverfout.</key>
-
     <key alias="errorContentNoRedirects">Er kan geen item gevonden worden met deze ID.</key>
     <key alias="errorMediaNoRedirects">Er kan geen item gevonden worden met deze ID.</key>
     <key alias="errorNoUrl">Je moet wel een URL ingeven.</key>
     <key alias="errorNoDestination">Je moet wel een bestemming ingeven.</key>
     <key alias="errorUnknownLinkMode">Het type link is ongeldig.</key>
-
-    <key alias="pageNoRedirects">Deze pagina bestaat nog niet. Is deze wel opgeslagen en gepubliceerd?</key>
-
   </area>
 </language>
