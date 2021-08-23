@@ -1,12 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 
-<language alias="en" intName="English (US)" localName="English (US)" lcid="" culture="en-US">
+<language alias="en" intName="English (UK)" localName="English (UK)" lcid="" culture="en-GB">
   <area alias="dashboardTabs">
     <key alias="Skybrud.Umbraco.Redirects">Redirects</key>
   </area>
   <area alias="redirects">
-    <key alias="add">Add</key>
-    <key alias="save">Save</key>
     <key alias="redirects">Redirects</key>
     <key alias="addNewRedirect">Add new redirect</key>
     <key alias="addRedirect">Add redirect</key>
@@ -31,6 +29,10 @@
     <key alias="created">Created</key>
     <key alias="updated">Updated</key>
     <key alias="id">ID</key>
+    <key alias="forwardQueryString">Forward query string</key>
+    <key alias="forwardQueryStringDescription">When enabled, the query string of the original request is forwarded to the redirect location (pass through).</key>
+    <key alias="labelUrlDescription">Specify the original URL to match from which the user should be redirected to the destination.</key>
+    <key alias="labelDestinationDescription">Select the page or URL the user should be redirected to.</key>
     <key alias="labelNoRedirects">There has not yet been added any redirects.</key>
     <key alias="labelNoContentRedirects">There has not yet been added any redirects to this page.</key>
     <key alias="labelNoMediaRedirects">There has not yet been added any redirects to this media.</key>
@@ -54,6 +56,8 @@
 
     <key alias="labelDeleteRedirectConfirm">Are you sure you want do delete the redirect at %0% ?</key>
 
+    <key alias="propertyRedirectTypeName">Redirect type</key>
+    <key alias="propertyRedirectTypeDescription">Select the type of the redirect. Notice that browsers will remember permanent redirects.</key>
 
     <key alias="addSuccessfulTitle">Redirect added</key>
     <key alias="addSuccessfulMessage">Your redirect has successfully been added.</key>
@@ -83,18 +87,6 @@
     <key alias="errorUnknownLinkMode">Specified link mode is not valid.</key>
 
     <key alias="pageNoRedirects">This page has not been created yet. You must save and publish the page in order to be able to add redirects to it.</key>
-
-  </area>
-  <area alias="redirects">
-    <key alias="propertyRootNode">Site</key>
-    <key alias="propertyRootNodeDescription">Specify the site that the original URL to match from belongs to.</key>
-    <key alias="propertyOriginalUrl">Original URL</key>
-    <key alias="propertyOriginalUrlDescription">Specify the original URL to match from which the user should be redirected to the destination.</key>
-    <key alias="propertyDestination">Destination</key>
-    <key alias="propertyDestinationDescription">Select the page or URL the user should be redirected to.</key>
-    <key alias="propertyRedirectType">Redirect type</key>
-    <key alias="propertyRedirectTypeDescription">Select the type of the redirect. Notice that browsers will remember permanent redirects.</key>
-    <key alias="propertyForwardQueryString">Forward query string</key>
-    <key alias="propertyForwardQueryStringDescription">When enabled, the query string of the original request is forwarded to the redirect location (pass through).</key>
+    
   </area>
 </language>

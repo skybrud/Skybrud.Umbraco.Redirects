@@ -8,7 +8,10 @@
 
     $scope.options = $scope.model.options || {};
 
+    // Localization
     $scope.model.title = "Add new redirect";
+    $scope.model.closeButtonKey = "general_close";
+    $scope.model.submitButtonKey = "general_add";
     localizationService.localize("redirects_addNewRedirect").then(function (value) { $scope.model.title = value; });
 
     var destionation = null;
@@ -17,10 +20,10 @@
 
     if ($scope.model.redirect) {
 
+        // Localization
         $scope.model.title = "Edit redirect";
+        $scope.model.submitButtonKey = "general_save";
         localizationService.localize("redirects_editRedirect").then(function (value) { $scope.model.title = value; });
-
-        $scope.model.submitButtonLabel = "Save";
 
         destionation = {
             id: $scope.model.redirect.linkId,
@@ -49,8 +52,8 @@
 
     $scope.model.properties.push({
         alias: "rootNodeId",
-        label: "Site",
-        description: "Specify the site that the original URL to match from belongs to.",
+        labelKey: "redirects_propertyRootNode",
+        descriptionKey: "redirects_propertyRootNodeDescription",
         view: `/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/Site.html?v=${cacheBuster}`,
         value: $scope.model.redirect && $scope.model.redirect.rootId ? $scope.model.redirect.rootId : 0,
         config: {
@@ -63,8 +66,8 @@
 
     $scope.model.properties.push({
         alias: "originalUrl",
-        label: "Original URL",
-        description: "Specify the original URL to match from which the user should be redirected to the destination.",
+        labelKey: "redirects_propertyOriginalUrl",
+        descriptionKey: "redirects_propertyOriginalUrlDescription",
         view: `/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/OriginalUrl.html?v=${cacheBuster}`,
         value: $scope.model.redirect ? $scope.model.redirect.url + ($scope.model.redirect.queryString ? "?" + $scope.model.redirect.queryString : "") : "",
         validation: {
@@ -74,8 +77,8 @@
 
     $scope.model.properties.push({
         alias: "destination",
-        label: "Destination",
-        description: "Select the page or URL the user should be redirected to.",
+        labelKey: "redirects_propertyDestination",
+        descriptionKey: "redirects_propertyDestinationDescription",
         view: `/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/Destination.html?v=${cacheBuster}`,
         value: destionation,
         validation: {
@@ -87,7 +90,7 @@
         {
             alias: "permanent",
             label: "Redirect type",
-            labelKey: "redirects_propertyRedirectTypeName",
+            labelKey: "redirects_propertyRedirectType",
             description: "Select the type of the redirect. Notice that browsers will remember permanent redirects.",
             descriptionKey: "redirects_propertyRedirectTypeDescription",
             view: `/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/RadioGroup.html?v=${cacheBuster}`,
@@ -109,10 +112,8 @@
         },
         {
             alias: "forward",
-            label: "Forward query string",
-            labelKey: "redirects_forwardQueryString",
-            description: "When enabled, the query string of the original request is forwarded to the redirect location (pass through).",
-            descriptionKey: "redirects_forwardQueryStringDescription",
+            labelKey: "redirects_propertyForwardQueryString",
+            descriptionKey: "redirects_propertyForwardQueryStringDescription",
             view: `/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/RadioGroup.html?v=${cacheBuster}`,
             value: $scope.model.redirect ? $scope.model.redirect.forward : false,
             config: {

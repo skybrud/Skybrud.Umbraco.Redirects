@@ -5,6 +5,8 @@
     <key alias="Skybrud.Umbraco.Redirects">Redirects</key>
   </area>
   <area alias="redirects">
+    <key alias="add">Tilføj</key>
+    <key alias="save">Gem</key>
     <key alias="redirects">Redirects</key>
     <key alias="addNewRedirect">Tilføj nyt redirect</key>
     <key alias="addRedirect">Tilføj redirect</key>
@@ -29,10 +31,6 @@
     <key alias="created">Oprettet</key>
     <key alias="updated">Opdateret</key>
     <key alias="id">ID</key>
-    <key alias="forwardQueryString">Videresend query string</key>
-    <key alias="forwardQueryStringDescription">Når slået til, tilføjes en evt. query string fra det oprindelige request til redirect destinationen.</key>
-    <key alias="labelUrlDescription">Angiv den oprindelige URL, der skal sende brugeren videre til den valgte destination.</key>
-    <key alias="labelDestinationDescription">Vælg den side eller URL, som brugeren skal sendes videre til.</key>
     <key alias="labelNoRedirects">Der er endnu ikke blevet tilføjet nogle redirects.</key>
     <key alias="labelNoContentRedirects">Der er endnu ikke blevet tilføjet nogle redirects, der henviser til denne side.</key>
     <key alias="labelNoMediaRedirects">Der er endnu ikke blevet tilføjet nogle redirects, der henviser til dette medie.</key>
@@ -55,9 +53,6 @@
     <key alias="labelAdvancedOptions">Avancerede indstillinger</key>
 
     <key alias="labelDeleteRedirectConfirm">Er du sikker på at du vil slette det valgte redirect på %0% ?</key>
-
-    <key alias="propertyRedirectTypeName">Type</key>
-    <key alias="propertyRedirectTypeDescription">Vælg typen for dit redirect. Bemærk at browsere vil huske et permanent redirect.</key>
 
     <key alias="addSuccessfulTitle">Redirect oprettet</key>
     <key alias="addSuccessfulMessage">Dit redirect er nu blevet oprettet.</key>
@@ -87,6 +82,20 @@
     <key alias="errorUnknownLinkMode">Den angivne linktype er ikke gyldig.</key>
 
     <key alias="pageNoRedirects">Din side er endnu ikke oprettet. Du skal gemme eller publicere siden for, at kunne tilføje redirects.</key>
-    
+
+
+
+  </area>
+  <area alias="redirects">
+    <key alias="propertyRootNode">Site</key>
+    <key alias="propertyRootNodeDescription">Vælg det site, som den oprindelige URL tilhører.</key>
+    <key alias="propertyOriginalUrl">Oprindelig URL</key>
+    <key alias="propertyOriginalUrlDescription">Angiv den oprindelige URL, der skal sende brugeren videre til den valgte destination.</key>
+    <key alias="propertyDestination">Destination</key>
+    <key alias="propertyDestinationDescription">Vælg den side eller URL, som brugeren skal sendes videre til.</key>
+    <key alias="propertyRedirectType">Type</key>
+    <key alias="propertyRedirectTypeDescription">Vælg typen for dit redirect. Bemærk at browsere vil huske et permanent redirect.</key>
+    <key alias="propertyForwardQueryString">Videresend query string</key>
+    <key alias="propertyForwardQueryStringDescription">Når slået til, tilføjes en evt. query string fra det oprindelige request til redirect destinationen.</key>
   </area>
 </language>

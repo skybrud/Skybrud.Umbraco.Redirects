@@ -44,7 +44,9 @@
                             <span ng-show="redirect.rootId">
                                 <a href="/umbraco/#/content/content/edit/{{redirect.rootId}}" title="{{redirect.rootNodeName}}">{{redirect.rootNodeName}}</a>
                             </span>
-                            <span ng-hide="redirect.rootId">All sites</span>
+                            <span ng-hide="redirect.rootId">
+                                <localize key="redirects_allSites">All sites</localize>
+                            </span>
                         </td>
                         <td class="col-original">
                             <a href="{{redirect.urls[0]}}" rel="noopener noreferrer" target="_blank" title="{{redirect.url}}{{redirect.queryString ? '?' + redirect.queryString : ''}}">{{redirect.url}}{{redirect.queryString ? '?' + redirect.queryString : ''}}</a>
