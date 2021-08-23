@@ -5,8 +5,6 @@
     <key alias="Skybrud.Umbraco.Redirects">Redirects</key>
   </area>
   <area alias="redirects">
-    <key alias="add">Tilføj</key>
-    <key alias="save">Gem</key>
     <key alias="redirects">Redirects</key>
     <key alias="addNewRedirect">Tilføj nyt redirect</key>
     <key alias="addRedirect">Tilføj redirect</key>
