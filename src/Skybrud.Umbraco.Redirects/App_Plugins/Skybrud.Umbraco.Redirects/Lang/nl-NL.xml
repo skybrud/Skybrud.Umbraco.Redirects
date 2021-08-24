@@ -56,8 +56,8 @@
   </area>
   <area alias="redirects">
     <key alias="propertyRootNode">Site</key>
-    <!--<key alias="propertyRootNodeDescription">missing</key>-->
-    <!--<key alias="propertyOriginalUrl">missing</key>-->
+    <key alias="propertyRootNodeDescription">Specificeer de site waar de originele URL van afkomstig is.</key>
+    <key alias="propertyOriginalUrl">Originele URL</key>
     <key alias="propertyOriginalUrlDescription">Geef de originele URL in, vanaf waar er doorgestuurd moet worden.</key>
     <key alias="propertyDestination">Bestemming</key>
     <key alias="propertyDestinationDescription">Selecteer de pagina of URL waar naartoe gestuurd moet worden.</key>
