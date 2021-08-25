@@ -17,7 +17,7 @@
     <PackageTags>Umbraco, Redirects, 301, Content, Url</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://packages.skybrud.dk/skybrud.umbraco.redirects/</PackageProjectUrl>
-    <PackageIconUrl>http://www.skybrud.dk/img/5431sk/icon/favicon.ico</PackageIconUrl>
+    <PackageIcon>Skybrud.png</PackageIcon>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/skybrud/Skybrud.Umbraco.Redirects</RepositoryUrl>
   </PropertyGroup>
@@ -36,10 +36,11 @@
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\**\*.js" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Lang\*.xml" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\package.manifest" />
+    <None Include="Images\Skybrud.png" Pack="true" PackagePath="\"/>
   </ItemGroup>
   
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(ConfigurationName)'=='Releaseeeee' AND '$(BuildTools)'=='1'">
+  <!--<Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(ConfigurationName)'=='Releaseeeee' AND '$(BuildTools)'=='1'">
     <Exec Command="&quot;$(ProjectDir)..\build\Skybrud.BuildTools.Tasks.exe&quot; &quot;postBuild&quot; &quot;$(ConfigurationName)&quot; &quot;$(ProjectPath)&quot; &quot;$(TargetPath)&quot;" />
-  </Target>
+  </Target>-->
 
 </Project>
