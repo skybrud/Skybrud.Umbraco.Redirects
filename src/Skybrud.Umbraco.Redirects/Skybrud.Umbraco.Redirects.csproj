@@ -30,6 +30,7 @@
   </ItemGroup>
   
   <ItemGroup>
+    <Content Include="../build/Skybrud.Umbraco.Redirects.targets" PackagePath="build\Skybrud.Umbraco.Redirects.targets" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\**\*.css" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\**\*.html" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\**\*.js" />
