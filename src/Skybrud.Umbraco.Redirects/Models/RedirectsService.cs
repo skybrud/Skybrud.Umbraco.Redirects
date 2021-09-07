@@ -9,6 +9,7 @@ using WebComposing = Umbraco.Web.Composing;
 using System.Text.RegularExpressions;
 using NPoco;
 using Skybrud.Essentials.Time;
+using Skybrud.Umbraco.Redirects.Events;
 using Skybrud.Umbraco.Redirects.Models.Database;
 using Skybrud.Umbraco.Redirects.Models.Options;
 using Umbraco.Core.Composing;
@@ -45,6 +46,24 @@ namespace Skybrud.Umbraco.Redirects.Models {
         #endregion
 
         #region Member methods
+
+        public RedirectItem[] GetAllRedirects() {
+            
+            using (IScope scope = _scopeProvider.CreateScope(autoComplete: true)) {
+
+                // Fetch non-regex redirects from the database
+                var sql = scope.SqlContext.Sql()
+                        .Select<RedirectItemDto>()
+                        .From<RedirectItemDto>();
+                
+                // Make the call to the database
+                return scope.Database.Fetch<RedirectItemDto>(sql)
+                    .Select(RedirectItem.GetFromRow)
+                    .ToArray();
+
+            }
+
+        }
 
         /// <summary>
         /// Gets an array of all domains (<see cref="RedirectDomain"/>) registered in Umbraco.
@@ -587,6 +606,28 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
 			return newRedirectUrl;
 	    }
+
+        /// <summary>
+        /// Event which gets called before the redirect lookup has happened.
+        /// This allows you to do something after the package has hit the database.
+        /// </summary>
+        /// <param name="e">The event args</param>
+        public virtual void OnPreLookup(RedirectPreLookupEventArgs e) {
+            PreLookup?.Invoke(this, e);
+        }
+
+        public event EventHandler<RedirectPreLookupEventArgs> PreLookup;
+
+        /// <summary>
+        /// Event which gets called after the redirect lookup has happened.
+        /// This allows you to do something after the package has hit the database.
+        /// </summary>
+        /// <param name="e">The event args</param>
+        public virtual void OnPostLookup(RedirectPostLookupEventArgs e) {
+            PostLookup?.Invoke(this, e);
+        }
+
+        public event EventHandler<RedirectPostLookupEventArgs> PostLookup;
 
         #endregion
 
