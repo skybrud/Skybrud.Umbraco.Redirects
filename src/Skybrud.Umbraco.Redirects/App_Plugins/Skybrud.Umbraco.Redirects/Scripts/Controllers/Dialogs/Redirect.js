@@ -22,7 +22,7 @@
 
         // Localization
         $scope.model.title = "Edit redirect";
-        $scope.model.submitButtonKey = "general_save";
+        $scope.model.submitButtonKey = "buttons_save";
         localizationService.localize("redirects_editRedirect").then(function (value) { $scope.model.title = value; });
 
         destionation = {
