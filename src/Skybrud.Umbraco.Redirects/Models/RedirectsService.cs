@@ -5,7 +5,6 @@ using Skybrud.Umbraco.Redirects.Exceptions;
 using Umbraco.Core;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Persistence;
-using WebComposing = Umbraco.Web.Composing;
 using System.Text.RegularExpressions;
 using NPoco;
 using Skybrud.Essentials.Time;

@@ -66,7 +66,7 @@ namespace Skybrud.Umbraco.Redirects.Routing {
             int rootNodeId = domain?.ContentId ?? 0;
 
             // Invoke the pre lookup event
-            RedirectPreLookupEventArgs preLookupEventArgs = new RedirectHttpContextPreLookupEventArgs(context);
+            RedirectPreLookupEventArgs preLookupEventArgs = new RedirectPreLookupHttpContextEventArgs(context);
             _redirects.OnPreLookup(preLookupEventArgs);
             
             // Declare a variable for the redirect (pre lookup event may alreadu have set one)
@@ -80,7 +80,7 @@ namespace Skybrud.Umbraco.Redirects.Routing {
                 redirect = redirect ?? _redirects.GetRedirectByUrl(0, context.Request.RawUrl);
 
                 // Invoke the post lookup event
-                RedirectPostLookupEventArgs postLookUpEventArgs = new RedirectPostLookupEventArgs(context, redirect);
+                RedirectPostLookupEventArgs postLookUpEventArgs = new RedirectPostLookupHttpContextEventArgs(context, redirect);
                 _redirects.OnPostLookup(postLookUpEventArgs);
 
                 // Update the local variable with the redirect from the event
