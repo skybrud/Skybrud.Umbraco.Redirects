@@ -45,14 +45,6 @@ namespace Skybrud.Umbraco.Redirects.Services {
             return _domains.GetAll(false).Select(RedirectDomain.GetFromDomain).ToArray();
         }
 
-
-
-
-
-
-
-        
-
         /// <summary>
         /// Deletes the specified <paramref name="redirect"/>.
         /// </summary>
@@ -76,12 +68,6 @@ namespace Skybrud.Umbraco.Redirects.Services {
             scope.Complete();
 
         }
-
-
-
-
-
-
         
         /// <summary>
         /// Gets the redirect mathing the specified <paramref name="url"/>.
@@ -104,6 +90,8 @@ namespace Skybrud.Umbraco.Redirects.Services {
         public virtual Redirect GetRedirectByPathAndQuery(Guid rootNodeKey, string path, string query) {
 
             query ??= string.Empty;
+
+            path = path.TrimEnd('/').Trim();
 
             RedirectDto dto;
     
