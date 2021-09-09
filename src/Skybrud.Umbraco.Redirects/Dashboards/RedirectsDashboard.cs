@@ -7,7 +7,7 @@ namespace Skybrud.Umbraco.Redirects.Dashboards {
         
         private readonly RedirectsBackOfficeHelper _backoffice;
         
-        public string Alias => "Skybrud.Umbraco.Redirects";
+        public string Alias => "redirects";
 
         public string[] Sections => new[] { "content" };
 
