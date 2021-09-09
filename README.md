@@ -2,6 +2,8 @@
 
 
 
+[Looking for the Umbraco 9 version of the package?](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v3/main)
+
 [Looking for the Umbraco 7 version of the package?](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v1/latest)
 
 **Skybrud.Umbraco.Redirects** is a redirects manager for Umbraco 8. The package features a dashboard and property editor that let's users manage inbound redirects from within the Umbraco backoffice.
