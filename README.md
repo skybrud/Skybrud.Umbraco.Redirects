@@ -1,65 +1,51 @@
-# Skybrud.Umbraco.Redirects [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md) [![NuGet](https://img.shields.io/nuget/v/Skybrud.Umbraco.Redirects.svg)](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects) [![NuGet](https://img.shields.io/nuget/dt/Skybrud.Umbraco.Redirects.svg)](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects)
+<table>
+  <thead>
+    <tr>
+      <td align="left">
+        :warning:
+      </td>
+      <td align="left" width="100%">
+          <strong>NOTICE</strong>
+      </td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan="2">
+          This branch is for the <strong>Umbraco 9</strong> version of this package. For the Umbraco 8 package, see <a href="https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v2/latest"><strong>v2/latest</strong></a> branch.
+      </td>
+    </tr>
+  </tbody>
+</table>
 
+# Skybrud.Umbraco.Redirects [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md) [![NuGet](https://img.shields.io/nuget/vpre/Skybrud.Umbraco.Redirects.svg)](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects/3.0.0-alpha002) [![NuGet](https://img.shields.io/nuget/dt/Skybrud.Umbraco.Redirects.svg)](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects)
 
-
-[Looking for the Umbraco 7 version of the package?](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v1/latest)
-
-**Skybrud.Umbraco.Redirects** is a redirects manager for Umbraco 8. The package features a dashboard and property editor that let's users manage inbound redirects from within the Umbraco backoffice.
+**Skybrud.Umbraco.Redirects** is a redirects manager for Umbraco 9. The package features a dashboard and property editor that let's users manage inbound redirects from within the Umbraco backoffice.
 
 URLs can be added to redirect to either a content item, media item or a custom URL.
 
 ## Installation
 
-### Install via NuGet
-This is the recommend approach, as you install the [**NuGet Package**][NuGetPackage] in your Visual Studio project, and NuGet takes care of the rest.
+The Umbraco 9 version of this package is only available via NuGet. To install the package, you can use either .NET CLI:
+
+```
+dotnet add package Skybrud.Umbraco.Redirects --version 3.0.0-alpha002
+```
+
+or the older NuGet Package Manager:
+
+```
+Install-Package Skybrud.Umbraco.Redirects -Version 3.0.0-alpha002
+```
 
 **Umbraco 8**  
-Latest release for Umbraco 8 is [**v2.0.7**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/releases/tag/v2.0.7):
-
-```
-Install-Package Skybrud.Umbraco.Redirects -Version 2.0.7
-```
+For the Umbraco 8 version of this package, see the [**v2/latest**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v2/latest) branch instead.
 
 **Umbraco 7**  
-Latest release for Umbraco 7 is [**v1.0.0**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/releases/tag/v1.0.0):
+For the Umbraco 7 version of this package, see the [**v1/latest**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v1/latest) branch instead.
 
-```
-Install-Package Skybrud.Umbraco.Redirects -Version 1.0.0
-```
 
-### Umbraco package
 
-**Umbraco 8**  
-Download the package from Our Umbraco - the Umbraco cummunity website:
-
-- <a href="https://our.umbraco.com/packages/website-utilities/skybrud-redirects/" target="_blank"><strong>Download Umbraco package</strong></a>
-
-**Umbraco 7**  
-There is no Umbraco package available for Umbraco 7. Please see either the [Install via NuGet](#install-via-nuget) option above or the [#manual-install] option below.
-
-### Manual install
-You can also download a ZIP file of the latest release directly from GitHub, unzip, and move the contents to the root directory of your web application.
-
-1. [**Download ZIP file**][GitHubRelease]  
-  Download the ZIP file directly from here on GitHub. The ZIP contains all necessary files to run the package.
-
-2. **Unzip**  
-  Unzip and move the contents to the root directory of your web application.
-
-3. **Install HTTP module**  
-  The package features a HTTP module. When downloading the ZIP file, you must install this manually. In your root `Web.config` file, search for the `<system.webServer>` element. Then add the following to the `<modules>` child element:
-  
-     ```xml
-    <remove name="RedirectsModule" />
-    <add name="RedirectsModule" type="Skybrud.Umbraco.Redirects.Routing.RedirectsModule, Skybrud.Umbraco.Redirects" />
-    ```
-
-    The order shouldn't matter that much, but we typically add it right after:
-
-    ```xml
-    <remove name="UmbracoModule" />
-    <add name="UmbracoModule" type="Umbraco.Web.UmbracoModule,umbraco" />
-    ```
 
 
 
