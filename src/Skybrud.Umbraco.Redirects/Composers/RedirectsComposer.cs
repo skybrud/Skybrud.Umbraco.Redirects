@@ -14,7 +14,7 @@ using Umbraco.Extensions;
 
 namespace Skybrud.Umbraco.Redirects.Composers {
     
-    public class RedirectsComposer : IUserComposer {
+    public class RedirectsComposer : IComposer {
         
         public void Compose(IUmbracoBuilder builder) {
 
