@@ -233,7 +233,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
                 var sql = scope.SqlContext.Sql()
                     .Select<RedirectDto>()
                     .From<RedirectDto>()
-                    .Where<RedirectDto>(x => x.RootKey == rootNodeKey && !x.IsRegex && x.Path == url && x.QueryString == queryString);
+                    .Where<RedirectDto>(x => x.RootKey == rootNodeKey && x.Path == url && x.QueryString == queryString);
 
                 // Make the call to the database
                 dto = scope.Database.FirstOrDefault<RedirectDto>(sql);

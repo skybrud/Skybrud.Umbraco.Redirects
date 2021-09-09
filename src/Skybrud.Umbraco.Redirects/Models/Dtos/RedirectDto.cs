@@ -97,18 +97,11 @@ namespace Skybrud.Umbraco.Redirects.Models.Dtos {
         [Column("Updated")]
         public DateTime Updated { get; set; }
 
-
         /// <summary>
         /// Gets or sets whether the redirect is permanent.
         /// </summary>
         [Column("IsPermanent")]
         public bool IsPermanent { get; set; }
-
-        /// <summary>
-        /// Gets or sets whether <see cref="Path"/> is a REGEX pattern.
-        /// </summary>
-        [Column("IsRegex")]
-        public bool IsRegex { get; set; }
 
         /// <summary>
         /// Gets or sets whether the query string should be forwarded.

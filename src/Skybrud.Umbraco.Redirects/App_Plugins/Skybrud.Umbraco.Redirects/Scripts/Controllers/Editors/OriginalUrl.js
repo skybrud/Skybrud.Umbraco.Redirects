@@ -1,12 +1,12 @@
 ﻿angular.module("umbraco").controller("SkybrudUmbracoRedirects.Editors.OriginalUrl.Controller", function ($scope) {
 
-    $scope.isValidUrl = function (url, isRegex) {
+    $scope.isValidUrl = function (url) {
 
 		// Make sure we have a string and trim all leading and trailing whitespace
 		url = $.trim(url + "");
 
 		// For now a valid URL should start with a forward slash
-		return isRegex || url.indexOf("/") === 0;
+		return url.indexOf("/") === 0;
 
 	};
 

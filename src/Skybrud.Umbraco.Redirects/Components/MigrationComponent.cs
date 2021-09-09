@@ -25,7 +25,8 @@ namespace Skybrud.Umbraco.Redirects.Components {
             var plan = new MigrationPlan("Skybrud.Umbraco.Redirects");
             
             plan.From(string.Empty)
-                .To<CreateTableMigration>("2.0.0-alpha001");
+                .To<CreateTableMigration>("2.0.0-alpha001")
+                .To<RemoveIsRegexColumnMigration>("2.0.0-alpha002");
 
             var upgrader = new Upgrader(plan);
 
