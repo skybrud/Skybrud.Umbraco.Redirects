@@ -1,5 +1,6 @@
 ﻿using System;
 using NPoco;
+using Skybrud.Umbraco.Redirects.Models.Schema;
 using Umbraco.Cms.Infrastructure.Persistence.DatabaseAnnotations;
 
 namespace Skybrud.Umbraco.Redirects.Models.Dtos {

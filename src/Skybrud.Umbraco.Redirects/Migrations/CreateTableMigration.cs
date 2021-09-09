@@ -1,4 +1,5 @@
 ﻿using Skybrud.Umbraco.Redirects.Models.Dtos;
+using Skybrud.Umbraco.Redirects.Models.Schema;
 using Umbraco.Cms.Infrastructure.Migrations;
 
 namespace Skybrud.Umbraco.Redirects.Migrations {

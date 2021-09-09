@@ -2,7 +2,7 @@
 using NPoco;
 using Umbraco.Cms.Infrastructure.Persistence.DatabaseAnnotations;
 
-namespace Skybrud.Umbraco.Redirects.Models.Dtos {
+namespace Skybrud.Umbraco.Redirects.Models.Schema {
 
     /// <summary>
     /// Class representing the schema of the redirects database table.
