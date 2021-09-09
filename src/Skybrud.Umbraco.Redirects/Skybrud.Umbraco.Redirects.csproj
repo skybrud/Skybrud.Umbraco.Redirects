@@ -7,17 +7,17 @@
   <PropertyGroup>
     <Version>3.0.0-alpha001</Version>
     <Authors>Anders Bjerner</Authors>
-    <Company>Skybrud.dk</Company>
+    <Company>Limbo</Company>
     <Description>Redirects manager for Umbraco 9.</Description>
     <Copyright>Copyright © 2021</Copyright>
   </PropertyGroup>
 
   <PropertyGroup>
     <PackageId>Skybrud.Umbraco.Redirects</PackageId>
-    <PackageTags>Umbraco, Redirects, 301, Content, Url</PackageTags>
+    <PackageTags>Umbraco, Redirects, 301, Content, Url, Skybrud, Limbo</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://packages.skybrud.dk/skybrud.umbraco.redirects/</PackageProjectUrl>
-    <PackageIcon>Skybrud.png</PackageIcon>
+    <PackageIcon>Limbo.png</PackageIcon>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/skybrud/Skybrud.Umbraco.Redirects</RepositoryUrl>
   </PropertyGroup>
@@ -36,7 +36,8 @@
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\**\*.js" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Lang\*.xml" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\package.manifest" />
-    <None Include="Images\Skybrud.png" Pack="true" PackagePath="\"/>
+    <None Include="../build/Skybrud.png" Pack="true" PackagePath="\"/>
+    <None Include="../build/Limbo.png" Pack="true" PackagePath="\"/>
   </ItemGroup>
   
   <!--<Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(ConfigurationName)'=='Releaseeeee' AND '$(BuildTools)'=='1'">
