@@ -222,7 +222,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
             // Some input validation
             if (string.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
 
-            url = url.TrimEnd('/').Trim();
+            url = url.Trim().TrimEnd('/');
             queryString = (queryString ?? string.Empty).Trim();
 
             RedirectDto dto;
