@@ -36,8 +36,7 @@
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\**\*.js" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Lang\*.xml" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\package.manifest" />
-    <None Include="../build/Skybrud.png" Pack="true" PackagePath="\"/>
-    <None Include="../build/Limbo.png" Pack="true" PackagePath="\"/>
+    <None Include="../build/Limbo.png" Pack="true" PackagePath="\" />
   </ItemGroup>
   
   <!--<Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(ConfigurationName)'=='Releaseeeee' AND '$(BuildTools)'=='1'">
