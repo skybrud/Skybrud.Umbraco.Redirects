@@ -272,7 +272,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                 RedirectsSearchResult result = _redirects.GetRedirects(options);
 
                 // Map the result for the API
-                return _backOffice.Map(result);
+                return new JsonResult(_backOffice.Map(result));
 
             } catch (RedirectsException ex) {
 
