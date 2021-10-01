@@ -1,4 +1,4 @@
-﻿angular.module("umbraco").directive("redirectsNode", function (localizationService, notificationsService, $http, $q, $timeout, skybrudRedirectsService) {
+﻿angular.module("umbraco").directive("redirectsNode", function (localizationService, notificationsService, overlayService, $http, $q, $timeout, skybrudRedirectsService) {
 
     // Get the cache buster value
     const cacheBuster = Umbraco.Sys.ServerVariables.skybrud.redirects.cacheBuster;
@@ -65,6 +65,39 @@
                         scope.updateList();
                     }
                 });
+            };
+
+            scope.deleteRedirect = function (redirect) {
+
+                const url = redirect.url + (redirect.queryString ? `?${redirect.queryString}` : "");
+
+                // TODO: Localize overlay labels
+
+                const overlay = {
+                    title: "Confirm delete",
+                    content: `Are you sure you want to delete the redirect at "${url}" ?`,
+                    submit: function () {
+
+                        // Update the button state in the UI
+                        overlay.submitButtonState = "busy";
+
+                        // Delete the redirect
+                        skybrudRedirectsService.deleteRedirect(redirect, function () {
+                            overlayService.close();
+                            scope.updateList();
+                        }, function () {
+                            overlay.submitButtonState = "error";
+                        });
+
+                    },
+                    close: function () {
+                        overlayService.close();
+                    }
+                };
+
+                // Open the overlay
+                overlayService.confirmDelete(overlay);
+
             };
 
             scope.updateList = function () {
