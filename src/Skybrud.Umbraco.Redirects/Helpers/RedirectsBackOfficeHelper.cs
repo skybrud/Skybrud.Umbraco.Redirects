@@ -120,52 +120,13 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
         //}
 
         public virtual object Map(RedirectsSearchResult result) {
-
-            List<RedirectModel> items = new List<RedirectModel>();
             
             Dictionary<Guid, RedirectRootNodeModel> rootNodeLookup = new Dictionary<Guid, RedirectRootNodeModel>();
             Dictionary<Guid, IContent> contentLookup = new Dictionary<Guid, IContent>();
             Dictionary<Guid, IMedia> mediaLookup = new Dictionary<Guid, IMedia>();
 
-            foreach (var redirect in result.Items) {
-
-                RedirectRootNodeModel rootNode = null;
-                if (redirect.RootKey != Guid.Empty) {
-
-                    if (!rootNodeLookup.TryGetValue(redirect.RootKey, out rootNode)) {
-
-                        if (!contentLookup.TryGetValue(redirect.RootKey, out IContent content)) {
-                            content = _contentService.GetById(redirect.RootKey);
-                            if (content != null) contentLookup.Add(content.Key, content);
-                        }
-                        var domains = content == null ? null :_domainService.GetAssignedDomains(content.Id, false).Select(x => x.DomainName).ToArray();
-                        rootNode = new RedirectRootNodeModel(redirect, content, domains);
-
-                        rootNodeLookup.Add(rootNode.Key, rootNode);
-
-                    }
-                }
-
-                RedirectDestinationModel destination;
-                if (redirect.Destination.Type == RedirectDestinationType.Content) {
-                    if (!contentLookup.TryGetValue(redirect.Destination.Key, out IContent content)) {
-                        content = _contentService.GetById(redirect.Destination.Key);
-                        if (content != null) contentLookup.Add(content.Key, content);
-                    }
-                    destination = new RedirectDestinationModel(redirect, content);
-                } else if (redirect.Destination.Type == RedirectDestinationType.Media) {
-                    if (!mediaLookup.TryGetValue(redirect.Destination.Key, out IMedia media)) {
-                        media = _mediaService.GetById(redirect.Destination.Key);
-                        if (media != null) mediaLookup.Add(media.Key, media);
-                    }
-                    destination = new RedirectDestinationModel(redirect, media);
-                } else {
-                    destination = new RedirectDestinationModel(redirect);
-                }
-
-                items.Add(new RedirectModel(redirect, rootNode, destination));
-
-            }
+            IEnumerable<RedirectModel> items = result.Items
+                .Select(redirect => Map(redirect, rootNodeLookup, contentLookup, mediaLookup));
 
             return new {
                 result.Pagination,
@@ -174,55 +135,59 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
 
         }
 
+        public virtual RedirectModel Map(Redirect redirect)  {
+            Dictionary<Guid, RedirectRootNodeModel> rootNodeLookup = new();
+            Dictionary<Guid, IContent> contentLookup = new();
+            Dictionary<Guid, IMedia> mediaLookup = new();
+            return Map(redirect, rootNodeLookup, contentLookup, mediaLookup);
+        }
+
         public virtual IEnumerable<RedirectModel> Map(IEnumerable<Redirect> redirects) {
+            Dictionary<Guid, RedirectRootNodeModel> rootNodeLookup = new();
+            Dictionary<Guid, IContent> contentLookup = new();
+            Dictionary<Guid, IMedia> mediaLookup = new();
+            return redirects.Select(redirect => Map(redirect, rootNodeLookup, contentLookup, mediaLookup));
+        }
 
-            List<RedirectModel> items = new List<RedirectModel>();
+        private RedirectModel Map(Redirect redirect, Dictionary<Guid, RedirectRootNodeModel> rootNodeLookup,
+            Dictionary<Guid, IContent> contentLookup, Dictionary<Guid, IMedia> mediaLookup)
+        {
             
-            Dictionary<Guid, RedirectRootNodeModel> rootNodeLookup = new Dictionary<Guid, RedirectRootNodeModel>();
-            Dictionary<Guid, IContent> contentLookup = new Dictionary<Guid, IContent>();
-            Dictionary<Guid, IMedia> mediaLookup = new Dictionary<Guid, IMedia>();
+            RedirectRootNodeModel rootNode = null;
+            if (redirect.RootKey != Guid.Empty) {
 
-            foreach (var redirect in redirects) {
+                if (!rootNodeLookup.TryGetValue(redirect.RootKey, out rootNode)) {
 
-                RedirectRootNodeModel rootNode = null;
-                if (redirect.RootKey != Guid.Empty) {
-
-                    if (!rootNodeLookup.TryGetValue(redirect.RootKey, out rootNode)) {
-
-                        if (!contentLookup.TryGetValue(redirect.RootKey, out IContent content)) {
-                            content = _contentService.GetById(redirect.RootKey);
-                            if (content != null) contentLookup.Add(content.Key, content);
-                        }
-                        var domains = content == null ? null :_domainService.GetAssignedDomains(content.Id, false).Select(x => x.DomainName).ToArray();
-                        rootNode = new RedirectRootNodeModel(redirect, content, domains);
-
-                        rootNodeLookup.Add(rootNode.Key, rootNode);
-
-                    }
-                }
-
-                RedirectDestinationModel destination;
-                if (redirect.Destination.Type == RedirectDestinationType.Content) {
-                    if (!contentLookup.TryGetValue(redirect.Destination.Key, out IContent content)) {
-                        content = _contentService.GetById(redirect.Destination.Key);
+                    if (!contentLookup.TryGetValue(redirect.RootKey, out IContent content)) {
+                        content = _contentService.GetById(redirect.RootKey);
                         if (content != null) contentLookup.Add(content.Key, content);
                     }
-                    destination = new RedirectDestinationModel(redirect, content);
-                } else if (redirect.Destination.Type == RedirectDestinationType.Media) {
-                    if (!mediaLookup.TryGetValue(redirect.Destination.Key, out IMedia media)) {
-                        media = _mediaService.GetById(redirect.Destination.Key);
-                        if (media != null) mediaLookup.Add(media.Key, media);
-                    }
-                    destination = new RedirectDestinationModel(redirect, media);
-                } else {
-                    destination = new RedirectDestinationModel(redirect);
+                    var domains = content == null ? null :_domainService.GetAssignedDomains(content.Id, false).Select(x => x.DomainName).ToArray();
+                    rootNode = new RedirectRootNodeModel(redirect, content, domains);
+
+                    rootNodeLookup.Add(rootNode.Key, rootNode);
+
                 }
-
-                items.Add(new RedirectModel(redirect, rootNode, destination));
-
             }
 
-            return items;
+            RedirectDestinationModel destination;
+            if (redirect.Destination.Type == RedirectDestinationType.Content) {
+                if (!contentLookup.TryGetValue(redirect.Destination.Key, out IContent content)) {
+                    content = _contentService.GetById(redirect.Destination.Key);
+                    if (content != null) contentLookup.Add(content.Key, content);
+                }
+                destination = new RedirectDestinationModel(redirect, content);
+            } else if (redirect.Destination.Type == RedirectDestinationType.Media) {
+                if (!mediaLookup.TryGetValue(redirect.Destination.Key, out IMedia media)) {
+                    media = _mediaService.GetById(redirect.Destination.Key);
+                    if (media != null) mediaLookup.Add(media.Key, media);
+                }
+                destination = new RedirectDestinationModel(redirect, media);
+            } else {
+                destination = new RedirectDestinationModel(redirect);
+            }
+
+            return new RedirectModel(redirect, rootNode, destination);
 
         }
 
