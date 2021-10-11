@@ -42,8 +42,7 @@ namespace Skybrud.Umbraco.Redirects.Tracking
             references.Add(new UmbracoEntityReference(udi));
         }
 
-        public bool IsForEditor(IDataEditor dataEditor) =>
-            || dataEditor.Alias.InvariantEquals("Skybrud.Umbraco.Redirects")
+        public bool IsForEditor(IDataEditor dataEditor) => dataEditor.Alias.InvariantEquals("Skybrud.Umbraco.Redirects")
             || dataEditor.Alias.InvariantEquals("Skybrud.Umbraco.Redirects.OutboundRedirect");
     }
 }
