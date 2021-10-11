@@ -15,6 +15,7 @@ namespace Skybrud.Umbraco.Redirects.Composers {
             composition.Register<IRedirectsService, RedirectsService>(Lifetime.Singleton);
             composition.Register<RedirectsInjectedModule, RedirectsInjectedModule>();
             composition.Register<RedirectsBackOfficeHelper>();
+            composition.DataValueReferenceFactories().Append<RedirectsMediaTracking>();
         }
 
     }
