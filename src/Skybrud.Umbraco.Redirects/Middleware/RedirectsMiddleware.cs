@@ -31,18 +31,12 @@ namespace Skybrud.Umbraco.Redirects.Middleware {
                 return;
             }
 
-            // Get the current Umbraco context
-            _umbracoContextAccessor.TryGetUmbracoContext(out IUmbracoContext umbracoContext);
-            
-            // Get a reference to the published request (may be null)
-            var publishedRequest = umbracoContext?.PublishedRequest;
-
-            // If we're inside the Umbraco request pipeline, and an IPublishedContent has been set, we don't do anything
-            if (publishedRequest is not null && publishedRequest.HasPublishedContent()) {
+            if (ShouldIgnoreRequest())
+            {
                 await _next(context);
                 return;
             }
-                
+
             // Look for a redirect
             Redirect redirect = _redirectsService.GetRedirectByRequest(context.Request);
 
@@ -55,6 +49,24 @@ namespace Skybrud.Umbraco.Redirects.Middleware {
             // Redirect the user to the destination URL
             context.Response.Redirect(redirect.Destination.Url);
 
+        }
+
+        private bool ShouldIgnoreRequest()
+        {
+            // Get the current Umbraco context
+            if (!_umbracoContextAccessor.TryGetUmbracoContext(out var umbracoContext))
+            {
+                return false;
+            }
+
+            // Get a reference to the published request (may be null)
+            var publishedRequest = umbracoContext?.PublishedRequest;
+
+            // If we're inside the Umbraco request pipeline, and an IPublishedContent has been set,
+            // we don't do anything except a 404 status is set
+            // 404 is set, when Umbraco found a custom 404 page
+            // if no redirect is set up, custom 404 page will still be shown ( see redirect equals null condition above)
+            return publishedRequest?.ResponseStatusCode != 404 && publishedRequest.HasPublishedContent();
         }
 
     }
