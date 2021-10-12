@@ -66,7 +66,7 @@ namespace Skybrud.Umbraco.Redirects.Middleware {
             // we don't do anything except a 404 status is set
             // 404 is set, when Umbraco found a custom 404 page
             // if no redirect is set up, custom 404 page will still be shown ( see redirect equals null condition above)
-            return publishedRequest?.ResponseStatusCode != 404 && publishedRequest.HasPublishedContent();
+            return publishedRequest?.ResponseStatusCode != 404 && publishedRequest?.HasPublishedContent() == true;
         }
 
     }
