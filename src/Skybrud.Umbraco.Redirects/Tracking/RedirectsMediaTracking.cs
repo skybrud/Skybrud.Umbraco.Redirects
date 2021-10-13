@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Skybrud.Umbraco.Redirects.Models.Tracking;
+using System;
 using System.Collections.Generic;
 using Umbraco.Core;
 using Umbraco.Core.Models;
@@ -30,8 +31,17 @@ namespace Skybrud.Umbraco.Redirects.Tracking
                 {
                     AddReferenceFromMediaPath(references, redirectLink?.Destination?.Url);
                 }
+                else if (redirectLink?.Destination?.Type == "content")
+                {
+                    AddReferenceToContent(references, redirectLink?.Destination?.Key);
+                }
             }
             return references;
+        }
+        private void AddReferenceToContent(List<UmbracoEntityReference> references, string key)
+        {
+            Udi udi = new GuidUdi("content", Guid.Parse(key));
+            references.Add(new UmbracoEntityReference(udi));
         }
 
         private void AddReferenceFromMediaPath(List<UmbracoEntityReference> references, string imagePath)
