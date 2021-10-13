@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Skybrud.Umbraco.Redirects.Models.Outbound;
 using Skybrud.Umbraco.Redirects.Models.Tracking;
 using System;
 using System.Collections.Generic;
@@ -26,21 +27,22 @@ namespace Skybrud.Umbraco.Redirects.Tracking
             var references = new List<UmbracoEntityReference>();
             if (value != null)
             {
-                var redirectLink = JsonConvert.DeserializeObject<RedirectLink>(value.ToString());
-                if(redirectLink?.Destination?.Type == "media")
+                var redirectLink = JsonConvert.DeserializeObject<OutboundRedirect>(value.ToString());
+                if(redirectLink?.Destination?.Type == Models.RedirectDestinationType.Media)
                 {
                     AddReferenceFromMediaPath(references, redirectLink?.Destination?.Url);
                 }
-                else if (redirectLink?.Destination?.Type == "content")
+                else if (redirectLink?.Destination?.Type == Models.RedirectDestinationType.Content)
                 {
                     AddReferenceToContent(references, redirectLink?.Destination?.Key);
                 }
             }
             return references;
         }
-        private void AddReferenceToContent(List<UmbracoEntityReference> references, string key)
+        private void AddReferenceToContent(List<UmbracoEntityReference> references, Guid? key)
         {
-            Udi udi = new GuidUdi("content", Guid.Parse(key));
+            if (key == null) return;
+            Udi udi = new GuidUdi("content", key.Value);
             references.Add(new UmbracoEntityReference(udi));
         }
 
@@ -52,8 +54,7 @@ namespace Skybrud.Umbraco.Redirects.Tracking
             references.Add(new UmbracoEntityReference(udi));
         }
 
-        public bool IsForEditor(IDataEditor dataEditor) => dataEditor.Alias.InvariantEquals("Skybrud.Umbraco.Redirects")
-            || dataEditor.Alias.InvariantEquals("Skybrud.Umbraco.Redirects.OutboundRedirect");
+        public bool IsForEditor(IDataEditor dataEditor) => dataEditor.Alias.InvariantEquals("Skybrud.Umbraco.Redirects.OutboundRedirect");
     }
 
 }
