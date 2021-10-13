@@ -1,6 +1,6 @@
-﻿using Skybrud.Umbraco.Redirects.PackageConstants;
+﻿using Newtonsoft.Json;
+using Skybrud.Umbraco.Redirects.Models.Tracking;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.Editors;
@@ -26,17 +26,18 @@ namespace Skybrud.Umbraco.Redirects.Tracking
             var references = new List<UmbracoEntityReference>();
             if (value != null)
             {
-                foreach (Match image in Regex.Matches(value.ToString(), RedirectsConstants.Tracking.MatchMediaPathPattern))
+                var redirectLink = JsonConvert.DeserializeObject<RedirectLink>(value.ToString());
+                if (redirectLink?.Destination?.Type == "media")
                 {
-                    AddReferenceFromMediaPath(references, image);
+                    AddReferenceFromMediaPath(references, redirectLink?.Destination?.Url);
                 }
             }
             return references;
         }
 
-        private void AddReferenceFromMediaPath(List<UmbracoEntityReference> references, Match image)
+        private void AddReferenceFromMediaPath(List<UmbracoEntityReference> references, string imagePath)
         {
-            IMedia media = _mediaService.GetMediaByPath(image.Value);
+            IMedia media = _mediaService.GetMediaByPath(imagePath);
             if (media == null) return;
             Udi udi = new GuidUdi("media", media.Key);
             references.Add(new UmbracoEntityReference(udi));
