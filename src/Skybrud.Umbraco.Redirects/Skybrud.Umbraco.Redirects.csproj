@@ -25,10 +25,10 @@
   <ItemGroup>
     <Reference Include="System.Web" />
     <PackageReference Include="Skybrud.Essentials" Version="1.1.29" />
-    <PackageReference Include="UmbracoCms.Core" Version="8.1.0">
+    <PackageReference Include="UmbracoCms.Core" Version="8.6.8">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="UmbracoCms.Web" Version="8.1.0">
+    <PackageReference Include="UmbracoCms.Web" Version="8.6.8">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Skybrud.WebApi.Json" Version="1.0.4" />
