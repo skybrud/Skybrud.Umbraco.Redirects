@@ -1,14 +1,14 @@
-﻿using Skybrud.Umbraco.Redirects.Models.Outbound;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Skybrud.Umbraco.Redirects.Models;
+using Skybrud.Umbraco.Redirects.Models.Outbound;
 using Skybrud.Umbraco.Redirects.PropertyEditors;
 using Umbraco.Core;
 using Umbraco.Core.Models.Editors;
 using Umbraco.Core.PropertyEditors;
 
-namespace Skybrud.Umbraco.Redirects.Tracking {
+namespace Skybrud.Umbraco.Redirects.Factories.References {
     
-    internal class RedirectsMediaTracking : IDataValueReferenceFactory, IDataValueReference {
+    internal class OutboundRedirectReferenceFactory : IDataValueReferenceFactory, IDataValueReference {
 
         public IDataValueReference GetDataValueReference() => this;
 
