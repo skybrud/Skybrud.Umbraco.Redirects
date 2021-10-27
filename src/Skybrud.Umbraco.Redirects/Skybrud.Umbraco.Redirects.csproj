@@ -8,7 +8,7 @@
   <PropertyGroup>
     <Version>2.0.9</Version>
     <Authors>Anders Bjerner</Authors>
-    <Company>Skybrud.dk</Company>
+    <Company>Limbo</Company>
     <Description>Redirects manager for Umbraco 8.</Description>
     <Copyright>Copyright © 2021</Copyright>
   </PropertyGroup>
@@ -18,7 +18,7 @@
     <PackageTags>Umbraco, Redirects, 301, Content, Url</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://packages.skybrud.dk/skybrud.umbraco.redirects/</PackageProjectUrl>
-    <PackageIconUrl>http://www.skybrud.dk/img/5431sk/icon/favicon.ico</PackageIconUrl>
+    <PackageIcon>Limbo.png</PackageIcon>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/skybrud/Skybrud.Umbraco.Redirects</RepositoryUrl>
   </PropertyGroup>
@@ -45,6 +45,7 @@
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\package.manifest" />
     <Content Include="Web.config.install.xdt" />
     <Content Include="Web.config.uninstall.xdt" />
+    <None Include="../build/Limbo.png" Pack="true" PackagePath="\"/>
   </ItemGroup>
 
   <PropertyGroup>
