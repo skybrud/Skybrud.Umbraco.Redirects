@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using Skybrud.Umbraco.Redirects.Models.Outbound;
-using Skybrud.Umbraco.Redirects.Models.Tracking;
 using System;
 using System.Collections.Generic;
 using Umbraco.Core;
