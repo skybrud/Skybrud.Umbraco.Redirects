@@ -28,22 +28,29 @@ namespace Skybrud.Umbraco.Redirects.Middleware {
             }
 
             context.Response.OnStarting(() => {
-                if (context.Response.StatusCode == StatusCodes.Status404NotFound)
-                {
-                    // Look for a redirect
-                    Redirect redirect = _redirectsService.GetRedirectByRequest(context.Request);
+                
+                switch (context.Response.StatusCode) {
+                    
+                    case StatusCodes.Status404NotFound: {
+                        
+                        // Look for a redirect
+                        Redirect redirect = _redirectsService.GetRedirectByRequest(context.Request);
+                    
+                        // If a redirect is found, redirect the user to the destination URL
+                        if (redirect != null) context.Response.Redirect(redirect.Destination.Url);
+                        
+                        break;
 
-                    if (redirect != null)
-                    {
-                        // Redirect the user to the destination URL
-                        context.Response.Redirect(redirect.Destination.Url);
                     }
+
                 }
 
                 return Task.CompletedTask;
+
             });
 
             await _next(context);
+
         }
 
     }
