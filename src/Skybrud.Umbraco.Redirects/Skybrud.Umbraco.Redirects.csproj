@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>3.0.0-alpha005</Version>
+    <Version>3.0.0-alpha006</Version>
     <Authors>Anders Bjerner</Authors>
     <Company>Limbo</Company>
     <Description>Redirects manager for Umbraco 9.</Description>
