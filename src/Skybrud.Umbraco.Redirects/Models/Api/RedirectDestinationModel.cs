@@ -29,6 +29,16 @@ namespace Skybrud.Umbraco.Redirects.Models.Api {
         [JsonPropertyName("published")]
         public bool IsPublished { get; }
 
+        [JsonPropertyName("warning")]
+        public string Warning {
+            get {
+                if (IsNull) return "deleted";
+                if (IsTrashed) return "trashed";
+                if (!IsPublished) return "unpublished";
+                return null;
+            }
+        }
+
         public RedirectDestinationModel(Redirect redirect) : this(redirect.Destination) { }
 
         public RedirectDestinationModel(RedirectDestination destination) {
