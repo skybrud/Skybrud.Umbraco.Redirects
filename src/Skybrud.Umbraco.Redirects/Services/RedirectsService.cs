@@ -379,7 +379,13 @@ namespace Skybrud.Umbraco.Redirects.Services {
                     string[] parts = options.Text.Split('?');
 
                     if (parts.Length == 1) {
-                        sql = sql.Where<RedirectDto>(x => x.Path.Contains(options.Text) || x.QueryString.Contains(options.Text));
+                        if (int.TryParse(options.Text, out int redirectId)) {
+                            sql = sql.Where<RedirectDto>(x => x.Id == redirectId || x.Path.Contains(options.Text) || x.QueryString.Contains(options.Text));
+                        } else if (Guid.TryParse(options.Text, out Guid redirectKey)) {
+                            sql = sql.Where<RedirectDto>(x => x.Key == redirectKey || x.Path.Contains(options.Text) || x.QueryString.Contains(options.Text));
+                        } else {
+                            sql = sql.Where<RedirectDto>(x => x.Path.Contains(options.Text) || x.QueryString.Contains(options.Text));
+                        }
                     } else {
                         string url = parts[0];
                         string query = parts[1];
