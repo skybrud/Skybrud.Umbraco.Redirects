@@ -135,21 +135,21 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
 
         }
 
-        public virtual RedirectModel Map(Redirect redirect)  {
+        public virtual RedirectModel Map(IRedirect redirect)  {
             Dictionary<Guid, RedirectRootNodeModel> rootNodeLookup = new();
             Dictionary<Guid, IContent> contentLookup = new();
             Dictionary<Guid, IMedia> mediaLookup = new();
             return Map(redirect, rootNodeLookup, contentLookup, mediaLookup);
         }
 
-        public virtual IEnumerable<RedirectModel> Map(IEnumerable<Redirect> redirects) {
+        public virtual IEnumerable<RedirectModel> Map(IEnumerable<IRedirect> redirects) {
             Dictionary<Guid, RedirectRootNodeModel> rootNodeLookup = new();
             Dictionary<Guid, IContent> contentLookup = new();
             Dictionary<Guid, IMedia> mediaLookup = new();
             return redirects.Select(redirect => Map(redirect, rootNodeLookup, contentLookup, mediaLookup));
         }
 
-        private RedirectModel Map(Redirect redirect, Dictionary<Guid, RedirectRootNodeModel> rootNodeLookup,
+        private RedirectModel Map(IRedirect redirect, Dictionary<Guid, RedirectRootNodeModel> rootNodeLookup,
             Dictionary<Guid, IContent> contentLookup, Dictionary<Guid, IMedia> mediaLookup)
         {
             

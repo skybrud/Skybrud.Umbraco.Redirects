@@ -19,7 +19,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// Gets an array representing the items of the collection.
         /// </summary>
         [JsonProperty("items")]
-        public Redirect[] Items { get; }
+        public IRedirect[] Items { get; }
 
         #endregion
 
@@ -34,7 +34,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// <param name="page">The page returned.</param>
         /// <param name="pages">The total amount of pages.</param>
         /// <param name="items">An array of the items making up the page.</param>
-        public RedirectsSearchResult(int total, int limit, int offset, int page, int pages, Redirect[] items) {
+        public RedirectsSearchResult(int total, int limit, int offset, int page, int pages, IRedirect[] items) {
             Pagination = new RedirectsSearchResultPagination(total, limit, offset, page, pages);
             Items = items;
         }

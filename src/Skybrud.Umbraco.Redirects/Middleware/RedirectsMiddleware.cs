@@ -34,7 +34,7 @@ namespace Skybrud.Umbraco.Redirects.Middleware {
                     case StatusCodes.Status404NotFound: {
                         
                         // Look for a redirect
-                        Redirect redirect = _redirectsService.GetRedirectByRequest(context.Request);
+                        IRedirect redirect = _redirectsService.GetRedirectByRequest(context.Request);
                     
                         // If a redirect is found, redirect the user to the destination URL
                         if (redirect != null) context.Response.Redirect(redirect.Destination.Url);

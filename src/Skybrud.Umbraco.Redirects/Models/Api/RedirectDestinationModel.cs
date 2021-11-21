@@ -6,7 +6,7 @@ namespace Skybrud.Umbraco.Redirects.Models.Api {
 
     public class RedirectDestinationModel {
 
-        private readonly RedirectDestination _destination;
+        private readonly IRedirectDestination _destination;
 
         public int Id => _destination.Id;
 
@@ -39,9 +39,9 @@ namespace Skybrud.Umbraco.Redirects.Models.Api {
             }
         }
 
-        public RedirectDestinationModel(Redirect redirect) : this(redirect.Destination) { }
+        public RedirectDestinationModel(IRedirect redirect) : this(redirect.Destination) { }
 
-        public RedirectDestinationModel(RedirectDestination destination) {
+        public RedirectDestinationModel(IRedirectDestination destination) {
             
             _destination = destination;
 
@@ -65,7 +65,7 @@ namespace Skybrud.Umbraco.Redirects.Models.Api {
 
         }
 
-        public RedirectDestinationModel(Redirect redirect, IContent content) {
+        public RedirectDestinationModel(IRedirect redirect, IContent content) {
             _destination = redirect.Destination;
             Name = content?.Name ?? redirect.Destination.Name;
             Icon = content?.ContentType.Icon ?? "icon-article";
@@ -74,7 +74,7 @@ namespace Skybrud.Umbraco.Redirects.Models.Api {
             IsPublished = content?.Published ?? false;
         }
 
-        public RedirectDestinationModel(Redirect redirect, IMedia media) {
+        public RedirectDestinationModel(IRedirect redirect, IMedia media) {
             _destination = redirect.Destination;
             Name = media?.Name ?? redirect.Destination.Name;
             Icon = media?.ContentType.Icon ?? "icon-picture";

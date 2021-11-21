@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using Skybrud.Essentials.Enums;
 using Skybrud.Umbraco.Redirects.Exceptions;
+using Skybrud.Umbraco.Redirects.Extensions;
 using Skybrud.Umbraco.Redirects.Helpers;
 using Skybrud.Umbraco.Redirects.Models;
 using Skybrud.Umbraco.Redirects.Models.Api;
@@ -80,7 +81,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                 if (string.IsNullOrWhiteSpace(model.Destination?.Url)) throw new RedirectsException(_backOffice.Localize("errorNoDestination"));
 
                 // Add the redirect
-                Redirect redirect = _redirects.AddRedirect(model);
+                IRedirect redirect = _redirects.AddRedirect(model);
                 
                 // Map the result for the API
                 return new JsonResult(_backOffice.Map(redirect));
@@ -102,7 +103,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
             try {
                 
                 // Get a reference to the redirect
-                Redirect redirect = _redirects.GetRedirectByKey(redirectId);
+                IRedirect redirect = _redirects.GetRedirectByKey(redirectId);
                 if (redirect == null) throw new RedirectNotFoundException();
 
                 // Some input validation
@@ -118,7 +119,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                 redirect.RootKey = model.RootNodeKey;
                 redirect.Url = url;
                 redirect.QueryString = query;
-                redirect.SetDestination(model.Destination);
+                redirect.Destination = model.Destination;
                 redirect.IsPermanent = model.IsPermanent;
                 redirect.ForwardQueryString = model.ForwardQueryString;
 
@@ -160,7 +161,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
             try {
 
                 // Get a reference to the redirect
-                Redirect redirect = _redirects.GetRedirectByKey(redirectId);
+                IRedirect redirect = _redirects.GetRedirectByKey(redirectId);
                 if (redirect == null) throw new RedirectNotFoundException();
 
                 // Some input validation
@@ -225,7 +226,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
             try {
 
                 // Get a reference to the redirect
-                Redirect redirect = _redirects.GetRedirectByKey(redirectId);
+                IRedirect redirect = _redirects.GetRedirectByKey(redirectId);
                 if (redirect == null) throw new RedirectNotFoundException();
 
                 // Delete the redirect
@@ -339,7 +340,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                 }
                 
                 // get the redirects via the redirects service
-                Redirect[] redirects = _redirects.GetRedirectsByNodeKey(node.Type, key);
+                IRedirect[] redirects = _redirects.GetRedirectsByNodeKey(node.Type, key);
                 
                 // Generate the response
                 return new JsonResult(new {

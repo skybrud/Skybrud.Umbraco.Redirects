@@ -3,43 +3,43 @@ using Newtonsoft.Json;
 
 namespace Skybrud.Umbraco.Redirects.Models {
     
-    public class RedirectDestination : IRedirectDestination {
+    public interface IRedirectDestination {
         
         /// <summary>
         /// Gets the ID of the selected content or media. If an URL has been selected, this will return <c>0</c>.
         /// </summary>
         [JsonProperty("id")]
-        public int Id { get; set; }
+        int Id { get; }
 
         /// <summary>
         /// Gets the GUID key of the selected content or media. If an URL has been selected, this will return <c>null</c>.
         /// </summary>
         [JsonProperty("key")]
-        public Guid Key { get; set; }
+        Guid Key { get; }
 
         /// <summary>
         /// Gets the URL of the destination.
         /// </summary>
         [JsonProperty("url")]
-        public string Url { get; set; }
+        string Url { get; }
 
         /// <summary>
         /// Gets the name of the destination.
         /// </summary>
         [JsonProperty("name")]
-        public string Name { get; set; }
+        string Name { get; }
 
         /// <summary>
         /// Gets the type of the destination.
         /// </summary>
         [JsonProperty("type")]
-        public RedirectDestinationType Type { get; set; }
+        RedirectDestinationType Type { get; }
 
         /// <summary>
         /// Gets whether the link is valid.
         /// </summary>
         [JsonIgnore]
-        public bool IsValid => string.IsNullOrWhiteSpace(Url) == false;
+        bool IsValid { get; }
 
     }
 
