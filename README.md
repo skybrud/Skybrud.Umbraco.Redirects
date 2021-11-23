@@ -29,13 +29,13 @@ URLs can be added to redirect to either a content item, media item or a custom U
 The Umbraco 9 version of this package is only available via NuGet. To install the package, you can use either .NET CLI:
 
 ```
-dotnet add package Skybrud.Umbraco.Redirects --version 3.0.0-alpha005
+dotnet add package Skybrud.Umbraco.Redirects --version 3.0.0-alpha006
 ```
 
 or the older NuGet Package Manager:
 
 ```
-Install-Package Skybrud.Umbraco.Redirects -Version 3.0.0-alpha005
+Install-Package Skybrud.Umbraco.Redirects -Version 3.0.0-alpha006
 ```
 
 **Umbraco 8**  
