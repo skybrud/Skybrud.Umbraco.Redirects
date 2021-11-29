@@ -16,7 +16,7 @@ URLs can be added to redirect to either a content item, media item or a custom U
 This is the recommend approach, as you install the [**NuGet Package**][NuGetPackage] in your Visual Studio project, and NuGet takes care of the rest.
 
 **Umbraco 8**  
-Latest release for Umbraco 8 is [**v2.0.9**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/releases/tag/v2.1.0):
+Latest release for Umbraco 8 is [**v2.1.0**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/releases/tag/v2.1.0):
 
 ```
 Install-Package Skybrud.Umbraco.Redirects -Version 2.1.0
