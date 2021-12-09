@@ -36,9 +36,21 @@ namespace Skybrud.Umbraco.Redirects.Middleware {
                         // Look for a redirect
                         IRedirect redirect = _redirectsService.GetRedirectByRequest(context.Request);
                     
-                        // If a redirect is found, redirect the user to the destination URL
-                        if (redirect != null) context.Response.Redirect(redirect.Destination.Url);
-                        
+                        // Respond with a redirect based on the redirect type
+                        switch (redirect?.Type) {
+
+                            // If redirect is of type permanent, trigger a 301 redirect
+                            case RedirectType.Permanent:
+                                context.Response.Redirect(redirect.Destination.Url, true);
+                                break;
+                                    
+                            // If redirect is of type temporary, trigger a 307 redirect
+                            case RedirectType.Temporary:
+                                context.Response.Redirect(redirect.Destination.Url, false, true);
+                                break;
+                            
+                        }
+
                         break;
 
                     }
