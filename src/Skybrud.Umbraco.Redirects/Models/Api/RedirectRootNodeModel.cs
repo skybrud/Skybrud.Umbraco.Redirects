@@ -17,7 +17,7 @@ namespace Skybrud.Umbraco.Redirects.Models.Api {
 
         public string[] Domains { get; }
 
-        public RedirectRootNodeModel(Redirect redirect, IContent content, string[] domains) {
+        public RedirectRootNodeModel(IRedirect redirect, IContent content, string[] domains) {
             Id = content?.Id ?? 0;
             Key = content?.Key ?? redirect.RootKey;
             Name = content?.Name;

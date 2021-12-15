@@ -7,13 +7,12 @@ using Skybrud.Umbraco.Redirects.Exceptions;
 using Skybrud.Umbraco.Redirects.Extensions;
 using Skybrud.Umbraco.Redirects.Models.Dtos;
 using Skybrud.Umbraco.Redirects.Text.Json;
-using Umbraco.Cms.Core.Models.PublishedContent;
-using Umbraco.Extensions;
 
 namespace Skybrud.Umbraco.Redirects.Models {
 
-    public class Redirect {
+    public class Redirect : IRedirect {
 
+        private IRedirectDestination _destination;
         private EssentialsTime _createDate;
         private EssentialsTime _updateDate;
 
@@ -86,7 +85,22 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
         }
 
-        public RedirectDestination Destination { get; private set; }
+        /// <summary>
+        /// Gets or sets the destination of the redirect.
+        /// </summary>
+        public IRedirectDestination Destination {
+
+            get => _destination;
+
+            set {
+                _destination = value ?? throw new ArgumentNullException(nameof(value));
+                Dto.DestinationId = value.Id;
+                Dto.DestinationKey = value.Key;
+                Dto.DestinationType = value.Type.ToString();
+                Dto.DestinationUrl = value.Url;
+            }
+
+        }
 
         /// <summary>
         /// Gets or sets the timestamp for when the redirect was created.
@@ -147,13 +161,14 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// </summary>
         public Redirect() {
             Dto = new RedirectDto();
+            _destination = new RedirectDestination();
             _createDate = EssentialsTime.UtcNow;
             _updateDate = EssentialsTime.UtcNow;
             Dto.Key = Guid.NewGuid();
         }
 
         internal Redirect(RedirectDto dto) {
-
+            
             _createDate = new EssentialsTime(dto.Created);
             _updateDate = new EssentialsTime(dto.Updated);
 
@@ -161,7 +176,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
                 throw new RedirectsException($"Unknown redirect type: {dto.DestinationType}");
             }
 
-            Destination = new RedirectDestination {
+            _destination = new RedirectDestination {
                 Type = type,
                 Id = dto.DestinationId,
                 Key = dto.DestinationKey,
@@ -169,65 +184,6 @@ namespace Skybrud.Umbraco.Redirects.Models {
             };
            
             Dto = dto;
-
-        }
-
-        #endregion
-
-        #region Member methods
-
-        public Redirect SetDestination(RedirectDestination destination) {
-            
-            Destination = destination ?? throw new ArgumentNullException(nameof(destination));
-
-            Dto.DestinationId = destination.Id;
-            Dto.DestinationKey = destination.Key;
-            Dto.DestinationType = destination.Type.ToString();
-            Dto.DestinationUrl = destination.Url;
-            
-            return this;
-
-        }
-
-        public Redirect SetDestination(IPublishedContent content) {
-
-            if (content == null) throw new ArgumentNullException(nameof(content));
-
-            switch (content.ItemType) {
-
-                case PublishedItemType.Content:
-                    return SetDestination(new RedirectDestination {
-                        Id = content.Id,
-                        Key = content.Key,
-                        Name = content.Name,
-                        Url = content.Url(),
-                        Type = RedirectDestinationType.Content
-                    });
-
-                case PublishedItemType.Media:
-                    return SetDestination(new RedirectDestination {
-                        Id = content.Id,
-                        Key = content.Key,
-                        Name = content.Name,
-                        Url = content.Url(),
-                        Type = RedirectDestinationType.Media
-                    });
-
-                default:
-                    throw new RedirectsException($"Unsupported item type: {content.ItemType}");
-
-            }
-
-        }
-
-        public Redirect SetDestination(string url) {
-
-            if (string.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
-            
-            return SetDestination(new RedirectDestination {
-                Url = url,
-                Type = RedirectDestinationType.Media
-            });
 
         }
 

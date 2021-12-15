@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Skybrud.Umbraco.Redirects.Components;
 using Skybrud.Umbraco.Redirects.ContentApps;
 using Skybrud.Umbraco.Redirects.Helpers;
 using Skybrud.Umbraco.Redirects.Middleware;
@@ -20,12 +19,11 @@ namespace Skybrud.Umbraco.Redirects.Composers {
 
             builder.Services.AddUnique<IRedirectsService, RedirectsService>();
             builder.Services.AddUnique<RedirectsBackOfficeHelper>();
-            
-            builder.Components().Append<MigrationComponent>();
 
             builder.ContentApps().Append<RedirectsContentAppFactory>();
             
             builder.AddNotificationHandler<ServerVariablesParsingNotification, ServerVariablesParsingHandler>();
+            builder.AddNotificationHandler<UmbracoApplicationStartingNotification, UmbracoApplicationStartingHandler>();
 
             builder.Services.Configure<UmbracoPipelineOptions>(options => {
                 options.AddFilter(new UmbracoPipelineFilter(
