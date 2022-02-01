@@ -284,9 +284,13 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                 redirect.LinkId = model.Destination.Id;
                 redirect.LinkKey = model.Destination.Key;
                 redirect.LinkUrl = model.Destination.Url;
+                redirect.LinkQuery = model.Destination.Query ?? string.Empty;
+                redirect.LinkFragment = model.Destination.Fragment ?? string.Empty;
                 redirect.LinkMode = model.Destination.Type;
                 redirect.IsPermanent = model.IsPermanent;
                 redirect.ForwardQueryString = model.ForwardQueryString;
+
+                RedirectsUtils.NormalizeUrlParts(redirect);
 
                 // Save/update the redirect
                 _redirects.SaveRedirect(redirect);

@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Skybrud.Essentials.Json.Extensions;
+using Skybrud.Essentials.Strings.Extensions;
 using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Web.Composing;
 
@@ -66,6 +68,37 @@ namespace Skybrud.Umbraco.Redirects.Models {
         [JsonIgnore]
         public string RawUrl { get; }
 
+        /// <summary>
+        /// Gets the query string part of the destination.
+        /// </summary>
+        [JsonProperty("query")]
+        public string Query { get; set; }
+        
+        /// <summary>
+        /// Gets the fragment part of the destination.
+        /// </summary>
+        [JsonProperty("fragment")]
+        public string Fragment { get; set; }
+        
+        /// <summary>
+        /// Gets the full destination URL.
+        /// </summary>
+        [JsonProperty("fullUrl")]
+        public string FullUrl {
+            get {
+                StringBuilder sb = new StringBuilder();
+                sb.Append(Url);
+                if (Query.HasValue()) {
+                    sb.Append(Url.Contains("?") ? '&' : '?');
+                    sb.Append(Query);
+                }
+                if (Fragment.HasValue()) {
+                    sb.Append(Fragment);
+                }
+                return sb.ToString();
+            }
+        }
+
         #endregion
 
         #region Constructors
@@ -92,6 +125,25 @@ namespace Skybrud.Umbraco.Redirects.Models {
             Id = id;
             Key = key;
             RawUrl = url;
+            Type = type;
+        }
+
+        /// <summary>
+        /// Initializes a new link picker item.
+        /// </summary>
+        /// <param name="id">The ID of the content or media item.</param>
+        /// <param name="key">The GUID ID of the destination.</param>
+        /// <param name="url">The URL of the link.</param>
+        /// <param name="query">The query of the link.</param>
+        /// <param name="fragment">The URL fragment of the link.</param>
+        /// <param name="type">The type of the link - either <see cref="RedirectDestinationType.Content"/>,
+        /// <see cref="RedirectDestinationType.Media"/> or <see cref="RedirectDestinationType.Url"/>.</param>
+        public RedirectDestination(int id, Guid key, string url, string query, string fragment, RedirectDestinationType type) {
+            Id = id;
+            Key = key;
+            RawUrl = url;
+            Query = query;
+            Fragment = fragment;
             Type = type;
         }
 

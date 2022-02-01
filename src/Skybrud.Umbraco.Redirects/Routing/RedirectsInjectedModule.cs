@@ -91,9 +91,9 @@ namespace Skybrud.Umbraco.Redirects.Routing {
             // Return if we don't have a redirect at this point
             if (redirect == null) return;
 
-			string redirectUrl = redirect.LinkUrl;
+			string redirectUrl = redirect.LinkFullUrl;
 
-			if (redirect.ForwardQueryString) redirectUrl = _redirects.HandleForwardQueryString(redirect, context.Request.RawUrl);
+            if (redirect.ForwardQueryString) redirectUrl = _redirects.HandleForwardQueryString(redirect, context.Request.RawUrl);
 
             //if (redirect.IsRegex)
             //{

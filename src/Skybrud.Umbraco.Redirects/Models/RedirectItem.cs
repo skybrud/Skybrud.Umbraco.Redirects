@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 using Newtonsoft.Json;
 using Skybrud.Essentials.Enums;
 using Skybrud.Essentials.Json.Converters.Time;
+using Skybrud.Essentials.Strings.Extensions;
 using Skybrud.Essentials.Time;
 using Skybrud.Umbraco.Redirects.Models.Database;
 using Skybrud.Umbraco.Redirects.Models.Options;
@@ -205,17 +207,78 @@ namespace Skybrud.Umbraco.Redirects.Models {
         }
 
         /// <summary>
+        /// Gets or sets the query of the destination link.
+        /// </summary>
+        [JsonProperty("linkQuery")]
+        public string LinkQuery {
+            get => Dto.DestinationQuery;
+            set => Dto.DestinationQuery = value;
+        }
+
+        /// <summary>
+        /// Gets or sets the URL fragment of the destination link.
+        /// </summary>
+        [JsonProperty("linkFragment")]
+        public string LinkFragment {
+            get => Dto.DestinationFragment;
+            set => Dto.DestinationFragment = value;
+        }
+
+        /// <summary>
+        /// Gets or sets full URL of the destination link.
+        /// </summary>
+        [JsonProperty("linkFullUrl")]
+        public string LinkFullUrl {
+           
+            get {
+
+                StringBuilder sb = new StringBuilder();
+
+                sb.Append(LinkUrl);
+
+                if (LinkQuery.HasValue()) {
+                    sb.Append(LinkUrl.Contains("?") ? '&' : '?');
+                    sb.Append(LinkQuery);
+                }
+
+                if (LinkFragment.HasValue()) {
+                    sb.Append(LinkFragment);
+                }
+                
+                return sb.ToString();
+
+            }
+
+            set {
+
+                if (string.IsNullOrWhiteSpace(value)) throw new ArgumentNullException(nameof(value));
+
+                string[] pieces = value.Split('#');
+                Dto.DestinationFragment = pieces.Length <= 1 ? string.Empty : $"#{pieces[1]}";
+
+                pieces = pieces[0].Split('?');
+                Dto.DestinationQuery = pieces.Length <= 1 ? string.Empty : pieces[1];
+
+                Dto.DestinationUrl = pieces[0];
+
+            }
+
+        }
+
+        /// <summary>
         /// Gets or sets an instance of <see cref="RedirectDestination"/> representing the destination link.
         /// </summary>
         [JsonProperty("link")]
         public RedirectDestination Link {
-            get => new RedirectDestination(LinkId, LinkKey, LinkUrl, LinkMode);
+            get => new RedirectDestination(LinkId, LinkKey, LinkUrl, LinkQuery, LinkFragment, LinkMode);
             set {
                 if (value == null) throw new ArgumentNullException(nameof(value));
                 LinkMode = value.Type;
                 LinkKey = value.Key;
                 LinkId = value.Id;
                 LinkUrl = value.Url;
+                LinkQuery = value.Query;
+                LinkFragment = value.Fragment;
             }
         }
 
@@ -287,6 +350,8 @@ namespace Skybrud.Umbraco.Redirects.Models {
             LinkKey = options.Destination.Key;
             LinkUrl = options.Destination.Url;
             LinkMode = options.Destination.Type;
+            LinkQuery = options.Destination.Query;
+            LinkFragment = options.Destination.Fragment;
 
             Url = url;
             QueryString = query;

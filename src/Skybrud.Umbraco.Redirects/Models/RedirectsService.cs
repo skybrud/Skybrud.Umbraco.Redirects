@@ -96,6 +96,8 @@ namespace Skybrud.Umbraco.Redirects.Models {
                 LinkId = model.Destination.Id,
                 LinkKey = model.Destination.Key,
                 LinkUrl = model.Destination.Url,
+                LinkQuery = model.Destination.Query ?? string.Empty,
+                LinkFragment = model.Destination.Fragment ?? string.Empty,
                 LinkMode = model.Destination.Type,
                 Url = url,
                 QueryString = query,
@@ -582,7 +584,8 @@ namespace Skybrud.Umbraco.Redirects.Models {
                 // we have querystrings in the original url
 
 				// find querystrings in the redirect url
-			    string[] elementsRedirecturl = redirect.LinkUrl.Split('?');
+                
+			    string[] elementsRedirecturl = redirect.LinkFullUrl.Split('?');
 			    string querystringsRedirecturl = 1 < elementsRedirecturl.Length ? elementsRedirecturl[1] : null;
 
 				// merge querystrings
@@ -600,7 +603,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
 		    }
 		    else
 		    {
-			    newRedirectUrl = redirect.LinkUrl;
+			    newRedirectUrl = redirect.LinkFullUrl;
 		    }
 
 			return newRedirectUrl;
