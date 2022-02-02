@@ -12,7 +12,7 @@
   <tbody>
     <tr>
       <td colspan="2">
-          This branch is for the <strong>Umbraco 9</strong> version of this package. For the Umbraco 8 package, see <a href="https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v2/main"><strong>v2/latest</strong></a> branch.
+          This branch is for the <strong>Umbraco 9</strong> version of this package. For the Umbraco 8 package, see <a href="https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v2/main"><strong>v2/main</strong></a> branch.
       </td>
     </tr>
   </tbody>
