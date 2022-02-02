@@ -12,7 +12,7 @@
   <tbody>
     <tr>
       <td colspan="2">
-          This branch is for the <strong>Umbraco 9</strong> version of this package. For the Umbraco 8 package, see <a href="https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v2/latest"><strong>v2/latest</strong></a> branch.
+          This branch is for the <strong>Umbraco 9</strong> version of this package. For the Umbraco 8 package, see <a href="https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v2/main"><strong>v2/latest</strong></a> branch.
       </td>
     </tr>
   </tbody>
@@ -39,10 +39,10 @@ Install-Package Skybrud.Umbraco.Redirects -Version 3.0.0-alpha007
 ```
 
 **Umbraco 8**  
-For the Umbraco 8 version of this package, see the [**v2/latest**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v2/latest) branch instead.
+For the Umbraco 8 version of this package, see the [**v2/main**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v2/main) branch instead.
 
 **Umbraco 7**  
-For the Umbraco 7 version of this package, see the [**v1/latest**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v1/latest) branch instead.
+For the Umbraco 7 version of this package, see the [**v1/main**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v1/main) branch instead.
 
 
 
