@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>2.1.1</Version>
+    <Version>2.1.2</Version>
     <Authors>Anders Bjerner</Authors>
     <Company>Limbo</Company>
     <Description>Redirects manager for Umbraco 8.</Description>
