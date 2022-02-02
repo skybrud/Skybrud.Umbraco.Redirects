@@ -29,6 +29,8 @@
             id: $scope.model.redirect.linkId,
             key: $scope.model.redirect.linkKey,
             url: $scope.model.redirect.linkUrl,
+            query: $scope.model.redirect.linkQuery,
+            fragment: $scope.model.redirect.linkFragment,
             type: $scope.model.redirect.linkMode
         };
 

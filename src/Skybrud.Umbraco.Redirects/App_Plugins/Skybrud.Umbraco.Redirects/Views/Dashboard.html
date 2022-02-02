@@ -58,15 +58,15 @@
                         <td class="col-destination">
                             <span ng-if="redirect.link.type == 'content'">
                                 <localize key="redirects_content">Content</localize>:
-                                <a href="{{redirect.link.url}}" rel="noopener noreferrer" target="_blank" title="{{redirect.link.name ? redirect.link.name : redirect.link.url}}">{{redirect.link.name ? redirect.link.name : redirect.link.url}}</a>
+                                <a href="{{redirect.link.fullUrl}}" rel="noopener noreferrer" target="_blank" title="{{redirect.link.name ? redirect.link.name : redirect.link.fullUrl}}">{{redirect.link.name ? redirect.link.name : redirect.link.fullUrl}}</a>
                             </span>
                             <span ng-if="redirect.link.type == 'media'">
                                 <localize key="redirects_media">Media</localize>:
-                                <a href="{{redirect.link.url}}" rel="noopener noreferrer" target="_blank" title="{{redirect.link.name ? redirect.link.name : redirect.link.url}}">{{redirect.link.name ? redirect.link.name : redirect.link.url}}</a>
+                                <a href="{{redirect.link.fullUrl}}" rel="noopener noreferrer" target="_blank" title="{{redirect.link.name ? redirect.link.name : redirect.link.fullUrl}}">{{redirect.link.name ? redirect.link.name : redirect.link.fullUrl}}</a>
                             </span>
                             <span ng-if="redirect.link.type == 'url'">
                                 <localize key="redirects_url">URL</localize>:
-                                <a href="{{redirect.link.url}}" rel="noopener noreferrer" target="_blank" title="{{redirect.link.url}}">{{redirect.link.url}}</a>
+                                <a href="{{redirect.link.fullUrl}}" rel="noopener noreferrer" target="_blank" title="{{redirect.link.fullUrl}}">{{redirect.link.fullUrl}}</a>
                             </span>
                             <small ng-if="redirect.forward">
                                 &nbsp;?&amp;
