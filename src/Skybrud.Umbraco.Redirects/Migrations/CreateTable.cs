@@ -1,6 +1,8 @@
 ﻿using Skybrud.Umbraco.Redirects.Models.Database;
 using Umbraco.Core.Migrations;
 
+#pragma warning disable 1591
+
 namespace Skybrud.Umbraco.Redirects.Migrations {
 
     public class CreateTable : MigrationBase {

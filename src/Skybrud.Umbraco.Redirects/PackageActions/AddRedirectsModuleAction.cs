@@ -6,6 +6,8 @@ using Umbraco.Core.IO;
 using Umbraco.Core.Logging;
 using Umbraco.Core.PackageActions;
 
+#pragma warning disable 1591
+
 namespace Skybrud.Umbraco.Redirects.PackageActions {
 
     public class AddRedirectsModuleAction : IPackageAction {

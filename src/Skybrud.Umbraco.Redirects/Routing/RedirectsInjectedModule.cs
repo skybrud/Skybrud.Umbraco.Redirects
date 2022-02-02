@@ -7,6 +7,8 @@ using Umbraco.Core.Services;
 using Umbraco.Web;
 using Umbraco.Web.Routing;
 
+#pragma warning disable 1591
+
 namespace Skybrud.Umbraco.Redirects.Routing {
     
     /// <summary>

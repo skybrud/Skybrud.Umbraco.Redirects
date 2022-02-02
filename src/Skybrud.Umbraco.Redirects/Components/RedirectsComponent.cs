@@ -3,6 +3,8 @@ using Skybrud.Umbraco.Redirects.Helpers;
 using Umbraco.Core.Composing;
 using Umbraco.Web.JavaScript;
 
+#pragma warning disable 1591
+
 namespace Skybrud.Umbraco.Redirects.Components {
     
     public class RedirectsComponent : IComponent {

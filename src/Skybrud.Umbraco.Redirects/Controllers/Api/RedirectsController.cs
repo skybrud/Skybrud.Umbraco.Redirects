@@ -16,6 +16,8 @@ using Umbraco.Web.Composing;
 using Umbraco.Web.Mvc;
 using Umbraco.Web.WebApi;
 
+#pragma warning disable 1591
+
 namespace Skybrud.Umbraco.Redirects.Controllers.Api {
     
     /// <summary>

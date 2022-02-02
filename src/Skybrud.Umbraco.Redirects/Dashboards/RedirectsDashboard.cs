@@ -1,6 +1,8 @@
 ﻿using Skybrud.Umbraco.Redirects.Helpers;
 using Umbraco.Core.Dashboards;
 
+#pragma warning disable 1591
+
 namespace Skybrud.Umbraco.Redirects.Dashboards {
     
     public class RedirectsDashboard : IDashboard {

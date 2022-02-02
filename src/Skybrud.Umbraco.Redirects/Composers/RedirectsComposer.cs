@@ -6,6 +6,8 @@ using Skybrud.Umbraco.Redirects.Routing;
 using Umbraco.Core;
 using Umbraco.Core.Composing;
 
+#pragma warning disable 1591
+
 namespace Skybrud.Umbraco.Redirects.Composers {
 
     [RuntimeLevel(MinLevel = RuntimeLevel.Boot)]

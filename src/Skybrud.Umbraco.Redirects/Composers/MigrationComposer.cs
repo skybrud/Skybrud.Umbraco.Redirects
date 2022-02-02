@@ -2,14 +2,17 @@
 using Umbraco.Core;
 using Umbraco.Core.Composing;
 
-namespace Skybrud.Umbraco.Redirects.Composers
-{
+#pragma warning disable 1591
+
+namespace Skybrud.Umbraco.Redirects.Composers {
+
     [RuntimeLevel(MinLevel = RuntimeLevel.Run)]
-    public class MigrationComposer : IUserComposer
-    {
-        public void Compose(Composition composition)
-        {
+    public class MigrationComposer : IUserComposer {
+
+        public void Compose(Composition composition) {
             composition.Components().Append<MigrationComponent>();
         }
+
     }
+
 }
