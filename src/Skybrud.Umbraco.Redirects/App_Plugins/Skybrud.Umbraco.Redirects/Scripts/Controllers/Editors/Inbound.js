@@ -11,7 +11,7 @@
         url: editorState.current.mediaLink ? editorState.current.mediaLink : editorState.current.urls[0].text,
         published: !!editorState.current.mediaLink || editorState.current.urls[0].isUrl,
         trashed: editorState.current.trashed,
-        type: $routeParams.section,
+        type: editorState.current.udi.indexOf("umb://media/") === 0 ? "media" : "content",
         mode: $routeParams.create ? "create" : "list"
     };
 
