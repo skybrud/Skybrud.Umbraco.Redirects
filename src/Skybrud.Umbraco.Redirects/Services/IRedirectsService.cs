@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Skybrud.Umbraco.Redirects.Models;
 using Skybrud.Umbraco.Redirects.Models.Options;
+using Skybrud.Umbraco.Redirects.Models.Outbound;
+using Umbraco.Cms.Core.Models.PublishedContent;
+using Umbraco.Cms.Core.Web;
+using Umbraco.Extensions;
 
 namespace Skybrud.Umbraco.Redirects.Services {
     
@@ -99,6 +104,21 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// <param name="redirect">The redirect.</param>
         /// <returns>The destination URL.</returns>
         string GetDestinationUrl(IRedirect redirect);
+
+        /// <summary>
+        /// Returns the calculated destination URL for the specified <paramref name="redirect"/>.
+        /// </summary>
+        /// <param name="redirect">The redirect.</param>
+        /// <returns>The destination URL.</returns>
+        string GetDestinationUrl(IOutboundRedirect redirect);
+
+        /// <summary>
+        /// Returns the calculated destination URL for the specified <paramref name="redirect"/>.
+        /// </summary>
+        /// <param name="redirect">The redirect.</param>
+        /// <param name="uri">The inbound URL.</param>
+        /// <returns>The destination URL.</returns>
+        string GetDestinationUrl(IOutboundRedirect redirect, Uri uri);
         
         /// <summary>
         /// Returns a paginated list of redirects matching the specified <paramref name="options"/>.

@@ -1,12 +1,12 @@
-﻿<div ng-controller="SkybrudUmbracoRedirects.OutboundRedirectEditor.Controller">
+﻿<div ng-controller="SkybrudUmbracoRedirects.OutboundRedirectEditor.Controller as vm">
     <div class="SkybrudPropertyEditors LinkPicker SingleLinkPicker">
         <div>
             <label style="margin: 0; padding: 0;">
-                <input type="radio" name="radio_{{model.id}}" ng-model="mode" value="permanent" ng-change="changed()" />
+                <input type="radio" name="radio_{{model.id}}" ng-model="vm.type" value="permanent" ng-change="vm.changed()" />
                 <localize key="redirects_labelPermanentRedirect">Permanent redirect</localize> (301)
             </label>
             <label style="margin: 0 0 0 10px; padding: 0;">
-                <input type="radio" name="radio_{{model.id}}" ng-model="mode" value="temporary" ng-change="changed()" />
+                <input type="radio" name="radio_{{model.id}}" ng-model="vm.type" value="temporary" ng-change="vm.changed()" />
                 <localize key="redirects_labelTemporaryRedirect">Temporary redirect</localize> (307)
             </label>
         </div>
@@ -20,11 +20,11 @@
                 <div class="umb-node-preview__description">{{model.value.destination.url}}</div>
             </div>
             <div class="umb-node-preview__actions">
-                <a class="umb-node-preview__action" href="" ng-click="editLink()"><localize key="general_edit">Edit</localize></a>
-                <a class="umb-node-preview__action umb-node-preview__action--red" href="" ng-click="removeLink()"><localize key="general_remove">Remove</localize></a>
+                <a class="umb-node-preview__action" href="" ng-click="vm.editLink()"><localize key="general_edit">Edit</localize></a>
+                <a class="umb-node-preview__action umb-node-preview__action--red" href="" ng-click="vm.removeLink()"><localize key="general_remove">Remove</localize></a>
             </div>
         </div>
-        <button type="button" ng-if="!model.value.destination" class="umb-node-preview-add" ng-click="addLink()" style="max-width: initial;">
+        <button type="button" ng-if="!model.value.destination" class="umb-node-preview-add" ng-click="vm.addLink()" style="max-width: initial;">
             <localize key="redirects_selectDestination">Select destination</localize>
         </button>
     </div>

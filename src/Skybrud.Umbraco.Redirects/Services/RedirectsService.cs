@@ -11,6 +11,7 @@ using Skybrud.Umbraco.Redirects.Extensions;
 using Skybrud.Umbraco.Redirects.Models;
 using Skybrud.Umbraco.Redirects.Models.Dtos;
 using Skybrud.Umbraco.Redirects.Models.Options;
+using Skybrud.Umbraco.Redirects.Models.Outbound;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Routing;
 using Umbraco.Cms.Core.Scoping;
@@ -534,10 +535,83 @@ namespace Skybrud.Umbraco.Redirects.Services {
 
         }
 
+        /// <summary>
+        /// Returns the calculated destination URL for the specified <paramref name="redirect"/>.
+        /// </summary>
+        /// <param name="redirect">The redirect.</param>
+        /// <returns>The destination URL.</returns>
+        public virtual string GetDestinationUrl(IOutboundRedirect redirect) {
+            return GetDestinationUrl(redirect, null);
+        }
+        
+        /// <summary>
+        /// Returns the calculated destination URL for the specified <paramref name="redirect"/>.
+        /// </summary>
+        /// <param name="redirect">The redirect.</param>
+        /// <param name="uri">The inbound URL.</param>
+        /// <returns>The destination URL.</returns>
+        public virtual string GetDestinationUrl(IOutboundRedirect redirect, Uri uri) {
 
+            if (redirect is not { HasDestination: true }) return null;
 
+            // Get the query string from the URL (if any)
+            string query = redirect.Destination.Url
+                .Split('?')
+                .Skip(1)
+                .FirstOrDefault();
 
+            // Get the fragment (if any)
+            string fragment = redirect.Destination.Fragment;
 
+            // Merge the existing query string with the query string of "uri" (eg. from the inbound request)
+            if (uri != null && uri.Query.HasValue() && redirect.ForwardQueryString) query = MergeQueryString2(query, uri.Query);
+
+            // For content and media, we need to look up the most recent URL
+            IPublishedContent content = null;
+            switch (redirect.Destination.Type) {
+
+                case RedirectDestinationType.Content:
+                    if (_umbracoContextAccessor.TryGetUmbracoContext(out IUmbracoContext context))  {
+                        content = context.Content.GetById(redirect.Destination.Key);
+                    }
+                    break;
+
+                case RedirectDestinationType.Media:
+                    if (_umbracoContextAccessor.TryGetUmbracoContext(out context))  {
+                        content = context.Media.GetById(redirect.Destination.Key);
+                    }
+                    break;
+                
+            }
+
+            // Put the destination URL back together
+            return ConcatUrl(content?.Url() ?? redirect.Destination.Url, query, fragment);
+
+        }
+
+        /// <summary>
+        /// Returns the concatenated URL based on <paramref name="url"/>, <paramref name="query"/> and <paramref name="fragment"/>.
+        /// </summary>
+        /// <param name="url">The URL.</param>
+        /// <param name="query">The query string.</param>
+        /// <param name="fragment">The fragment.</param>
+        /// <returns>The combined URL.</returns>
+        protected virtual string ConcatUrl(string url, string query, string fragment) {
+
+            return $"{url}{(string.IsNullOrWhiteSpace(query) ? null : "?" + query)}{fragment}";
+
+        }
+
+        /// <summary>
+        /// Returns the combined query string value for <paramref name="query1"/> and <paramref name="query2"/>.
+        /// </summary>
+        /// <param name="query1">The first query string.</param>
+        /// <param name="query2">The second query string.</param>
+        /// <returns>The combined query string.</returns>
+        protected virtual string MergeQueryString2(string query1, string query2) {
+            if (!query1.HasValue()) return query2.TrimStart('?');
+            return query1 + "&" + query2.TrimStart('?');
+        }
 
 
 

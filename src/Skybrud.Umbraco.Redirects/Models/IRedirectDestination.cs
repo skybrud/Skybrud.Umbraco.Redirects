@@ -30,6 +30,12 @@ namespace Skybrud.Umbraco.Redirects.Models {
         string Name { get; }
 
         /// <summary>
+        /// Gets the fragment of the destination - eg. <c>#hello</c>.
+        /// </summary>
+        [JsonProperty("fragment")]
+        string Fragment { get; }
+
+        /// <summary>
         /// Gets the type of the destination.
         /// </summary>
         [JsonProperty("type")]

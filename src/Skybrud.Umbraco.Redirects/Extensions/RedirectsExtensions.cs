@@ -2,12 +2,38 @@
 using Microsoft.AspNetCore.Http;
 using Skybrud.Umbraco.Redirects.Exceptions;
 using Skybrud.Umbraco.Redirects.Models;
+using Skybrud.Umbraco.Redirects.Models.Outbound;
+using Skybrud.Umbraco.Redirects.Services;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Extensions;
+
+// ReSharper disable ConvertSwitchStatementToSwitchExpression
+// ReSharper disable SwitchStatementHandlesSomeKnownEnumValuesWithDefault
 
 namespace Skybrud.Umbraco.Redirects.Extensions {
     
     public static class RedirectsExtensions {
+        
+        /// <summary>
+        /// Returns the calculated destination URL for the specified <paramref name="redirect"/>.
+        /// </summary>
+        /// <param name="redirect">The redirect.</param>
+        /// <param name="redirectsService">A reference to the current redirects service.</param>
+        /// <returns>The destination URL.</returns>
+        public static string GetDestinationUrl(this OutboundRedirect redirect, IRedirectsService redirectsService) {
+            return redirectsService.GetDestinationUrl(redirect);
+        }
+        
+        /// <summary>
+        /// Returns the calculated destination URL for the specified <paramref name="redirect"/>.
+        /// </summary>
+        /// <param name="redirect">The redirect.</param>
+        /// <param name="uri">The inbound URL.</param>
+        /// <param name="redirectsService">A reference to the current redirects service.</param>
+        /// <returns>The destination URL.</returns>
+        public static string GetDestinationUrl(this OutboundRedirect redirect, Uri uri, IRedirectsService redirectsService) {
+            return redirectsService.GetDestinationUrl(redirect, uri);
+        }
 
         public static void Split(this string value, char separator, out string first) {
             string[] array = value?.Split(separator);

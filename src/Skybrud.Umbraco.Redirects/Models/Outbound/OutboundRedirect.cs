@@ -1,108 +1,98 @@
-﻿//using System;
-//using Newtonsoft.Json;
-//using Newtonsoft.Json.Linq;
-//using Skybrud.Essentials.Json;
-//using Skybrud.Essentials.Json.Extensions;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Skybrud.Essentials.Json;
+using Skybrud.Essentials.Json.Extensions;
 
-//namespace Skybrud.Umbraco.Redirects.Models.Outbound {
-    
-//    /// <summary>
-//    /// Model for an outbound redirect.
-//    /// </summary>
-//    public class OutboundRedirect : JsonObjectBase {
+namespace Skybrud.Umbraco.Redirects.Models.Outbound {
 
-//        #region Properties
-        
-//        /// <summary>
-//        /// Gets whether the redirect is permanent.
-//        /// </summary>
-//        [JsonProperty("permanent")]
-//        public bool IsPermanent { get; }
+    /// <summary>
+    /// Model for an outbound redirect.
+    /// </summary>
+    public class OutboundRedirect : JsonObjectBase, IOutboundRedirect {
 
-//        /// <summary>
-//        /// Gets an instance of <see cref="RedirectDestination"/> representing the destination.
-//        /// </summary>
-//        [JsonProperty("destination")]
-//        public RedirectDestination Destination { get; }
+        #region Properties
 
-//        /// <summary>
-//        /// Gets the URL of the redirects.
-//        /// </summary>
-//        [JsonIgnore]
-//        public string Url => HasDestination ? Destination.Url : string.Empty;
+        /// <summary>
+        /// Gets whether the redirect is permanent.
+        /// </summary>
+        [JsonProperty("permanent")]
+        public bool IsPermanent => Type == RedirectType.Permanent;
 
-//        /// <summary>
-//        /// Same as <see cref="IsValid"/>.
-//        /// </summary>
-//        [JsonIgnore]
-//        public bool HasDestination => IsValid;
+        /// <summary>
+        /// Gets the type of the redirect - either <see cref="RedirectType.Permanent"/> or <see cref="RedirectType.Temporary"/>.
+        /// </summary>
+        [JsonProperty("type")]
+        public RedirectType Type { get; set; }
 
-//        /// <summary>
-//        /// Same as <see cref="Destination"/>.
-//        /// </summary>
-//        [JsonIgnore]
-//        [Obsolete("Use Destination instead.")]
-//        public RedirectDestination Link => Destination;
+        /// <summary>
+        /// Gets an instance of <see cref="RedirectDestination"/> representing the destination.
+        /// </summary>
+        [JsonProperty("destination")]
+        public RedirectDestination Destination { get; set; }
 
-//        /// <summary>
-//        /// Same as <see cref="IsValid"/>.
-//        /// </summary>
-//        [JsonIgnore]
-//        [Obsolete("Use HasDestination instead.")]
-//        public bool HasLink => IsValid;
+        /// <summary>
+        /// Gets whether the query string of the inbound request should be forwarded.
+        /// </summary>
+        [JsonProperty("forward")]
+        public bool ForwardQueryString { get; set; }
 
-//        /// <summary>
-//        /// Gets whether the redirects has a valid link.
-//        /// </summary>
-//        [JsonIgnore]
-//        public bool IsValid => Destination != null && Destination.IsValid;
+        /// <summary>
+        /// Same as <see cref="IsValid"/>.
+        /// </summary>
+        [JsonIgnore]
+        public bool HasDestination => IsValid;
 
-//        #endregion
+        /// <summary>
+        /// Gets whether the redirects has a valid link.
+        /// </summary>
+        [JsonIgnore]
+        public bool IsValid => Destination is { IsValid: true };
 
-//        #region Constructors
+        #endregion
 
-//        /// <summary>
-//        /// Initializes a new instance with an empty model.
-//        /// </summary>
-//        public OutboundRedirect() : base(null) {
-//            IsPermanent = true;
-//            Destination = new RedirectDestination();
-//        }
+        #region Constructors
 
-//        /// <summary>
-//        /// Initializes a new instance based on the specified <see cref="JObject"/>.
-//        /// </summary>
-//        /// <param name="obj">An instance of <see cref="JObject"/> representing the redirect.</param>
-//        protected OutboundRedirect(JObject obj) : base(obj) {
-//            IsPermanent = obj.GetBoolean("permanent");
-//            Destination = RedirectDestination.Parse(obj.GetObject("destination") ?? obj.GetObject("link")) ?? new RedirectDestination();
-//        }
+        /// <summary>
+        /// Initializes a new instance with an empty model.
+        /// </summary>
+        public OutboundRedirect() : base(null) {
+            Destination = new RedirectDestination();
+        }
 
-//        #endregion
+        /// <summary>
+        /// Initializes a new instance based on the specified <see cref="JObject"/>.
+        /// </summary>
+        /// <param name="obj">An instance of <see cref="JObject"/> representing the redirect.</param>
+        protected OutboundRedirect(JObject obj) : base(obj) {
+            Type = obj.GetBoolean("permanent") ? RedirectType.Permanent : RedirectType.Temporary;
+            Destination = obj.GetObject("destination", RedirectDestination.Parse);
+        }
 
-//        #region Static methods
+        #endregion
 
-//        /// <summary>
-//        /// Parses the specified <see cref="JObject"/> into an instance of <see cref="OutboundRedirect"/>.
-//        /// </summary>
-//        /// <param name="obj">An instance of <see cref="JObject"/> representing the redirect.</param>
-//        /// <returns>An instacne of <see cref="OutboundRedirect"/>, or <c>null</c> if <paramref name="obj"/> is <c>null</c>.</returns>
-//        public static OutboundRedirect Parse(JObject obj) {
-//            return obj == null ? null : new OutboundRedirect(obj);
-//        }
+        #region Static methods
 
-//        /// <summary>
-//        /// Deseralizes the specified JSON string into an instance of <see cref="OutboundRedirect"/>.
-//        /// </summary>
-//        /// <param name="json">The raw JSON to be parsed.</param>
-//        public static OutboundRedirect Deserialize(string json) {
-//            if (json == null) return new OutboundRedirect();
-//            if (json.StartsWith("{") && json.EndsWith("}")) return JsonUtils.ParseJsonObject(json, Parse);
-//            return new OutboundRedirect();
-//        }
+        /// <summary>
+        /// Parses the specified <see cref="JObject"/> into an instance of <see cref="OutboundRedirect"/>.
+        /// </summary>
+        /// <param name="obj">An instance of <see cref="JObject"/> representing the redirect.</param>
+        /// <returns>An instacne of <see cref="OutboundRedirect"/>, or <c>null</c> if <paramref name="obj"/> is <c>null</c>.</returns>
+        public static OutboundRedirect Parse(JObject obj) {
+            return obj == null ? null : new OutboundRedirect(obj);
+        }
 
-//        #endregion
+        /// <summary>
+        /// Deseralizes the specified JSON string into an instance of <see cref="OutboundRedirect"/>.
+        /// </summary>
+        /// <param name="json">The raw JSON to be parsed.</param>
+        public static OutboundRedirect Deserialize(string json) {
+            if (json == null) return new OutboundRedirect();
+            if (json.StartsWith("{") && json.EndsWith("}")) return JsonUtils.ParseJsonObject(json, Parse);
+            return new OutboundRedirect();
+        }
 
-//    }
+        #endregion
 
-//}
+    }
+
+}
