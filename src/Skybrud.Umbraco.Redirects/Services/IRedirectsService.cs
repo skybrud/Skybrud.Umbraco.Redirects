@@ -42,7 +42,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
         IRedirect GetRedirectById(int redirectId);
 
         /// <summary>
-        /// Gets the redirect mathing the specified GUID <paramref name="key"/>.
+        /// Gets the redirect matching the specified GUID <paramref name="key"/>.
         /// </summary>
         /// <param name="key">The GUID key of the redirect.</param>
         /// <returns>An instance of <see cref="IRedirect"/>, or <c>null</c> if not found.</returns>
@@ -57,12 +57,13 @@ namespace Skybrud.Umbraco.Redirects.Services {
         IRedirect GetRedirectByUrl(Guid rootNodeKey, string url);
         
         /// <summary>
-        /// Gets the redirect mathing the specified <paramref name="url"/> and <paramref name="queryString"/>.
+        /// Gets the redirect matching the specified <paramref name="url"/> and <paramref name="queryString"/>.
         /// </summary>
         /// <param name="rootNodeKey">The GUID of the root/side node. Use <see cref="Guid.Empty"/> for a global redirect.</param>
         /// <param name="url">The URL of the redirect.</param>
         /// <param name="queryString">The query string of the redirect.</param>
         /// <returns>An instance of <see cref="IRedirect"/>, or <c>null</c> if not found.</returns>
+        [Obsolete("Use GetRedirectByPathAndQuery")]
         IRedirect GetRedirectByUrl(Guid rootNodeKey, string url, string queryString);
 
         /// <summary>
