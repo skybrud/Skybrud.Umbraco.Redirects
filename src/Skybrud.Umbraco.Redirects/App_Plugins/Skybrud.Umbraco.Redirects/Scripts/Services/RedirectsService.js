@@ -8,23 +8,122 @@
 
     var service = {
 
+        toUmbracoLink: function(e) {
+
+            if (!e) return null;
+
+            // Create a copy of "e" so we don't modify the original value
+            const link = Utilities.copy(e);
+
+            // Make sure to set the UDI
+            switch (link.type) {
+                case "document":
+                case "content":
+                    link.udi = `umb://document/${link.key}`;
+                    break;
+                case "media":
+                    link.udi = `umb://media/${link.key}`;
+                    break;
+            }
+
+            // For legacy values, the fragment might be stored as part of the
+            // URL. If so, we need to isolate it in it's own property
+            if (!link.fragment) {
+                const pos = link.url.indexOf("#");
+                if (pos > 0) {
+                    link.fragment = link.url.substr(pos + 1);
+                    link.url = link.url.substr(0, pos);
+                }
+            }
+
+            // For legacy values, the query string might be stored as part of the
+            // URL. If so, we need to isolate it in it's own property
+            if (!link.query) {
+                const pos = link.url.indexOf("?");
+                if (pos > 0) {
+                    link.query = link.url.substr(pos + 1);
+                    link.url = link.url.substr(0, pos);
+                }
+            }
+            
+            // Append the query and fragment to the anchor value (if specified)
+            link.anchor = "";
+            if (link.query) link.anchor = link.query;
+            if (link.fragment) link.anchor += link.fragment;
+
+            return link;
+
+        },
+
         parseUmbracoLink: function (e) {
 
-            var key = "00000000-0000-0000-0000-000000000000";
-            var type = "url";
+            let url = e.url;
+            let query = null;
+            let fragment = null;
+
+            // Isolate the fragment if specified in the URL
+            const pos1 = url.indexOf("#");
+            if (pos1 >= 0) {
+                fragment = url.substr(pos1);
+                url = url.substr(0, pos1);
+            }
+
+            // Isolate the query string if specified in the URL
+            const pos2 = url.indexOf("?");
+            if (pos2 >= 0) {
+                query = url.substr(pos2 + 1);
+                url = url.substr(0, pos2);
+            }
+
+            // Parse the "anchor" value
+            if (e.anchor) {
+
+                // Isolate the fragment if specified in the "anchor" value (overwrites fragment from the URL)
+                const pos3 = e.anchor.indexOf("#");
+                if (pos3 >= 0) {
+                    fragment = e.anchor.substr(pos3);
+                    e.anchor = e.anchor.substr(0, pos3);
+                }
+
+                // Treat remaining anchor value as query string (append if URL also has query string)
+                if (e.anchor) {
+                    if (e.anchor.indexOf("?") === 0 || e.anchor.indexOf("&") === 0) {
+                        query = (query ? query + "&" : "") + e.anchor.substr(1);
+                    } else {
+                        query = (query ? query + "&" : "") + e.anchor;
+                    }
+                }
+
+            }
+
+            let key = "00000000-0000-0000-0000-000000000000";
+            let type = "url";
 
             if (e.udi) {
                 key = e.udi.split("/")[3];
                 type = e.udi.split("/")[2];
             }
 
-            return {
+            const link = {
                 id: e.id || 0,
                 key: key,
-                url: e.url,
+                url: url,
+                displayUrl: url,
                 name: e.name,
                 type: type === "document" ? "content" : type
             };
+
+            if (query) {
+                link.query = query;
+                link.displayUrl += "?" + query;
+            }
+
+            if (fragment) {
+                link.fragment = fragment;
+                link.displayUrl += fragment;
+            }
+
+            return link;
 
         },
 
@@ -41,41 +140,29 @@
             });
         },
 
-        editLink: function (link, callback, closeAllDialogs) {
-            closeAllDialogs = closeAllDialogs !== false;
-            if (closeAllDialogs) editorService.closeAll();
-            if (link.type === "media") {
-                editorService.linkPicker({
-                    currentTarget: {
-                        name: link.name,
-                        url: link.url,
-                        target: link.target
-                    },
-                    submit: function (e) {
-                        if (!e.id && !e.url && !confirm("The selected link appears to be empty. Do you want to continue anyways?")) return;
-                        if (service.parseUmbracoLink(e).id === 0) {
-                            e.id = link.id;
-                            e.isMedia = true;
-                        }
-                        if (callback) callback(service.parseUmbracoLink(e));
-                        if (closeAllDialogs) editorService.closeAll();
-                    }
-                });
-            } else {
-                editorService.linkPicker({
-                    currentTarget: {
-                        id: link.id,
-                        name: link.name,
-                        url: link.url,
-                        target: link.target
-                    },
-                    submit: function (e) {
-                        if (!e.id && !e.url && !confirm("The selected link appears to be empty. Do you want to continue anyways?")) return;
-                        if (callback) callback(service.parseUmbracoLink(e));
-                        if (closeAllDialogs) editorService.closeAll();
-                    }
-                });
-            }
+        editLink: function (link, callback) {
+
+            // Convert our link object to something Umbraco's link picker can understand
+            const target = service.toUmbracoLink(link);
+
+            // Open the link picker overlay 
+            editorService.linkPicker({
+                size: "medium",
+                currentTarget: target,
+                submit: function (model) {
+
+                    // Make sure the user has picked a valid link
+                    if (!model.target.id && !model.target.url && !confirm("The selected link appears to be empty. Do you want to continue anyways?")) return;
+
+                    // Convert the selected link back to our own format
+                    const newLink = service.parseUmbracoLink(model.target);
+
+                    // Invoke the callback (if specified)
+                    if (callback) callback(newLink);
+                
+                }
+            });
+        
         },
 
         addRedirect: function (options) {
@@ -84,7 +171,7 @@
             if (typeof options === "function") options = { callback: options };
 
             const o = {
-                size: "small",
+                size: "medium",
                 view: `/App_Plugins/Skybrud.Umbraco.Redirects/Views/Dialogs/Redirect.html?v=${cacheBuster}`,
                 options: options,
                 submit: function(value) {
@@ -108,7 +195,7 @@
             if (typeof options === "function") options = { callback: options };
 
             editorService.open({
-	            size: "small",
+	            size: "medium",
                 view: `/App_Plugins/Skybrud.Umbraco.Redirects/Views/Dialogs/Redirect.html?v=${cacheBuster}`,
                 redirect: redirect,
                 options: options,

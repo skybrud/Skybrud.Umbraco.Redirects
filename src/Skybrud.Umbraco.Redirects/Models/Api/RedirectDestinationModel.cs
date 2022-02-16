@@ -14,6 +14,12 @@ namespace Skybrud.Umbraco.Redirects.Models.Api {
 
         public string Url => _destination.Url;
 
+        public string Query => _destination.Query;
+
+        public string Fragment => _destination.Fragment;
+
+        public string DisplayUrl => RedirectsUtils.ConcatUrl(Url, Query, Fragment);
+
         public string Name { get; }
 
         public string Icon { get; }

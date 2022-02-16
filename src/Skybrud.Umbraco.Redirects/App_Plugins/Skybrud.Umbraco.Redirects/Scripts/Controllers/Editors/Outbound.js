@@ -9,24 +9,10 @@
     vm.type = $scope.model.value.permanent ? "permanent" : "temporary";
 
     function editLink(link) {
-
-        // Convert "link" to the target value the link picker can understand
-        const target = skybrudRedirectsService.toUmbracoLink(link);
-
-        // Open the link picker
-        editorService.linkPicker({
-            currentTarget: target,
-            hideTarget: true,
-            size: "medium",
-            submit: function (m) {
-                $scope.model.value.destination = skybrudRedirectsService.parseUmbracoLink(m.target);
-                editorService.close();
-            },
-            close: function () {
-                editorService.close();
-            }
+        skybrudRedirectsService.editLink(link, function(model) {
+            $scope.model.value.destination = model;
+            editorService.close();
         });
-
     }
 
     vm.addLink = function () {

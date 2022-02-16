@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
+using Skybrud.Umbraco.Redirects.Extensions;
 using Skybrud.Umbraco.Redirects.Models;
 using Skybrud.Umbraco.Redirects.Services;
 using Umbraco.Cms.Core;
@@ -43,21 +44,27 @@ namespace Skybrud.Umbraco.Redirects.Middleware {
                 switch (context.Response.StatusCode) {
                     
                     case StatusCodes.Status404NotFound: {
+
+                        // Get the URI of the inbound request
+                        Uri uri = context.Request.GetUri();
                         
                         // Look for a redirect
                         IRedirect redirect = _redirectsService.GetRedirectByRequest(context.Request);
+
+                        // Calculate the destination URL
+                        string destinationUrl = _redirectsService.GetDestinationUrl(redirect, uri);
                     
                         // Respond with a redirect based on the redirect type
                         switch (redirect?.Type) {
 
                             // If redirect is of type permanent, trigger a 301 redirect
                             case RedirectType.Permanent:
-                                context.Response.Redirect(redirect.Destination.Url, true);
+                                context.Response.Redirect(destinationUrl, true);
                                 break;
                                     
                             // If redirect is of type temporary, trigger a 307 redirect
                             case RedirectType.Temporary:
-                                context.Response.Redirect(redirect.Destination.Url, false, true);
+                                context.Response.Redirect(destinationUrl, false, true);
                                 break;
                             
                         }

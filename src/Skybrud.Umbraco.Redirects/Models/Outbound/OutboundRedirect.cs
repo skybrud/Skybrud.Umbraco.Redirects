@@ -28,7 +28,7 @@ namespace Skybrud.Umbraco.Redirects.Models.Outbound {
         /// Gets an instance of <see cref="RedirectDestination"/> representing the destination.
         /// </summary>
         [JsonProperty("destination")]
-        public RedirectDestination Destination { get; set; }
+        public IRedirectDestination Destination { get; set; }
 
         /// <summary>
         /// Gets whether the query string of the inbound request should be forwarded.

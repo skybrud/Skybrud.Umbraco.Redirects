@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Skybrud.Essentials.Json.Extensions;
+using Skybrud.Essentials.Strings.Extensions;
 
 namespace Skybrud.Umbraco.Redirects.Models {
     
@@ -22,22 +24,47 @@ namespace Skybrud.Umbraco.Redirects.Models {
         public Guid Key { get; set; }
 
         /// <summary>
-        /// Gets the URL of the destination.
-        /// </summary>
-        [JsonProperty("url")]
-        public string Url { get; set; }
-
-        /// <summary>
         /// Gets the name of the destination.
         /// </summary>
         [JsonProperty("name")]
         public string Name { get; set; }
 
         /// <summary>
+        /// Gets the URL of the destination.
+        /// </summary>
+        [JsonProperty("url")]
+        public string Url { get; set; }
+
+        /// <summary>
+        /// Gets the query string part of the destination.
+        /// </summary>
+        [JsonProperty("query")]
+        public string Query { get; set; }
+
+        /// <summary>
         /// Gets the fragment of the destination - eg. <c>#hello</c>.
         /// </summary>
         [JsonProperty("fragment")]
         public string Fragment { get; set; }
+
+        /// <summary>
+        /// Gets the full destination URL.
+        /// </summary>
+        [JsonProperty("fullUrl")]
+        public string FullUrl {
+            get {
+                StringBuilder sb = new StringBuilder();
+                sb.Append(Url);
+                if (Query.HasValue()) {
+                    sb.Append(Url.Contains("?") ? '&' : '?');
+                    sb.Append(Query);
+                }
+                if (Fragment.HasValue()) {
+                    sb.Append(Fragment);
+                }
+                return sb.ToString();
+            }
+        }
 
         /// <summary>
         /// Gets the type of the destination.
@@ -55,14 +82,20 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
         #region Constructors
 
-        public RedirectDestination() {}
+        public RedirectDestination() {
+            Url = string.Empty;
+            Name = string.Empty;
+            Query = string.Empty;
+            Fragment = string.Empty;
+        }
 
         public RedirectDestination(JObject json) {
             Id = json.GetInt32("id");
             Key = json.GetGuid("key");
             Url = json.GetString("url");
             Name = json.GetString("name");
-            Fragment = json.GetString("fragment");
+            Query = json.GetString("query") ?? string.Empty;
+            Fragment = json.GetString("fragment") ?? string.Empty;
             Type = json.GetEnum("type", RedirectDestinationType.Url);
         }
 

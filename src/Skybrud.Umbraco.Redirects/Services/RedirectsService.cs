@@ -11,7 +11,6 @@ using Skybrud.Umbraco.Redirects.Extensions;
 using Skybrud.Umbraco.Redirects.Models;
 using Skybrud.Umbraco.Redirects.Models.Dtos;
 using Skybrud.Umbraco.Redirects.Models.Options;
-using Skybrud.Umbraco.Redirects.Models.Outbound;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Routing;
 using Umbraco.Cms.Core.Scoping;
@@ -282,6 +281,8 @@ namespace Skybrud.Umbraco.Redirects.Services {
                 Key = options.Destination.Key,
                 Name = options.Destination.Name,
                 Url = options.Destination.Url,
+                Query = options.Destination.Query ?? string.Empty,
+                Fragment = options.Destination.Fragment ?? string.Empty,
                 Type = options.Destination.Type
             };
 
@@ -445,60 +446,6 @@ namespace Skybrud.Umbraco.Redirects.Services {
 
         }
 
-        
-        
-        public virtual string GetDestinationUrl(IRedirect redirect) {
-
-            // Initialize "url" with the destination URL as saved in the database
-            string url = redirect.Destination.Url;
-
-            // Get the current Umbraco context
-            _umbracoContextAccessor.TryGetUmbracoContext(out IUmbracoContext umbracoContext);
-
-            switch (redirect.Destination.Type) {
-
-                case RedirectDestinationType.Content:
-                    IPublishedContent content = umbracoContext?.Content.GetById(redirect.Destination.Key);
-                    if (content != null) return content.Url();
-                    break;
-
-                case RedirectDestinationType.Media:
-                    IPublishedContent media = umbracoContext?.Media.GetById(redirect.Destination.Key);
-                    if (media != null) return media.Url();
-                    break;
-
-            }
-
-            return url;
-
-        }
-
-        public virtual string GetDestinationUrl(IRedirect redirect, string inboundUrl) {
-
-            // Resolve the current URL for content and media
-            string destinationUrl = redirect.Destination.Url;
-
-            // Get the current Umbraco context
-            _umbracoContextAccessor.TryGetUmbracoContext(out IUmbracoContext umbracoContext);
-            
-            switch (redirect.Destination.Type) {
-                
-                case RedirectDestinationType.Content:
-                    var content = umbracoContext?.Content.GetById(redirect.Destination.Key);
-                    if (content != null) destinationUrl = content.Url();
-                    break;
-
-                case RedirectDestinationType.Media:
-                    var media = umbracoContext?.Media.GetById(redirect.Destination.Key);
-                    if (media != null) destinationUrl = media.Url();
-                    break;
-  
-            }
-
-            return redirect.ForwardQueryString ? MergeQueryString(inboundUrl, destinationUrl) : destinationUrl;
-
-        }
-
         public RedirectRootNode[] GetRootNodes()  {
 
             // Multiple domains may be configured for a single node, so we need to group the domains before proceeding
@@ -540,7 +487,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// </summary>
         /// <param name="redirect">The redirect.</param>
         /// <returns>The destination URL.</returns>
-        public virtual string GetDestinationUrl(IOutboundRedirect redirect) {
+        public virtual string GetDestinationUrl(IRedirectBase redirect) {
             return GetDestinationUrl(redirect, null);
         }
         
@@ -550,9 +497,9 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// <param name="redirect">The redirect.</param>
         /// <param name="uri">The inbound URL.</param>
         /// <returns>The destination URL.</returns>
-        public virtual string GetDestinationUrl(IOutboundRedirect redirect, Uri uri) {
-
-            if (redirect is not { HasDestination: true }) return null;
+        public virtual string GetDestinationUrl(IRedirectBase redirect, Uri uri) {
+            
+            if (string.IsNullOrWhiteSpace(redirect?.Destination?.Url)) return null;
 
             // Get the query string from the URL (if any)
             string query = redirect.Destination.Url
@@ -585,20 +532,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
             }
 
             // Put the destination URL back together
-            return ConcatUrl(content?.Url() ?? redirect.Destination.Url, query, fragment);
-
-        }
-
-        /// <summary>
-        /// Returns the concatenated URL based on <paramref name="url"/>, <paramref name="query"/> and <paramref name="fragment"/>.
-        /// </summary>
-        /// <param name="url">The URL.</param>
-        /// <param name="query">The query string.</param>
-        /// <param name="fragment">The fragment.</param>
-        /// <returns>The combined URL.</returns>
-        protected virtual string ConcatUrl(string url, string query, string fragment) {
-
-            return $"{url}{(string.IsNullOrWhiteSpace(query) ? null : "?" + query)}{fragment}";
+            return RedirectsUtils.ConcatUrl(content?.Url() ?? redirect.Destination.Url, query, fragment);
 
         }
 

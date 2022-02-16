@@ -1,16 +1,9 @@
 ﻿angular.module("umbraco").controller("SkybrudUmbracoRedirects.Editors.Destination.Controller", function ($scope, editorService, skybrudRedirectsService) {
 
     function editLink(link) {
-        editorService.linkPicker({
-            currentTarget: link,
-            hideTarget: true,
-            submit: function (m) {
-                $scope.model.value = skybrudRedirectsService.parseUmbracoLink(m.target);
-                editorService.close();
-            },
-            close: function () {
-                editorService.close();
-            }
+        skybrudRedirectsService.editLink(link, function(model) {
+            $scope.model.value = model;
+            editorService.close();
         });
     }
 

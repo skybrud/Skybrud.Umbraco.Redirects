@@ -6,7 +6,7 @@ using Skybrud.Umbraco.Redirects.Text.Json;
 
 namespace Skybrud.Umbraco.Redirects.Models {
 
-    public interface IRedirect {
+    public interface IRedirect : IRedirectBase {
         
         /// <summary>
         /// Gets the ID of the redirect.
@@ -47,42 +47,42 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// <summary>
         /// Gets or sets the destination of the redirect.
         /// </summary>
-        public IRedirectDestination Destination { get; set; }
-
-        /// <summary>
-        /// Gets or sets the timestamp for when the redirect was created.
-        /// </summary>
-        [JsonProperty("createDate")]
-        [System.Text.Json.Serialization.JsonConverter(typeof(Iso8601TimeConverter))]
-        public EssentialsTime CreateDate { get; }
-
-        /// <summary>
-        /// Gets or sets the timestamp for when the redirect was last updated.
-        /// </summary>
-        [JsonProperty("updateDate")]
-        [System.Text.Json.Serialization.JsonConverter(typeof(Iso8601TimeConverter))]
-        public EssentialsTime UpdateDate { get; set; }
+        public new IRedirectDestination Destination { get; set; }
 
         /// <summary>
         /// Gets or sets the type of the redirect. Possible values are <see cref="RedirectType.Permanent"/> and <see cref="RedirectType.Temporary"/>.
         /// </summary>
         [JsonProperty("type")]
         [JsonPropertyName("type")]
-        public RedirectType Type { get; set; }
+        public new RedirectType Type { get; set; }
 
         /// <summary>
         /// Gets or sets whether the redirect is permanent.
         /// </summary>
         [JsonProperty("permanent")]
         [JsonPropertyName("permanent")]
-        public bool IsPermanent { get; set; }
+        public new bool IsPermanent { get; set; }
 
         /// <summary>
         /// Gets or sets whether the query string should be forwarded.
         /// </summary>
         [JsonProperty("forward")]
         [JsonPropertyName("forward")]
-        public bool ForwardQueryString { get; set; }
+        public new bool ForwardQueryString { get; set; }
+
+        /// <summary>
+        /// Gets or sets the timestamp for when the redirect was created.
+        /// </summary>
+        [JsonProperty("createDate", Order = 100)]
+        [System.Text.Json.Serialization.JsonConverter(typeof(Iso8601TimeConverter))]
+        public EssentialsTime CreateDate { get; }
+
+        /// <summary>
+        /// Gets or sets the timestamp for when the redirect was last updated.
+        /// </summary>
+        [JsonProperty("updateDate", Order = 101)]
+        [System.Text.Json.Serialization.JsonConverter(typeof(Iso8601TimeConverter))]
+        public EssentialsTime UpdateDate { get; set; }
 
     }
 

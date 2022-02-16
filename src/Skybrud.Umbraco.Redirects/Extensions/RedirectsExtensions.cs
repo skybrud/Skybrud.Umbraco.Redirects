@@ -68,7 +68,9 @@ namespace Skybrud.Umbraco.Redirects.Extensions {
             
             return SetDestination(redirect, new RedirectDestination {
                 Url = url,
-                Type = RedirectDestinationType.Media
+                Query = string.Empty,
+                Fragment = string.Empty,
+                Type = RedirectDestinationType.Url
             });
 
         }
@@ -91,6 +93,8 @@ namespace Skybrud.Umbraco.Redirects.Extensions {
                         Key = content.Key,
                         Name = content.Name,
                         Url = content.Url(),
+                        Query = string.Empty,
+                        Fragment = string.Empty,
                         Type = RedirectDestinationType.Content
                     });
 
@@ -100,6 +104,8 @@ namespace Skybrud.Umbraco.Redirects.Extensions {
                         Key = content.Key,
                         Name = content.Name,
                         Url = content.Url(),
+                        Query = string.Empty,
+                        Fragment = string.Empty,
                         Type = RedirectDestinationType.Media
                     });
 

@@ -98,6 +98,8 @@ namespace Skybrud.Umbraco.Redirects.Models {
                 Dto.DestinationKey = value.Key;
                 Dto.DestinationType = value.Type.ToString();
                 Dto.DestinationUrl = value.Url;
+                Dto.DestinationQuery = value.Query ?? string.Empty;
+                Dto.DestinationFragment = value.Fragment ?? string.Empty;
             }
 
         }
@@ -180,7 +182,9 @@ namespace Skybrud.Umbraco.Redirects.Models {
                 Type = type,
                 Id = dto.DestinationId,
                 Key = dto.DestinationKey,
-                Url = dto.DestinationUrl
+                Url = dto.DestinationUrl,
+                Query = dto.DestinationQuery,
+                Fragment = dto.DestinationFragment
             };
            
             Dto = dto;

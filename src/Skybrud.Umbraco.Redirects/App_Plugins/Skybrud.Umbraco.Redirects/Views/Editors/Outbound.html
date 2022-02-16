@@ -17,7 +17,7 @@
             <i ng-if="model.value.destination.type == 'url'" class="umb-node-preview__icon icon-link"></i>
             <div class="umb-node-preview__content">
                 <div class="umb-node-preview__name">{{model.value.destination.name}}</div>
-                <div class="umb-node-preview__description">{{model.value.destination.url}}</div>
+                <div class="umb-node-preview__description">{{model.value.destination.displayUrl}}</div>
             </div>
             <div class="umb-node-preview__actions">
                 <a class="umb-node-preview__action" href="" ng-click="vm.editLink()"><localize key="general_edit">Edit</localize></a>
