@@ -149,6 +149,7 @@
             editorService.linkPicker({
                 size: "medium",
                 currentTarget: target,
+                hideTarget: true,
                 submit: function (model) {
 
                     // Make sure the user has picked a valid link
