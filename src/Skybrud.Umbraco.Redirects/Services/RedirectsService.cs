@@ -237,18 +237,6 @@ namespace Skybrud.Umbraco.Redirects.Services {
 
         }
 
-        /// <summary>
-        /// Gets the redirect mathing the specified <paramref name="url"/> and <paramref name="queryString"/>.
-        /// </summary>
-        /// <param name="rootNodeKey">The key of the root/side node. Use <c>0</c> for a global redirect.</param>
-        /// <param name="url">The URL of the redirect.</param>
-        /// <param name="queryString">The query string of the redirect.</param>
-        /// <returns>An instance of <see cref="Redirect"/>, or <c>null</c> if not found.</returns>
-        [Obsolete("Use GetRedirectByPathAndQuery")]
-        public IRedirect GetRedirectByUrl(Guid rootNodeKey, string url, string queryString) {
-            return GetRedirectByPathAndQuery(rootNodeKey, url, queryString);
-        }
-
         /// <inheritdoc />
         public IRedirect AddRedirect(AddRedirectOptions options) {
 
