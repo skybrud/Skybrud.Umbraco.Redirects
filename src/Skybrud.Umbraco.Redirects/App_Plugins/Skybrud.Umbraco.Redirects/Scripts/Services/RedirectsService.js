@@ -160,6 +160,9 @@
                     // Invoke the callback (if specified)
                     if (callback) callback(newLink);
                 
+                },
+                close: function () {
+                    editorService.close();
                 }
             });
         
