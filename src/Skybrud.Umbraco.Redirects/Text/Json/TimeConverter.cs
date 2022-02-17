@@ -39,7 +39,7 @@ namespace Skybrud.Umbraco.Redirects.Text.Json {
                     return null;
 
                 case JsonTokenType.Number:
-                    return EssentialsTime.FromUnixTimestamp(reader.GetInt32());
+                    return EssentialsTime.FromUnixTimeSeconds(reader.GetInt32());
 
                 case JsonTokenType.String:
                     return EssentialsTime.Parse(reader.GetString());
