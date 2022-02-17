@@ -35,11 +35,11 @@
             </umb-editor-container>
             <umb-editor-footer>
                 <umb-editor-footer-content-right>
-                    <umb-button ng-if="model.infiniteMode" action="close()" button-style="link" label="{{model.closeButtonLabel || 'Close'}}" type="button" shortcut="esc"></umb-button>
+                    <umb-button ng-if="model.infiniteMode" action="close()" button-style="link" label-key="close" type="button" shortcut="esc"></umb-button>
                     <umb-button
                         type="submit"
                         button-style="success"
-                        label="{{model.submitButtonLabel || 'Add'}}">
+                        label-key="{{model.submitButtonLabelKey}}">
                     </umb-button>
                 </umb-editor-footer-content-right>
             </umb-editor-footer>

@@ -8,6 +8,8 @@
 
     $scope.options = $scope.model.options || {};
 
+    $scope.model.submitButtonLabelKey = "redirects_add";
+
     $scope.model.title = "Add new redirect";
     localizationService.localize("redirects_addNewRedirect").then(function (value) { $scope.model.title = value; });
 
@@ -20,7 +22,7 @@
         $scope.model.title = "Edit redirect";
         localizationService.localize("redirects_editRedirect").then(function (value) { $scope.model.title = value; });
 
-        $scope.model.submitButtonLabel = "Save";
+        $scope.model.submitButtonLabelKey = "redirects_save";
 
         destionation = $scope.model.redirect.destination;
 
@@ -45,7 +47,9 @@
     $scope.model.properties.push({
         alias: "rootNodeId",
         label: "Site",
+        labelKey: "redirects_propertySite",
         description: "Specify the site that the original URL to match from belongs to.",
+        descriptionKey: "redirects_propertySiteDescription",
         view: `/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/Site.html?v=${cacheBuster}`,
         value: $scope.model.redirect && $scope.model.redirect.rootId ? $scope.model.redirect.rootId : 0,
         config: {
@@ -59,7 +63,9 @@
     $scope.model.properties.push({
         alias: "originalUrl",
         label: "Original URL",
+        labelKey: "redirects_propertyOriginalUrl",
         description: "Specify the original URL to match from which the user should be redirected to the destination.",
+        descriptionKey: "redirects_propertyOriginalUrlDescription",
         view: `/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/OriginalUrl.html?v=${cacheBuster}`,
         value: $scope.model.redirect ? $scope.model.redirect.url + ($scope.model.redirect.queryString ? `?${$scope.model.redirect.queryString}` : "") : "",
         validation: {
@@ -70,7 +76,9 @@
     $scope.model.properties.push({
         alias: "destination",
         label: "Destination",
+        labelKey: "redirects_propertyDestination",
         description: "Select the page or URL the user should be redirected to.",
+        descriptionKey: "redirects_propertyDestinationDescription",
         view: `/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/Destination.html?v=${cacheBuster}`,
         value: destionation,
         validation: {
@@ -160,7 +168,7 @@
             {
                 alias: "updateDate",
                 label: "Updated Date",
-                labelKey: "redirects_propertyLastUpdatedDate",
+                labelKey: "redirects_propertyUpdateDate",
                 view: `/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/Timestamp.html?v=${cacheBuster}`,
                 value: $scope.model.redirect ? $scope.model.redirect.updateDate : null,
                 hello: moment(new Date($scope.model.redirect.updateDate)).fromNow(),
@@ -171,17 +179,32 @@
 
     const allProperties = $scope.model.properties.concat($scope.model.advancedProperties, $scope.model.hiddenProperties);
 
-    allProperties.forEach(function (p) {
+    allProperties.concat($scope.model.infoProperties).forEach(function (p) {
 
-        // Skip any readonly properties (info app)
-        if (p.readonly) return;
-
-        // Localize relevant label and description keys
-        if (p.labelKey) localizationService.localize(p.labelKey).then(function (value) { p.label = value; });
-        if (p.descriptionKey) localizationService.localize(p.descriptionKey).then(function (value) { p.description = value; });
+        // Localize the label
+        if (p.labelKey) {
+            localizationService.localize(p.labelKey).then(function (value) {
+                if (!value.length || value[0] === "[") return;
+                p.label = value;
+            });
+        }
+        
+        // Localize the description
+        if (p.descriptionKey) {
+            localizationService.localize(p.descriptionKey).then(function (value) {
+                if (!value.length || value[0] === "[") return;
+                p.description = value;
+            });
+        }
+        
+        // Localize any config options
         if (p.config && p.config.options) {
             p.config.options.forEach(function (o) {
-                if (o.labelKey) localizationService.localize(o.labelKey).then(function (value) { o.label = value; });
+                if (!o.labelKey) return;
+                localizationService.localize(o.labelKey).then(function (value) {
+                    if (!value.length || value[0] === "[") return;
+                    o.label = value;
+                });
             });
         }
 
@@ -217,6 +240,16 @@
             localizationService.localize(`redirects_${key}`).then(function (value) {
                 $scope.labels[key] = value;
             });
+        });
+
+        localizationService.localize("redirects_settingsApp").then(function (value) {
+            if (!value.length || value[0] === "[") return;
+            $scope.settingsApp.name = value;
+        });
+        
+        localizationService.localize("redirects_infoApp").then(function (value) {
+            if (!value.length || value[0] === "[") return;
+            $scope.infoApp.name = value;
         });
 
     }

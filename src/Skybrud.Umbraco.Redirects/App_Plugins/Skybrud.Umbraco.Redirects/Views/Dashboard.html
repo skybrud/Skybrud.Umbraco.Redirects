@@ -29,7 +29,7 @@
                     <th class="col-site"><localize key="redirects_site">Site</localize></th>
                     <th class="col-original"><localize key="redirects_originalUrl">Original URL</localize></th>
                     <th></th>
-                    <th>Type</th>
+                    <th class="col-type"><localize key="redirects_labelType">Type</localize></th>
                     <th><localize key="redirects_redirectedTo">Destination</localize></th>
                     <!--<th><localize key="redirects_created">Created</localize></th>
                     <th><localize key="redirects_updated">Updated</localize></th>-->
@@ -45,7 +45,7 @@
                             <span ng-show="redirect.rootNode">
                                 <a href="{{redirect.rootNode.backOfficeUrl}}" title="{{redirect.rootNode.name}}">{{redirect.rootNode.name}}</a>
                             </span>
-                            <span ng-hide="redirect.rootNode">All sites</span>
+                            <span ng-hide="redirect.rootNode"><localize key="redirects_allSites">All sites</localize></span>
                         </td>
                         <td class="col-original">
                             <a href="{{redirect.url}}" rel="noopener noreferrer" target="_blank" title="{{redirect.path}}{{redirect.queryString ? '?' + redirect.queryString : ''}}">{{redirect.path}}{{redirect.queryString ? '?' + redirect.queryString : ''}}</a>
@@ -54,8 +54,8 @@
                             <i class="umb-table-body__icon umb-table-body__fileicon icon-arrow-right" style="font-size: 12px; line-height: 1;"></i>
                         </td>
                         <td class="col-type">
-                            <span ng-show="redirect.permanent">Permanent</span>
-                            <span ng-show="!redirect.permanent">Temporary</span>
+                            <span ng-show="redirect.permanent"><localize key="redirects_labelPermanent">Permanent</localize></span>
+                            <span ng-show="!redirect.permanent"><localize key="redirects_labelTemporary">Temporary</localize></span>
                         </td>
                         <td class="col-destination">
                             <div>

@@ -6,6 +6,8 @@
   </area>
   <area alias="redirects">
     <key alias="redirects">Redirects</key>
+    <key alias="add">Tilføj</key>
+    <key alias="save">Gem</key>
     <key alias="addNewRedirect">Tilføj nyt redirect</key>
     <key alias="addRedirect">Tilføj redirect</key>
     <key alias="editRedirect">Rediger redirect</key>
@@ -43,6 +45,10 @@
     <key alias="media_media">Medier</key>
     <key alias="media_url">URLs</key>
 
+    <key alias="settingsApp">Indstillinger</key>
+    <key alias="infoApp">Info</key>
+
+    <key alias="labelType">Type</key>
     <key alias="labelPermanent">Permanent</key>
     <key alias="labelTemporary">Midlertidig</key>
     <key alias="labelPermanentRedirect">Permanent redirect</key>
@@ -54,11 +60,20 @@
 
     <key alias="labelDeleteRedirectConfirm">Er du sikker på at du vil slette det valgte redirect på %0% ?</key>
 
+    <key alias="propertySite">Site</key>
+    <key alias="propertySiteDescription">Vælg det site (eller rodnode) som redirectet skal gælde for. Vælges der ikke noget site, vil redirectet virke for alle domæner/sites i Umbraco-løsningen.</key>
+
+    <key alias="propertyOriginalUrl">Oprindelig URL</key>
+    <key alias="propertyOriginalUrlDescription">Angiv den oprindelige URL, der skal sende brugeren videre til den valgte destination.</key>
+
+    <key alias="propertyDestination">Destination</key>
+    <key alias="propertyDestinationDescription">Vælg den side eller URL, som brugeren skal sendes videre til.</key>
+
     <key alias="propertyRedirectTypeName">Type</key>
     <key alias="propertyRedirectTypeDescription">Vælg typen for dit redirect. Bemærk at browsere vil huske et permanent redirect.</key>
 
     <key alias="propertyCreateDate">Oprettelsesdato</key>
-    <key alias="propertyLastUpdatedDate">Sidst opdateret</key>
+    <key alias="propertyUpdateDate">Sidst opdateret</key>
 
     <key alias="addSuccessfulTitle">Redirect oprettet</key>
     <key alias="addSuccessfulMessage">Dit redirect er nu blevet oprettet.</key>
