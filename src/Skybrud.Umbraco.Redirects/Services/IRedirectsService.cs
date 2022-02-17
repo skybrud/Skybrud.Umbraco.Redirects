@@ -64,6 +64,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// <param name="url">The URL of the redirect.</param>
         /// <param name="queryString">The query string of the redirect.</param>
         /// <returns>An instance of <see cref="IRedirect"/>, or <c>null</c> if not found.</returns>
+        [Obsolete("Use GetRedirectByPathAndQuery")]
         IRedirect GetRedirectByUrl(Guid rootNodeKey, string url, string queryString);
 
         /// <summary>
