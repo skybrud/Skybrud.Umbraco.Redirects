@@ -128,16 +128,7 @@
         },
 
         addLink: function (callback) {
-            editorService.linkPicker({
-                submit: function (e) {
-                    if (!e.id && !e.url && !confirm("The selected link appears to be empty. Do you want to continue anyways?")) return;
-                    if (callback) callback(e);
-                    editorService.close();
-                },
-                close: function () {
-                    editorService.close();
-                }
-            });
+            editLink(null, callback);
         },
 
         editLink: function (link, callback) {
