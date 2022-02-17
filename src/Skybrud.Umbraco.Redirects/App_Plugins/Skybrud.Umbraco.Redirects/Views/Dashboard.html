@@ -25,22 +25,22 @@
             <table class="table list" ng-if="redirects.length > 0">
                 <thead>
                 <tr>
-                    <th><localize key="redirects_id">ID</localize></th>
-                    <th><localize key="redirects_site">Site</localize></th>
-                    <th><localize key="redirects_originalUrl">Original URL</localize></th>
+                    <!--<th><localize key="redirects_id">ID</localize></th>-->
+                    <th class="col-site"><localize key="redirects_site">Site</localize></th>
+                    <th class="col-original"><localize key="redirects_originalUrl">Original URL</localize></th>
                     <th></th>
                     <th>Type</th>
                     <th><localize key="redirects_redirectedTo">Destination</localize></th>
-                    <th><localize key="redirects_created">Created</localize></th>
-                    <th><localize key="redirects_updated">Updated</localize></th>
+                    <!--<th><localize key="redirects_created">Created</localize></th>
+                    <th><localize key="redirects_updated">Updated</localize></th>-->
                     <th></th>
                 </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="redirect in redirects">
-                        <td class="col-id">
+                        <!--<td class="col-id">
                             {{redirect.id}}
-                        </td>
+                        </td>-->
                         <td class="col-site">
                             <span ng-show="redirect.rootNode">
                                 <a href="{{redirect.rootNode.backOfficeUrl}}" title="{{redirect.rootNode.name}}">{{redirect.rootNode.name}}</a>
@@ -58,32 +58,31 @@
                             <span ng-show="!redirect.permanent">Temporary</span>
                         </td>
                         <td class="col-destination">
-                            <span ng-if="redirect.destination.type == 'content'">
-                                <localize key="redirects_content">Content</localize>:
-                                <a href="{{redirect.destination.displayUrl}}" rel="noopener noreferrer" target="_blank" title="{{redirect.destination.name ? redirect.link.name : redirect.link.displayUrl}}">{{redirect.destination.name ? redirect.destination.name : redirect.destination.displayUrl}}</a>
-                            </span>
-                            <span ng-if="redirect.destination.type == 'media'">
-                                <localize key="redirects_media">Media</localize>:
-                                <a href="{{redirect.destination.displayUrl}}" rel="noopener noreferrer" target="_blank" title="{{redirect.destination.name ? redirect.destination.name : redirect.destination.displayUrl}}">{{redirect.destination.name ? redirect.destination.name : redirect.destination.displayUrl}}</a>
-                            </span>
-                            <span ng-if="redirect.destination.type == 'url'">
-                                <localize key="redirects_url">URL</localize>:
-                                <a href="{{redirect.destination.displayUrl}}" rel="noopener noreferrer" target="_blank" title="{{redirect.destination.displayUrl}}">{{redirect.destination.url}}</a>
-                            </span>
-                            <small ng-if="redirect.destination.warning" class="color-red">({{redirect.destination.warning}})</small>
-                            <small ng-if="redirect.forward" title="Forward query string is enabled">
-                                &nbsp;?&amp;
-                            </small>
-                            <!--<span ng-if="!redirect.permanent" title="Temporary redirect" style="">
-                                <i class="icon icon-timer"></i>
-                            </span>-->
+                            <div>
+                                <span ng-if="redirect.destination.type == 'content'">
+                                    <localize key="redirects_content">Content</localize>:
+                                    <a href="{{redirect.destination.displayUrl}}" rel="noopener noreferrer" target="_blank" title="{{redirect.destination.name ? redirect.link.name : redirect.link.displayUrl}}">{{redirect.destination.name ? redirect.destination.name : redirect.destination.displayUrl}}</a>
+                                </span>
+                                <span ng-if="redirect.destination.type == 'media'">
+                                    <localize key="redirects_media">Media</localize>:
+                                    <a href="{{redirect.destination.displayUrl}}" rel="noopener noreferrer" target="_blank" title="{{redirect.destination.name ? redirect.destination.name : redirect.destination.displayUrl}}">{{redirect.destination.name ? redirect.destination.name : redirect.destination.displayUrl}}</a>
+                                </span>
+                                <span ng-if="redirect.destination.type == 'url'">
+                                    <localize key="redirects_url">URL</localize>
+                                </span>
+                                <small ng-if="redirect.destination.warning" class="color-red">({{redirect.destination.warning}})</small>
+                                <small ng-if="redirect.forward" title="Forward query string is enabled">
+                                    &nbsp;?&amp;
+                                </small>
+                            </div>
+                            <a class="display-url" href="{{redirect.destination.displayUrl}}" rel="noopener noreferrer" target="_blank">{{redirect.destination.displayUrl}}</a>
                         </td>
-                        <td class="col-date">
+                        <!--<td class="col-date">
                             {{redirect.createDate | date: 'yyyy-MM-dd HH:mm'}}
                         </td>
                         <td class="col-date">
                             {{redirect.updateDate | date: 'yyyy-MM-dd HH:mm'}}
-                        </td>
+                        </td>-->
                         <td class="col-actions tar">
                             <button type="button" ng-click="editRedirect(redirect)" class="btn btn-link"><localize key="redirects_edit">Edit</localize></button>
                             <button type="button" ng-click="deleteRedirect(redirect)" class="btn btn-link color-red"><localize key="redirects_delete">Delete</localize></button>

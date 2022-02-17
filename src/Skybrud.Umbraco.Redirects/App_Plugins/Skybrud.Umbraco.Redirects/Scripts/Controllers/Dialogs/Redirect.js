@@ -11,13 +11,11 @@
     $scope.model.title = "Add new redirect";
     localizationService.localize("redirects_addNewRedirect").then(function (value) { $scope.model.title = value; });
 
-    var destionation = null;
+    let destionation = null;
 
     $scope.model.hiddenProperties = [];
 
     if ($scope.model.redirect) {
-
-        console.log($scope.model.redirect);
 
         $scope.model.title = "Edit redirect";
         localizationService.localize("redirects_editRedirect").then(function (value) { $scope.model.title = value; });
@@ -63,7 +61,7 @@
         label: "Original URL",
         description: "Specify the original URL to match from which the user should be redirected to the destination.",
         view: `/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/OriginalUrl.html?v=${cacheBuster}`,
-        value: $scope.model.redirect ? $scope.model.redirect.url + ($scope.model.redirect.queryString ? "?" + $scope.model.redirect.queryString : "") : "",
+        value: $scope.model.redirect ? $scope.model.redirect.url + ($scope.model.redirect.queryString ? `?${$scope.model.redirect.queryString}` : "") : "",
         validation: {
             mandatory: true
         }
@@ -129,10 +127,56 @@
         }
     ];
 
-    var allProperties = $scope.model.properties.concat($scope.model.advancedProperties);
-    allProperties = allProperties.concat($scope.model.hiddenProperties);
+    $scope.model.infoProperties = [];
+
+    // We only wish to initialize/show the info properties when we have a redirect (eg. when editing, not adding)
+    if ($scope.model.redirect && $scope.model.redirect.id) {
+        $scope.model.infoProperties = [
+            {
+                alias: "id",
+                label: "ID",
+                labelKey: "redirects_propertyId",
+                view: `/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/Code.html?v=${cacheBuster}`,
+                value: $scope.model.redirect ? $scope.model.redirect.id : null,
+                readonly: true
+            },
+            {
+                alias: "key",
+                label: "Key",
+                labelKey: "redirects_propertyKey",
+                view: `/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/Code.html?v=${cacheBuster}`,
+                value: $scope.model.redirect ? $scope.model.redirect.key : null,
+                readonly: true
+            },
+            {
+                alias: "createDate",
+                label: "Created Date",
+                labelKey: "redirects_propertyCreateDate",
+                view: `/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/Timestamp.html?v=${cacheBuster}`,
+                value: $scope.model.redirect ? $scope.model.redirect.createDate : null,
+                hello: moment(new Date($scope.model.redirect.updateDate)).fromNow(),
+                readonly: true
+            },
+            {
+                alias: "updateDate",
+                label: "Updated Date",
+                labelKey: "redirects_propertyLastUpdatedDate",
+                view: `/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/Timestamp.html?v=${cacheBuster}`,
+                value: $scope.model.redirect ? $scope.model.redirect.updateDate : null,
+                hello: moment(new Date($scope.model.redirect.updateDate)).fromNow(),
+                readonly: true
+            }
+        ];
+    };
+
+    const allProperties = $scope.model.properties.concat($scope.model.advancedProperties, $scope.model.hiddenProperties);
 
     allProperties.forEach(function (p) {
+
+        // Skip any readonly properties (info app)
+        if (p.readonly) return;
+
+        // Localize relevant label and description keys
         if (p.labelKey) localizationService.localize(p.labelKey).then(function (value) { p.label = value; });
         if (p.descriptionKey) localizationService.localize(p.descriptionKey).then(function (value) { p.description = value; });
         if (p.config && p.config.options) {
@@ -140,13 +184,27 @@
                 if (o.labelKey) localizationService.localize(o.labelKey).then(function (value) { o.label = value; });
             });
         }
+
     });
 
-    function initLabels() {
+    $scope.settingsApp = {
+        alias: "settings",
+        name: "Settings",
+        icon: "icon-equalizer",
+        view: "nope",
+        active: true
+    };
 
-        //localizationService.localize("redirects_allSites").then(function (value) {
-        //    $scope.rootNodes[0].name = value;
-        //});
+    $scope.infoApp = {
+        alias: "info",
+        name: "Info",
+        view: "nope",
+        icon: "icon-info"
+    };
+
+    $scope.model.navigation = $scope.model.redirect && $scope.model.redirect.id ? [$scope.settingsApp, $scope.infoApp] : [];
+
+    function initLabels() {
 
         $scope.labels = {
             saveSuccessfulTitle: "Redirect added",
@@ -155,7 +213,7 @@
             errorAddFailedMessage: "The redirect could not be saved due to an error on the server."
         };
 
-        angular.forEach($scope.labels, function (value, key) {
+        Utilities.forEach($scope.labels, function (_, key) {
             localizationService.localize(`redirects_${key}`).then(function (value) {
                 $scope.labels[key] = value;
             });

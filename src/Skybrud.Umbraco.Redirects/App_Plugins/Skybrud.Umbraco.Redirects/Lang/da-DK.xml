@@ -57,6 +57,9 @@
     <key alias="propertyRedirectTypeName">Type</key>
     <key alias="propertyRedirectTypeDescription">Vælg typen for dit redirect. Bemærk at browsere vil huske et permanent redirect.</key>
 
+    <key alias="propertyCreateDate">Oprettelsesdato</key>
+    <key alias="propertyLastUpdatedDate">Sidst opdateret</key>
+
     <key alias="addSuccessfulTitle">Redirect oprettet</key>
     <key alias="addSuccessfulMessage">Dit redirect er nu blevet oprettet.</key>
 

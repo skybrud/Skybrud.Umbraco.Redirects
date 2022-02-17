@@ -14,3 +14,5 @@
 const Utilities = {
     copy: function(src, dst) { }
 };
+
+const moment = function(date) { };

@@ -57,6 +57,9 @@
     <key alias="propertyRedirectTypeName">Redirect type</key>
     <key alias="propertyRedirectTypeDescription">Select the type of the redirect. Notice that browsers will remember permanent redirects.</key>
 
+    <key alias="propertyCreateDate">Created</key>
+    <key alias="propertyLastUpdatedDate">Last updated</key>
+
     <key alias="addSuccessfulTitle">Redirect added</key>
     <key alias="addSuccessfulMessage">Your redirect has successfully been added.</key>
 

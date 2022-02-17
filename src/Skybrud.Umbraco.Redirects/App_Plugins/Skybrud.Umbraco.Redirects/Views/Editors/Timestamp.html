@@ -1,0 +1,9 @@
+<div ng-controller="SkybrudUmbracoRedirects.Editors.Timestamp.Controller as vm">
+    <div ng-if="model.value">
+        {{model.value | date: 'yyyy-MM-dd HH:mm'}}
+        <small>({{vm.from}})</small>
+    </div>
+    <div ng-if="!model.value">
+        <em>N/A</em>
+    </div>
+</div>
