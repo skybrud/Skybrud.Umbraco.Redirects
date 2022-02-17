@@ -4,8 +4,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Skybrud.Umbraco.Redirects.Extensions;
 using Skybrud.Umbraco.Redirects.Models;
+using Skybrud.Umbraco.Redirects.Notifications;
 using Skybrud.Umbraco.Redirects.Services;
 using Umbraco.Cms.Core;
+using Umbraco.Cms.Core.Events;
 using Umbraco.Cms.Core.Services;
 
 namespace Skybrud.Umbraco.Redirects.Middleware {
@@ -13,11 +15,13 @@ namespace Skybrud.Umbraco.Redirects.Middleware {
     public class RedirectsMiddleware {
         
         private readonly RequestDelegate _next;
+        private readonly IEventAggregator _eventAggregator;
         private readonly IRuntimeState _runtimeState;
         private readonly IRedirectsService _redirectsService;
 
-        public RedirectsMiddleware(RequestDelegate next, IRuntimeState runtimeState, IRedirectsService redirectsService) {
+        public RedirectsMiddleware(RequestDelegate next, IEventAggregator eventAggregator, IRuntimeState runtimeState, IRedirectsService redirectsService) {
             _next = next;
+            _eventAggregator = eventAggregator;
             _runtimeState = runtimeState;
             _redirectsService = redirectsService;
         }
@@ -47,15 +51,41 @@ namespace Skybrud.Umbraco.Redirects.Middleware {
 
                         // Get the URI of the inbound request
                         Uri uri = context.Request.GetUri();
-                        
-                        // Look for a redirect
-                        IRedirect redirect = _redirectsService.GetRedirectByRequest(context.Request);
+                            
+                        // Invoke the pre lookup event
+                        RedirectPreLookupNotification preLookup = new(context);
+                        _eventAggregator.Publish<IRedirectPreLookupNotification>(preLookup);
+            
+                        // Get the destination URL from the arguments (in case a value has been set
+                        // from an notification handler)
+                        string destinationUrl = preLookup.DestinationUrl;
+                            
+                        // Declare a variable for the redirect (either from the pre lookup or a lookup via the service)
+                        IRedirect redirect = preLookup.Redirect ?? _redirectsService.GetRedirectByRequest(context.Request);
 
+                        // Return if we neither have a redirect or a destination URL
+                        if (redirect == null && string.IsNullOrWhiteSpace(destinationUrl)) return Task.CompletedTask;
+
+                        // Determine the redirect type
+                        RedirectType redirectType = preLookup.RedirectType ?? redirect?.Type ?? RedirectType.Temporary;
+                        
                         // Calculate the destination URL
-                        string destinationUrl = _redirectsService.GetDestinationUrl(redirect, uri);
-                    
+                        destinationUrl ??= _redirectsService.GetDestinationUrl(redirect, uri);
+
+                        // Invoke the post lookup event
+                        RedirectPostLookupNotification postLookup = new(context, redirect, redirectType, destinationUrl);
+                        _eventAggregator.Publish<IRedirectPostLookupNotification>(postLookup);
+
+                        // Extract the values from the notification
+                        redirectType = postLookup.RedirectType;
+                        destinationUrl = postLookup.DestinationUrl;
+
+                        // The destination URL should have a value at this point. If the value is empty, it's most
+                        // likely because it was emptied via the post look up notification
+                        if (string.IsNullOrWhiteSpace(destinationUrl)) return Task.CompletedTask;
+                        
                         // Respond with a redirect based on the redirect type
-                        switch (redirect?.Type) {
+                        switch (redirectType) {
 
                             // If redirect is of type permanent, trigger a 301 redirect
                             case RedirectType.Permanent:
