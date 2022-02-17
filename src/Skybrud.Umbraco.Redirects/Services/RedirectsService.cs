@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using NPoco;
@@ -128,6 +129,12 @@ namespace Skybrud.Umbraco.Redirects.Services {
         
         public IRedirect GetRedirectByUri(Uri uri) {
 
+            // Get the decoded path
+            string path = HttpUtility.UrlDecode(uri.AbsolutePath);
+
+            // Get the query string
+            string query = uri.PathAndQuery.Split('?').Skip(1).FirstOrDefault();
+
             // Get the current Umbraco context
             _umbracoContextAccessor.TryGetUmbracoContext(out IUmbracoContext umbracoContext);
             
@@ -140,12 +147,12 @@ namespace Skybrud.Umbraco.Redirects.Services {
 
             // Look for a site specific redirect
             if (rootKey != Guid.Empty) {
-                var redirect = GetRedirectByUrl(rootKey, uri.PathAndQuery);
+                IRedirect redirect = GetRedirectByPathAndQuery(rootKey, path, query);
                 if (redirect != null) return redirect;
             }
             
             // Look for a global redirect
-            return GetRedirectByUrl(Guid.Empty, uri.PathAndQuery);
+            return GetRedirectByPathAndQuery(Guid.Empty, path, query);
 
         }
         
@@ -501,11 +508,8 @@ namespace Skybrud.Umbraco.Redirects.Services {
             
             if (string.IsNullOrWhiteSpace(redirect?.Destination?.Url)) return null;
 
-            // Get the query string from the URL (if any)
-            string query = redirect.Destination.Url
-                .Split('?')
-                .Skip(1)
-                .FirstOrDefault();
+            // Get the query string (if any)
+            string query = redirect.Destination.Query;
 
             // Get the fragment (if any)
             string fragment = redirect.Destination.Fragment;

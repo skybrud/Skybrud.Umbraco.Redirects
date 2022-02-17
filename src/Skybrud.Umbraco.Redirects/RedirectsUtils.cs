@@ -6,6 +6,16 @@ namespace Skybrud.Umbraco.Redirects {
     internal class RedirectsUtils {
 
         /// <summary>
+        /// Returns the concatenated URL based on <paramref name="url"/> and <paramref name="query"/>.
+        /// </summary>
+        /// <param name="url">The URL.</param>
+        /// <param name="query">The query string.</param>
+        /// <returns>The combined URL.</returns>
+        public static string ConcatUrl(string url, string query) {
+            return $"{url}{(string.IsNullOrWhiteSpace(query) ? null : "?" + query)}";
+        }
+
+        /// <summary>
         /// Returns the concatenated URL based on <paramref name="url"/>, <paramref name="query"/> and <paramref name="fragment"/>.
         /// </summary>
         /// <param name="url">The URL.</param>
