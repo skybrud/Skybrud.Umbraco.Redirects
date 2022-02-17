@@ -35,6 +35,7 @@
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\**\*.html" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\**\*.js" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Lang\*.xml" />
+    <Content Remove="App_Plugins\Skybrud.Umbraco.Redirects\Scripts\Intellisense.js" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\package.manifest" />
     <None Include="../build/Limbo.png" Pack="true" PackagePath="\" />
   </ItemGroup>
