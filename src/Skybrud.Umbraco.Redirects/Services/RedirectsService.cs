@@ -468,27 +468,6 @@ namespace Skybrud.Umbraco.Redirects.Services {
 
         }
 
-        protected virtual string MergeQueryString(string inboundUrl, string destinationUrl) {
-            
-            // Split the inbound URL
-            inboundUrl.Split('?', out string _, out string inboundQuery);
-            if (string.IsNullOrWhiteSpace(inboundQuery)) return destinationUrl;
-
-            // Split the destination URL
-            destinationUrl.Split('?', out string destinationPath, out string destinationQuery);
-
-            // Merge the two query strings
-            List<string> queryElements = new List<string>();
-            if (!string.IsNullOrWhiteSpace(destinationQuery)) {
-                queryElements.Add(destinationQuery);
-            }
-            queryElements.Add(inboundQuery);
-
-            // Put the URL back together
-            return $"{destinationPath}?{string.Join("&", queryElements)}";
-
-        }
-
         /// <summary>
         /// Returns the calculated destination URL for the specified <paramref name="redirect"/>.
         /// </summary>
@@ -515,7 +494,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
             string fragment = redirect.Destination.Fragment;
 
             // Merge the existing query string with the query string of "uri" (eg. from the inbound request)
-            if (uri != null && uri.Query.HasValue() && redirect.ForwardQueryString) query = MergeQueryString2(query, uri.Query);
+            if (uri != null && uri.Query.HasValue() && redirect.ForwardQueryString) query = MergeQueryString(query, uri.Query);
 
             // For content and media, we need to look up the most recent URL
             IPublishedContent content = null;
@@ -546,18 +525,11 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// <param name="query1">The first query string.</param>
         /// <param name="query2">The second query string.</param>
         /// <returns>The combined query string.</returns>
-        protected virtual string MergeQueryString2(string query1, string query2) {
+        protected virtual string MergeQueryString(string query1, string query2) {
             if (!query1.HasValue()) return query2.TrimStart('?');
             return query1 + "&" + query2.TrimStart('?');
         }
-
-
-
-
-
-
-
-
+        
         public virtual IRedirect[] GetRedirectsByNodeId(RedirectDestinationType nodeType, int nodeId) {
             if (nodeType == RedirectDestinationType.Url) throw new RedirectsException($"Unsupported node type: {nodeType}");
             return GetRedirectsByNodeId(nodeType.ToString(), nodeId);
