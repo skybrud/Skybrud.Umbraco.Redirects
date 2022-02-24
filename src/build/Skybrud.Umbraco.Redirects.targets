@@ -1,28 +1,26 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-  <!--Based on: https://github.com/bergmania/Bergmania.OpenStreetMap/blob/main/Bergmania.OpenStreetMap/build/Bergmania.OpenStreetMap.targets -->
-
   <PropertyGroup>
-    <SkybrudRedirectsContentFilesPath>$(MSBuildThisFileDirectory)..\content\App_Plugins\Skybrud.Umbraco.Redirects\**\*.*</SkybrudRedirectsContentFilesPath>
+    <SkybrudUmbracoRedirectsContentFilesPath>$(MSBuildThisFileDirectory)..\content\App_Plugins\Skybrud.Umbraco.Redirects\**\*.*</SkybrudUmbracoRedirectsContentFilesPath>
   </PropertyGroup>
 
-  <Target Name="CopySkybrudRedirectsAssets" BeforeTargets="Build">
+  <Target Name="CopySkybrudUmbracoRedirectsAssets" BeforeTargets="Build">
     <ItemGroup>
-      <SkybrudRedirectsContentFiles Include="$(SkybrudRedirectsContentFilesPath)" />
+      <SkybrudUmbracoRedirectsContentFiles Include="$(SkybrudUmbracoRedirectsContentFilesPath)" />
     </ItemGroup>
-    <Message Text="Copying Skybrud.Umbraco.Redirects files: $(SkybrudRedirectsContentFilesPath) - #@(SkybrudRedirectsContentFiles->Count()) files"  Importance="high" />
+    <Message Text="Copying Skybrud.Umbraco.Redirects files: $(SkybrudUmbracoRedirectsContentFilesPath) - #@(SkybrudUmbracoRedirectsContentFiles->Count()) files"  Importance="high" />
     <Copy
-      SourceFiles="@(SkybrudRedirectsContentFiles)"
-      DestinationFiles="@(SkybrudRedirectsContentFiles->'$(MSBuildProjectDirectory)\App_Plugins\Skybrud.Umbraco.Redirects\%(RecursiveDir)%(Filename)%(Extension)')"
+      SourceFiles="@(SkybrudUmbracoRedirectsContentFiles)"
+      DestinationFiles="@(SkybrudUmbracoRedirectsContentFiles->'$(MSBuildProjectDirectory)\App_Plugins\Skybrud.Umbraco.Redirects\%(RecursiveDir)%(Filename)%(Extension)')"
       SkipUnchangedFiles="true" />
   </Target>
 
-  <Target Name="ClearSkybrudRedirectsAssets" BeforeTargets="Clean">
+  <Target Name="ClearSkybrudUmbracoRedirectsAssets" BeforeTargets="Clean">
     <ItemGroup>
-      <SkybrudRedirectsDir Include="$(MSBuildProjectDirectory)\App_Plugins\Skybrud.Umbraco.Redirects\" />
+      <SkybrudUmbracoRedirectsDir Include="$(MSBuildProjectDirectory)\App_Plugins\Skybrud.Umbraco.Redirects\" />
     </ItemGroup>
     <Message Text="Clear old Skybrud.Umbraco.Redirects files"  Importance="high" />
-    <RemoveDir Directories="@(SkybrudRedirectsDir)"  />
+    <RemoveDir Directories="@(SkybrudUmbracoRedirectsDir)"  />
   </Target>
 
 </Project>
