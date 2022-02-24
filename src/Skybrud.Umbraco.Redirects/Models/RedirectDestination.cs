@@ -7,6 +7,9 @@ using Skybrud.Essentials.Strings.Extensions;
 
 namespace Skybrud.Umbraco.Redirects.Models {
     
+    /// <summary>
+    /// Class with information about the destination of a redirect.
+    /// </summary>
     public class RedirectDestination : IRedirectDestination {
 
         #region Properties
@@ -82,6 +85,9 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
         #region Constructors
 
+        /// <summary>
+        /// Initializes a new redirect destination with default values.
+        /// </summary>
         public RedirectDestination() {
             Url = string.Empty;
             Name = string.Empty;
@@ -89,7 +95,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
             Fragment = string.Empty;
         }
 
-        public RedirectDestination(JObject json) {
+        private RedirectDestination(JObject json) {
             Id = json.GetInt32("id");
             Key = json.GetGuid("key");
             Url = json.GetString("url");
@@ -103,6 +109,11 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
         #region Static methods
 
+        /// <summary>
+        /// Parses the specified <paramref name="json"/> object into an instance of <see cref="RedirectDestination"/>.
+        /// </summary>
+        /// <param name="json">The JSON object representing the redirect destination.</param>
+        /// <returns>An instance of <see cref="RedirectDestination"/>.</returns>
         public static RedirectDestination Parse(JObject json) {
             return json == null ? null : new RedirectDestination(json);
         }

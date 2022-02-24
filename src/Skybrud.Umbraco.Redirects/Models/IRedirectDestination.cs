@@ -1,9 +1,11 @@
 ﻿using System;
 using Newtonsoft.Json;
-using Umbraco.Cms.Core.Models.ContentEditing;
 
 namespace Skybrud.Umbraco.Redirects.Models {
     
+    /// <summary>
+    /// Interface describing the destination of a redirect.
+    /// </summary>
     public interface IRedirectDestination {
         
         /// <summary>

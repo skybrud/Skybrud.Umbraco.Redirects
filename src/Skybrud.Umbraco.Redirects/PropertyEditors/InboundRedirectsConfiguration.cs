@@ -1,5 +1,7 @@
 ﻿using Umbraco.Cms.Core.PropertyEditors;
 
+#pragma warning disable 1591
+
 namespace Skybrud.Umbraco.Redirects.PropertyEditors {
     
     public class InboundRedirectsConfiguration {

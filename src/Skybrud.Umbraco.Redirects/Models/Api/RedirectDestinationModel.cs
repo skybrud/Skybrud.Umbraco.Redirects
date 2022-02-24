@@ -2,6 +2,8 @@
 using System.Text.Json.Serialization;
 using Umbraco.Cms.Core.Models;
 
+#pragma warning disable 1591
+
 namespace Skybrud.Umbraco.Redirects.Models.Api {
 
     public class RedirectDestinationModel {

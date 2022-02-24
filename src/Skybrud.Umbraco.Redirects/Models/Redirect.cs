@@ -10,6 +10,9 @@ using Skybrud.Umbraco.Redirects.Text.Json;
 
 namespace Skybrud.Umbraco.Redirects.Models {
 
+    /// <summary>
+    /// Class representing a redirect.
+    /// </summary>
     public class Redirect : IRedirect {
 
         private IRedirectDestination _destination;

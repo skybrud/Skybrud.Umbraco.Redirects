@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Http.Extensions;
 using Skybrud.Umbraco.Redirects.Extensions;
 using Skybrud.Umbraco.Redirects.Models;
 
+#pragma warning disable 1591
+
 namespace Skybrud.Umbraco.Redirects.Notifications {
     
     public class RedirectPreLookupNotification : IRedirectPreLookupNotification {

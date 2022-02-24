@@ -7,6 +7,8 @@ using Skybrud.Essentials.Time.Rfc2822;
 using Skybrud.Essentials.Time.Rfc822;
 using Skybrud.Essentials.Time.UnixTime;
 
+#pragma warning disable 1591
+
 namespace Skybrud.Umbraco.Redirects.Text.Json {
     
     public class TimeConverter : JsonConverter<object> {

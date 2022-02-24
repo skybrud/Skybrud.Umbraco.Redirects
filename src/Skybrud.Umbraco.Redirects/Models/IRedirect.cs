@@ -5,7 +5,10 @@ using Skybrud.Essentials.Time;
 using Skybrud.Umbraco.Redirects.Text.Json;
 
 namespace Skybrud.Umbraco.Redirects.Models {
-
+    
+    /// <summary>
+    /// Interface describing a redirect.
+    /// </summary>
     public interface IRedirect : IRedirectBase {
         
         /// <summary>

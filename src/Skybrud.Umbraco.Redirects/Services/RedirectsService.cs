@@ -22,6 +22,9 @@ using Umbraco.Extensions;
 
 namespace Skybrud.Umbraco.Redirects.Services {
     
+    /// <summary>
+    /// Default implementation of the <see cref="IRedirectsService"/> interface.
+    /// </summary>
     public class RedirectsService : IRedirectsService {
         
         private readonly ILogger<RedirectsService> _logger;
@@ -30,6 +33,16 @@ namespace Skybrud.Umbraco.Redirects.Services {
         private readonly IContentService _contentService;
         private readonly IUmbracoContextAccessor _umbracoContextAccessor;
 
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance based on the specified dependencies.
+        /// </summary>
+        /// <param name="logger"></param>
+        /// <param name="scopeProvider"></param>
+        /// <param name="domains"></param>
+        /// <param name="contentService"></param>
+        /// <param name="umbracoContextAccessor"></param>
         public RedirectsService(ILogger<RedirectsService> logger, IScopeProvider scopeProvider, IDomainService domains, IContentService contentService, IUmbracoContextAccessor umbracoContextAccessor) {
             _logger = logger;
             _scopeProvider = scopeProvider;
@@ -37,6 +50,10 @@ namespace Skybrud.Umbraco.Redirects.Services {
             _contentService = contentService;
             _umbracoContextAccessor = umbracoContextAccessor;
         }
+
+        #endregion
+
+        #region Member methods
 
         /// <summary>
         /// Gets an array of all domains (<see cref="RedirectDomain"/>) registered in Umbraco.
@@ -133,7 +150,12 @@ namespace Skybrud.Umbraco.Redirects.Services {
             return dto == null ? null : new Redirect(dto);
 
         }
-
+        
+        /// <summary>
+        /// Returns the first redirect matching the specified <paramref name="request"/>, or <c>null</c> if the request does not match any redirects.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns>An instance of <see cref="IRedirect"/>, or <c>null</c> if no matching redirects were found.</returns>
         public IRedirect GetRedirectByRequest(HttpRequest request) {
             
             // Get the URI from the request
@@ -144,6 +166,11 @@ namespace Skybrud.Umbraco.Redirects.Services {
 
         }
         
+        /// <summary>
+        /// Returns the first redirect matching the specified <paramref name="uri"/>, or <c>null</c> if the URI does not match any redirects.
+        /// </summary>
+        /// <param name="uri">The URI of the request.</param>
+        /// <returns>An instance of <see cref="IRedirect"/>, or <c>null</c> if no matching redirects were found.</returns>
         public IRedirect GetRedirectByUri(Uri uri) {
 
             // Get the decoded path
@@ -402,7 +429,11 @@ namespace Skybrud.Umbraco.Redirects.Services {
             return result;
 
         }
-
+        
+        /// <summary>
+        /// Returns a collection with all redirects.
+        /// </summary>
+        /// <returns>An instance of <see cref="IEnumerable{Redirect}"/>.</returns>
         public IEnumerable<IRedirect> GetAllRedirects()  {
             
             // Create a new scope
@@ -419,7 +450,11 @@ namespace Skybrud.Umbraco.Redirects.Services {
             return redirects;
 
         }
-
+        
+        /// <summary>
+        /// Returns an array of all rode nodes configured in Umbraco.
+        /// </summary>
+        /// <returns>An array of <see cref="RedirectRootNode"/> representing the root nodes.</returns>
         public RedirectRootNode[] GetRootNodes()  {
 
             // Multiple domains may be configured for a single node, so we need to group the domains before proceeding
@@ -497,16 +532,34 @@ namespace Skybrud.Umbraco.Redirects.Services {
             return query1 + "&" + query2.TrimStart('?');
         }
         
+        /// <summary>
+        /// Returns an array of redirects where the destination matches the specified <paramref name="nodeType"/> and <paramref name="nodeId"/>.
+        /// </summary>
+        /// <param name="nodeType">The type of the destination node.</param>
+        /// <param name="nodeId">The numeric ID of the destination node.</param>
+        /// <returns>An array of <see cref="IRedirect"/>.</returns>
         public virtual IRedirect[] GetRedirectsByNodeId(RedirectDestinationType nodeType, int nodeId) {
             if (nodeType == RedirectDestinationType.Url) throw new RedirectsException($"Unsupported node type: {nodeType}");
             return GetRedirectsByNodeId(nodeType.ToString(), nodeId);
         }
-
+        
+        /// <summary>
+        /// Returns an array of redirects where the destination matches the specified <paramref name="nodeType"/> and <paramref name="nodeKey"/>.
+        /// </summary>
+        /// <param name="nodeType">The type of the destination node.</param>
+        /// <param name="nodeKey">The key (GUID) of the destination node.</param>
+        /// <returns>An array of <see cref="IRedirect"/>.</returns>
         public virtual IRedirect[] GetRedirectsByNodeKey(RedirectDestinationType nodeType, Guid nodeKey) {
             if (nodeType == RedirectDestinationType.Url) throw new RedirectsException($"Unsupported node type: {nodeType}");
             return GetRedirectsByNodeKey(nodeType.ToString(), nodeKey);
         }
         
+        /// <summary>
+        /// Returns an array of redirects where the destination matches the specified <paramref name="nodeType"/> and <paramref name="nodeId"/>.
+        /// </summary>
+        /// <param name="nodeType">The type of the destination node.</param>
+        /// <param name="nodeId">The numeric ID of the destination node.</param>
+        /// <returns>An array of <see cref="IRedirect"/>.</returns>
         protected virtual IRedirect[] GetRedirectsByNodeId(string nodeType, int nodeId) {
             
             // Create a new scope
@@ -532,6 +585,12 @@ namespace Skybrud.Umbraco.Redirects.Services {
 
         }
         
+        /// <summary>
+        /// Returns an array of redirects where the destination matches the specified <paramref name="nodeType"/> and <paramref name="nodeKey"/>.
+        /// </summary>
+        /// <param name="nodeType">The type of the destination node.</param>
+        /// <param name="nodeKey">The key (GUID) of the destination node.</param>
+        /// <returns>An array of <see cref="IRedirect"/>.</returns>
         protected virtual IRedirect[] GetRedirectsByNodeKey(string nodeType, Guid nodeKey) {
             
             // Create a new scope
@@ -555,6 +614,8 @@ namespace Skybrud.Umbraco.Redirects.Services {
             return rows;
 
         }
+
+        #endregion
 
     }
 

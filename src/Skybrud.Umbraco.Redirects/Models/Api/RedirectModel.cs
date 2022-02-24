@@ -3,6 +3,8 @@ using System.Text.Json.Serialization;
 using Skybrud.Essentials.Time;
 using Skybrud.Umbraco.Redirects.Text.Json;
 
+#pragma warning disable 1591
+
 namespace Skybrud.Umbraco.Redirects.Models.Api {
     
     public class RedirectModel {

@@ -6,11 +6,19 @@ using Umbraco.Cms.Core.Services;
 using Umbraco.Extensions;
 
 namespace Skybrud.Umbraco.Redirects.Services {
-/// <summary>
+
+    /// <summary>
     /// Static utility class with helper methods related to domains.
     /// </summary>
     public static class DomainUtils {
 
+        /// <summary>
+        /// Attemtps to get the domain matching the specified <paramref name="uri"/>
+        /// </summary>
+        /// <param name="domainService">The current <see cref="IDomainService"/>.</param>
+        /// <param name="uri">The URI.</param>
+        /// <param name="domain">When this method returns, holds the domain if successful; otherwise, <c>null</c>.</param>
+        /// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
         public static bool TryGetDomain(IDomainService domainService, Uri uri, out Domain domain) {
             domain = FindDomainForUri(domainService, uri);
             return domain != null;
@@ -51,8 +59,8 @@ namespace Skybrud.Umbraco.Redirects.Services {
         ///     <cref>https://github.com/umbraco/Umbraco-CMS/blob/193e24afd256b2994a0900c0e9739f3f3466c036/src/Umbraco.Web/Routing/DomainHelper.cs#L98</cref>
         /// </see>
         /// </remarks>
-        internal static DomainAndUri SelectDomain(IEnumerable<Domain> domains, Uri uri, string culture = null, string defaultCulture = null, Func<IReadOnlyCollection<DomainAndUri>, Uri, string, string, DomainAndUri> filter = null)
-        {
+        internal static DomainAndUri SelectDomain(IEnumerable<Domain> domains, Uri uri, string culture = null, string defaultCulture = null, Func<IReadOnlyCollection<DomainAndUri>, Uri, string, string, DomainAndUri> filter = null)  {
+            
             // sanitize the list to have proper uris for comparison (scheme, path end with /)
             // we need to end with / because example.com/foo cannot match example.com/foobar
             // we need to order so example.com/foo matches before example.com/
@@ -100,8 +108,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
 
             // if nothing works, then try to run the filter to select a domain
             // either restricting on cultureDomains, or on all domains
-            if (filter != null)
-            {
+            if (filter != null)  {
                 var domainAndUri = filter(cultureDomains ?? domainsAndUris, uri, culture, defaultCulture);
                 // if still nothing, pick the first one?
                 // no: move that constraint to the filter, but check
@@ -111,13 +118,13 @@ namespace Skybrud.Umbraco.Redirects.Services {
             }
 
             return null;
+
         }
 
-        private static bool IsBaseOf(DomainAndUri domain, Uri uri)
-            => domain.Uri.EndPathWithSlash().IsBaseOf(uri);
+        private static bool IsBaseOf(DomainAndUri domain, Uri uri) => domain.Uri.EndPathWithSlash().IsBaseOf(uri);
 
-        private static IReadOnlyCollection<DomainAndUri> SelectByBase(IReadOnlyCollection<DomainAndUri> domainsAndUris, Uri uri)
-        {
+        private static IReadOnlyCollection<DomainAndUri> SelectByBase(IReadOnlyCollection<DomainAndUri> domainsAndUris, Uri uri) {
+            
             // look for domains that would be the base of the uri
             // ie current is www.example.com/foo/bar, look for domain www.example.com
             var currentWithSlash = uri.EndPathWithSlash();
@@ -132,8 +139,8 @@ namespace Skybrud.Umbraco.Redirects.Services {
             return baseDomains;
         }
 
-        private static IReadOnlyCollection<DomainAndUri> SelectByCulture(IReadOnlyCollection<DomainAndUri> domainsAndUris, string culture, string defaultCulture)
-        {
+        private static IReadOnlyCollection<DomainAndUri> SelectByCulture(IReadOnlyCollection<DomainAndUri> domainsAndUris, string culture, string defaultCulture) {
+            
             // we try our best to match cultures, but may end with a bogus domain
 
             if (culture != null) // try the supplied culture
@@ -151,8 +158,8 @@ namespace Skybrud.Umbraco.Redirects.Services {
             return null;
         }
 
-        private static DomainAndUri GetByCulture(IReadOnlyCollection<DomainAndUri> domainsAndUris, string culture, string defaultCulture)
-        {
+        private static DomainAndUri GetByCulture(IReadOnlyCollection<DomainAndUri> domainsAndUris, string culture, string defaultCulture) {
+            
             DomainAndUri domainAndUri;
 
             // we try our best to match cultures, but may end with a bogus domain

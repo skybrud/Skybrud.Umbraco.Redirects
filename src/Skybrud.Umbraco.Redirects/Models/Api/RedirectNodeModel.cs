@@ -6,6 +6,8 @@ using Umbraco.Extensions;
 
 using MicrosoftJsonConverter = System.Text.Json.Serialization.JsonConverterAttribute;
 
+#pragma warning disable 1591
+
 namespace Skybrud.Umbraco.Redirects.Models.Api {
 
     public class RedirectNodeModel {

@@ -1,8 +1,16 @@
 ﻿using System.Text.Json.Serialization;
 using Newtonsoft.Json;
+using Skybrud.Umbraco.Redirects.Models.Outbound;
 
 namespace Skybrud.Umbraco.Redirects.Models {
     
+    /// <summary>
+    /// Interface describing a basic redirect.
+    /// </summary>
+    /// <seealso cref="IRedirect"/>
+    /// <seealso cref="Redirect"/>
+    /// <seealso cref="IOutboundRedirect"/>
+    /// <seealso cref="OutboundRedirect"/>
     public interface IRedirectBase {
 
         /// <summary>

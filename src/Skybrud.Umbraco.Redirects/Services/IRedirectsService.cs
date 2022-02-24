@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Skybrud.Umbraco.Redirects.Models;
 using Skybrud.Umbraco.Redirects.Models.Options;
-using Skybrud.Umbraco.Redirects.Models.Outbound;
 
 namespace Skybrud.Umbraco.Redirects.Services {
     
+    /// <summary>
+    /// Interface describing the redirects service.
+    /// </summary>
     public interface IRedirectsService {
         
         /// <summary>

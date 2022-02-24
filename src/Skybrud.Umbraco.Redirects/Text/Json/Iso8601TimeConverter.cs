@@ -3,6 +3,8 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Skybrud.Essentials.Time;
 
+#pragma warning disable 1591
+
 namespace Skybrud.Umbraco.Redirects.Text.Json {
     
     public class Iso8601TimeConverter : JsonConverter<EssentialsTime> {

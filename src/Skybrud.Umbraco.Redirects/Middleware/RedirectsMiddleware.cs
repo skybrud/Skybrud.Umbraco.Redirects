@@ -10,6 +10,8 @@ using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Events;
 using Umbraco.Cms.Core.Services;
 
+#pragma warning disable 1591
+
 namespace Skybrud.Umbraco.Redirects.Middleware {
     
     public class RedirectsMiddleware {

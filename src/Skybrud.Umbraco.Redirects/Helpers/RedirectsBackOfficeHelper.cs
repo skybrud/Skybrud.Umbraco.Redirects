@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
 using Skybrud.Essentials.Reflection;
 using Skybrud.Umbraco.Redirects.Dashboards;
 using Skybrud.Umbraco.Redirects.Models;
@@ -17,25 +15,39 @@ using Umbraco.Extensions;
 
 namespace Skybrud.Umbraco.Redirects.Helpers {
     
+    /// <summary>
+    /// Backoffice helper class for the redirects package.
+    /// </summary>
     public class RedirectsBackOfficeHelper {
         
         private readonly IRuntimeState _runtimeState;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly LinkGenerator _linkGenerator;
         private readonly IDomainService _domainService;
         private readonly IContentService _contentService;
         private readonly IMediaService _mediaService;
         private readonly ILocalizedTextService _textService;
 
-        public RedirectsBackOfficeHelper(IRuntimeState runtimeState, IHttpContextAccessor httpContextAccessor, LinkGenerator linkGenerator, IDomainService domainService, IContentService contentService, IMediaService mediaService, ILocalizedTextService textService) {
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance based on the specified dependencies.
+        /// </summary>
+        /// <param name="runtimeState"></param>
+        /// <param name="domainService"></param>
+        /// <param name="contentService"></param>
+        /// <param name="mediaService"></param>
+        /// <param name="textService"></param>
+        public RedirectsBackOfficeHelper(IRuntimeState runtimeState, IDomainService domainService, IContentService contentService,
+            IMediaService mediaService, ILocalizedTextService textService) {
             _runtimeState = runtimeState;
-            _httpContextAccessor = httpContextAccessor;
-            _linkGenerator = linkGenerator;
             _domainService = domainService;
             _contentService = contentService;
             _mediaService = mediaService;
             _textService = textService;
         }
+
+        #endregion
+
+        #region Member methods
         
         /// <summary>
         /// Returns the localized value for the key with the specified <paramref name="alias"/> within the <c>redirects</c> area.
@@ -119,6 +131,11 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
 
         //}
 
+        /// <summary>
+        /// Maps the specified <paramref name="result"/> to a corresponding object to be returned in the API.
+        /// </summary>
+        /// <param name="result">The search result to be mapped.</param>
+        /// <returns>An instance of <see cref="object"/>.</returns>
         public virtual object Map(RedirectsSearchResult result) {
             
             Dictionary<Guid, RedirectRootNodeModel> rootNodeLookup = new Dictionary<Guid, RedirectRootNodeModel>();
@@ -135,6 +152,11 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
 
         }
 
+        /// <summary>
+        /// Maps the specified <paramref name="redirect"/> to a corresponding <see cref="RedirectModel"/> to be returned in the API.
+        /// </summary>
+        /// <param name="redirect">The redirect to be mapped.</param>
+        /// <returns>An instance of <see cref="RedirectModel"/>.</returns>
         public virtual RedirectModel Map(IRedirect redirect)  {
             Dictionary<Guid, RedirectRootNodeModel> rootNodeLookup = new();
             Dictionary<Guid, IContent> contentLookup = new();
@@ -142,6 +164,11 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
             return Map(redirect, rootNodeLookup, contentLookup, mediaLookup);
         }
 
+        /// <summary>
+        /// Maps the specified collection of <paramref name="redirects"/> to a corresponding colelction of <see cref="RedirectModel"/> to be returned in the API.
+        /// </summary>
+        /// <param name="redirects">The collection of redirects to be mapped.</param>
+        /// <returns>A collection of <see cref="RedirectModel"/>.</returns>
         public virtual IEnumerable<RedirectModel> Map(IEnumerable<IRedirect> redirects) {
             Dictionary<Guid, RedirectRootNodeModel> rootNodeLookup = new();
             Dictionary<Guid, IContent> contentLookup = new();
@@ -191,6 +218,12 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
 
         }
 
+        /// <summary>
+        /// Returns the content app for the specified <paramref name="source"/>, or <c>null</c> if no content app should be shown.
+        /// </summary>
+        /// <param name="source">The source - eg. an instance <see cref="IContent"/>.</param>
+        /// <param name="userGroups">The user groups of the current user.</param>
+        /// <returns>An instance of <see cref="ContentApp"/>, or <c>null</c> if no content app should be shown.</returns>
         public virtual ContentApp GetContentAppFor(object source, IEnumerable<IReadOnlyUserGroup> userGroups)  {
 
             switch (source) {
@@ -208,6 +241,10 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
 
         }
 
+        /// <summary>
+        /// Returns the default content app for the redirects package.
+        /// </summary>
+        /// <returns>An instance of <see cref="ContentApp"/>.</returns>
         public virtual ContentApp GetDefaultContentApp() {
 
             return new() {
@@ -219,6 +256,8 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
             };
 
         }
+
+        #endregion
 
     }
 

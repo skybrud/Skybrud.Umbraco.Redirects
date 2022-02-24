@@ -1,5 +1,7 @@
 ﻿using Umbraco.Cms.Infrastructure.Migrations;
 
+#pragma warning disable 1591
+
 namespace Skybrud.Umbraco.Redirects.Migrations {
     
     public abstract class RedirectsMigrationBase : MigrationBase {

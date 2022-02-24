@@ -44,6 +44,11 @@ namespace Skybrud.Umbraco.Redirects.Exceptions {
             StatusCode = statusCode;
         }
 
+        /// <summary>
+        /// Initializes a new instance based on the specified <paramref name="message"/> and <paramref name="innerException"/>.
+        /// </summary>
+        /// <param name="message">The message of the exception.</param>
+        /// <param name="innerException">An inner exception.</param>
         public RedirectsException(string message, Exception innerException) : base(message, innerException) {
             StatusCode = HttpStatusCode.InternalServerError;
         }

@@ -3,6 +3,8 @@ using Skybrud.Umbraco.Redirects.Helpers;
 using Umbraco.Cms.Core.Events;
 using Umbraco.Cms.Core.Notifications;
 
+#pragma warning disable 1591
+
 namespace Skybrud.Umbraco.Redirects.Notifications.Handlers {
     
     public class ServerVariablesParsingHandler : INotificationHandler<ServerVariablesParsingNotification> {

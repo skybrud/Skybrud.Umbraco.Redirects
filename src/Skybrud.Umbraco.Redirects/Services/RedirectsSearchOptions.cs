@@ -2,6 +2,9 @@
 
 namespace Skybrud.Umbraco.Redirects.Services {
     
+    /// <summary>
+    /// Class with options for searching through the created redirects.
+    /// </summary>
     public class RedirectsSearchOptions {
 
         #region Properties
@@ -40,6 +43,9 @@ namespace Skybrud.Umbraco.Redirects.Services {
         
         #region Constructors
 
+        /// <summary>
+        /// Initializes a new instance with default options.
+        /// </summary>
         public RedirectsSearchOptions() {
             Page = 1;
             Limit = 20;

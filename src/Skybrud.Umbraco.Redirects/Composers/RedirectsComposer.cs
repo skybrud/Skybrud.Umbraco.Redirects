@@ -11,6 +11,8 @@ using Umbraco.Cms.Core.Notifications;
 using Umbraco.Cms.Web.Common.ApplicationBuilder;
 using Umbraco.Extensions;
 
+#pragma warning disable 1591
+
 namespace Skybrud.Umbraco.Redirects.Composers {
     
     public class RedirectsComposer : IComposer {

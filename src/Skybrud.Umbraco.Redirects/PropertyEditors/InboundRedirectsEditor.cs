@@ -3,6 +3,8 @@ using Umbraco.Cms.Core.IO;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.PropertyEditors;
 
+#pragma warning disable 1591
+
 namespace Skybrud.Umbraco.Redirects.PropertyEditors {
 
     [DataEditor(EditorAlias, EditorType.PropertyValue, EditorName, EditorView, ValueType = ValueTypes.Json, Group = "Skybrud.dk", Icon = "icon-arrow-right")]

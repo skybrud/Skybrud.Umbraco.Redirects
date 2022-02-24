@@ -19,6 +19,8 @@ using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Web.BackOffice.Controllers;
 using Umbraco.Cms.Web.Common.Attributes;
 
+#pragma warning disable 1591
+
 // ReSharper disable IntroduceOptionalParameters.Local
 
 namespace Skybrud.Umbraco.Redirects.Controllers.Api {
