@@ -1,5 +1,7 @@
-﻿using Skybrud.Essentials.Strings.Extensions;
+﻿using Skybrud.Essentials.Reflection;
+using Skybrud.Essentials.Strings.Extensions;
 using Skybrud.Umbraco.Redirects.Models;
+using Umbraco.Cms.Core.Semver;
 
 namespace Skybrud.Umbraco.Redirects {
 
@@ -83,6 +85,10 @@ namespace Skybrud.Umbraco.Redirects {
 
             return hasChanges;
 
+        }
+
+        public static SemVersion GetSemVersion() {
+            return SemVersion.Parse(ReflectionUtils.GetInformationalVersion(typeof(RedirectsUtils).Assembly));
         }
 
     }
