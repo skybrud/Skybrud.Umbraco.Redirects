@@ -18,6 +18,9 @@ namespace Skybrud.Umbraco.Redirects.Composers {
     public class RedirectsComposer : IComposer {
         
         public void Compose(IUmbracoBuilder builder) {
+            
+            builder.Services.AddUnique<RedirectsServiceDependencies>();
+            builder.Services.AddUnique<RedirectsBackOfficeHelperDependencies>();
 
             builder.Services.AddUnique<IRedirectsService, RedirectsService>();
             builder.Services.AddUnique<RedirectsBackOfficeHelper>();

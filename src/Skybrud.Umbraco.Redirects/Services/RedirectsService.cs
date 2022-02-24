@@ -36,19 +36,15 @@ namespace Skybrud.Umbraco.Redirects.Services {
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance based on the specified dependencies.
+        /// Initializes a new instance based on the specified <paramref name="dependencies"/>.
         /// </summary>
-        /// <param name="logger"></param>
-        /// <param name="scopeProvider"></param>
-        /// <param name="domains"></param>
-        /// <param name="contentService"></param>
-        /// <param name="umbracoContextAccessor"></param>
-        public RedirectsService(ILogger<RedirectsService> logger, IScopeProvider scopeProvider, IDomainService domains, IContentService contentService, IUmbracoContextAccessor umbracoContextAccessor) {
-            _logger = logger;
-            _scopeProvider = scopeProvider;
-            _domains = domains;
-            _contentService = contentService;
-            _umbracoContextAccessor = umbracoContextAccessor;
+        /// <param name="dependencies">An instance of <see cref="RedirectsServiceDependencies"/>.</param>
+        public RedirectsService(RedirectsServiceDependencies dependencies) {
+            _logger = dependencies.Logger;
+            _scopeProvider = dependencies.ScopeProvider;
+            _domains = dependencies.Domains;
+            _contentService = dependencies.ContentService;
+            _umbracoContextAccessor = dependencies.UmbracoContextAccessor;
         }
 
         #endregion

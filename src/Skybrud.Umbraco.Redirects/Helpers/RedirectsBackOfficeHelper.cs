@@ -10,7 +10,6 @@ using Umbraco.Cms.Core.Dashboards;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.ContentEditing;
 using Umbraco.Cms.Core.Models.Membership;
-using Umbraco.Cms.Core.Services;
 using Umbraco.Extensions;
 
 namespace Skybrud.Umbraco.Redirects.Helpers {
@@ -19,30 +18,24 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
     /// Backoffice helper class for the redirects package.
     /// </summary>
     public class RedirectsBackOfficeHelper {
-        
-        private readonly IRuntimeState _runtimeState;
-        private readonly IDomainService _domainService;
-        private readonly IContentService _contentService;
-        private readonly IMediaService _mediaService;
-        private readonly ILocalizedTextService _textService;
+
+        #region Properties
+
+        /// <summary>
+        /// gets a reference to the dependencies of this instance.
+        /// </summary>
+        protected RedirectsBackOfficeHelperDependencies Dependencies { get; }
+
+        #endregion
 
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance based on the specified dependencies.
+        /// Initializes a new instance based on the specified <paramref name="dependencies"/>.
         /// </summary>
-        /// <param name="runtimeState"></param>
-        /// <param name="domainService"></param>
-        /// <param name="contentService"></param>
-        /// <param name="mediaService"></param>
-        /// <param name="textService"></param>
-        public RedirectsBackOfficeHelper(IRuntimeState runtimeState, IDomainService domainService, IContentService contentService,
-            IMediaService mediaService, ILocalizedTextService textService) {
-            _runtimeState = runtimeState;
-            _domainService = domainService;
-            _contentService = contentService;
-            _mediaService = mediaService;
-            _textService = textService;
+        /// <param name="dependencies">An instance of <see cref="RedirectsBackOfficeHelperDependencies"/>.</param>
+        public RedirectsBackOfficeHelper(RedirectsBackOfficeHelperDependencies dependencies) {
+            Dependencies = dependencies;
         }
 
         #endregion
@@ -65,7 +58,7 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
         /// <param name="area">The area in which the key is located.</param>
         /// <returns>The localized value.</returns>
         public string Localize(string alias, string area) {
-            return _textService.Localize(area, alias);
+            return Dependencies.TextService.Localize(area, alias);
         }
 
         /// <summary>
@@ -83,9 +76,9 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
         /// </summary>
         /// <returns>The cache buster value.</returns>
         public virtual string GetCacheBuster() {
-            string version1 = _runtimeState.SemanticVersion.ToSemanticString();
+            string version1 = Dependencies.RuntimeState.SemanticVersion.ToSemanticString();
             string version2 = GetInformationVersion();
-            return $"{version1}.{_runtimeState.Level}.{version2}".GenerateHash();
+            return $"{version1}.{Dependencies.RuntimeState.Level}.{version2}".GenerateHash();
         }
 
         /// <summary>
@@ -186,10 +179,10 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
                 if (!rootNodeLookup.TryGetValue(redirect.RootKey, out rootNode)) {
 
                     if (!contentLookup.TryGetValue(redirect.RootKey, out IContent content)) {
-                        content = _contentService.GetById(redirect.RootKey);
+                        content = Dependencies.ContentService.GetById(redirect.RootKey);
                         if (content != null) contentLookup.Add(content.Key, content);
                     }
-                    var domains = content == null ? null :_domainService.GetAssignedDomains(content.Id, false).Select(x => x.DomainName).ToArray();
+                    var domains = content == null ? null : Dependencies.DomainService.GetAssignedDomains(content.Id, false).Select(x => x.DomainName).ToArray();
                     rootNode = new RedirectRootNodeModel(redirect, content, domains);
 
                     rootNodeLookup.Add(rootNode.Key, rootNode);
@@ -200,13 +193,13 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
             RedirectDestinationModel destination;
             if (redirect.Destination.Type == RedirectDestinationType.Content) {
                 if (!contentLookup.TryGetValue(redirect.Destination.Key, out IContent content)) {
-                    content = _contentService.GetById(redirect.Destination.Key);
+                    content = Dependencies.ContentService.GetById(redirect.Destination.Key);
                     if (content != null) contentLookup.Add(content.Key, content);
                 }
                 destination = new RedirectDestinationModel(redirect, content);
             } else if (redirect.Destination.Type == RedirectDestinationType.Media) {
                 if (!mediaLookup.TryGetValue(redirect.Destination.Key, out IMedia media)) {
-                    media = _mediaService.GetById(redirect.Destination.Key);
+                    media = Dependencies.MediaService.GetById(redirect.Destination.Key);
                     if (media != null) mediaLookup.Add(media.Key, media);
                 }
                 destination = new RedirectDestinationModel(redirect, media);
