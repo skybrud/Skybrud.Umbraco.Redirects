@@ -1,6 +1,6 @@
 The MIT License (MIT)
 
-Copyright (c) 2021 [Limbo](https://www.limbo.works/)
+Copyright (c) 2022 [Limbo](https://www.limbo.works/)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
