@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Skybrud.Umbraco.Redirects.ContentApps;
+using Skybrud.Umbraco.Redirects.Factories.References;
 using Skybrud.Umbraco.Redirects.Helpers;
 using Skybrud.Umbraco.Redirects.Middleware;
 using Skybrud.Umbraco.Redirects.Notifications.Handlers;
 using Skybrud.Umbraco.Redirects.Services;
-using Skybrud.Umbraco.Redirects.Tracking;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Core.Notifications;
@@ -42,7 +42,7 @@ namespace Skybrud.Umbraco.Redirects.Composers {
                 ));
             });
 
-            builder.DataValueReferenceFactories().Append<RedirectsMediaTracking>();
+            builder.DataValueReferenceFactories().Append<OutboundRedirectReferenceFactory>();
 
         }
 

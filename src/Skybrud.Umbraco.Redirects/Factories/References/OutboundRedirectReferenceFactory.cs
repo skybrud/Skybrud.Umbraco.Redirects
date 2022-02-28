@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
-using Skybrud.Umbraco.Redirects.Models.Tracking;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using Skybrud.Umbraco.Redirects.Models.Tracking;
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.Editors;
@@ -9,15 +9,15 @@ using Umbraco.Cms.Core.PropertyEditors;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Extensions;
 
-namespace Skybrud.Umbraco.Redirects.Tracking {
+namespace Skybrud.Umbraco.Redirects.Factories.References {
 
-    public class RedirectsMediaTracking : IDataValueReferenceFactory, IDataValueReference {
+    public class OutboundRedirectReferenceFactory : IDataValueReferenceFactory, IDataValueReference {
 
         private readonly IMediaService _mediaService;
 
         public IDataValueReference GetDataValueReference() => this;
 
-        public RedirectsMediaTracking(IMediaService mediaService) {
+        public OutboundRedirectReferenceFactory(IMediaService mediaService) {
             _mediaService = mediaService;
         }
 
