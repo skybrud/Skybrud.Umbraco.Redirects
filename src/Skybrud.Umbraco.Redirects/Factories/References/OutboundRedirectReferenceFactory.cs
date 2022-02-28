@@ -9,6 +9,8 @@ using Umbraco.Cms.Core.PropertyEditors;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Extensions;
 
+#pragma warning disable 1591
+
 namespace Skybrud.Umbraco.Redirects.Factories.References {
 
     public class OutboundRedirectReferenceFactory : IDataValueReferenceFactory, IDataValueReference {
