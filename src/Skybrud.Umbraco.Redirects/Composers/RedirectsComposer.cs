@@ -5,6 +5,7 @@ using Skybrud.Umbraco.Redirects.Helpers;
 using Skybrud.Umbraco.Redirects.Middleware;
 using Skybrud.Umbraco.Redirects.Notifications.Handlers;
 using Skybrud.Umbraco.Redirects.Services;
+using Skybrud.Umbraco.Redirects.Tracking;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Core.Notifications;
@@ -14,7 +15,7 @@ using Umbraco.Extensions;
 #pragma warning disable 1591
 
 namespace Skybrud.Umbraco.Redirects.Composers {
-    
+
     public class RedirectsComposer : IComposer {
         
         public void Compose(IUmbracoBuilder builder) {
@@ -40,6 +41,8 @@ namespace Skybrud.Umbraco.Redirects.Composers {
                     _ => { }
                 ));
             });
+
+            builder.DataValueReferenceFactories().Append<RedirectsMediaTracking>();
 
         }
 
