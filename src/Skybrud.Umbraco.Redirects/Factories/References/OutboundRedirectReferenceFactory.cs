@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using Newtonsoft.Json;
-using Skybrud.Umbraco.Redirects.Models.Tracking;
+﻿using System.Collections.Generic;
+using Skybrud.Umbraco.Redirects.Models;
+using Skybrud.Umbraco.Redirects.Models.Outbound;
+using Skybrud.Umbraco.Redirects.PropertyEditors;
 using Umbraco.Cms.Core;
-using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.Editors;
 using Umbraco.Cms.Core.PropertyEditors;
-using Umbraco.Cms.Core.Services;
 using Umbraco.Extensions;
 
 #pragma warning disable 1591
@@ -15,40 +13,33 @@ namespace Skybrud.Umbraco.Redirects.Factories.References {
 
     public class OutboundRedirectReferenceFactory : IDataValueReferenceFactory, IDataValueReference {
 
-        private readonly IMediaService _mediaService;
-
         public IDataValueReference GetDataValueReference() => this;
 
-        public OutboundRedirectReferenceFactory(IMediaService mediaService) {
-            _mediaService = mediaService;
-        }
-
         public IEnumerable<UmbracoEntityReference> GetReferences(object value) {
-            var references = new List<UmbracoEntityReference>();
-            if (value != null) {
-                var redirectLink = JsonConvert.DeserializeObject<RedirectLink>(value.ToString());
-                if (redirectLink?.Destination?.Type == "media") {
-                    AddReferenceFromMediaPath(references, redirectLink?.Destination?.Url);
-                } else if (redirectLink?.Destination?.Type == "content") {
-                    AddReferenceToContent(references, redirectLink?.Destination?.Key);
-                }
+            
+            List<UmbracoEntityReference> references = new List<UmbracoEntityReference>();
+            if (value is not string json) return references;
+
+            IRedirectDestination destination = OutboundRedirect.Deserialize(json)?.Destination;
+            if (destination == null) return references;
+
+            switch (destination.Type) {
+                
+                case RedirectDestinationType.Media:
+                    references.Add(new UmbracoEntityReference(new GuidUdi("media", destination.Key)));
+                    break;
+                
+                case RedirectDestinationType.Content:
+                    references.Add(new UmbracoEntityReference(new GuidUdi("content", destination.Key)));
+                    break;
+
             }
+            
             return references;
+
         }
 
-        private void AddReferenceToContent(List<UmbracoEntityReference> references, string key) {
-            Udi udi = new GuidUdi("content", Guid.Parse(key));
-            references.Add(new UmbracoEntityReference(udi));
-        }
-
-        private void AddReferenceFromMediaPath(List<UmbracoEntityReference> references, string imagePath) {
-            IMedia media = _mediaService.GetMediaByPath(imagePath);
-            if (media == null) return;
-            Udi udi = new GuidUdi("media", media.Key);
-            references.Add(new UmbracoEntityReference(udi));
-        }
-
-        public bool IsForEditor(IDataEditor dataEditor) => dataEditor.Alias.InvariantEquals("Skybrud.Umbraco.Redirects.OutboundRedirect");
+        public bool IsForEditor(IDataEditor dataEditor) => dataEditor.Alias.InvariantEquals(OutboundRedirectEditor.EditorAlias);
 
     }
 
