@@ -36,13 +36,15 @@ namespace Skybrud.Umbraco.Redirects.Notifications.Handlers {
             // after a successful install/upgrade, in which case the runtime level will be "Run" for the next startup
             if (_runtimeState.Level < RuntimeLevel.Run) return;
             
-            var plan = new MigrationPlan("Skybrud.Umbraco.Redirects");
+            var plan = new MigrationPlan(RedirectsPackage.Alias);
             
             plan.From(string.Empty)
                 .To<CreateTableMigration>("2.0.0-alpha001")
                 .To<RemoveIsRegexColumnMigration>("2.0.0-alpha002")
-                .To<AddDestinationColumnsMigration>("2.0.0-alpha008");
-                .To<FixRootKeyValue>("2.0.5");
+                .To<DummyMigration>("2.0.0-alpha008")
+                .To<FixRootKeyValue>("2.0.5")
+                .To<DummyMigration>("2.1.1")
+                .To<AddDestinationColumnsMigration>("3.0.0-alpha008");
 
             var upgrader = new Upgrader(plan);
 
