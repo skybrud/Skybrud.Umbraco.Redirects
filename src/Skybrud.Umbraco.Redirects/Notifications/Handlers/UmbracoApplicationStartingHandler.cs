@@ -42,6 +42,7 @@ namespace Skybrud.Umbraco.Redirects.Notifications.Handlers {
                 .To<CreateTableMigration>("2.0.0-alpha001")
                 .To<RemoveIsRegexColumnMigration>("2.0.0-alpha002")
                 .To<AddDestinationColumnsMigration>("2.0.0-alpha008");
+                .To<FixRootKeyValue>("2.0.5");
 
             var upgrader = new Upgrader(plan);
 
