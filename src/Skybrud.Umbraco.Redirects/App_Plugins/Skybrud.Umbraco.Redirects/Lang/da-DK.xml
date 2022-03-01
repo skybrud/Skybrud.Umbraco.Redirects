@@ -44,47 +44,20 @@
     <key alias="media_content">Indhold</key>
     <key alias="media_media">Medier</key>
     <key alias="media_url">URLs</key>
-
-    <key alias="settingsApp">Indstillinger</key>
-    <key alias="infoApp">Info</key>
-
     <key alias="labelType">Type</key>
     <key alias="labelPermanent">Permanent</key>
     <key alias="labelTemporary">Midlertidig</key>
     <key alias="labelPermanentRedirect">Permanent redirect</key>
     <key alias="labelTemporaryRedirect">Midlertidig redirect</key>
-    
     <key alias="labelEnabled">Aktiveret</key>
     <key alias="labelDisabled">Deaktiveret</key>
     <key alias="labelAdvancedOptions">Avancerede indstillinger</key>
-
     <key alias="labelDeleteRedirectConfirm">Er du sikker på at du vil slette det valgte redirect på %0% ?</key>
-
-    <key alias="propertySite">Site</key>
-    <key alias="propertySiteDescription">Vælg det site (eller rodnode) som redirectet skal gælde for. Vælges der ikke noget site, vil redirectet virke for alle domæner/sites i Umbraco-løsningen.</key>
-
-    <key alias="propertyOriginalUrl">Oprindelig URL</key>
-    <key alias="propertyOriginalUrlDescription">Angiv den oprindelige URL, der skal sende brugeren videre til den valgte destination.</key>
-
-    <key alias="propertyDestination">Destination</key>
-    <key alias="propertyDestinationDescription">Vælg den side eller URL, som brugeren skal sendes videre til.</key>
-
-    <key alias="propertyRedirectTypeName">Type</key>
-    <key alias="propertyRedirectTypeDescription">Vælg typen for dit redirect. Bemærk at browsere vil huske et permanent redirect.</key>
-
-    <key alias="propertyCreateDate">Oprettelsesdato</key>
-    <key alias="propertyUpdateDate">Sidst opdateret</key>
-
-    <key alias="errorContentNoRedirects">En side med det angivne ID blev ikke fundet.</key>
-    <key alias="errorMediaNoRedirects">Et medie med det angivne ID blev ikke fundet.</key>
-    <key alias="errorNoUrl">Du skal angive en URL for dit redirect.</key>
-    <key alias="errorNoDestination">Du skal angive en destination for dit redirect.</key>
-    <key alias="errorUnknownLinkMode">Den angivne linktype er ikke gyldig.</key>
-
-    <key alias="pageNoRedirects">Din side er endnu ikke oprettet. Du skal gemme eller publicere siden for, at kunne tilføje redirects.</key>
-    
   </area>
   <area alias="redirects">
+    <!-- Content Apps -->
+    <key alias="settingsApp">Indstillinger</key>
+    <key alias="infoApp">Info</key>
     <!-- Notifications: Add redirects -->
     <key alias="addSuccessfulTitle">Redirect oprettet</key>
     <key alias="addSuccessfulMessage">Dit redirect er nu blevet oprettet.</key>
@@ -102,5 +75,26 @@
     <key alias="errorInvalidUrlMessage">Den angivne URL er ikke gyldig.</key>
     <key alias="errorNoLinkTitle">Intet link</key>
     <key alias="errorNoLinkMessage">Du skal angive en destinationsside eller -link.</key>
+    <key alias="errorContentNoRedirects">En side med det angivne ID blev ikke fundet.</key>
+    <key alias="errorMediaNoRedirects">Et medie med det angivne ID blev ikke fundet.</key>
+    <key alias="errorNoUrl">Du skal angive en URL for dit redirect.</key>
+    <key alias="errorNoDestination">Du skal angive en destination for dit redirect.</key>
+    <key alias="errorUnknownLinkMode">Den angivne linktype er ikke gyldig.</key>
+    <!-- Misc info and warnings -->
+    <key alias="pageNoRedirects">Din side er endnu ikke oprettet. Du skal gemme eller publicere siden for, at kunne tilføje redirects.</key>
+    <key alias="pageIsUnpublished">Denne side er endnu ikke blevet udgivet. Redirects til ikke-udgivne sider kan resultere i uventet adfærd - eksempelvis hvor besøgende bliver videresendt til en ikke-eksisterende URL.</key>
+    <key alias="pageIsTrashed">Denne side ligger i øjeblikket i papirkurven. Redirects til denne side kan derfor resultere i uventet adfærd - eksempelvis hvor besøgende bliver videresendt til en ikke-eksisterende URL.</key>
+    <key alias="mediaIsTrashed">Dette medie ligger i øjeblikket i papirkurven. Redirects til dette medie kan derfor resultere i uventet adfærd - eksempelvis hvor besøgende bliver videresendt til en ikke-eksisterende URL.</key>
+    <!-- Properties -->
+    <key alias="propertySite">Site</key>
+    <key alias="propertySiteDescription">Vælg det site (eller rodnode) som redirectet skal gælde for. Vælges der ikke noget site, vil redirectet virke for alle domæner/sites i Umbraco-løsningen.</key>
+    <key alias="propertyOriginalUrl">Oprindelig URL</key>
+    <key alias="propertyOriginalUrlDescription">Angiv den oprindelige URL, der skal sende brugeren videre til den valgte destination.</key>
+    <key alias="propertyDestination">Destination</key>
+    <key alias="propertyDestinationDescription">Vælg den side eller URL, som brugeren skal sendes videre til.</key>
+    <key alias="propertyRedirectTypeName">Type</key>
+    <key alias="propertyRedirectTypeDescription">Vælg typen for dit redirect. Bemærk at browsere vil huske et permanent redirect.</key>
+    <key alias="propertyCreateDate">Oprettelsesdato</key>
+    <key alias="propertyUpdateDate">Sidst opdateret</key>
   </area>
 </language>
