@@ -12,7 +12,13 @@
 };
 
 const Utilities = {
-    copy: function(src, dst) { }
+    copy: function (src, dst) { },
+    forEach: function (value, key) { }
+};
+
+const angular = {
+    copy: function (src, dst) { },
+    forEach: function (value, key) { }
 };
 
 const moment = function(date) { };

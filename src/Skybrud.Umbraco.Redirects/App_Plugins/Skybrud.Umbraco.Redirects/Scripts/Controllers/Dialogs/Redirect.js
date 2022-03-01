@@ -230,15 +230,21 @@
     function initLabels() {
 
         $scope.labels = {
+            addSuccessfulTitle: "Redirect added",
+            addSuccessfulMessage: "Your redirect has successfully been added.",
+            addFailedTitle: "Saving failed",
+            addFailedMessage: "The redirect could not be added due to an error on the server.",
             saveSuccessfulTitle: "Redirect added",
             saveSuccessfulMessage: "Your redirect has successfully been added.",
-            errorAddFailedTitle: "Saving failed",
-            errorAddFailedMessage: "The redirect could not be saved due to an error on the server."
+            saveFailedTitle: "Saving failed",
+            saveFailedMessage: "The redirect could not be saved due to an error on the server."
         };
 
-        Utilities.forEach($scope.labels, function (_, key) {
+        angular.forEach($scope.labels, function (_, key) {
             localizationService.localize(`redirects_${key}`).then(function (value) {
+                if (!value.length || value[0] === "[") return;
                 $scope.labels[key] = value;
+                console.log(`redirects_${key} => ${value}`);
             });
         });
 
@@ -259,7 +265,7 @@
     $scope.save = function () {
 
         // Map the properties back to an object we can send to the API
-        var redirect = skybrudRedirectsService.propertiesToObject(allProperties);
+        const redirect = skybrudRedirectsService.propertiesToObject(allProperties);
 
         // Attempt to submit the form (Angular validation will kick in)
         if (!formHelper.submitForm({ scope: $scope })) return;
@@ -288,11 +294,11 @@
                 data: redirect
             }).then(function (r) {
                 $scope.loading = false;
-                notificationsService.success($scope.labels.saveSuccessfulTitle, $scope.labels.saveSuccessfulMessage);
+                notificationsService.success($scope.labels.saveSuccessfulTitle, $scope.labels.addSuccessfulMessage);
                 $scope.model.submit(r);
             }, function (res) {
                 $scope.loading = false;
-                notificationsService.error($scope.labels.errorAddFailedTitle, res && res.data && res.data.meta ? res.data.meta.error : $scope.labels.errorAddFailedMessage);
+                notificationsService.error($scope.labels.saveFailedTitle, res && res.data && res.data.meta ? res.data.meta.error : $scope.labels.saveFailedMessage);
             });
         } else {
             $http({
@@ -301,11 +307,11 @@
                 data: redirect
             }).then(function (r) {
                 $scope.loading = false;
-                notificationsService.success($scope.labels.saveSuccessfulTitle, $scope.labels.saveSuccessfulMessage);
+                notificationsService.success($scope.labels.addSuccessfulTitle, $scope.labels.saveSuccessfulMessage);
                 $scope.model.submit(r);
             }, function (res) {
                 $scope.loading = false;
-                notificationsService.error($scope.labels.errorAddFailedTitle, res && res.data && res.data.meta ? res.data.meta.error : $scope.labels.errorAddFailedMessage);
+                notificationsService.error($scope.labels.addFailedTitle, res && res.data && res.data.meta ? res.data.meta.error : $scope.labels.addFailedMessage);
             });
         }
 

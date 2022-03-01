@@ -75,27 +75,6 @@
     <key alias="propertyCreateDate">Created</key>
     <key alias="propertyUpdateDate">Last updated</key>
 
-    <key alias="addSuccessfulTitle">Redirect added</key>
-    <key alias="addSuccessfulMessage">Your redirect has successfully been added.</key>
-
-    <key alias="saveSuccessfulTitle">Redirect saved</key>
-    <key alias="saveSuccessfulMessage">Your redirect has successfully been saved.</key>
-
-    <key alias="errorNoUrlTitle">No URL</key>
-    <key alias="errorNoUrlMessage">You must specify the original URL.</key>
-
-    <key alias="errorInvalidUrlTitle">Invalid URL</key>
-    <key alias="errorInvalidUrlMessage">The specified URL is not valid.</key>
-
-    <key alias="errorNoLinkTitle">No link</key>
-    <key alias="errorNoLinkMessage">You must select a destination page or link.</key>
-
-    <key alias="errorAddFailedTitle">Saving failed</key>
-    <key alias="errorAddFailedMessage">The redirect could not be saved due to an error on the server.</key>
-
-    <key alias="errorEditFailedTitle">Saving failed</key>
-    <key alias="errorEditFailedMessage">The redirect could not be saved due to an error on the server.</key>
-
     <key alias="errorContentNoRedirects">A content item with the specified ID could not be found.</key>
     <key alias="errorMediaNoRedirects">A media item with the specified ID could not be found.</key>
     <key alias="errorNoUrl">You must specify a URL for the redirect.</key>
@@ -107,5 +86,24 @@
     <key alias="pageIsTrashed">This page is in the recycle bin. Redirects to this page may therefore result in unexpected behaviour - eg. where the visitors are redirected to non-existing URLs.</key>
     <key alias="mediaIsTrashed">This media is in the recycle bin. Redirects to this media may therefore result in unexpected behaviour - eg. where the visitors are redirected to non-existing URLs.</key>
 
+  </area>
+  <area alias="redirects">
+    <!-- Notifications: Add redirects -->
+    <key alias="addSuccessfulTitle">Redirect added</key>
+    <key alias="addSuccessfulMessage">Your redirect has successfully been added.</key>
+    <key alias="addFailedTitle">Saving failed</key>
+    <key alias="addFailedMessage">The redirect could not be saved due to an error on the server.</key>
+    <!-- Notifications: Save redirect -->
+    <key alias="saveSuccessfulTitle">Redirect saved</key>
+    <key alias="saveSuccessfulMessage">Your redirect has successfully been saved.</key>
+    <key alias="saveFailedTitle">Saving failed</key>
+    <key alias="saveFailedMessage">The redirect could not be saved due to an error on the server.</key>
+    <!-- Misc errors-->
+    <key alias="errorNoUrlTitle">No URL</key>
+    <key alias="errorNoUrlMessage">You must specify the original URL.</key>
+    <key alias="errorInvalidUrlTitle">Invalid URL</key>
+    <key alias="errorInvalidUrlMessage">The specified URL is not valid.</key>
+    <key alias="errorNoLinkTitle">No link</key>
+    <key alias="errorNoLinkMessage">You must select a destination page or link.</key>
   </area>
 </language>
