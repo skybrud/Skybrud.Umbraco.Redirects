@@ -7,11 +7,16 @@
     $scope.mode = "list";
 
     $scope.rootNodes = [
-        { name: "All sites", value: "" }
+        { name: "All sites", key: "" },
+        { name: "Global redirects", key: "00000000-0000-0000-0000-000000000000" }
     ];
 
     localizationService.localize("redirects_allSites").then(function (value) {
         $scope.rootNodes[0].name = value;
+    });
+
+    localizationService.localize("redirects_globalRedirects").then(function (value) {
+        $scope.rootNodes[1].name = value;
     });
 
     $scope.types = [
@@ -128,7 +133,7 @@
         $scope.activeFilters = 0;
 
         // Any filters?
-        if ($scope.filters.rootNode && $scope.filters.rootNode.id > 0) {
+        if ($scope.filters.rootNode && $scope.filters.rootNode.key) {
             args.rootNodeKey = $scope.filters.rootNode.key;
             $scope.activeFilters++;
         }

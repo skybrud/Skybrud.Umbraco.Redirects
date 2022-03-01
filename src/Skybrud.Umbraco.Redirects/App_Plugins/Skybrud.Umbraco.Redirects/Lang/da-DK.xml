@@ -22,6 +22,7 @@
     <key alias="site">Site</key>
     <key alias="siteDescription">Vælg det site (eller rodnode) som redirectet skal gælde for. Vælges der ikke noget site, vil redirectet virke for alle domæner/sites i Umbraco-løsningen.</key>
     <key alias="allSites">Alle sites</key>
+    <key alias="globalRedirects">Globale redirects</key>
     <key alias="originalUrl">Oprindelig URL</key>
     <key alias="destination">Destination</key>
     <key alias="redirectedTo">Viderestillet til</key>

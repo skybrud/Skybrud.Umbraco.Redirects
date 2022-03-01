@@ -22,6 +22,7 @@
     <key alias="site">Site</key>
     <key alias="siteDescription">Select the site (or root node) the redirect should apply to. If a site is not selected, the redirect will apply to all domains/sites in the Umbraco solution.</key>
     <key alias="allSites">All sites</key>
+    <key alias="globalRedirects">Global redirects</key>
     <key alias="originalUrl">Original URL</key>
     <key alias="destination">Destination</key>
     <key alias="redirectedTo">Redirected to</key>
