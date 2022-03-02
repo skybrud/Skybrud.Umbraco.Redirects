@@ -1,14 +1,14 @@
-﻿<div class="SkybrudUmbracoRedirects skybrud-redirects-dashboard" ng-controller="SkybrudUmbracoRedirects.Dashboard.Controller">
+﻿<div class="SkybrudUmbracoRedirects skybrud-redirects-dashboard" ng-controller="SkybrudUmbracoRedirects.Dashboard.Controller as vm">
     <div>
         <div class="umb-editor-sub-header" umb-sticky-bar="">
             <h3><localize key="redirects_redirects">Redirects</localize></h3>
         </div>
         <div class="filters">
-            <select style="margin-right: 10px;" ng-options="item as item.name for item in rootNodes track by item.key" ng-model="filters.rootNode" no-dirty-check></select>
-            <select style="margin-right: 10px;" ng-options="item as item.name for item in types track by item.value" ng-model="filters.type" no-dirty-check></select>
-            <input type="text" ng-model="filters.text" no-dirty-check placeholder="typeToSearch" localize="placeholder" style="max-width: initial; flex: 1; margin-right: 100px;" />
+            <select style="margin-right: 10px;" ng-options="item as item.name for item in vm.rootNodes track by item.key" ng-model="vm.filters.rootNode" no-dirty-check ng-change="vm.filterUpdated()"></select>
+            <select style="margin-right: 10px;" ng-options="item as item.name for item in vm.types track by item.value" ng-model="vm.filters.type" no-dirty-check ng-change="vm.filterUpdated()"></select>
+            <input type="text" ng-model="vm.filters.text" no-dirty-check placeholder="typeToSearch" localize="placeholder" style="max-width: initial; flex: 1; margin-right: 100px;" ng-change="vm.filterUpdated()" />
             <umb-button-group
-                ng-repeat="bg in buttonGroups"
+                ng-repeat="bg in vm.buttonGroups"
                               button-style="{{bg.buttonStyle}}"
                               default-button="bg.defaultButton"
                               sub-buttons="bg.subButtons"
@@ -16,13 +16,13 @@
                               float="right">
             </umb-button-group>
         </div>
-        <div ng-class="{loading: loading}">
+        <div ng-class="{loading: vm.loading}">
             <umb-load-indicator></umb-load-indicator>
-            <umb-empty-state ng-if="!loading && redirects.length == 0" position="center">
-                <span ng-if="activeFilters == 0"><localize key="redirects_labelNoRedirects">There has not yet been added any redirects.</localize></span>
-                <span ng-if="activeFilters > 0"><localize key="redirects_labelNoSearchRedirects">Your search did not match any redirects.</localize></span>
+            <umb-empty-state ng-if="!vm.loading && vm.redirects.length == 0" position="center">
+                <span ng-if="vm.activeFilters == 0"><localize key="redirects_labelNoRedirects">There has not yet been added any redirects.</localize></span>
+                <span ng-if="vm.activeFilters > 0"><localize key="redirects_labelNoSearchRedirects">Your search did not match any redirects.</localize></span>
             </umb-empty-state>
-            <table class="table list" ng-if="redirects.length > 0">
+            <table class="table list" ng-if="vm.redirects.length > 0">
                 <thead>
                 <tr>
                     <!--<th><localize key="redirects_id">ID</localize></th>-->
@@ -37,7 +37,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="redirect in redirects">
+                    <tr ng-repeat="redirect in vm.redirects">
                         <!--<td class="col-id">
                             {{redirect.id}}
                         </td>-->
@@ -86,31 +86,31 @@
                             {{redirect.updateDate | date: 'yyyy-MM-dd HH:mm'}}
                         </td>-->
                         <td class="col-actions tar">
-                            <button type="button" ng-click="editRedirect(redirect)" class="btn btn-link"><localize key="redirects_edit">Edit</localize></button>
-                            <button type="button" ng-click="deleteRedirect(redirect)" class="btn btn-link color-red"><localize key="redirects_delete">Delete</localize></button>
+                            <button type="button" ng-click="vm.editRedirect(redirect)" class="btn btn-link"><localize key="redirects_edit">Edit</localize></button>
+                            <button type="button" ng-click="vm.deleteRedirect(redirect)" class="btn btn-link color-red"><localize key="redirects_delete">Delete</localize></button>
                         </td>
                     </tr>
                 </tbody>
                 <tfoot>
                     <tr>
                         <th colspan="3">
-                            <div ng-show="pagination.page > 0 && pagination.total > 0">
-                                {{pagination.text}}
+                            <div ng-show="vm.pagination.page > 0 && vm.pagination.total > 0">
+                                {{vm.pagination.text}}
                             </div>
                         </th>
                         <th colspan="6" class="tar">
                             <div class="pagination">
                                 <ul>
-                                    <li ng-class="{disabled:pagination.page <= 1}">
-                                        <a href="#" ng-click="prev()" prevent-default="">
+                                    <li ng-class="{disabled: vm.pagination.page <= 1}">
+                                        <a href="#" ng-click="vm.prev()" prevent-default="">
                                             <localize key="general_previous">Previous</localize>
                                         </a>
                                     </li>
-                                    <li ng-repeat="pgn in pagination.pagination" ng-class="{active: pgn.active}">
-                                        <a href="#" ng-click="updateList(pgn.page)" prevent-default="">{{pgn.page}}</a>
+                                    <li ng-repeat="pgn in vm.pagination.pagination" ng-class="{active: pgn.active}">
+                                        <a href="#" ng-click="vm.updateList(pgn.page)" prevent-default="">{{pgn.page}}</a>
                                     </li>
-                                    <li ng-class="{disabled:pagination.page >= pagination.pages}" class="">
-                                        <a href="#" ng-click="next()" prevent-default="">
+                                    <li ng-class="{disabled: vm.pagination.page >= vm.pagination.pages}" class="">
+                                        <a href="#" ng-click="vm.next()" prevent-default="">
                                             <localize key="general_next">Next</localize>
                                         </a>
                                     </li>

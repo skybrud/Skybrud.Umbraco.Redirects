@@ -3,67 +3,69 @@
     // Get the base URL for the API controller
     const baseUrl = Umbraco.Sys.ServerVariables.skybrud.redirects.baseUrl;
 
-    $scope.redirects = [];
-    $scope.mode = "list";
+    const vm = this;
 
-    $scope.rootNodes = [
+    vm.redirects = [];
+    vm.mode = "list";
+
+    vm.rootNodes = [
         { name: "All sites", key: "" },
         { name: "Global redirects", key: "00000000-0000-0000-0000-000000000000" }
     ];
 
     localizationService.localize("redirects_allSites").then(function (value) {
-        $scope.rootNodes[0].name = value;
+        vm.rootNodes[0].name = value;
     });
 
     localizationService.localize("redirects_globalRedirects").then(function (value) {
-        $scope.rootNodes[1].name = value;
+        vm.rootNodes[1].name = value;
     });
 
-    $scope.types = [
+    vm.types = [
         { name: "All types", value: "all" },
         { name: "Content", value: "content" },
         { name: "Media", value: "media" },
         { name: "URL", value: "url" }
     ];
 
-    $scope.types.forEach(function (type) {
+    vm.types.forEach(function (type) {
         localizationService.localize(`redirects_media_${type.value}`).then(function (value) {
             type.name = value;
         });
     });
 
-    $scope.filters = {
-        rootNode: $scope.rootNodes[0],
-        type: $scope.types[0],
+    vm.filters = {
+        rootNode: vm.rootNodes[0],
+        type: vm.types[0],
         text: ""
     };
 
-    $scope.activeFilters = 0;
+    vm.activeFilters = 0;
 
-    $scope.loading = false;
+    vm.loading = false;
 
     // Opens a dialog for adding a new redirect. When a callback received, the list is updated.
     // Since we don't have any sorting, we can assume the added redirect will be shown last
-    $scope.addRedirect = function () {
+    vm.addRedirect = function () {
         skybrudRedirectsService.addRedirect({
-            rootNodes: $scope.rootNodes,
+            rootNodes: vm.rootNodes,
             callback: function () {
-                $scope.updateList(1);
+                vm.updateList(1);
             }
         });
     };
 
     // Opens a dialog for adding a new redirect. When a callback received, the list is updated.
-    $scope.editRedirect = function (redirect) {
+    vm.editRedirect = function (redirect) {
         skybrudRedirectsService.editRedirect(redirect, {
-            rootNodes: $scope.rootNodes,
+            rootNodes: vm.rootNodes,
             callback: function () {
-                $scope.updateList();
+                vm.updateList();
             }
         });
     };
 
-    $scope.deleteRedirect = function (redirect) {
+    vm.deleteRedirect = function (redirect) {
 
         const url = redirect.url + (redirect.queryString ? `?${redirect.queryString}` : "");
 
@@ -80,7 +82,7 @@
                 // Delete the redirect
                 skybrudRedirectsService.deleteRedirect(redirect, function () {
                     overlayService.close();
-                    $scope.updateList();
+                    vm.updateList();
                 }, function () {
                     overlay.submitButtonState = "error";
                 });
@@ -97,7 +99,7 @@
     };
 
     // Initial pagination options
-    $scope.pagination = {
+    vm.pagination = {
         text: "",
         page: 1,
         pages: 0,
@@ -107,46 +109,46 @@
     };
 
     // Loads the previous page
-    $scope.prev = function () {
-        if ($scope.pagination.page > 1) $scope.updateList($scope.pagination.page - 1);
+    vm.prev = function () {
+        if (vm.pagination.page > 1) vm.updateList(vm.pagination.page - 1);
     };
 
     // Loads the next pages
-    $scope.next = function () {
-        if ($scope.pagination.page < $scope.pagination.pages) $scope.updateList($scope.pagination.page + 1);
+    vm.next = function () {
+        if (vm.pagination.page < vm.pagination.pages) vm.updateList(vm.pagination.page + 1);
     };
 
     // Updates the list based on current arguments
-    $scope.updateList = function (page) {
+    vm.updateList = function (page) {
 
-        $scope.loading = true;
+        vm.loading = true;
 
         // If a page is specified, we load that page
-        page = (page ? page : $scope.pagination.page);
+        page = (page ? page : vm.pagination.page);
 
         // Declare the arguments (making up the query string) for the call to the API
         const args = {
-            limit: $scope.pagination.limit,
+            limit: vm.pagination.limit,
             page: page
         };
 
-        $scope.activeFilters = 0;
+        vm.activeFilters = 0;
 
         // Any filters?
-        if ($scope.filters.rootNode && $scope.filters.rootNode.key) {
-            args.rootNodeKey = $scope.filters.rootNode.key;
-            $scope.activeFilters++;
+        if (vm.filters.rootNode && vm.filters.rootNode.key) {
+            args.rootNodeKey = vm.filters.rootNode.key;
+            vm.activeFilters++;
         }
 
         // Any filters?
-        if ($scope.filters.type.value !== "all") {
-            args.type = $scope.filters.type.value;
-            $scope.activeFilters++;
+        if (vm.filters.type.value !== "all") {
+            args.type = vm.filters.type.value;
+            vm.activeFilters++;
         }
 
-        if ($scope.filters.text) {
-            args.text = $scope.filters.text;
-            $scope.activeFilters++;
+        if (vm.filters.text) {
+            args.text = vm.filters.text;
+            vm.activeFilters++;
         }
 
         // Declare the HTTP options
@@ -162,61 +164,62 @@
         // Wait for both the AJAX call and the timeout
         $q.all([http, timer]).then(function (array) {
 
-            $scope.loading = false;
-            $scope.redirects = array[0].data.items;
+            vm.loading = false;
+            vm.redirects = array[0].data.items;
 
             // Update our pagination model
-            $scope.pagination = array[0].data.pagination;
-            $scope.pagination.pagination = [];
+            vm.pagination = array[0].data.pagination;
+            vm.pagination.pagination = [];
 
-            const from = Math.max(1, $scope.pagination.page - 7);
-            const to = Math.min($scope.pagination.pages, $scope.pagination.page + 7);
+            const from = Math.max(1, vm.pagination.page - 7);
+            const to = Math.min(vm.pagination.pages, vm.pagination.page + 7);
 
             for (let i = from; i <= to; i++) {
-                $scope.pagination.pagination.push({
+                vm.pagination.pagination.push({
                     page: i,
-                    active: $scope.pagination.page === i
+                    active: vm.pagination.page === i
                 });
             }
 
             const tokens = [
-                $scope.pagination.from,
-                $scope.pagination.to,
-                $scope.pagination.total,
-                $scope.pagination.page,
-                $scope.pagination.pages
+                vm.pagination.from,
+                vm.pagination.to,
+                vm.pagination.total,
+                vm.pagination.page,
+                vm.pagination.pages
             ];
 
             localizationService.localize("redirects_pagination", tokens).then(function (value) {
-                $scope.pagination.text = value;
+                vm.pagination.text = value;
             });
 
         }, function () {
             notificationsService.error("Unable to load redirects", "The list of redirects could not be loaded.");
-            $scope.loading.list = false;
+            vm.loading.list = false;
         });
 
     };
 
     skybrudRedirectsService.getRootNodes().then(function (r) {
         r.data.items.forEach(function (rootNode) {
-            $scope.rootNodes.push(rootNode);
+            vm.rootNodes.push(rootNode);
         });
     });
 
-    $scope.updateList();
+    vm.updateList();
 
-    $scope.$watch("filters", function () {
-        $scope.updateList();
-    }, true);
+    vm.filterUpdated = function () {
+        console.log("filter updated");
+        vm.updateList();
+    };
 
-    $scope.buttonGroups = [
+    vm.buttonGroups = [
         {
             alias: "add",
             buttonStyle: "success",
             defaultButton: {
                 labelKey: "redirects_addNewRedirect",
-                handler: $scope.addRedirect
+                handler: vm.addRedirect
             },
             subButtons: []
         },
@@ -224,14 +227,14 @@
             alias: "refresh",
             defaultButton: {
                 labelKey: "redirects_reload",
-                handler: $scope.updateList
+                handler: vm.updateList
             },
             subButtons: []
         }
     ];
 
     eventsService.emit("skybrud.umbraco.redirects.dashboard.init", {
-        buttonGroups: $scope.buttonGroups
+        buttonGroups: vm.buttonGroups
     });
 
 });
