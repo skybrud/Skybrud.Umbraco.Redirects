@@ -1,5 +1,7 @@
 ﻿angular.module("umbraco").controller("SkybrudUmbracoRedirects.Editors.Destination.Controller", function ($scope, editorService, skybrudRedirectsService) {
 
+    const vm = this;
+
     function editLink(link) {
         skybrudRedirectsService.editLink(link, function(model) {
             $scope.model.value = model;
@@ -7,15 +9,15 @@
         });
     }
 
-    $scope.addLink = function () {
+    vm.addLink = function () {
         editLink();
     };
 
-    $scope.editLink = function () {
+    vm.editLink = function () {
         editLink($scope.model.value);
     };
 
-    $scope.removeLink = function () {
+    vm.removeLink = function () {
         $scope.model.value = null;
     };
 

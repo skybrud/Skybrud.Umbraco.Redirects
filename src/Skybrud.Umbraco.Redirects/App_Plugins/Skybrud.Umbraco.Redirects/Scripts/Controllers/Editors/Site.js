@@ -1,25 +1,27 @@
 ﻿angular.module("umbraco").controller("SkybrudUmbracoRedirects.Editors.Site.Controller", function ($scope, localizationService, skybrudRedirectsService, editorState) {
 
-    $scope.current = editorState.getCurrent();
+    const vm = this;
 
-    $scope.rootNodes = [
-        { id: 0, name: "All sites" }
+    vm.current = editorState.getCurrent();
+
+    vm.rootNodes = [
+        { id: 0, key: "", name: "All sites" }
     ];
 
-    $scope.loading = true;
+    vm.loading = true;
 
     localizationService.localize("redirects_allSites").then(function (value) {
-        $scope.rootNodes[0].name = value;
+        vm.rootNodes[0].name = value;
     });
 
     skybrudRedirectsService.getRootNodes().then(function (r) {
         r.data.items.forEach(function (rootNode) {
-            $scope.rootNodes.push(rootNode);
-            if ($scope.current && (`,${$scope.current.path},`).indexOf(`,${rootNode.id},`) > 0) {
+            vm.rootNodes.push(rootNode);
+            if (vm.current && (`,${vm.current.path},`).indexOf(`,${rootNode.id},`) > 0) {
                 $scope.model.value = rootNode.id;
             }
         });
-        $scope.loading = false;
+        vm.loading = false;
     });
 
 });

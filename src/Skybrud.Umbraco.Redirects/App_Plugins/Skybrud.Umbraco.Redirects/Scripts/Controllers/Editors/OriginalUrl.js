@@ -1,6 +1,8 @@
-﻿angular.module("umbraco").controller("SkybrudUmbracoRedirects.Editors.OriginalUrl.Controller", function ($scope) {
+﻿angular.module("umbraco").controller("SkybrudUmbracoRedirects.Editors.OriginalUrl.Controller", function () {
 
-    $scope.isValidUrl = function (url) {
+	const vm = this;
+
+    vm.isValidUrl = function (url) {
 
 		// Make sure we have a string and trim all leading and trailing whitespace
 		url = $.trim(url + "");
