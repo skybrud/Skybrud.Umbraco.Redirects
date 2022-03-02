@@ -6,7 +6,9 @@
     // Get the base URL for the API controller
     const baseUrl = Umbraco.Sys.ServerVariables.skybrud.redirects.baseUrl;
 
-    $scope.options = $scope.model.options || {};
+    const vm = this;
+
+    vm.options = $scope.model.options || {};
 
     $scope.model.submitButtonLabelKey = "redirects_add";
 
@@ -53,7 +55,7 @@
         view: `/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/Site.html?v=${cacheBuster}`,
         value: $scope.model.redirect && $scope.model.redirect.rootId ? $scope.model.redirect.rootId : 0,
         config: {
-            rootNodes: $scope.options.rootNodes
+            rootNodes: vm.options.rootNodes
         },
         validation: {
             mandatory: false
@@ -210,7 +212,7 @@
 
     });
 
-    $scope.settingsApp = {
+    vm.settingsApp = {
         alias: "settings",
         name: "Settings",
         icon: "icon-equalizer",
@@ -218,18 +220,18 @@
         active: true
     };
 
-    $scope.infoApp = {
+    vm.infoApp = {
         alias: "info",
         name: "Info",
         view: "nope",
         icon: "icon-info"
     };
 
-    $scope.model.navigation = $scope.model.redirect && $scope.model.redirect.id ? [$scope.settingsApp, $scope.infoApp] : [];
+    $scope.model.navigation = $scope.model.redirect && $scope.model.redirect.id ? [vm.settingsApp, vm.infoApp] : [];
 
     function initLabels() {
 
-        $scope.labels = {
+        vm.labels = {
             addSuccessfulTitle: "Redirect added",
             addSuccessfulMessage: "Your redirect has successfully been added.",
             addFailedTitle: "Saving failed",
@@ -240,29 +242,28 @@
             saveFailedMessage: "The redirect could not be saved due to an error on the server."
         };
 
-        angular.forEach($scope.labels, function (_, key) {
+        angular.forEach(vm.labels, function (_, key) {
             localizationService.localize(`redirects_${key}`).then(function (value) {
                 if (!value.length || value[0] === "[") return;
-                $scope.labels[key] = value;
-                console.log(`redirects_${key} => ${value}`);
+                vm.labels[key] = value;
             });
         });
 
         localizationService.localize("redirects_settingsApp").then(function (value) {
             if (!value.length || value[0] === "[") return;
-            $scope.settingsApp.name = value;
+            vm.settingsApp.name = value;
         });
         
         localizationService.localize("redirects_infoApp").then(function (value) {
             if (!value.length || value[0] === "[") return;
-            $scope.infoApp.name = value;
+            vm.infoApp.name = value;
         });
 
     }
 
     initLabels();
 
-    $scope.save = function () {
+    vm.save = function () {
 
         // Map the properties back to an object we can send to the API
         const redirect = skybrudRedirectsService.propertiesToObject(allProperties);
@@ -274,11 +275,11 @@
         formHelper.resetForm({ scope: $scope });
 
         // Make sure we set a loading state
-        $scope.loading = true;
+        vm.loading = true;
 
         // Make sure we set the "rootNodeKey" property as well
         if (redirect.rootNodeId > 0) {
-            const rootNode = $scope.options.rootNodes.find(x => x.id === redirect.rootNodeId);
+            const rootNode = vm.options.rootNodes.find(x => x.id === redirect.rootNodeId);
             redirect.rootNodeKey = rootNode ? rootNode.key : "00000000-0000-0000-0000-000000000000";
         } else {
             redirect.rootNodeKey = "00000000-0000-0000-0000-000000000000";
@@ -293,12 +294,12 @@
                 },
                 data: redirect
             }).then(function (r) {
-                $scope.loading = false;
-                notificationsService.success($scope.labels.saveSuccessfulTitle, $scope.labels.addSuccessfulMessage);
+                vm.loading = false;
+                notificationsService.success(vm.labels.saveSuccessfulTitle, vm.labels.saveSuccessfulMessage);
                 $scope.model.submit(r);
             }, function (res) {
-                $scope.loading = false;
-                notificationsService.error($scope.labels.saveFailedTitle, res && res.data && res.data.meta ? res.data.meta.error : $scope.labels.saveFailedMessage);
+                vm.loading = false;
+                notificationsService.error(vm.labels.saveFailedTitle, res && res.data && res.data.meta ? res.data.meta.error : vm.labels.saveFailedMessage);
             });
         } else {
             $http({
@@ -306,18 +307,18 @@
                 url: `${baseUrl}AddRedirect`,
                 data: redirect
             }).then(function (r) {
-                $scope.loading = false;
-                notificationsService.success($scope.labels.addSuccessfulTitle, $scope.labels.saveSuccessfulMessage);
+                vm.loading = false;
+                notificationsService.success(vm.labels.addSuccessfulTitle, vm.labels.addSuccessfulMessage);
                 $scope.model.submit(r);
             }, function (res) {
-                $scope.loading = false;
-                notificationsService.error($scope.labels.addFailedTitle, res && res.data && res.data.meta ? res.data.meta.error : $scope.labels.addFailedMessage);
+                vm.loading = false;
+                notificationsService.error(vm.labels.addFailedTitle, res && res.data && res.data.meta ? res.data.meta.error : vm.labels.addFailedMessage);
             });
         }
 
     };
 
-    $scope.close = function () {
+    vm.close = function () {
         if ($scope.model.close) {
             $scope.model.close();
         } else {
