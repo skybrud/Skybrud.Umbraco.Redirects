@@ -97,5 +97,8 @@
     <key alias="propertyRedirectTypeDescription">Select the type of the redirect. Notice that browsers will remember permanent redirects.</key>
     <key alias="propertyCreateDate">Created</key>
     <key alias="propertyUpdateDate">Last updated</key>
+    <!-- Overlays -->
+    <key alias="overlayDeleteTitle">Confirm delete</key>
+    <key alias="overlayDeleteMessage"><![CDATA[Are you sure you want to delete the redirect at <strong>%0%</strong> ?]]></key>
   </area>
 </language>

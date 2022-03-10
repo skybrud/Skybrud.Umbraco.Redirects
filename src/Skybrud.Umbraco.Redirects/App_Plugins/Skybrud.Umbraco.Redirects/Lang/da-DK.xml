@@ -97,5 +97,8 @@
     <key alias="propertyRedirectTypeDescription">Vælg typen for dit redirect. Bemærk at browsere vil huske et permanent redirect.</key>
     <key alias="propertyCreateDate">Oprettelsesdato</key>
     <key alias="propertyUpdateDate">Sidst opdateret</key>
+    <!-- Overlays -->
+    <key alias="overlayDeleteTitle">Bekræft sletning</key>
+    <key alias="overlayDeleteMessage"><![CDATA[Er du sikker på at du vil slette redirectet for <strong>%0%</strong> ?]]></key>
   </area>
 </language>

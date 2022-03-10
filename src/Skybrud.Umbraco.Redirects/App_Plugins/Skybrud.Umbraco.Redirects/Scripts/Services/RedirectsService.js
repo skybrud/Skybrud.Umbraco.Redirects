@@ -1,4 +1,4 @@
-﻿angular.module("umbraco.services").factory("skybrudRedirectsService", function ($http, editorService, notificationsService) {
+﻿angular.module("umbraco.services").factory("skybrudRedirectsService", function ($http, editorService, localizationService, notificationsService, overlayService) {
 
     // Get the cache buster value
     const cacheBuster = Umbraco.Sys.ServerVariables.skybrud.redirects.cacheBuster;
@@ -6,7 +6,7 @@
     // Get the base URL for the API controller
     const baseUrl = Umbraco.Sys.ServerVariables.skybrud.redirects.baseUrl;
 
-    var service = {
+    const service = {
 
         toUmbracoLink: function(e) {
 
@@ -219,6 +219,61 @@
                 notificationsService.error("Deleting redirect failed", res && res.data && res.data.meta ? res.data.meta.error : "The server was unable to delete your redirect.");
                 if (failed) failed(redirect);
             });
+        },
+
+        requestDeleteRedirect: function(options) {
+
+            if (!options) options = {};
+            if (!options.redirect) return;
+
+            if (typeof options.submit !== "function") {
+                options.submit = function() {
+                    overlayService.close();
+                };
+            }
+
+            if (typeof options.close !== "function") {
+                options.close = function() {
+                    overlayService.close();
+                };
+            }
+
+            const overlay = {
+                title: "Confirm delete",
+                content: `Are you sure you want to delete the redirect at <strong>${options.redirect.destination.displayUrl}</strong> ?`,
+                submit: function() {
+    
+                    // Update the button state in the UI
+                    overlay.submitButtonState = "busy";
+    
+                    // Delete the redirect
+                    service.deleteRedirect(options.redirect, function () {
+                        if (typeof options.submit === "function") {
+                            options.submit(overlay);
+                        } else {
+                            overlayService.close();
+                        }
+                    }, function () {
+                        overlay.submitButtonState = "error";
+                    });
+    
+                },
+                close: function() {
+                    options.close(overlay);
+                }
+            };
+
+            localizationService.localize("redirects_overlayDeleteTitle", null, overlay.title).then(function (value) {
+                overlay.title = value;
+            });
+
+            localizationService.localize("redirects_overlayDeleteMessage", [options.redirect.destination.displayUrl], overlay.content).then(function (value) {
+                overlay.content = value;
+            });
+    
+            // Open the overlay
+            overlayService.confirmDelete(overlay);
+
         },
 
         isValidUrl: function (url) {

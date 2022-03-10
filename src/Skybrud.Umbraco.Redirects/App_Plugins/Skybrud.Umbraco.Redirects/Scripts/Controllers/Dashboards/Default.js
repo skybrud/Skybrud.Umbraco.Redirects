@@ -66,36 +66,13 @@
     };
 
     vm.deleteRedirect = function (redirect) {
-
-        const url = redirect.url + (redirect.queryString ? `?${redirect.queryString}` : "");
-
-        // TODO: Localize overlay labels
-
-        const overlay = {
-            title: "Confirm delete",
-            content: `Are you sure you want to delete the redirect at "${url}" ?`,
+        skybrudRedirectsService.requestDeleteRedirect({
+            redirect: redirect,
             submit: function() {
-
-                // Update the button state in the UI
-                overlay.submitButtonState = "busy";
-
-                // Delete the redirect
-                skybrudRedirectsService.deleteRedirect(redirect, function () {
-                    overlayService.close();
-                    vm.updateList();
-                }, function () {
-                    overlay.submitButtonState = "error";
-                });
-
-            },
-            close: function() {
+                vm.updateList();
                 overlayService.close();
             }
-        };
-
-        // Open the overlay
-        overlayService.confirmDelete(overlay);
-
+        });
     };
 
     // Initial pagination options
@@ -209,7 +186,6 @@
     vm.updateList();
 
     vm.filterUpdated = function () {
-        console.log("filter updated");
         vm.updateList();
     };
 
