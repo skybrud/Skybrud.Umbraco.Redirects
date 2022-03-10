@@ -31,13 +31,13 @@
             <table class="table list">
                 <thead>
                     <tr>
-                        <th class="col-id"><localize key="redirects_id">ID</localize></th>
+                        <!--<th class="col-id"><localize key="redirects_id">ID</localize></th>-->
                         <th class="col-original"><localize key="redirects_originalUrl">Original URL</localize></th>
                         <th class="col-arrow"></th>
                         <th>Type</th>
                         <th class="col-destination"><localize key="redirectUrls_redirectedTo">Redirected to</localize></th>
-                        <th class="col-date"><localize key="redirects_created">Created</localize></th>
-                        <th class="col-date"><localize key="redirects_updated">Updated</localize></th>
+                        <!--<th class="col-date"><localize key="redirects_created">Created</localize></th>
+                        <th class="col-date"><localize key="redirects_updated">Updated</localize></th>-->
                         <th class="col-actions"></th>
                     </tr>
                 </thead>
@@ -55,7 +55,7 @@
                 </tbody>
                 <tbody>
                     <tr ng-repeat="redirect in redirects">
-                        <td class="col-id">{{redirect.id}}</td>
+                        <!--<td class="col-id">{{redirect.id}}</td>-->
                         <td class="col-original">
                             <a href="{{redirect.url}}" rel="noopener noreferrer" target="_blank" title="{{redirect.path}}{{redirect.queryString ? '?' + redirect.queryString : ''}}">{{redirect.url}}{{redirect.queryString ? '?' + redirect.queryString : ''}}</a>
                         </td>
@@ -67,22 +67,26 @@
                             <span ng-show="!redirect.permanent">Temporary</span>
                         </td>
                         <td class="col-destination">
-                            <span ng-if="redirect.destination.type == 'content'">
-                                <localize key="redirects_content">Content</localize>:
-                                <a href="{{redirect.destination.url}}" rel="noopener noreferrer" target="_blank" title="{{redirect.destination.name ? redirect.destination.name : redirect.destination.url}}">{{redirect.destination.name ? redirect.destination.name : redirect.destination.url}}</a>
-                            </span>
-                            <span ng-if="redirect.destination.type == 'media'">
-                                <localize key="redirects_media">Media</localize>:
-                                <a href="{{redirect.destination.url}}" rel="noopener noreferrer" target="_blank" title="{{redirect.destination.name ? redirect.destination.name : redirect.destination.url}}">{{redirect.destination.name ? redirect.destination.name : redirect.destination.url}}</a>
-                            </span>
-                            <span ng-if="redirect.destination.type == 'url'">
-                                <localize key="redirects_url">URL</localize>:
-                                <a href="{{redirect.destination.url}}" rel="noopener noreferrer" target="_blank" title="{{redirect.destination.url}}">{{redirect.destination.url}}</a>
-                            </span>
-                            <small ng-if="redirect.forward">&nbsp;?&amp;</small>
+                            <div>
+                                <span ng-if="redirect.destination.type == 'content'">
+                                    <localize key="redirects_content">Content</localize>:
+                                    <a href="{{redirect.destination.backOfficeUrl}}" rel="noopener noreferrer" target="_blank" title="{{redirect.destination.name}}">{{redirect.destination.name}}</a>
+                                </span>
+                                <span ng-if="redirect.destination.type == 'media'">
+                                    <localize key="redirects_media">Media</localize>:
+                                    <a href="{{redirect.destination.backOfficeUrl}}" rel="noopener noreferrer" target="_blank" title="{{redirect.destination.name}}">{{redirect.destination.name}}</a>
+                                </span>
+                                <span ng-if="redirect.destination.type == 'url'">
+                                    <localize key="redirects_url">URL</localize>
+                                </span>
+                                <small ng-if="redirect.forward">&nbsp;?&amp;</small>
+                            </div>
+                            <div class="display-url">
+                                <a href="{{redirect.destination.displayUrl}}" rel="noopener noreferrer" target="_blank">{{redirect.destination.displayUrl}}</a>
+                            </div>
                         </td>
-                        <td class="col-date">{{redirect.createDate | date: 'yyyy-MM-dd HH:mm'}}</td>
-                        <td class="col-date">{{redirect.updateDate | date: 'yyyy-MM-dd HH:mm'}}</td>
+                        <!--<td class="col-date">{{redirect.createDate | date: 'yyyy-MM-dd HH:mm'}}</td>
+                        <td class="col-date">{{redirect.updateDate | date: 'yyyy-MM-dd HH:mm'}}</td>-->
                         <td class="col-actions">
                             <button type="button" ng-click="editRedirect(redirect)" class="btn btn-link"><localize key="redirects_edit">Edit</localize></button>
                             <button type="button" ng-click="deleteRedirect(redirect)" class="btn btn-link red"><localize key="redirects_delete">Delete</localize></button>

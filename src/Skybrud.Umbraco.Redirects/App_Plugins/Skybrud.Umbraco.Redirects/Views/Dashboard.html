@@ -61,11 +61,11 @@
                             <div>
                                 <span ng-if="redirect.destination.type == 'content'">
                                     <localize key="redirects_content">Content</localize>:
-                                    <a href="{{redirect.destination.displayUrl}}" rel="noopener noreferrer" target="_blank" title="{{redirect.destination.name ? redirect.link.name : redirect.link.displayUrl}}">{{redirect.destination.name ? redirect.destination.name : redirect.destination.displayUrl}}</a>
+                                    <a href="{{redirect.destination.backOfficeUrl}}" rel="noopener noreferrer" target="_blank" title="{{redirect.destination.name}}">{{redirect.destination.name}}</a>
                                 </span>
                                 <span ng-if="redirect.destination.type == 'media'">
                                     <localize key="redirects_media">Media</localize>:
-                                    <a href="{{redirect.destination.displayUrl}}" rel="noopener noreferrer" target="_blank" title="{{redirect.destination.name ? redirect.destination.name : redirect.destination.displayUrl}}">{{redirect.destination.name ? redirect.destination.name : redirect.destination.displayUrl}}</a>
+                                    <a href="{{redirect.destination.backOfficeUrl}}" rel="noopener noreferrer" target="_blank" title="{{redirect.destination.name}}">{{redirect.destination.name}}</a>
                                 </span>
                                 <span ng-if="redirect.destination.type == 'url'">
                                     <localize key="redirects_url">URL</localize>
