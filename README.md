@@ -1,24 +1,4 @@
-<table>
-  <thead>
-    <tr>
-      <td align="left">
-        :warning:
-      </td>
-      <td align="left" width="100%">
-          <strong>NOTICE</strong>
-      </td>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td colspan="2">
-          This branch is for the <strong>Umbraco 9</strong> version of this package. For the Umbraco 8 package, see <a href="https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v2/main"><strong>v2/main</strong></a> branch.
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-# Skybrud.Umbraco.Redirects [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md) [![NuGet](https://img.shields.io/nuget/vpre/Skybrud.Umbraco.Redirects.svg)](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects/3.0.0-beta001) [![NuGet](https://img.shields.io/nuget/dt/Skybrud.Umbraco.Redirects.svg)](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects)
+# Skybrud.Umbraco.Redirects [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md) [![NuGet](https://img.shields.io/nuget/vpre/Skybrud.Umbraco.Redirects.svg)](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects/3.0.0-beta001) [![NuGet](https://img.shields.io/nuget/dt/Skybrud.Umbraco.Redirects.svg)](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects) [![Our Umbraco](https://img.shields.io/badge/our-umbraco-%233544B1)](https://our.umbraco.com/packages/website-utilities/skybrud-redirects/)
 
 **Skybrud.Umbraco.Redirects** is a redirects manager for Umbraco 9. The package features a dashboard and property editor that let's users manage inbound redirects from within the Umbraco backoffice.
 
@@ -26,16 +6,16 @@ URLs can be added to redirect to either a content item, media item or a custom U
 
 ## Installation
 
-The Umbraco 9 version of this package is only available via [NuGet](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects/3.0.0-beta001). To install the package, you can use either .NET CLI:
+The Umbraco 9 version of this package is only available via [NuGet](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects). To install the package, you can use either .NET CLI:
 
 ```
-dotnet add package Skybrud.Umbraco.Redirects --version 3.0.0-beta001
+dotnet add package Skybrud.Umbraco.Redirects
 ```
 
 or the older NuGet Package Manager:
 
 ```
-Install-Package Skybrud.Umbraco.Redirects -Version 3.0.0-beta001
+Install-Package Skybrud.Umbraco.Redirects
 ```
 
 **Umbraco 8**  
