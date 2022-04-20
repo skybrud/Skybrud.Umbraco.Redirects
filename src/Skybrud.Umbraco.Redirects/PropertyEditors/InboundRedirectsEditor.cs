@@ -7,7 +7,7 @@ using Umbraco.Cms.Core.PropertyEditors;
 
 namespace Skybrud.Umbraco.Redirects.PropertyEditors {
 
-    [DataEditor(EditorAlias, EditorType.PropertyValue, EditorName, EditorView, ValueType = ValueTypes.Json, Group = "Skybrud.dk", Icon = "icon-arrow-right")]
+    [DataEditor(EditorAlias, EditorType.PropertyValue, EditorName, EditorView, ValueType = ValueTypes.Json, Group = "Skybrud.dk", Icon = "icon-arrow-right color-skybrud")]
     public class InboundRedirectsEditor : DataEditor {
 
         internal const string EditorAlias = "Skybrud.Umbraco.Redirects";
