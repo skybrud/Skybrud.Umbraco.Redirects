@@ -265,8 +265,9 @@ namespace Skybrud.Umbraco.Redirects.Services {
 
             if (options == null) throw new ArgumentNullException(nameof(options));
 
-            string url = options.OriginalUrl;
-            string query = string.Empty;
+            string[] urlParts = options.OriginalUrl.Split('?');
+            string url = urlParts[0].TrimEnd('/');
+            string query = urlParts.Length == 2 ? urlParts[1] : string.Empty;
 
             if (GetRedirectByPathAndQuery(options.RootNodeKey, url, query) != null) {
                 throw new RedirectsException("A redirect with the specified URL already exists.");
