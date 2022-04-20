@@ -91,7 +91,7 @@
     <key alias="propertySiteDescription">Select the site (or root node) the redirect should apply to. If a site is not selected, the redirect will apply to all domains/sites in the Umbraco solution.</key>
     <key alias="propertyOriginalUrl">Original URL</key>
     <key alias="propertyOriginalUrlDescription">Specify the original URL to match from which the user should be redirected to the destination.</key>
-    <key alias="propertyDestination">Original URL</key>
+    <key alias="propertyDestination">Destination</key>
     <key alias="propertyDestinationDescription">Select the page or URL the user should be redirected to.</key>
     <key alias="propertyRedirectTypeName">Redirect type</key>
     <key alias="propertyRedirectTypeDescription">Select the type of the redirect. Notice that browsers will remember permanent redirects.</key>
