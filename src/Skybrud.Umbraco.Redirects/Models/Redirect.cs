@@ -81,7 +81,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
                 value.Split('?', out string path, out string query);
 
                 // Update the DTO properties
-                Dto.Path = path;
+                Dto.Path = path.TrimEnd('/');
                 Dto.QueryString = query;
 
             }
