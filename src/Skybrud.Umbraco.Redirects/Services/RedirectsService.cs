@@ -265,14 +265,6 @@ namespace Skybrud.Umbraco.Redirects.Services {
 
             if (options == null) throw new ArgumentNullException(nameof(options));
 
-            string[] urlParts = options.OriginalUrl.Split('?');
-            string url = urlParts[0].TrimEnd('/');
-            string query = urlParts.Length == 2 ? urlParts[1] : string.Empty;
-
-            if (GetRedirectByPathAndQuery(options.RootNodeKey, url, query) != null) {
-                throw new RedirectsException("A redirect with the specified URL already exists.");
-            }
-
             // Initialize the destination
             RedirectDestination destination = new RedirectDestination {
                 Id = options.Destination.Id,
@@ -287,13 +279,17 @@ namespace Skybrud.Umbraco.Redirects.Services {
             // Initialize the new redirect and populate the properties
             Redirect item = new Redirect {
                 RootKey = options.RootNodeKey,
-                Url = url,
-                QueryString = query,
+                Url = options.OriginalUrl,
                 CreateDate = EssentialsTime.UtcNow,
                 UpdateDate = EssentialsTime.UtcNow,
                 IsPermanent = options.IsPermanent,
                 ForwardQueryString = options.ForwardQueryString
             }.SetDestination(destination);
+
+            // Does a matching redirect already exist?
+            if (GetRedirectByPathAndQuery(options.RootNodeKey, item.Path, item.QueryString) != null) {
+                throw new RedirectsException("A redirect with the specified URL already exists.");
+            }
 
             // Attempt to add the redirect to the database
             using (IScope scope = _scopeProvider.CreateScope()) {
