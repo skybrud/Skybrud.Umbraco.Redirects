@@ -50,7 +50,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         [JsonProperty("path")]
         public string Path {
             get => Dto.Path;
-            set => Dto.Path = value;
+            set => Dto.Path = value?.TrimEnd('/');
         }
 
         /// <summary>
@@ -80,9 +80,9 @@ namespace Skybrud.Umbraco.Redirects.Models {
                 // Split the path and query
                 value.Split('?', out string path, out string query);
 
-                // Update the DTO properties
-                Dto.Path = path;
-                Dto.QueryString = query;
+                // Update the path and query
+                Path = path;
+                QueryString = query ?? string.Empty;
 
             }
 
