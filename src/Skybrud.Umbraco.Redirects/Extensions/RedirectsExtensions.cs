@@ -37,30 +37,6 @@ namespace Skybrud.Umbraco.Redirects.Extensions {
         public static string GetDestinationUrl(this OutboundRedirect redirect, Uri uri, IRedirectsService redirectsService) {
             return redirectsService.GetDestinationUrl(redirect, uri);
         }
-
-        /// <summary>
-        /// Splits the specified <paramref name="value"/> into multiple pieces using <paramref name="separator"/>.
-        /// </summary>
-        /// <param name="value">The value to be split.</param>
-        /// <param name="separator">The separator to be used for splitting the string.</param>
-        /// <param name="first">The first item resulting from the split.</param>
-        public static void Split(this string value, char separator, out string first) {
-            string[] array = value?.Split(separator);
-            first = array?[0];
-        }
-        
-        /// <summary>
-        /// Splits the specified <paramref name="value"/> into multiple pieces using <paramref name="separator"/>.
-        /// </summary>
-        /// <param name="value">The value to be split.</param>
-        /// <param name="separator">The separator to be used for splitting the string.</param>
-        /// <param name="first">The first item resulting from the split.</param>
-        /// <param name="second">The second item resulting from the split.</param>
-        public static void Split(this string value, char separator, out string first, out string second) {
-            string[] array = value?.Split(separator);
-            first = array?[0];
-            second = array is { Length: > 1 } ? array[1] : null;
-        }
         
         /// <summary>
         /// Returns the <see cref="Uri"/> of the specified <paramref name="request"/>.

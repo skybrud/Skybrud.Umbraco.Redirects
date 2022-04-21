@@ -2,9 +2,9 @@
 using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 using Skybrud.Essentials.Enums;
+using Skybrud.Essentials.Strings.Extensions;
 using Skybrud.Essentials.Time;
 using Skybrud.Umbraco.Redirects.Exceptions;
-using Skybrud.Umbraco.Redirects.Extensions;
 using Skybrud.Umbraco.Redirects.Models.Dtos;
 using Skybrud.Umbraco.Redirects.Text.Json;
 
