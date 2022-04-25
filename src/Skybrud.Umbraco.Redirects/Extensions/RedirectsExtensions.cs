@@ -17,6 +17,8 @@ namespace Skybrud.Umbraco.Redirects.Extensions {
     /// </summary>
     public static class RedirectsExtensions {
         
+        private static readonly string[] OutboundPropertyAliases = { "skyRedirect", "outboundRedirect" };
+
         /// <summary>
         /// Returns the calculated destination URL for the specified <paramref name="redirect"/>.
         /// </summary>
@@ -122,6 +124,59 @@ namespace Skybrud.Umbraco.Redirects.Extensions {
         public static T SetDestination<T>(this T redirect, IRedirectDestination destination) where T : IRedirect {
             redirect.Destination = destination ?? throw new ArgumentNullException(nameof(destination));
             return redirect;
+        }
+
+        /// <summary>
+        /// Returns an instance of <see cref="IOutboundRedirect"/> representing the outbound redirect from either the
+        /// <c>skyRedirect</c> or <c>outboundRedirect</c> properties.
+        ///
+        /// This method will ensure that you'll always get an instance of <see cref="IOutboundRedirect"/> even though
+        /// the property may not hold a redirect. You can then use the <see cref="IOutboundRedirect.IsValid"/> property
+        /// to check that the redirect is in fact valid.
+        /// </summary>
+        /// <param name="content">The content item holding the outbound rediderect.</param>
+        /// <returns>An instance of <see cref="IOutboundRedirect"/>.</returns>
+        public static IOutboundRedirect GetOutboundRedirect(this IPublishedContent content) {
+            return GetOutboundRedirect(content, OutboundPropertyAliases);
+        }
+
+        /// <summary>
+        /// Returns an instance of <see cref="IOutboundRedirect"/> representing the outbound redirect from the property
+        /// with specified alias <paramref name="propertyAlias"/>.
+        ///
+        /// This method will ensure that you'll always get an instance of <see cref="IOutboundRedirect"/> even though
+        /// the property may not hold a redirect. You can then use the <see cref="IOutboundRedirect.IsValid"/> property
+        /// to check that the redirect is in fact valid.
+        /// </summary>
+        /// <param name="content">The content item holding the outbound rediderect.</param>
+        /// <param name="propertyAlias">The alias of the property.</param>
+        /// <returns>An instance of <see cref="IOutboundRedirect"/>.</returns>
+        public static IOutboundRedirect GetOutboundRedirect(this IPublishedContent content, string propertyAlias) {
+            if (string.IsNullOrWhiteSpace(propertyAlias)) throw new ArgumentNullException(nameof(propertyAlias));
+            OutboundRedirect redirect = content.Value(propertyAlias) as OutboundRedirect;
+            return redirect ?? new OutboundRedirect();
+        }
+
+        /// <summary>
+        /// Returns an instance of <see cref="IOutboundRedirect"/> representing the outbound redirect from the first property
+        /// matching the specified <paramref name="propertyAliases"/> where the value is an <see cref="IOutboundRedirect"/>.
+        ///
+        /// This method will ensure that you'll always get an instance of <see cref="IOutboundRedirect"/> even though
+        /// the property may not hold a redirect. You can then use the <see cref="IOutboundRedirect.IsValid"/> property
+        /// to check that the redirect is in fact valid.
+        /// </summary>
+        /// <param name="content">The content item holding the outbound rediderect.</param>
+        /// <param name="propertyAliases">The aliases of the properties.</param>
+        /// <returns>An instance of <see cref="IOutboundRedirect"/>.</returns>
+        public static IOutboundRedirect GetOutboundRedirect(this IPublishedContent content, params string[] propertyAliases) {
+            
+            if (propertyAliases == null) throw new ArgumentNullException(nameof(propertyAliases));
+
+            foreach (string alias in propertyAliases) {
+                if (content.Value(alias) is OutboundRedirect redirect) return redirect;
+            }
+
+            return new OutboundRedirect();
 
         }
 
