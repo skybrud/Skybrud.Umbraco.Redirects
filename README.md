@@ -1,4 +1,4 @@
-# Skybrud.Umbraco.Redirects [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md) [![NuGet](https://img.shields.io/nuget/vpre/Skybrud.Umbraco.Redirects.svg)](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects/3.0.0-beta001) [![NuGet](https://img.shields.io/nuget/dt/Skybrud.Umbraco.Redirects.svg)](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects) [![Our Umbraco](https://img.shields.io/badge/our-umbraco-%233544B1)](https://our.umbraco.com/packages/website-utilities/skybrud-redirects/)
+# Skybrud Redirects [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md) [![NuGet](https://img.shields.io/nuget/vpre/Skybrud.Umbraco.Redirects.svg)](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects/3.0.0-beta001) [![NuGet](https://img.shields.io/nuget/dt/Skybrud.Umbraco.Redirects.svg)](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects) [![Our Umbraco](https://img.shields.io/badge/our-umbraco-%233544B1)](https://our.umbraco.com/packages/website-utilities/skybrud-redirects/)
 
 **Skybrud.Umbraco.Redirects** is a redirects manager for Umbraco 9. The package features a dashboard and property editor that let's users manage inbound redirects from within the Umbraco backoffice.
 
@@ -18,7 +18,7 @@ or the older NuGet Package Manager:
 Install-Package Skybrud.Umbraco.Redirects
 ```
 
-**Umbraco 10** *(stillwork in progress)*  
+**Umbraco 10** *(still work in progress)*  
 For the Umbraco 10 version of this package, see the [**v4/main**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v4/main) branch instead.
 
 **Umbraco 8**  
