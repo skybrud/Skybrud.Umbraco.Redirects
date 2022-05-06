@@ -7,12 +7,12 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>3.0.3</VersionPrefix>
-	<VersionSuffix Condition="'$(Configuration)'=='Debug'">build$([System.DateTime]::UtcNow.ToString(`yyyyMMddHHmm`))</VersionSuffix>
+    <VersionPrefix>4.0.0-alpha001</VersionPrefix>
+    <VersionSuffix Condition="'$(Configuration)'=='Debug'">build$([System.DateTime]::UtcNow.ToString(`yyyyMMddHHmm`))</VersionSuffix>
     <Authors>Anders Bjerner</Authors>
     <Company>Limbo</Company>
     <Title>Skybrud Redirects</Title>
-    <Description>Redirects manager for Umbraco 9.</Description>
+    <Description>Redirects manager for Umbraco 10.</Description>
     <Copyright>Copyright © 2022</Copyright>
   </PropertyGroup>
 
