@@ -18,6 +18,9 @@ or the older NuGet Package Manager:
 Install-Package Skybrud.Umbraco.Redirects
 ```
 
+**Umbraco 10** *(stillwork in progress)*
+For the Umbraco 9 version of this package, see the [**v4/main**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v4/main) branch instead.
+
 **Umbraco 8**  
 For the Umbraco 8 version of this package, see the [**v2/main**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v2/main) branch instead.
 
