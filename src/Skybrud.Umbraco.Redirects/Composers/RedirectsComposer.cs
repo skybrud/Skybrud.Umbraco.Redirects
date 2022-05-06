@@ -26,7 +26,7 @@ namespace Skybrud.Umbraco.Redirects.Composers {
             builder.Services.AddUnique<IRedirectsService, RedirectsService>();
             builder.Services.AddUnique<RedirectsBackOfficeHelper>();
 
-            builder.ContentApps().Append<RedirectsContentAppFactory>();
+            builder.ContentApps()?.Append<RedirectsContentAppFactory>();
             
             builder.AddNotificationHandler<ServerVariablesParsingNotification, ServerVariablesParsingHandler>();
             builder.AddNotificationHandler<UmbracoApplicationStartingNotification, UmbracoApplicationStartingHandler>();
@@ -42,7 +42,7 @@ namespace Skybrud.Umbraco.Redirects.Composers {
                 ));
             });
 
-            builder.DataValueReferenceFactories().Append<OutboundRedirectReferenceFactory>();
+            builder.DataValueReferenceFactories()?.Append<OutboundRedirectReferenceFactory>();
 
         }
 
