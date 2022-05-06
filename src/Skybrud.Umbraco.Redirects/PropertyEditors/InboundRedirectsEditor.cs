@@ -2,6 +2,7 @@
 using Umbraco.Cms.Core.IO;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.PropertyEditors;
+using Umbraco.Cms.Core.Services;
 
 #pragma warning disable 1591
 
@@ -17,14 +18,16 @@ namespace Skybrud.Umbraco.Redirects.PropertyEditors {
         internal const string EditorView = "/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/Inbound.html";
 
         private readonly IIOHelper _ioHelper;
+        private readonly IEditorConfigurationParser _editorConfigurationParser;
         private readonly RedirectsBackOfficeHelper _backOfficeHelper;
 
-        public InboundRedirectsEditor(IIOHelper ioHelper, IDataValueEditorFactory dataValueEditorFactory, RedirectsBackOfficeHelper backOfficeHelper) : base(dataValueEditorFactory) {
+        public InboundRedirectsEditor(IIOHelper ioHelper, IEditorConfigurationParser editorConfigurationParser, IDataValueEditorFactory dataValueEditorFactory, RedirectsBackOfficeHelper backOfficeHelper) : base(dataValueEditorFactory) {
             _ioHelper = ioHelper;
+            _editorConfigurationParser = editorConfigurationParser;
             _backOfficeHelper = backOfficeHelper;
         }
         
-        protected override IConfigurationEditor CreateConfigurationEditor() => new InboundRedirectsConfigurationEditor(_ioHelper);
+        protected override IConfigurationEditor CreateConfigurationEditor() => new InboundRedirectsConfigurationEditor(_ioHelper, _editorConfigurationParser);
 
         public override IDataValueEditor GetValueEditor(object configuration) {
             

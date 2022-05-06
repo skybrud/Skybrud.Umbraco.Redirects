@@ -20,11 +20,11 @@ namespace Skybrud.Umbraco.Redirects.Composers {
         
         public void Compose(IUmbracoBuilder builder) {
             
-            builder.Services.AddUnique<RedirectsServiceDependencies>();
-            builder.Services.AddUnique<RedirectsBackOfficeHelperDependencies>();
+            builder.Services.AddSingleton<RedirectsServiceDependencies>();
+            builder.Services.AddSingleton<RedirectsBackOfficeHelperDependencies>();
 
             builder.Services.AddUnique<IRedirectsService, RedirectsService>();
-            builder.Services.AddUnique<RedirectsBackOfficeHelper>();
+            builder.Services.AddSingleton<RedirectsBackOfficeHelper>();
 
             builder.ContentApps()?.Append<RedirectsContentAppFactory>();
             

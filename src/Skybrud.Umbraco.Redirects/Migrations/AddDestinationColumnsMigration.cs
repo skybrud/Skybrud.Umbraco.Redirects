@@ -2,22 +2,24 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using Skybrud.Essentials.Json;
 using Skybrud.Umbraco.Redirects.Models;
 using Skybrud.Umbraco.Redirects.Models.Dtos;
-using Umbraco.Cms.Core.Hosting;
 using Umbraco.Cms.Infrastructure.Migrations;
+using Umbraco.Extensions;
+using IHostingEnvironment = Umbraco.Cms.Core.Hosting.IHostingEnvironment;
 
 namespace Skybrud.Umbraco.Redirects.Migrations {
     
     internal class AddDestinationColumnsMigration : MigrationBase {
         
-        private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public AddDestinationColumnsMigration(IMigrationContext context, IHostingEnvironment hostingEnvironment) : base(context) {
-            _hostingEnvironment = hostingEnvironment;
+        public AddDestinationColumnsMigration(IMigrationContext context, IWebHostEnvironment webHostEnvironment) : base(context) {
+            _webHostEnvironment = webHostEnvironment;
         }
 
         protected override void Migrate() {
@@ -28,7 +30,7 @@ namespace Skybrud.Umbraco.Redirects.Migrations {
                 List<RedirectDto> dtos = Database.Fetch<RedirectDto>("SELECT * FROM [SkybrudRedirects];");
 
                 // Map the path to a special redirects folder
-                string dir = _hostingEnvironment.MapPathWebRoot("~/App_Data/Skybrud.Umbraco.Redirects");
+                string dir = _webHostEnvironment.MapPathWebRoot("~/App_Data/Skybrud.Umbraco.Redirects");
                 if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
 
                 // Map the path to the JSON file and save the DTOs to disk as a backup
