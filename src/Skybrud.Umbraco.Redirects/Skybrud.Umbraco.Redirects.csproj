@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <LangVersion>9.0</LangVersion>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <ContentTargetFolders>content</ContentTargetFolders>
   </PropertyGroup>
 
@@ -29,9 +29,9 @@
   <!-- Include NuGet dependencies -->
   <ItemGroup>
     <PackageReference Include="Skybrud.Essentials" Version="1.1.39" />
-    <PackageReference Include="Umbraco.Cms.Core" Version="9.0.0" />
-    <PackageReference Include="Umbraco.Cms.Web.Website" Version="9.0.0" />
-    <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="9.0.0" />
+    <PackageReference Include="Umbraco.Cms.Core" Version="10.0.0-rc1" />
+    <PackageReference Include="Umbraco.Cms.Web.Website" Version="10.0.0-rc1" />
+    <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="10.0.0-rc1" />
   </ItemGroup>
 
   <!-- Include backoffice assets -->

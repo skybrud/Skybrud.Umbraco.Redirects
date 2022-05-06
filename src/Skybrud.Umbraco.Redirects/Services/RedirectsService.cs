@@ -72,7 +72,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
             if (redirect is not Redirect r) throw new ArgumentException($"Redirect type is not supported: {redirect.GetType()}", nameof(redirect));
 
             // Create a new scope
-            using IScope scope = _scopeProvider.CreateScope();
+            using var scope = _scopeProvider.CreateScope();
 
             // Remove the redirect from the database
             try {
@@ -114,7 +114,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
 
             RedirectDto dto;
     
-            using (IScope scope = _scopeProvider.CreateScope()) {
+            using (var scope = _scopeProvider.CreateScope()) {
         
                 // Generate the SQL for the query
                 var sql = scope.SqlContext.Sql()
@@ -213,7 +213,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
 
             RedirectDto dto;
 
-            using (IScope scope = _scopeProvider.CreateScope()) {
+            using (var scope = _scopeProvider.CreateScope()) {
 
                 // Generate the SQL for the query
                 var sql = scope.SqlContext.Sql()
@@ -241,7 +241,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
 
             RedirectDto dto;
 
-            using (IScope scope = _scopeProvider.CreateScope()) {
+            using (var scope = _scopeProvider.CreateScope()) {
 
                 // Generate the SQL for the query
                 var sql = scope.SqlContext.Sql()
@@ -292,7 +292,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
             }
 
             // Attempt to add the redirect to the database
-            using (IScope scope = _scopeProvider.CreateScope()) {
+            using (var scope = _scopeProvider.CreateScope()) {
                 try {
                     scope.Database.Insert(item.Dto);
                 } catch (Exception ex) {
@@ -556,7 +556,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
         protected virtual IRedirect[] GetRedirectsByNodeId(string nodeType, int nodeId) {
             
             // Create a new scope
-            using IScope scope = _scopeProvider.CreateScope();
+            using var scope = _scopeProvider.CreateScope();
             
             // Generate the SQL for the query
             Sql<ISqlContext> sql = scope.SqlContext
@@ -587,7 +587,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
         protected virtual IRedirect[] GetRedirectsByNodeKey(string nodeType, Guid nodeKey) {
             
             // Create a new scope
-            using IScope scope = _scopeProvider.CreateScope();
+            using var scope = _scopeProvider.CreateScope();
             
             // Generate the SQL for the query
             Sql<ISqlContext> sql = scope.SqlContext
