@@ -10,6 +10,7 @@ using Umbraco.Cms.Core.Dashboards;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.ContentEditing;
 using Umbraco.Cms.Core.Models.Membership;
+using Umbraco.Cms.Core.Routing;
 using Umbraco.Extensions;
 
 namespace Skybrud.Umbraco.Redirects.Helpers {
@@ -95,8 +96,11 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
         /// <returns>An instance of <see cref="Dictionary{TKey,TValue}"/>.</returns>
         public virtual Dictionary<string, object> GetServerVariables() {
             
+            // Get the backoffice path
+            string backOfficePath = Dependencies.GlobalSettings.GetBackOfficePath(Dependencies.HostingEnvironment);
+
             // Determine the API base URL
-            string baseUrl = "/umbraco/backoffice/Skybrud/Redirects/";
+            string baseUrl = WebPath.Combine(backOfficePath, "/backoffice/Skybrud/Redirects/");
             
             // Append the "redirects" dictionary to "skybrud"
             return new Dictionary<string, object> {
