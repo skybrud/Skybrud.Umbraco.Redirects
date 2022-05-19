@@ -1,4 +1,7 @@
-﻿using Umbraco.Cms.Core.Services;
+﻿using Microsoft.Extensions.Options;
+using Umbraco.Cms.Core.Configuration.Models;
+using Umbraco.Cms.Core.Hosting;
+using Umbraco.Cms.Core.Services;
 
 namespace Skybrud.Umbraco.Redirects.Helpers {
     
@@ -8,7 +11,17 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
     public class RedirectsBackOfficeHelperDependencies {
 
         #region Properties
-        
+
+        /// <summary>
+        /// Gets the reference to the current <see cref="GlobalSettings"/>.
+        /// </summary>
+        public GlobalSettings GlobalSettings { get; }
+
+        /// <summary>
+        /// Gets the reference to the current <see cref="IHostingEnvironment"/>.
+        /// </summary>
+        public IHostingEnvironment HostingEnvironment { get; }
+
         /// <summary>
         /// Gets the reference to the current <see cref="IRuntimeState"/>.
         /// </summary>
@@ -41,13 +54,18 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
         /// <summary>
         /// Initializes a new instance based on the specified dependencies.
         /// </summary>
+        /// <param name="hostingEnvironment"></param>
         /// <param name="runtimeState"></param>
         /// <param name="domainService"></param>
         /// <param name="contentService"></param>
         /// <param name="mediaService"></param>
         /// <param name="textService"></param>
-        public RedirectsBackOfficeHelperDependencies(IRuntimeState runtimeState, IDomainService domainService, IContentService contentService,
+        /// <param name="globalSettings"></param>
+        public RedirectsBackOfficeHelperDependencies(IOptions<GlobalSettings> globalSettings, IHostingEnvironment hostingEnvironment,
+            IRuntimeState runtimeState, IDomainService domainService, IContentService contentService,
             IMediaService mediaService, ILocalizedTextService textService) {
+            GlobalSettings = globalSettings.Value;
+            HostingEnvironment = hostingEnvironment;
             RuntimeState = runtimeState;
             DomainService = domainService;
             ContentService = contentService;
