@@ -133,6 +133,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// <param name="url">The inbound URL to match.</param>
         /// <param name="destionation">An instance of <see cref="RedirectDestination"/> representing the destination link.</param>
         /// <returns>An instance of <see cref="RedirectItem"/> representing the created redirect.</returns>
+        [Obsolete("Use 'AddRedirect(AddRedirectOptions)' method overload instead.")]
         public RedirectItem AddRedirect(int rootNodeId, string url, RedirectDestination destionation) {
             return AddRedirect(rootNodeId, url, destionation, true, false, false);
         }
@@ -149,6 +150,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// <param name="isRegex">Whether regex should be enabled for the redirect.</param>
         /// <param name="forwardQueryString">Whether the redirect should forward the original query string.</param>
         /// <returns>An instance of <see cref="RedirectItem"/> representing the created redirect.</returns>
+        [Obsolete("Use 'AddRedirect(AddRedirectOptions)' method overload instead.")]
         public RedirectItem AddRedirect(int rootNodeId, string url, RedirectDestination destionation, bool permanent, bool isRegex, bool forwardQueryString) {
 
 
