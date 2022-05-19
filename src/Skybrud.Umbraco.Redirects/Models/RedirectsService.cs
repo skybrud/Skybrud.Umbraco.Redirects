@@ -171,6 +171,8 @@ namespace Skybrud.Umbraco.Redirects.Models {
                 LinkId = destionation.Id,
                 LinkUrl = destionation.Url,
                 LinkMode = destionation.Type,
+                LinkQuery = destionation.Query ?? string.Empty,
+                LinkFragment = destionation.Fragment ?? string.Empty,
                 Url = url,
                 QueryString = query,
                 Created = DateTime.Now,
