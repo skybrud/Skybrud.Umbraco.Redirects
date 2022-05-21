@@ -8,7 +8,7 @@
 
   <PropertyGroup>
     <VersionPrefix>3.0.3</VersionPrefix>
-	<VersionSuffix Condition="'$(Configuration)'=='Debug'">build$([System.DateTime]::UtcNow.ToString(`yyyyMMddHHmm`))</VersionSuffix>
+    <VersionSuffix Condition="'$(Configuration)'=='Debug'">build$([System.DateTime]::UtcNow.ToString(`yyyyMMddHHmm`))</VersionSuffix>
     <Authors>Anders Bjerner</Authors>
     <Company>Limbo</Company>
     <Description>Redirects manager for Umbraco 9.</Description>
