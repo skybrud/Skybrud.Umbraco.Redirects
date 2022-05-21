@@ -1,4 +1,5 @@
 ﻿using System;
+using Skybrud.Umbraco.Redirects.Helpers;
 using Umbraco.Cms.Core.Models;
 
 #pragma warning disable 1591
@@ -15,24 +16,44 @@ namespace Skybrud.Umbraco.Redirects.Models.Api {
 
         public string Icon { get; }
 
-        public string BackOfficeUrl => $"/umbraco/#/content/content/edit/{Id}";
+        public string BackOfficeUrl { get; }
 
         public string[] Domains { get; }
 
-        public RedirectRootNodeModel(IRedirect redirect, IContent content, string[] domains) {
+        public RedirectRootNodeModel(IRedirect redirect, IContent content, string[] domains, string backOfficeBaseUrl) {
             Id = content?.Id ?? 0;
             Key = content?.Key ?? redirect.RootKey;
             Name = content?.Name;
             Icon = content?.ContentType.Icon;
             Domains = domains ?? Array.Empty<string>();
+            BackOfficeUrl = $"{backOfficeBaseUrl}/#/content/content/edit/{Id}";
         }
 
-        public RedirectRootNodeModel(RedirectRootNode rootNode) {
+        public RedirectRootNodeModel(IRedirect redirect, IContent content, string[] domains, RedirectsBackOfficeHelper backOffice) {
+            Id = content?.Id ?? 0;
+            Key = content?.Key ?? redirect.RootKey;
+            Name = content?.Name;
+            Icon = content?.ContentType.Icon;
+            Domains = domains ?? Array.Empty<string>();
+            BackOfficeUrl = $"{backOffice.BackOfficeUrl}/#/content/content/edit/{Id}";
+        }
+
+        public RedirectRootNodeModel(RedirectRootNode rootNode, string backOfficeBaseUrl) {
             Id = rootNode.Id;
             Key = rootNode.Key;
             Name = rootNode.Name;
             Icon = rootNode.Icon;
             Domains = rootNode.Domains;
+            BackOfficeUrl = $"{backOfficeBaseUrl}/#/content/content/edit/{Id}";
+        }
+
+        public RedirectRootNodeModel(RedirectRootNode rootNode, RedirectsBackOfficeHelper backOffice) {
+            Id = rootNode.Id;
+            Key = rootNode.Key;
+            Name = rootNode.Name;
+            Icon = rootNode.Icon;
+            Domains = rootNode.Domains;
+            BackOfficeUrl = $"{backOffice.BackOfficeUrl}/#/content/content/edit/{Id}";
         }
 
     }
