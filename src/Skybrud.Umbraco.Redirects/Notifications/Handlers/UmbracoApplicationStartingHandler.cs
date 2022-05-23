@@ -3,10 +3,10 @@ using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Events;
 using Umbraco.Cms.Core.Migrations;
 using Umbraco.Cms.Core.Notifications;
-using Umbraco.Cms.Core.Scoping;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Infrastructure.Migrations;
 using Umbraco.Cms.Infrastructure.Migrations.Upgrade;
+using Umbraco.Cms.Infrastructure.Scoping;
 
 #pragma warning disable 1591
 

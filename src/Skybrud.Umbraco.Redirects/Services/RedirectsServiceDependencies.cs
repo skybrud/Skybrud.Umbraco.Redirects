@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
-using Umbraco.Cms.Core.Scoping;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
+using Umbraco.Cms.Infrastructure.Scoping;
 
 namespace Skybrud.Umbraco.Redirects.Services {
 

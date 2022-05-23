@@ -14,10 +14,10 @@ using Skybrud.Umbraco.Redirects.Models.Dtos;
 using Skybrud.Umbraco.Redirects.Models.Options;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Routing;
-using Umbraco.Cms.Core.Scoping;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Infrastructure.Persistence;
+using Umbraco.Cms.Infrastructure.Scoping;
 using Umbraco.Extensions;
 
 namespace Skybrud.Umbraco.Redirects.Services {
