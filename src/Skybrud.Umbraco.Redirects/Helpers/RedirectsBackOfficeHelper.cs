@@ -10,6 +10,7 @@ using Umbraco.Cms.Core.Dashboards;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.ContentEditing;
 using Umbraco.Cms.Core.Models.Membership;
+using Umbraco.Cms.Core.Routing;
 using Umbraco.Extensions;
 
 namespace Skybrud.Umbraco.Redirects.Helpers {
@@ -22,9 +23,14 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
         #region Properties
 
         /// <summary>
-        /// gets a reference to the dependencies of this instance.
+        /// Gets a reference to the dependencies of this instance.
         /// </summary>
         protected RedirectsBackOfficeHelperDependencies Dependencies { get; }
+
+        /// <summary>
+        /// Gets the back-office URL of Umbraco.
+        /// </summary>
+        public string BackOfficeUrl => Dependencies.GlobalSettings.GetBackOfficePath(Dependencies.HostingEnvironment);
 
         #endregion
 
@@ -95,8 +101,11 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
         /// <returns>An instance of <see cref="Dictionary{TKey,TValue}"/>.</returns>
         public virtual Dictionary<string, object> GetServerVariables() {
             
+            // Get the backoffice path
+            string backOfficePath = Dependencies.GlobalSettings.GetBackOfficePath(Dependencies.HostingEnvironment);
+
             // Determine the API base URL
-            string baseUrl = "/umbraco/backoffice/Skybrud/Redirects/";
+            string baseUrl = $"{WebPath.Combine(backOfficePath, "/backoffice/Skybrud/Redirects")}/";
             
             // Append the "redirects" dictionary to "skybrud"
             return new Dictionary<string, object> {
@@ -172,7 +181,9 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
         private RedirectModel Map(IRedirect redirect, Dictionary<Guid, RedirectRootNodeModel> rootNodeLookup,
             Dictionary<Guid, IContent> contentLookup, Dictionary<Guid, IMedia> mediaLookup)
         {
-            
+
+            string backOfficeBaseUrl = Dependencies.GlobalSettings.GetBackOfficePath(Dependencies.HostingEnvironment);
+
             RedirectRootNodeModel rootNode = null;
             if (redirect.RootKey != Guid.Empty) {
 
@@ -183,7 +194,7 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
                         if (content != null) contentLookup.Add(content.Key, content);
                     }
                     var domains = content == null ? null : Dependencies.DomainService.GetAssignedDomains(content.Id, false).Select(x => x.DomainName).ToArray();
-                    rootNode = new RedirectRootNodeModel(redirect, content, domains);
+                    rootNode = new RedirectRootNodeModel(redirect, content, domains, backOfficeBaseUrl);
 
                     rootNodeLookup.Add(rootNode.Key, rootNode);
 
@@ -192,19 +203,31 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
 
             RedirectDestinationModel destination;
             if (redirect.Destination.Type == RedirectDestinationType.Content) {
+
                 if (!contentLookup.TryGetValue(redirect.Destination.Key, out IContent content)) {
                     content = Dependencies.ContentService.GetById(redirect.Destination.Key);
                     if (content != null) contentLookup.Add(content.Key, content);
                 }
-                destination = new RedirectDestinationModel(redirect, content);
+                
+                destination = new RedirectDestinationModel(redirect, content) {
+                    BackOfficeUrl = $"{backOfficeBaseUrl}/#/content/content/edit/{redirect.Destination.Id}"
+                };
+
             } else if (redirect.Destination.Type == RedirectDestinationType.Media) {
+                
                 if (!mediaLookup.TryGetValue(redirect.Destination.Key, out IMedia media)) {
                     media = Dependencies.MediaService.GetById(redirect.Destination.Key);
                     if (media != null) mediaLookup.Add(media.Key, media);
                 }
-                destination = new RedirectDestinationModel(redirect, media);
+                
+                destination = new RedirectDestinationModel(redirect, media) {
+                    BackOfficeUrl = $"{backOfficeBaseUrl}/#/content/media/edit/{redirect.Destination.Id}"
+                };
+
             } else {
+                
                 destination = new RedirectDestinationModel(redirect);
+
             }
 
             return new RedirectModel(redirect, rootNode, destination);

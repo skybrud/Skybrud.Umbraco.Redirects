@@ -65,7 +65,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
 
             return new JsonResult(new {
                 total = rootNodes.Length,
-                items = rootNodes.Select(x => new RedirectRootNodeModel(x))
+                items = rootNodes.Select(x => new RedirectRootNodeModel(x, _backOffice))
             });
 
         }
