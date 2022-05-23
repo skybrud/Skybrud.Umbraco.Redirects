@@ -181,7 +181,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
             // Determine the root node via domain of the request
             Guid rootKey = Guid.Empty;
             if (TryGetDomain(uri, out Domain domain)) {
-                IPublishedContent root = umbracoContext?.Content.GetById(domain.ContentId);
+                IPublishedContent root = umbracoContext?.Content?.GetById(domain.ContentId);
                 if (root != null) rootKey = root.Key;
             }
 
@@ -329,17 +329,22 @@ namespace Skybrud.Umbraco.Redirects.Services {
             // Update the timestamp for when the redirect was modified
             redirect.UpdateDate = DateTime.UtcNow;
 
+            // Create a new scope
+            using IScope scope = _scopeProvider.CreateScope();
+
             // Update the redirect in the database
-            using (var scope = _scopeProvider.CreateScope()) {
-                try {
-                    scope.Database.Update(r.Dto);
-                } catch (Exception ex) {
-                    _logger.LogError(ex, "Unable to update redirect into the database.");
-                    throw new RedirectsException("Unable to update redirect into the database.", ex);
-                }
-                scope.Complete();
+            try
+            {
+                scope.Database.Update(r.Dto);
+            } catch (Exception ex) {
+                _logger.LogError(ex, "Unable to update redirect into the database.");
+                throw new RedirectsException("Unable to update redirect into the database.", ex);
             }
 
+            // Complete the scope
+            scope.Complete();
+
+            // Return the redirect
             return redirect;
 
         }
@@ -352,73 +357,72 @@ namespace Skybrud.Umbraco.Redirects.Services {
         public RedirectsSearchResult GetRedirects(RedirectsSearchOptions options) {
 
             if (options == null) throw new ArgumentNullException(nameof(options));
+            
+            // Create a new scope
+            using var scope = _scopeProvider.CreateScope();
+            
+            // Generate the SQL for the query
+            var sql = scope.SqlContext.Sql().Select<RedirectDto>().From<RedirectDto>();
 
-            RedirectsSearchResult result;
+            // Search by the rootNodeId
+            if (options.RootNodeKey != null) sql = sql.Where<RedirectDto>(x => x.RootKey == options.RootNodeKey.Value);
 
-            using (var scope = _scopeProvider.CreateScope()) {
-
-                // Generate the SQL for the query
-                var sql = scope.SqlContext.Sql().Select<RedirectDto>().From<RedirectDto>();
-
-                // Search by the rootNodeId
-                if (options.RootNodeKey != null) sql = sql.Where<RedirectDto>(x => x.RootKey == options.RootNodeKey.Value);
-
-                // Search by the type
-                if (options.Type != RedirectTypeFilter.All) {
-                    string type = options.Type.ToPascalCase();
-                    sql = sql.Where<RedirectDto>(x => x.DestinationType == type);
-                }
-
-                // Search by the text
-                if (string.IsNullOrWhiteSpace(options.Text) == false) {
-
-                    string[] parts = options.Text.Split('?');
-
-                    if (parts.Length == 1) {
-                        if (int.TryParse(options.Text, out int redirectId)) {
-                            sql = sql.Where<RedirectDto>(x => x.Id == redirectId || x.Path.Contains(options.Text) || x.QueryString.Contains(options.Text));
-                        } else if (Guid.TryParse(options.Text, out Guid redirectKey)) {
-                            sql = sql.Where<RedirectDto>(x => x.Key == redirectKey || x.Path.Contains(options.Text) || x.QueryString.Contains(options.Text));
-                        } else {
-                            sql = sql.Where<RedirectDto>(x => x.Path.Contains(options.Text) || x.QueryString.Contains(options.Text));
-                        }
-                    } else {
-                        string url = parts[0];
-                        string query = parts[1];
-                        sql = sql.Where<RedirectDto>(x => (
-                            x.Path.Contains(options.Text)
-                            ||
-                            (x.Path.Contains(url) && x.QueryString.Contains(query))
-                        ));
-                    }
-                }
-
-                // Order the redirects
-                sql = sql.OrderByDescending<RedirectDto>(x => x.Updated);
-
-                // Make the call to the database
-                RedirectDto[] all = scope.Database.Fetch<RedirectDto>(sql).ToArray();
-
-                // Calculate variables used for the pagination
-                int limit = options.Limit;
-                int pages = (int) Math.Ceiling(all.Length / (double) limit);
-                int page = Math.Max(1, Math.Min(options.Page, pages));
-                int offset = (page * limit) - limit;
-
-                // Apply pagination and wrap the database rows
-                IRedirect[] items = all
-                    .Skip(offset)
-                    .Take(limit)
-                    .Select(x => (IRedirect) Redirect.CreateFromDto(x))
-                    .ToArray();
-
-                // Return the items (on the requested page)
-                result = new RedirectsSearchResult(all.Length, limit, offset, page, pages, items);
-
-                scope.Complete();
-
+            // Search by the type
+            if (options.Type != RedirectTypeFilter.All) {
+                string type = options.Type.ToPascalCase();
+                sql = sql.Where<RedirectDto>(x => x.DestinationType == type);
             }
 
+            // Search by the text
+            if (string.IsNullOrWhiteSpace(options.Text) == false) {
+
+                string[] parts = options.Text.Split('?');
+
+                if (parts.Length == 1) {
+                    if (int.TryParse(options.Text, out int redirectId)) {
+                        sql = sql.Where<RedirectDto>(x => x.Id == redirectId || x.Path.Contains(options.Text) || x.QueryString.Contains(options.Text));
+                    } else if (Guid.TryParse(options.Text, out Guid redirectKey)) {
+                        sql = sql.Where<RedirectDto>(x => x.Key == redirectKey || x.Path.Contains(options.Text) || x.QueryString.Contains(options.Text));
+                    } else {
+                        sql = sql.Where<RedirectDto>(x => x.Path.Contains(options.Text) || x.QueryString.Contains(options.Text));
+                    }
+                } else {
+                    string url = parts[0];
+                    string query = parts[1];
+                    sql = sql.Where<RedirectDto>(x => (
+                        x.Path.Contains(options.Text)
+                        ||
+                        (x.Path.Contains(url) && x.QueryString.Contains(query))
+                    ));
+                }
+            }
+
+            // Order the redirects
+            sql = sql.OrderByDescending<RedirectDto>(x => x.Updated);
+
+            // Make the call to the database
+            RedirectDto[] all = scope.Database.Fetch<RedirectDto>(sql).ToArray();
+
+            // Calculate variables used for the pagination
+            int limit = options.Limit;
+            int pages = (int) Math.Ceiling(all.Length / (double) limit);
+            int page = Math.Max(1, Math.Min(options.Page, pages));
+            int offset = (page * limit) - limit;
+
+            // Apply pagination and wrap the database rows
+            IRedirect[] items = all
+                .Skip(offset)
+                .Take(limit)
+                .Select(x => (IRedirect) Redirect.CreateFromDto(x))
+                .ToArray();
+
+            // Wrap the search result
+            RedirectsSearchResult result = new RedirectsSearchResult(all.Length, limit, offset, page, pages, items);
+
+            // Complete the scope
+            scope.Complete();
+
+            // Return the result
             return result;
 
         }
@@ -456,7 +460,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
             return (
                 from domainGroup in domainsByRootNodeId
                 let content =  _contentService.GetById(domainGroup.First().RootNodeId)
-                where content != null && !content.Trashed
+                where content is { Trashed: false }
                 orderby content.Id
                 select RedirectRootNode.GetFromContent(content, domainGroup)
             ).ToArray();
@@ -497,13 +501,13 @@ namespace Skybrud.Umbraco.Redirects.Services {
 
                 case RedirectDestinationType.Content:
                     if (_umbracoContextAccessor.TryGetUmbracoContext(out IUmbracoContext context))  {
-                        content = context.Content.GetById(redirect.Destination.Key);
+                        content = context.Content?.GetById(redirect.Destination.Key);
                     }
                     break;
 
                 case RedirectDestinationType.Media:
                     if (_umbracoContextAccessor.TryGetUmbracoContext(out context))  {
-                        content = context.Media.GetById(redirect.Destination.Key);
+                        content = context.Media?.GetById(redirect.Destination.Key);
                     }
                     break;
                 

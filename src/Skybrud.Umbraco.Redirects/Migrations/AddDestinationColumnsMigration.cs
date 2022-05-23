@@ -10,7 +10,6 @@ using Skybrud.Umbraco.Redirects.Models;
 using Skybrud.Umbraco.Redirects.Models.Dtos;
 using Umbraco.Cms.Infrastructure.Migrations;
 using Umbraco.Extensions;
-using IHostingEnvironment = Umbraco.Cms.Core.Hosting.IHostingEnvironment;
 
 namespace Skybrud.Umbraco.Redirects.Migrations {
     
