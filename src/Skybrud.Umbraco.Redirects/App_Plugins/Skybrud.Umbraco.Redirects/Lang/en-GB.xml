@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+
+<language alias="en" intName="English (UK)" localName="English (UK)" lcid="" culture="en-GB">
+  <area alias="dashboardTabs">
+    <key alias="Skybrud.Umbraco.Redirects">Redirects</key>
+  </area>
+  <area alias="redirects">
+    <key alias="redirects">Redirects</key>
+    <key alias="add">Add</key>
+    <key alias="save">Save</key>
+    <key alias="addNewRedirect">Add new redirect</key>
+    <key alias="addRedirect">Add redirect</key>
+    <key alias="editRedirect">Edit redirect</key>
+    <key alias="saveRedirect">Save redirect</key>
+    <key alias="cancel">Cancel</key>
+    <key alias="reload">Reload</key>
+    <key alias="edit">Edit</key>
+    <key alias="delete">Delete</key>
+    <key alias="content">Content</key>
+    <key alias="media">Media</key>
+    <key alias="url">URL</key>
+    <key alias="site">Site</key>
+    <key alias="siteDescription">Select the site (or root node) the redirect should apply to. If a site is not selected, the redirect will apply to all domains/sites in the Umbraco solution.</key>
+    <key alias="allSites">All sites</key>
+    <key alias="globalRedirects">Global redirects</key>
+    <key alias="originalUrl">Original URL</key>
+    <key alias="destination">Destination</key>
+    <key alias="redirectedTo">Redirected to</key>
+    <key alias="selectDestination">Select destination</key>
+    <key alias="created">Created</key>
+    <key alias="updated">Updated</key>
+    <key alias="id">ID</key>
+    <key alias="forwardQueryString">Forward query string</key>
+    <key alias="forwardQueryStringDescription">When enabled, the query string of the original request is forwarded to the redirect location (pass through).</key>
+    <key alias="labelUrlDescription">Specify the original URL to match from which the user should be redirected to the destination.</key>
+    <key alias="labelDestinationDescription">Select the page or URL the user should be redirected to.</key>
+    <key alias="labelNoRedirects">There has not yet been added any redirects.</key>
+    <key alias="labelNoContentRedirects">There has not yet been added any redirects to this page.</key>
+    <key alias="labelNoMediaRedirects">There has not yet been added any redirects to this media.</key>
+    <key alias="labelNoSearchRedirects">Your search did not match any redirects.</key>
+    <key alias="pagination">Showing %0%-%1% of %2% - Page %3% of %4%</key>
+    <key alias="urlNotValid"><![CDATA[The specified URL is not valid. A valid URL should look like <code>/page</code> or <code>/page/subpage</code>.]]></key>
+    <key alias="addNewRedirectSubTitle">Fill out the fields below to add a new redirect.</key>
+    <key alias="media_all">All types</key>
+    <key alias="media_content">Content</key>
+    <key alias="media_media">Media</key>
+    <key alias="media_url">URLs</key>
+    <key alias="labelType">Type</key>
+    <key alias="labelPermanent">Permanent</key>
+    <key alias="labelTemporary">Temporary</key>
+    <key alias="labelPermanentRedirect">Permanent redirect</key>
+    <key alias="labelTemporaryRedirect">Temporary redirect</key>
+    <key alias="labelEnabled">Enabled</key>
+    <key alias="labelDisabled">Disabled</key>
+    <key alias="labelAdvancedOptions">Advanced options</key>
+    <key alias="labelDeleteRedirectConfirm">Are you sure you want do delete the redirect at %0% ?</key>
+  </area>
+  <area alias="redirects">
+    <!-- Content Apps -->
+    <key alias="settingsApp">Settings</key>
+    <key alias="infoApp">Info</key>
+    <!-- Notifications: Add redirects -->
+    <key alias="addSuccessfulTitle">Redirect added</key>
+    <key alias="addSuccessfulMessage">Your redirect has successfully been added.</key>
+    <key alias="addFailedTitle">Saving failed</key>
+    <key alias="addFailedMessage">The redirect could not be saved due to an error on the server.</key>
+    <!-- Notifications: Save redirect -->
+    <key alias="saveSuccessfulTitle">Redirect saved</key>
+    <key alias="saveSuccessfulMessage">Your redirect has successfully been saved.</key>
+    <key alias="saveFailedTitle">Saving failed</key>
+    <key alias="saveFailedMessage">The redirect could not be saved due to an error on the server.</key>
+    <!-- Misc errors-->
+    <key alias="errorNoUrlTitle">No URL</key>
+    <key alias="errorNoUrlMessage">You must specify the original URL.</key>
+    <key alias="errorInvalidUrlTitle">Invalid URL</key>
+    <key alias="errorInvalidUrlMessage">The specified URL is not valid.</key>
+    <key alias="errorNoLinkTitle">No link</key>
+    <key alias="errorNoLinkMessage">You must select a destination page or link.</key>
+    <key alias="errorContentNoRedirects">A content item with the specified ID could not be found.</key>
+    <key alias="errorMediaNoRedirects">A media item with the specified ID could not be found.</key>
+    <key alias="errorNoUrl">You must specify a URL for the redirect.</key>
+    <key alias="errorNoDestination">You must specify a destination link for the redirect.</key>
+    <key alias="errorUnknownLinkMode">Specified link mode is not valid.</key>
+    <!-- Misc info and warnings -->
+    <key alias="pageNoRedirects">This page has not been created yet. You must save and publish the page in order to be able to add redirects to it.</key>
+    <key alias="pageIsUnpublished">This page is currently not published. Redirects to unpublished pages may result in unexpected behaviour - eg. where the visitors are redirected to non-existing URLs.</key>
+    <key alias="pageIsTrashed">This page is in the recycle bin. Redirects to this page may therefore result in unexpected behaviour - eg. where the visitors are redirected to non-existing URLs.</key>
+    <key alias="mediaIsTrashed">This media is in the recycle bin. Redirects to this media may therefore result in unexpected behaviour - eg. where the visitors are redirected to non-existing URLs.</key>
+    <!-- Properties -->
+    <key alias="propertySite">Site</key>
+    <key alias="propertySiteDescription">Select the site (or root node) the redirect should apply to. If a site is not selected, the redirect will apply to all domains/sites in the Umbraco solution.</key>
+    <key alias="propertyOriginalUrl">Original URL</key>
+    <key alias="propertyOriginalUrlDescription">Specify the original URL to match from which the user should be redirected to the destination.</key>
+    <key alias="propertyDestination">Destination</key>
+    <key alias="propertyDestinationDescription">Select the page or URL the user should be redirected to.</key>
+    <key alias="propertyRedirectTypeName">Redirect type</key>
+    <key alias="propertyRedirectTypeDescription">Select the type of the redirect. Notice that browsers will remember permanent redirects.</key>
+    <key alias="propertyCreateDate">Created</key>
+    <key alias="propertyUpdateDate">Last updated</key>
+    <!-- Overlays -->
+    <key alias="overlayDeleteTitle">Confirm delete</key>
+    <key alias="overlayDeleteMessage"><![CDATA[Are you sure you want to delete the redirect at <strong>%0%</strong> ?]]></key>
+  </area>
+</language>
