@@ -2,6 +2,7 @@
 
 <language alias="en" intName="English (US)" localName="English (US)" lcid="" culture="en-US">
   <area alias="dashboardTabs">
+    <key alias="redirects">Redirects</key>
     <key alias="Skybrud.Umbraco.Redirects">Redirects</key>
   </area>
   <area alias="redirects">
