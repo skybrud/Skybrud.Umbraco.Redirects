@@ -282,7 +282,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
                 Url = options.OriginalUrl,
                 CreateDate = EssentialsTime.UtcNow,
                 UpdateDate = EssentialsTime.UtcNow,
-                IsPermanent = options.IsPermanent,
+                Type = options.Type,
                 ForwardQueryString = options.ForwardQueryString
             }.SetDestination(destination);
 
