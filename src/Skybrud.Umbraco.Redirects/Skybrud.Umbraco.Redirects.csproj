@@ -1,9 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <LangVersion>9.0</LangVersion>
+    <LangVersion>10.0</LangVersion>
     <TargetFramework>net6.0</TargetFramework>
-    <ContentTargetFolders>content</ContentTargetFolders>
+    <StaticWebAssetBasePath>App_Plugins/Skybrud.Umbraco.Redirects</StaticWebAssetBasePath>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -37,17 +37,14 @@
 
   <!-- Include backoffice assets -->
   <ItemGroup>
-    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\**\*.css" />
-    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\**\*.html" />
-    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\**\*.js" />
-    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\Lang\*.xml" />
-    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\package.manifest" />
-    <Content Remove="App_Plugins\Skybrud.Umbraco.Redirects\Scripts\Intellisense.js" />
-  </ItemGroup>
-
-  <!-- Include the targets file -->
-  <ItemGroup>
-    <Content Include="../build/$(AssemblyName).targets" PackagePath="build\$(AssemblyName).targets" />
+    <Content Remove="wwwroot\**\*" />
+    <Content Include="wwwroot\**\*.css" />
+    <Content Include="wwwroot\**\*.html" />
+    <Content Include="wwwroot\**\*.js" />
+    <Content Include="wwwroot\Lang\*.xml" />
+    <Content Include="wwwroot\package.manifest" />
+    <Content Remove="compilerconfig.json" />
+    <Content Remove="wwwroot\Scripts\Intellisense.js" />
   </ItemGroup>
 
   <!-- Include package icon for NuGet -->
