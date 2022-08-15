@@ -19,7 +19,7 @@ Install-Package Skybrud.Umbraco.Redirects -Version 4.0.0
 ```
 
 **Umbraco 9**  
-For the Umbraco 8 version of this package, see the [**v3/main**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v3/main) branch instead.
+For the Umbraco 9 version of this package, see the [**v3/main**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v3/main) branch instead.
 
 **Umbraco 8**  
 For the Umbraco 8 version of this package, see the [**v2/main**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v2/main) branch instead.
