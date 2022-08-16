@@ -4,7 +4,7 @@
     <SkybrudUmbracoRedirectsContentFilesPath>$(MSBuildThisFileDirectory)..\content\App_Plugins\Skybrud.Umbraco.Redirects\**\*.*</SkybrudUmbracoRedirectsContentFilesPath>
   </PropertyGroup>
 
-  <Target Name="CopySkybrudUmbracoRedirectsAssets" BeforeTargets="Build">
+  <!--<Target Name="CopySkybrudUmbracoRedirectsAssets" BeforeTargets="Build">
     <ItemGroup>
       <SkybrudUmbracoRedirectsContentFiles Include="$(SkybrudUmbracoRedirectsContentFilesPath)" />
     </ItemGroup>
@@ -13,7 +13,7 @@
       SourceFiles="@(SkybrudUmbracoRedirectsContentFiles)"
       DestinationFiles="@(SkybrudUmbracoRedirectsContentFiles->'$(MSBuildProjectDirectory)\App_Plugins\Skybrud.Umbraco.Redirects\%(RecursiveDir)%(Filename)%(Extension)')"
       SkipUnchangedFiles="true" />
-  </Target>
+  </Target>-->
 
   <Target Name="ClearSkybrudUmbracoRedirectsAssets" BeforeTargets="Clean">
     <ItemGroup>
