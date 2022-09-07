@@ -153,6 +153,7 @@ namespace Skybrud.Umbraco.Redirects {
 
             // Get the DTOs for all redirects in the database
             List<RedirectDto> dtos = database.Fetch<RedirectDto>("SELECT * FROM [SkybrudRedirects];");
+            if (dtos.Count == 0) return new RedirectsBackupResult(path, dtos);
 
             // Save the JSON file to the disk
             JsonUtils.SaveJsonArray(path, JArray.FromObject(dtos));
