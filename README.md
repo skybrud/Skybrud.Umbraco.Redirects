@@ -4,6 +4,33 @@
 
 URLs can be added to redirect to either a content item, media item or a custom URL.
 
+<table>
+  <tr>
+    <td><strong>License:</strong></td>
+    <td><a href="./LICENSE.md"><strong>MIT License</strong></a></td>
+  </tr>
+  <tr>
+    <td><strong>Umbraco:</strong></td>
+    <td>
+      Umbraco 10
+      <sub><sup>(and <a href="https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v3/main">Umbraco 9</a>, <a href="https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v2/main">Umbraco 8</a> and <a href="https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v1/main">Umbraco 7</a>)</sup></sub>
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Target Framework:</strong></td>
+    <td>
+      .NET 6
+      <sub><sup>(and <a href="https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v3/main">.NET 5</a>, <a href="https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v2/main">.NET 4.7.2</a>, and <a href="https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v1/main">.NET 4.5</a>)</sup></sub>
+    </td>
+  </tr>
+</table>
+
+
+
+
+
+<br /><br />
+
 ## Installation
 
 The Umbraco 10 version of this package is only available via [NuGet](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects/4.0.2). To install the package, you can use either .NET CLI:
@@ -30,7 +57,7 @@ For the Umbraco 7 version of this package, see the [**v1/main**](https://github.
 
 
 
-
+<br /><br />
 
 ## Features
 
@@ -49,6 +76,8 @@ For the Umbraco 7 version of this package, see the [**v1/main**](https://github.
 
 
 
+
+<br /><br />
 
 ## Documentation
 
