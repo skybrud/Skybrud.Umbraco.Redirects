@@ -23,6 +23,7 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://packages.skybrud.dk/skybrud.umbraco.redirects/</PackageProjectUrl>
     <PackageIcon>Limbo.png</PackageIcon>
+    <PackageReadmeFile>NUGET.md</PackageReadmeFile>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/skybrud/Skybrud.Umbraco.Redirects</RepositoryUrl>
   </PropertyGroup>
@@ -52,9 +53,10 @@
     <Content Include="../build/$(AssemblyName).targets" PackagePath="build\$(AssemblyName).targets" />
   </ItemGroup>
 
-  <!-- Include package icon for NuGet -->
+  <!-- Include package icon and README for the NuGet -->
   <ItemGroup>
     <Content Include="../build/Limbo.png" Pack="true" PackagePath="\" />
+    <None Include="..\..\NUGET.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <!-- Generate XML documentation -->
