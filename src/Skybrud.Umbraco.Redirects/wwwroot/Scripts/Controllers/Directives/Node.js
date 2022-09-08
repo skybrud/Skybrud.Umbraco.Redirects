@@ -1,4 +1,4 @@
-﻿angular.module("umbraco").directive("redirectsNode", function (localizationService, notificationsService, overlayService, $http, $q, $timeout, skybrudRedirectsService) {
+﻿angular.module("umbraco").directive("skybrudRedirectsNode", function (localizationService, notificationsService, overlayService, $http, $q, $timeout, skybrudRedirectsService) {
 
     // Get the cache buster value
     const cacheBuster = Umbraco.Sys.ServerVariables.skybrud.redirects.cacheBuster;
