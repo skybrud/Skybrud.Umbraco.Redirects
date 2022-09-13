@@ -43,9 +43,11 @@
     <Content Include="wwwroot\**\*.html" />
     <Content Include="wwwroot\**\*.js" />
     <Content Include="wwwroot\Lang\*.xml" />
-    <Content Include="wwwroot\package.manifest" />
     <Content Remove="compilerconfig.json" />
-    <Content Remove="wwwroot\Scripts\Intellisense.js" />
+    <Content Remove="wwwroot\Scripts/Intellisense.js" />
+    <None Include="wwwroot\**\*.less" />
+    <None Include="compilerconfig.json" />
+    <None Include="wwwroot\Scripts/Intellisense.js" />
   </ItemGroup>
 
   <!-- Include the targets file -->
