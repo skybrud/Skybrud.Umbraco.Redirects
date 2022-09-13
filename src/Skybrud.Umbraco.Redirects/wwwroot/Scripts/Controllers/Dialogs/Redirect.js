@@ -1,4 +1,4 @@
-﻿angular.module("umbraco").controller("SkybrudUmbracoRedirects.RedirectDialog.Controller", function ($scope, $http, editorService, notificationsService, skybrudRedirectsService, localizationService, formHelper) {
+﻿angular.module("umbraco").controller("SkybrudUmbracoRedirects.RedirectDialog.Controller", function ($scope, $http, editorService, notificationsService, skybrudRedirectsService, localizationService, formHelper, eventsService) {
 
     // Get the cache buster value
     const cacheBuster = Umbraco.Sys.ServerVariables.skybrud.redirects.cacheBuster;
@@ -22,7 +22,7 @@
     if ($scope.model.redirect) {
 
         $scope.model.title = "Edit redirect";
-        localizationService.localize("redirects_editRedirect").then(function (value) { $scope.model.title = value; });
+        localizationService.localize("redirects_editRedirect").then(function(value) { $scope.model.title = value; });
 
         $scope.model.submitButtonLabelKey = "redirects_save";
 
@@ -38,11 +38,30 @@
             value: $scope.model.redirect.key
         });
 
-    } else if ($scope.model.destination) {
+    } else {
 
-        destionation = $scope.model.destination;
+        $scope.model.redirect = {
+            id: 0,
+            key: "00000000-0000-0000-0000-000000000000",
+            url: null,
+            queryString: null,
+            permanent: true,
+            destination: null,
+            forward: false
+        };
+
+        if ($scope.model.destination) {
+            destionation = $scope.model.redirect = $scope.model.destination;
+        }
 
     }
+
+
+
+
+    eventsService.emit("skybrud.umbraco.redirects.overlay.initializing", {
+        model: $scope.model
+    });
 
     $scope.model.properties = [];
 
@@ -69,7 +88,7 @@
         description: "Specify the original URL to match from which the user should be redirected to the destination.",
         descriptionKey: "redirects_propertyOriginalUrlDescription",
         view: `/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/OriginalUrl.html?v=${cacheBuster}`,
-        value: $scope.model.redirect ? $scope.model.redirect.url + ($scope.model.redirect.queryString ? `?${$scope.model.redirect.queryString}` : "") : "",
+        value: $scope.model.redirect && $scope.model.redirect.url ? $scope.model.redirect.url + ($scope.model.redirect.queryString ? `?${$scope.model.redirect.queryString}` : "") : "",
         validation: {
             mandatory: true
         }
@@ -190,7 +209,7 @@
                 p.label = value;
             });
         }
-        
+
         // Localize the description
         if (p.descriptionKey) {
             localizationService.localize(p.descriptionKey).then(function (value) {
@@ -198,7 +217,7 @@
                 p.description = value;
             });
         }
-        
+
         // Localize any config options
         if (p.config && p.config.options) {
             p.config.options.forEach(function (o) {
@@ -229,6 +248,10 @@
 
     $scope.model.navigation = $scope.model.redirect && $scope.model.redirect.id ? [vm.settingsApp, vm.infoApp] : [];
 
+    eventsService.emit("skybrud.umbraco.redirects.overlay.initialized", {
+        model: $scope.model
+    });
+
     function initLabels() {
 
         vm.labels = {
@@ -253,7 +276,7 @@
             if (!value.length || value[0] === "[") return;
             vm.settingsApp.name = value;
         });
-        
+
         localizationService.localize("redirects_infoApp").then(function (value) {
             if (!value.length || value[0] === "[") return;
             vm.infoApp.name = value;
