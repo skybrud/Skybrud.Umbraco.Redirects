@@ -1,7 +1,7 @@
-﻿<div class="SkybrudUmbracoRedirects RadioGroup" ng-controller="SkybrudUmbracoRedirects.Editors.RadioGroup.Controller">
-    <label ng-repeat="option in model.config.options">
-        <input type="radio" name="{{vm.uniqueId}}" ng-model="model.value" ng-value="option.value" />
-        <i class="icon-check umb-checkmark" ng-class="{'umb-checkmark--checked': model.value == option.value}" size="xs"></i>
-        {{option.label}}
-    </label>
+﻿<div class="SkybrudUmbracoRedirects RadioGroup" ng-controller="SkybrudUmbracoRedirects.Editors.RadioGroup.Controller as vm">
+    <div class="radio-button-list">
+        <div ng-repeat="option in model.config.options">
+            <umb-radiobutton model="model.value" value="{{option.value}}" name="{{vm.uniqueId}}" text="{{option.label}}"></umb-radiobutton>
+        </div>
+    </div>
 </div>

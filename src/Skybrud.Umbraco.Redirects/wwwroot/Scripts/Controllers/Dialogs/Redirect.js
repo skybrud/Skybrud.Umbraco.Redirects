@@ -115,18 +115,18 @@
             description: "Select the type of the redirect. Notice that browsers will remember permanent redirects.",
             descriptionKey: "redirects_propertyRedirectTypeDescription",
             view: `/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/RadioGroup.html?v=${cacheBuster}`,
-            value: $scope.model.redirect ? $scope.model.redirect.permanent : true,
+            value: $scope.model.redirect && $scope.model.redirect.permanent ? "true" : "false",
             config: {
                 options: [
                     {
                         label: "Permanent",
                         labelKey: "redirects_labelPermanent",
-                        value: true
+                        value: "true"
                     },
                     {
                         label: "Temporary",
                         labelKey: "redirects_labelTemporary",
-                        value: false
+                        value: "false"
                     }
                 ]
             }
@@ -138,18 +138,18 @@
             description: "When enabled, the query string of the original request is forwarded to the redirect location (pass through).",
             descriptionKey: "redirects_forwardQueryStringDescription",
             view: `/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/RadioGroup.html?v=${cacheBuster}`,
-            value: $scope.model.redirect ? $scope.model.redirect.forward : false,
+            value: $scope.model.redirect && $scope.model.redirect.forward ? "true" : "false",
             config: {
                 options: [
                     {
                         label: "Enabled",
                         labelKey: "redirects_labelEnabled",
-                        value: true
+                        value: "true"
                     },
                     {
                         label: "Disabled",
                         labelKey: "redirects_labelDisabled",
-                        value: false
+                        value: "false"
                     }
                 ]
             }

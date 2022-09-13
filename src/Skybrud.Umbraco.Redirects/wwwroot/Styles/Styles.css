@@ -449,27 +449,11 @@
 .SkybrudUmbracoRedirects .filters .btn + .btn {
   margin-left: 10px;
 }
-.SkybrudUmbracoRedirects.RadioGroup {
+.SkybrudUmbracoRedirects.RadioGroup .radio-button-list {
   display: flex;
 }
-.SkybrudUmbracoRedirects.RadioGroup label {
-  display: flex;
-  cursor: pointer;
-}
-.SkybrudUmbracoRedirects.RadioGroup label + label {
-  margin-left: 20px;
-}
-.SkybrudUmbracoRedirects.RadioGroup input {
-  display: initial;
-  margin-right: 5px;
-}
-.SkybrudUmbracoRedirects.RadioGroup i {
-  display: none;
-  margin-right: 5px;
-  width: 18px;
-  height: 18px;
-  font-size: 10px;
-  line-height: 18px;
+.SkybrudUmbracoRedirects.RadioGroup .radio-button-list > div + div {
+  margin-left: 15px;
 }
 .SkybrudUmbracoRedirects.RedirectsRootId div {
   position: relative;

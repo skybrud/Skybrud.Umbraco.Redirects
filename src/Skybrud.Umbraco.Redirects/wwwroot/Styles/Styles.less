@@ -268,29 +268,11 @@
     }
 
     &.RadioGroup {
-        display: flex;
-
-        label {
+        .radio-button-list {
             display: flex;
-            cursor: pointer;
-        }
-
-        label + label {
-            margin-left: 20px;
-        }
-
-        input {
-            display: initial;
-            margin-right: 5px;
-        }
-
-        i {
-            display: none;
-            margin-right: 5px;
-            width: 18px;
-            height: 18px;
-            font-size: 10px;
-            line-height: 18px;
+            > div + div {
+                margin-left: 15px;
+            }
         }
     }
 
