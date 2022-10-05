@@ -72,7 +72,7 @@
         description: "Specify the site that the original URL to match from belongs to.",
         descriptionKey: "redirects_propertySiteDescription",
         view: `/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/Site.html?v=${cacheBuster}`,
-        value: $scope.model.redirect && $scope.model.redirect.rootId ? $scope.model.redirect.rootId : 0,
+        value: $scope.model.redirect?.rootNode?.id ? $scope.model.redirect.rootNode.id : 0,
         config: {
             rootNodes: vm.options.rootNodes
         },
