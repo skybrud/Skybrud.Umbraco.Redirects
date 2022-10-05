@@ -1,5 +1,5 @@
 ﻿namespace Skybrud.Umbraco.Redirects.Models {
-    
+
     /// <summary>
     /// Dummy class representing an inbound redirect. This class has no real purpose other than detecting properties
     /// returning instances of this class.

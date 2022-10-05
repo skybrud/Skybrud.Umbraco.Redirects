@@ -53,22 +53,22 @@ namespace Skybrud.Umbraco.Redirects.Models.Api {
         public RedirectDestinationModel(IRedirect redirect) : this(redirect.Destination) { }
 
         public RedirectDestinationModel(IRedirectDestination destination) {
-            
+
             _destination = destination;
 
             switch (Type) {
-                
+
                 case RedirectDestinationType.Content:
                     Icon = "icon-article";
                     BackOfficeUrl = $"/umbraco/#/content/content/edit/{destination.Id}";
                     break;
-                
+
                 case RedirectDestinationType.Media:
                     Icon = "icon-picture";
                     BackOfficeUrl = $"/umbraco/#/media/media/edit/{destination.Id}";
                     IsPublished = true;
                     break;
-                
+
                 default:
                     Icon = "icon-link";
                     IsPublished = true;

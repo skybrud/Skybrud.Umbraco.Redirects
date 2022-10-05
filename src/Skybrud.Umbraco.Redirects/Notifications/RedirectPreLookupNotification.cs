@@ -7,9 +7,9 @@ using Skybrud.Umbraco.Redirects.Models;
 #pragma warning disable 1591
 
 namespace Skybrud.Umbraco.Redirects.Notifications {
-    
+
     public class RedirectPreLookupNotification : IRedirectPreLookupNotification {
-        
+
         #region Properties
 
         /// <summary>
@@ -22,17 +22,17 @@ namespace Skybrud.Umbraco.Redirects.Notifications {
 
         /// <inheritdoc />
         public virtual string RawUrl => HttpContext.Request.GetDisplayUrl();
-        
+
         /// <summary>
         /// Gets or sets the redirect.
         /// </summary>
         public IRedirect Redirect { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the type of the redirect. Only change this value if you wish to overwrite the default behaviour.
         /// </summary>
         public RedirectType? RedirectType { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the destination URL of the redirect. Usually it should be necessary to change this value, but you can do so to force a specific destination URL.
         /// </summary>

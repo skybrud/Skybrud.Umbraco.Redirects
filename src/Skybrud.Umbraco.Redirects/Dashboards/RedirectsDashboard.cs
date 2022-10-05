@@ -4,11 +4,11 @@ using Umbraco.Cms.Core.Dashboards;
 #pragma warning disable 1591
 
 namespace Skybrud.Umbraco.Redirects.Dashboards {
-    
+
     public class RedirectsDashboard : IDashboard {
-        
+
         private readonly RedirectsBackOfficeHelper _backoffice;
-        
+
         public string Alias => "redirects";
 
         public string[] Sections => new[] { "content" };

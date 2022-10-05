@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 
 namespace Skybrud.Umbraco.Redirects.Models {
-    
+
     /// <summary>
     /// Class representing a collection of redirects.
     /// </summary>

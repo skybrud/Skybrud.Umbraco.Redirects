@@ -5,7 +5,7 @@ using Umbraco.Cms.Core.PropertyEditors;
 #pragma warning disable 1591
 
 namespace Skybrud.Umbraco.Redirects.PropertyEditors {
-    
+
     [DataEditor(EditorAlias, EditorType.PropertyValue, EditorName, EditorView, ValueType = ValueTypes.Json, Group = "Skybrud.dk", Icon = "icon-arrow-right color-skybrud")]
     public class OutboundRedirectEditor : DataEditor {
 
@@ -22,7 +22,7 @@ namespace Skybrud.Umbraco.Redirects.PropertyEditors {
         }
 
         public override IDataValueEditor GetValueEditor(object configuration) {
-            
+
             IDataValueEditor editor = base.GetValueEditor(configuration);
 
             if (editor is DataValueEditor dve) {

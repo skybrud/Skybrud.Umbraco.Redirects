@@ -11,7 +11,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
     public class RedirectsServiceDependencies {
 
         #region Properties
-        
+
         /// <summary>
         /// Gets the reference to the current <see cref="ILogger{RedirectsService}"/>.
         /// </summary>
@@ -21,17 +21,17 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// Gets the reference to the current <see cref="IScopeProvider"/>.
         /// </summary>
         public IScopeProvider ScopeProvider { get; }
-        
+
         /// <summary>
         /// Gets the reference to the current <see cref="IDomainService"/>.
         /// </summary>
         public IDomainService Domains { get; }
-        
+
         /// <summary>
         /// Gets the reference to the current <see cref="IContentService"/>.
         /// </summary>
         public IContentService ContentService { get; }
-        
+
         /// <summary>
         /// Gets the reference to the current <see cref="IUmbracoContextAccessor"/>.
         /// </summary>

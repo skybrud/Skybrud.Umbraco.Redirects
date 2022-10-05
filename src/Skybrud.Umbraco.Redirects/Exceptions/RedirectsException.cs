@@ -2,7 +2,7 @@
 using System.Net;
 
 namespace Skybrud.Umbraco.Redirects.Exceptions {
-    
+
     /// <summary>
     /// Exception representing a generic error thrown by the logic within this package.
     /// </summary>

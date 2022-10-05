@@ -26,11 +26,11 @@ namespace Skybrud.Umbraco.Redirects.PropertyEditors {
             _editorConfigurationParser = editorConfigurationParser;
             _backOfficeHelper = backOfficeHelper;
         }
-        
+
         protected override IConfigurationEditor CreateConfigurationEditor() => new InboundRedirectsConfigurationEditor(_ioHelper, _editorConfigurationParser);
 
         public override IDataValueEditor GetValueEditor(object configuration) {
-            
+
             IDataValueEditor editor = base.GetValueEditor(configuration);
 
             if (editor is DataValueEditor dve) {

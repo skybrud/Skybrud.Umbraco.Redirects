@@ -6,12 +6,12 @@
 //using Umbraco.Extensions;
 
 //namespace Skybrud.Umbraco.Redirects.Domains {
-    
+
 //    /// <summary>
 //    /// Static utility class with helper methods related to domains.
 //    /// </summary>
 //    public static class DomainUtils {
-        
+
 //        /// <summary>
 //        /// Finds the domain matching the specified uri using the domain service.
 //        /// </summary>

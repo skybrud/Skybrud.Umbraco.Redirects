@@ -5,12 +5,12 @@ using Skybrud.Umbraco.Redirects.Models;
 using Skybrud.Umbraco.Redirects.Models.Options;
 
 namespace Skybrud.Umbraco.Redirects.Services {
-    
+
     /// <summary>
     /// Interface describing the redirects service.
     /// </summary>
     public interface IRedirectsService {
-        
+
         /// <summary>
         /// Returns an array of <see cref="RedirectDomain"/> representing all the domains registered in Umbraco.
         /// </summary>
@@ -24,9 +24,6 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// <returns>An instance of <see cref="IRedirect"/> representing the created redirect.</returns>
         IRedirect AddRedirect(AddRedirectOptions options);
 
-
-
-        
         /// <summary>
         /// Saves the specified <paramref name="redirect"/>.
         /// </summary>
@@ -53,7 +50,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// <param name="key">The GUID key of the redirect.</param>
         /// <returns>An instance of <see cref="IRedirect"/>, or <c>null</c> if not found.</returns>
         IRedirect GetRedirectByKey(Guid key);
-        
+
         /// <summary>
         /// Gets the redirect matching the specified <paramref name="url"/>.
         /// </summary>
@@ -61,7 +58,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// <param name="url">The URL of the redirect.</param>
         /// <returns>An instance of <see cref="IRedirect"/>, or <c>null</c> if not found.</returns>
         IRedirect GetRedirectByUrl(Guid rootNodeKey, string url);
-        
+
         /// <summary>
         /// Returns the redirect matching the specified <paramref name="path"/> and <paramref name="query"/>, or <c>null</c> if not redirect is found.
         /// </summary>
@@ -77,7 +74,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// <param name="request">The request.</param>
         /// <returns>An instance of <see cref="IRedirect"/>, or <c>null</c> if no matching redirects were found.</returns>
         IRedirect GetRedirectByRequest(HttpRequest request);
-        
+
         /// <summary>
         /// Returns the first redirect matching the specified <paramref name="uri"/>, or <c>null</c> if the URI does not match any redirects.
         /// </summary>
@@ -99,7 +96,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// <param name="uri">The inbound URL.</param>
         /// <returns>The destination URL.</returns>
         string GetDestinationUrl(IRedirectBase redirect, Uri uri);
-        
+
         /// <summary>
         /// Returns a paginated list of redirects matching the specified <paramref name="options"/>.
         /// </summary>
@@ -118,7 +115,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// </summary>
         /// <returns>An array of <see cref="RedirectRootNode"/> representing the root nodes.</returns>
         RedirectRootNode[] GetRootNodes();
-        
+
         /// <summary>
         /// Returns an array of redirects where the destination matches the specified <paramref name="nodeType"/> and <paramref name="nodeId"/>.
         /// </summary>
@@ -126,7 +123,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// <param name="nodeId">The numeric ID of the destination node.</param>
         /// <returns>An array of <see cref="IRedirect"/>.</returns>
         IRedirect[] GetRedirectsByNodeId(RedirectDestinationType nodeType, int nodeId);
-        
+
         /// <summary>
         /// Returns an array of redirects where the destination matches the specified <paramref name="nodeType"/> and <paramref name="nodeKey"/>.
         /// </summary>

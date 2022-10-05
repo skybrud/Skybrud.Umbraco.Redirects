@@ -2,7 +2,7 @@
 using Skybrud.Umbraco.Redirects.Exceptions;
 
 namespace Skybrud.Umbraco.Redirects.Models.Api {
-    
+
     /// <summary>
     /// Class representing a redirects error.
     /// </summary>
@@ -25,8 +25,8 @@ namespace Skybrud.Umbraco.Redirects.Models.Api {
         public RedirectsError(string error) {
             StatusCode = HttpStatusCode.InternalServerError;
             Error = error;
-        } 
-        
+        }
+
         /// <summary>
         /// Initializes a new instance based on the specified <paramref name="exception"/>.
         /// </summary>

@@ -11,7 +11,7 @@ namespace Skybrud.Umbraco.Redirects.Exceptions {
         /// Initializes a new exception with default message.
         /// </summary>
         public RedirectNotFoundException() : base(HttpStatusCode.NotFound, "A redirect with the specified ID does not exist.") { }
-        
+
         /// <summary>
         /// Initializes a new exception with the specified <paramref name="message"/>.
         /// </summary>

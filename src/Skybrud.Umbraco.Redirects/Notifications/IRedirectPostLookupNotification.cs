@@ -3,12 +3,12 @@ using Skybrud.Umbraco.Redirects.Models;
 using Umbraco.Cms.Core.Notifications;
 
 namespace Skybrud.Umbraco.Redirects.Notifications {
-    
+
     /// <summary>
     /// Interface describing the redirect post lookup noticication.
     /// </summary>
     public interface IRedirectPostLookupNotification : INotification {
-        
+
         /// <summary>
         /// Gets the inbound URI of the request.
         /// </summary>

@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 
 namespace Skybrud.Umbraco.Redirects.Models {
-    
+
     /// <summary>
     /// Class with pagination information about a collection of redirect items.
     /// </summary>

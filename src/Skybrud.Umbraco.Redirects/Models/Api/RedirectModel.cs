@@ -6,21 +6,21 @@ using Skybrud.Umbraco.Redirects.Text.Json;
 #pragma warning disable 1591
 
 namespace Skybrud.Umbraco.Redirects.Models.Api {
-    
+
     public class RedirectModel {
 
         private readonly IRedirect _redirect;
-        
+
         public int Id => _redirect.Id;
-        
+
         public Guid Key => _redirect.Key;
 
         public RedirectRootNodeModel RootNode { get; }
-        
+
         public string Path => _redirect.Path;
-        
+
         public string QueryString => _redirect.QueryString;
-        
+
         public string Url => _redirect.Url;
 
         public RedirectDestinationModel Destination { get; }
@@ -30,9 +30,9 @@ namespace Skybrud.Umbraco.Redirects.Models.Api {
 
         [JsonConverter(typeof(Iso8601TimeConverter))]
         public EssentialsTime UpdateDate => _redirect.UpdateDate;
-        
+
         public RedirectType Type => _redirect.Type;
-        
+
         [JsonPropertyName("permanent")]
         public bool IsPermanent => _redirect.IsPermanent;
 

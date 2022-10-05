@@ -278,6 +278,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
 
             // Initialize the new redirect and populate the properties
             Redirect item = new Redirect {
+                
                 RootKey = options.RootNodeKey,
                 Url = options.OriginalUrl,
                 CreateDate = EssentialsTime.UtcNow,

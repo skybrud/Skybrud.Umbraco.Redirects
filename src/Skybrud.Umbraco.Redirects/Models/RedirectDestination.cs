@@ -6,14 +6,14 @@ using Skybrud.Essentials.Json.Extensions;
 using Skybrud.Essentials.Strings.Extensions;
 
 namespace Skybrud.Umbraco.Redirects.Models {
-    
+
     /// <summary>
     /// Class with information about the destination of a redirect.
     /// </summary>
     public class RedirectDestination : IRedirectDestination {
 
         #region Properties
-        
+
         /// <summary>
         /// Gets the ID of the selected content or media. If an URL has been selected, this will return <c>0</c>.
         /// </summary>

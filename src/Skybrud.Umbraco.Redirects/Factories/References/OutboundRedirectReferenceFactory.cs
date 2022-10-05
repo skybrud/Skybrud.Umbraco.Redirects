@@ -16,7 +16,7 @@ namespace Skybrud.Umbraco.Redirects.Factories.References {
         public IDataValueReference GetDataValueReference() => this;
 
         public IEnumerable<UmbracoEntityReference> GetReferences(object value) {
-            
+
             List<UmbracoEntityReference> references = new List<UmbracoEntityReference>();
             if (value is not string json) return references;
 
@@ -24,17 +24,17 @@ namespace Skybrud.Umbraco.Redirects.Factories.References {
             if (destination == null) return references;
 
             switch (destination.Type) {
-                
+
                 case RedirectDestinationType.Media:
                     references.Add(new UmbracoEntityReference(new GuidUdi("media", destination.Key)));
                     break;
-                
+
                 case RedirectDestinationType.Content:
                     references.Add(new UmbracoEntityReference(new GuidUdi("content", destination.Key)));
                     break;
 
             }
-            
+
             return references;
 
         }

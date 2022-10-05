@@ -67,7 +67,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// </summary>
         [JsonProperty("url")]
         public string Url {
-            
+
             get => Dto.Path + (string.IsNullOrWhiteSpace(Dto.QueryString) ? null : "?" + QueryString);
 
             set  {
@@ -173,7 +173,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         }
 
         internal Redirect(RedirectDto dto) {
-            
+
             _createDate = new EssentialsTime(dto.Created);
             _updateDate = new EssentialsTime(dto.Updated);
 
@@ -189,7 +189,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
                 Query = dto.DestinationQuery,
                 Fragment = dto.DestinationFragment
             };
-           
+
             Dto = dto;
 
         }
