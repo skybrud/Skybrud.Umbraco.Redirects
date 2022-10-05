@@ -40,12 +40,6 @@ namespace Skybrud.Umbraco.Redirects.Models.Dtos {
         public Guid Key { get; set; }
 
         /// <summary>
-        /// Gets or sets the root node ID of the redirect.
-        /// </summary>
-        [Column("RootId")]
-        public int RootId { get; set; }
-
-        /// <summary>
         /// Gets or sets the root node GUID key of the redirect.
         /// </summary>
         [Column("RootKey")]
