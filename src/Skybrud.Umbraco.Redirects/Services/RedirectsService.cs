@@ -402,11 +402,11 @@ namespace Skybrud.Umbraco.Redirects.Services {
             sql = sql.OrderByDescending<RedirectDto>(x => x.Updated);
 
             // Make the call to the database
-            RedirectDto[] all = scope.Database.Fetch<RedirectDto>(sql).ToArray();
+            List<RedirectDto> all = scope.Database.Fetch<RedirectDto>(sql);
 
             // Calculate variables used for the pagination
             int limit = options.Limit;
-            int pages = (int) Math.Ceiling(all.Length / (double) limit);
+            int pages = (int) Math.Ceiling(all.Count / (double) limit);
             int page = Math.Max(1, Math.Min(options.Page, pages));
             int offset = (page * limit) - limit;
 
@@ -418,7 +418,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
                 .ToArray();
 
             // Wrap the search result
-            RedirectsSearchResult result = new RedirectsSearchResult(all.Length, limit, offset, page, pages, items);
+            RedirectsSearchResult result = new RedirectsSearchResult(all.Count, limit, offset, page, pages, items);
 
             // Complete the scope
             scope.Complete();
