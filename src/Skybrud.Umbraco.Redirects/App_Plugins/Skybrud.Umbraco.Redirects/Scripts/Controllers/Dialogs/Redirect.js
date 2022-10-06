@@ -53,7 +53,7 @@
         description: "Specify the site that the original URL to match from belongs to.",
         descriptionKey: "redirects_propertySiteDescription",
         view: `/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/Site.html?v=${cacheBuster}`,
-        value: $scope.model.redirect && $scope.model.redirect.rootId ? $scope.model.redirect.rootId : 0,
+        value: $scope.model.redirect?.rootNode?.id ? $scope.model.redirect.rootNode.id : 0,
         config: {
             rootNodes: vm.options.rootNodes
         },
@@ -190,7 +190,7 @@
                 p.label = value;
             });
         }
-        
+
         // Localize the description
         if (p.descriptionKey) {
             localizationService.localize(p.descriptionKey).then(function (value) {
@@ -198,7 +198,7 @@
                 p.description = value;
             });
         }
-        
+
         // Localize any config options
         if (p.config && p.config.options) {
             p.config.options.forEach(function (o) {
@@ -253,7 +253,7 @@
             if (!value.length || value[0] === "[") return;
             vm.settingsApp.name = value;
         });
-        
+
         localizationService.localize("redirects_infoApp").then(function (value) {
             if (!value.length || value[0] === "[") return;
             vm.infoApp.name = value;
