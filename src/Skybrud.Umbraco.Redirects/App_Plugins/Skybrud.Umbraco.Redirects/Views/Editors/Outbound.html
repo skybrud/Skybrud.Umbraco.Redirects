@@ -1,31 +1,56 @@
 ﻿<div ng-controller="SkybrudUmbracoRedirects.OutboundRedirectEditor.Controller as vm">
-    <div class="SkybrudPropertyEditors LinkPicker SingleLinkPicker">
-        <div>
-            <label style="margin: 0; padding: 0;">
-                <input type="radio" name="radio_{{model.id}}" ng-model="vm.type" value="permanent" ng-change="vm.changed()" />
-                <localize key="redirects_labelPermanentRedirect">Permanent redirect</localize> (301)
-            </label>
-            <label style="margin: 0 0 0 10px; padding: 0;">
-                <input type="radio" name="radio_{{model.id}}" ng-model="vm.type" value="temporary" ng-change="vm.changed()" />
-                <localize key="redirects_labelTemporaryRedirect">Temporary redirect</localize> (307)
-            </label>
-        </div>
-        <hr style="margin: 10px 0;" />
-        <div ng-if="model.value.destination" class="umb-node-preview" style="max-width: initial;">
-            <i ng-if="model.value.destination.type == 'content'" class="umb-node-preview__icon icon-document"></i>
-            <i ng-if="model.value.destination.type == 'media'" class="umb-node-preview__icon icon-picture"></i>
-            <i ng-if="model.value.destination.type == 'url'" class="umb-node-preview__icon icon-link"></i>
-            <div class="umb-node-preview__content">
-                <div class="umb-node-preview__name">{{model.value.destination.name}}</div>
-                <div class="umb-node-preview__description">{{model.value.destination.displayUrl}}</div>
+    <div class="skybrud-outbound-redirect">
+        <div class="skybrud-outbound-redirect-properties">
+            <div class="skybrud-outbound-redirect-property">
+                <div class="skybrud-outbound-redirect-label">
+                    <strong><localize key="redirects_propertyRedirectTypeName">Redirect type</localize></strong><br />
+                    <small><localize key="redirects_propertyRedirectTypeDescription"></localize></small>
+                </div>
+                <div class="skybrud-outbound-redirect-value">
+                    <div class="skybrud-outbound-redirect-radio-list">
+                        <div ng-repeat="option in vm.redirectType.options">
+                            <umb-radiobutton model="vm.redirectType.value" value="{{option.value}}" name="{{vm.redirectType.uniqueId}}" text="{{option.label}}" on-change="vm.updated()"></umb-radiobutton>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="umb-node-preview__actions">
-                <a class="umb-node-preview__action" href="" ng-click="vm.editLink()"><localize key="general_edit">Edit</localize></a>
-                <a class="umb-node-preview__action umb-node-preview__action--red" href="" ng-click="vm.removeLink()"><localize key="general_remove">Remove</localize></a>
+            <div class="skybrud-outbound-redirect-property">
+                <div class="skybrud-outbound-redirect-label">
+                    <strong>Forward query string</strong><br />
+                    <small>When enabled, the query string of the original request is forwarded to the redirect location (pass through).</small>
+                </div>
+                <div class="skybrud-outbound-redirect-value">
+                    <div class="skybrud-outbound-redirect-radio-list">
+                        <div ng-repeat="option in vm.forward.options">
+                            <umb-radiobutton model="vm.forward.value" value="{{option.value}}" name="{{vm.forward.uniqueId}}" text="{{option.label}}" on-change="vm.updated()"></umb-radiobutton>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="skybrud-outbound-redirect-property">
+                <div class="skybrud-outbound-redirect-label">
+                    <strong>Destination</strong><br />
+                    <small>Select the page, media or URL the user should be redirected to.</small>
+                </div>
+                <div class="skybrud-outbound-redirect-value">
+                    <div ng-if="model.value.destination" class="umb-node-preview" single style="max-width: initial;">
+                        <i ng-if="model.value.destination.type == 'content'" class="umb-node-preview__icon icon-document"></i>
+                        <i ng-if="model.value.destination.type == 'media'" class="umb-node-preview__icon icon-picture"></i>
+                        <i ng-if="model.value.destination.type == 'url'" class="umb-node-preview__icon icon-link"></i>
+                        <div class="umb-node-preview__content">
+                            <div class="umb-node-preview__name">{{model.value.destination.name}}</div>
+                            <div class="umb-node-preview__description">{{model.value.destination.displayUrl}}</div>
+                        </div>
+                        <div class="umb-node-preview__actions">
+                            <a class="umb-node-preview__action" href="" ng-click="vm.editLink()"><localize key="general_edit">Edit</localize></a>
+                            <a class="umb-node-preview__action umb-node-preview__action--red" href="" ng-click="vm.removeLink()"><localize key="general_remove">Remove</localize></a>
+                        </div>
+                    </div>
+                    <button type="button" ng-if="!model.value.destination" class="umb-node-preview-add" ng-click="vm.addLink()" style="max-width: initial;">
+                        <localize key="redirects_selectDestination">Select destination</localize>
+                    </button>
+                </div>
             </div>
         </div>
-        <button type="button" ng-if="!model.value.destination" class="umb-node-preview-add" ng-click="vm.addLink()" style="max-width: initial;">
-            <localize key="redirects_selectDestination">Select destination</localize>
-        </button>
     </div>
 </div>
