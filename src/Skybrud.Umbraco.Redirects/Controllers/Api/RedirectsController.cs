@@ -12,12 +12,16 @@ using Skybrud.Umbraco.Redirects.Models;
 using Skybrud.Umbraco.Redirects.Models.Api;
 using Skybrud.Umbraco.Redirects.Models.Options;
 using Skybrud.Umbraco.Redirects.Services;
+using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Models;
+using Umbraco.Cms.Core.Models.Membership;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Web.BackOffice.Controllers;
 using Umbraco.Cms.Web.Common.Attributes;
+using Umbraco.Cms.Web.Common.UmbracoContext;
+using Umbraco.Extensions;
 
 #pragma warning disable 1591
 
@@ -36,6 +40,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         private readonly RedirectsBackOfficeHelper _backOffice;
         private readonly IContentService _contentService;
         private readonly IMediaService _mediaService;
+        private readonly IUserService _userService;
         private readonly IUmbracoContextAccessor _umbracoContextAccessor;
 
         #region Constructors
@@ -43,12 +48,14 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         public RedirectsController(ILogger<RedirectsController> logger, IRedirectsService redirectsService, RedirectsBackOfficeHelper backOffice,
             IContentService contentService,
             IMediaService mediaService,
+            IUserService userService,
             IUmbracoContextAccessor umbracoContextAccessor) {
             _logger = logger;
             _redirects = redirectsService;
             _backOffice = backOffice;
             _contentService = contentService;
             _mediaService = mediaService;
+            _userService = userService;
             _umbracoContextAccessor = umbracoContextAccessor;
         }
 
@@ -61,13 +68,13 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         [HttpGet]
         public ActionResult GetRootNodes() {
 
-            RedirectRootNode[] rootNodes = _redirects.GetRootNodes();
+	        RedirectRootNode[] rootNodes = _redirects.GetRootNodes(GetUser()).ToArray();
 
-            return new JsonResult(new {
-                total = rootNodes.Length,
-                items = rootNodes.Select(x => new RedirectRootNodeModel(x, _backOffice))
-            });
-
+	        return new JsonResult(new
+	        {
+		        total = rootNodes.Length,
+		        items = rootNodes.Select(x => new RedirectRootNodeModel(x, _backOffice))
+	        });
         }
 
         [HttpPost]
@@ -267,12 +274,17 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                     Page = page,
                     Limit = limit,
                     Type = EnumUtils.ParseEnum(type, RedirectTypeFilter.All),
-                    Text = text,
-                    RootNodeKey = rootNodeKey
+                    Text = text
                 };
+
+                if (rootNodeKey != null) options.RootNodeKey = rootNodeKey;
+
+                var rootKeys = _contentService.GetByIds(_redirects.GetUserAccessibleNodes(GetUser()))
+	                .Select(p => p.Key)
+	                .ToArray();
                 
                 // Make the search for redirects via the redirects service
-                RedirectsSearchResult result = _redirects.GetRedirects(options);
+                RedirectsSearchResult result = _redirects.GetRedirects(options, rootKeys);
 
                 // Map the result for the API
                 return new JsonResult(_backOffice.Map(result));
@@ -370,6 +382,11 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
 
         }
 
+        private IUser GetUser()
+        {
+	        var currentUser = HttpContext.User.GetUmbracoIdentity();
+	        return _userService.GetByUsername(currentUser.Name);
+        }
     }
 
 }

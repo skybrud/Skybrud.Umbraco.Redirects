@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Http;
 using Skybrud.Umbraco.Redirects.Models;
 using Skybrud.Umbraco.Redirects.Models.Options;
 
+using Umbraco.Cms.Core.Models.Membership;
+
 namespace Skybrud.Umbraco.Redirects.Services {
     
     /// <summary>
@@ -16,6 +18,8 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// </summary>
         /// <returns>An array of <see cref="RedirectDomain"/>.</returns>
         RedirectDomain[] GetDomains();
+
+        int[] GetUserAccessibleNodes(IUser umbracoUser);
 
         /// <summary>
         /// Adds a new redirect with the specified <paramref name="options"/>.
@@ -99,13 +103,14 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// <param name="uri">The inbound URL.</param>
         /// <returns>The destination URL.</returns>
         string GetDestinationUrl(IRedirectBase redirect, Uri uri);
-        
+
         /// <summary>
         /// Returns a paginated list of redirects matching the specified <paramref name="options"/>.
         /// </summary>
         /// <param name="options">The options the returned redirects should match.</param>
+        /// <param name="rootNodes">The user's root nodes that should be visible for security</param>
         /// <returns>An instance of <see cref="RedirectsSearchResult"/>.</returns>
-        RedirectsSearchResult GetRedirects(RedirectsSearchOptions options);
+        RedirectsSearchResult GetRedirects(RedirectsSearchOptions options, Guid[] rootNodes);
 
         /// <summary>
         /// Returns a collection with all redirects.
@@ -117,7 +122,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// Returns an array of all rode nodes configured in Umbraco.
         /// </summary>
         /// <returns>An array of <see cref="RedirectRootNode"/> representing the root nodes.</returns>
-        RedirectRootNode[] GetRootNodes();
+        RedirectRootNode[] GetRootNodes(IUser user);
         
         /// <summary>
         /// Returns an array of redirects where the destination matches the specified <paramref name="nodeType"/> and <paramref name="nodeId"/>.
