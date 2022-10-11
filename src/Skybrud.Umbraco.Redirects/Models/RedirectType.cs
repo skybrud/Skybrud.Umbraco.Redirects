@@ -2,7 +2,7 @@
 using MicrosoftJsonConverter = System.Text.Json.Serialization.JsonConverterAttribute;
 
 namespace Skybrud.Umbraco.Redirects.Models {
-    
+
     /// <summary>
     /// Enum class indicating the type of a redirect - eg. <see cref="Permanent"/> or <see cref="Temporary"/>.
     /// </summary>
@@ -14,7 +14,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// Indicates that a redirect is permanent.
         /// </summary>
         Permanent,
-        
+
         /// <summary>
         /// Indicates that a redirect is temporary.
         /// </summary>

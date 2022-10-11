@@ -5,7 +5,7 @@ using Skybrud.Umbraco.Redirects.Extensions;
 using Skybrud.Umbraco.Redirects.Models;
 
 namespace Skybrud.Umbraco.Redirects.Notifications {
-    
+
     /// <summary>
     /// Default implementation of the <see cref="IRedirectPostLookupNotification"/> interface, based on an <see cref="HttpContext"/>.
     /// </summary>
@@ -23,17 +23,17 @@ namespace Skybrud.Umbraco.Redirects.Notifications {
 
         /// <inheritdoc />
         public virtual string RawUrl => HttpContext.Request.GetDisplayUrl();
-        
+
         /// <summary>
         /// Gets the redirect.
         /// </summary>
         public IRedirect Redirect { get; }
-        
+
         /// <summary>
         /// Gets or sets the type of the redirect. Only change this value if you wish to overwrite the default behaviour.
         /// </summary>
         public RedirectType RedirectType { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the destination URL of the redirect.
         /// </summary>

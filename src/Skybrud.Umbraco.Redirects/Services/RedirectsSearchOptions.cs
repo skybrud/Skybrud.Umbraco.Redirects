@@ -1,7 +1,7 @@
 ﻿using System;
 
 namespace Skybrud.Umbraco.Redirects.Services {
-    
+
     /// <summary>
     /// Class with options for searching through the created redirects.
     /// </summary>
@@ -40,7 +40,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
         public Guid? RootNodeKey { get; set; }
 
         #endregion
-        
+
         #region Constructors
 
         /// <summary>

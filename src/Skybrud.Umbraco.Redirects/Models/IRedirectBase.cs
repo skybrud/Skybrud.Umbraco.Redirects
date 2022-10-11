@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using Skybrud.Umbraco.Redirects.Models.Outbound;
 
 namespace Skybrud.Umbraco.Redirects.Models {
-    
+
     /// <summary>
     /// Interface describing a basic redirect.
     /// </summary>
@@ -33,7 +33,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         [JsonProperty("forward", Order = 52)]
         [JsonPropertyName("forward")]
         public bool ForwardQueryString { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the destination of the redirect.
         /// </summary>

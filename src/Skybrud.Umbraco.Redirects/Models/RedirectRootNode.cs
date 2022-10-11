@@ -45,7 +45,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
             Key = content.Key;
             Name = content.Name;
             Icon = content.ContentType.Icon;
-            Domains = domains?.Select(x => x.Name)?.ToArray() ?? Array.Empty<string>();
+            Domains = domains?.Select(x => x.Name).ToArray() ?? Array.Empty<string>();
         }
 
         /// <summary>

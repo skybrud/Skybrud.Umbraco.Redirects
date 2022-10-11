@@ -14,7 +14,7 @@ using Umbraco.Cms.Core.Routing;
 using Umbraco.Extensions;
 
 namespace Skybrud.Umbraco.Redirects.Helpers {
-    
+
     /// <summary>
     /// Backoffice helper class for the redirects package.
     /// </summary>
@@ -47,7 +47,7 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
         #endregion
 
         #region Member methods
-        
+
         /// <summary>
         /// Returns the localized value for the key with the specified <paramref name="alias"/> within the <c>redirects</c> area.
         /// </summary>
@@ -56,7 +56,7 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
         public string Localize(string alias) {
             return Localize(alias, "redirects");
         }
-        
+
         /// <summary>
         /// Returns the localized value for the key with the specified <paramref name="alias"/> and <paramref name="area"/>.
         /// </summary>
@@ -100,13 +100,13 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
         /// </summary>
         /// <returns>An instance of <see cref="Dictionary{TKey,TValue}"/>.</returns>
         public virtual Dictionary<string, object> GetServerVariables() {
-            
+
             // Get the backoffice path
             string backOfficePath = Dependencies.GlobalSettings.GetBackOfficePath(Dependencies.HostingEnvironment);
 
             // Determine the API base URL
             string baseUrl = $"{WebPath.Combine(backOfficePath, "/backoffice/Skybrud/Redirects")}/";
-            
+
             // Append the "redirects" dictionary to "skybrud"
             return new Dictionary<string, object> {
                 {"baseUrl", baseUrl },
@@ -139,7 +139,7 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
         /// <param name="result">The search result to be mapped.</param>
         /// <returns>An instance of <see cref="object"/>.</returns>
         public virtual object Map(RedirectsSearchResult result) {
-            
+
             Dictionary<Guid, RedirectRootNodeModel> rootNodeLookup = new Dictionary<Guid, RedirectRootNodeModel>();
             Dictionary<Guid, IContent> contentLookup = new Dictionary<Guid, IContent>();
             Dictionary<Guid, IMedia> mediaLookup = new Dictionary<Guid, IMedia>();
@@ -208,24 +208,24 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
                     content = Dependencies.ContentService.GetById(redirect.Destination.Key);
                     if (content != null) contentLookup.Add(content.Key, content);
                 }
-                
+
                 destination = new RedirectDestinationModel(redirect, content) {
                     BackOfficeUrl = $"{backOfficeBaseUrl}/#/content/content/edit/{redirect.Destination.Id}"
                 };
 
             } else if (redirect.Destination.Type == RedirectDestinationType.Media) {
-                
+
                 if (!mediaLookup.TryGetValue(redirect.Destination.Key, out IMedia media)) {
                     media = Dependencies.MediaService.GetById(redirect.Destination.Key);
                     if (media != null) mediaLookup.Add(media.Key, media);
                 }
-                
+
                 destination = new RedirectDestinationModel(redirect, media) {
                     BackOfficeUrl = $"{backOfficeBaseUrl}/#/content/media/edit/{redirect.Destination.Id}"
                 };
 
             } else {
-                
+
                 destination = new RedirectDestinationModel(redirect);
 
             }
@@ -252,7 +252,7 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
 
                 default:
                     return null;
-                
+
             }
 
         }

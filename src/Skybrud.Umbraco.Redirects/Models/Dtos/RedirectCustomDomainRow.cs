@@ -46,7 +46,7 @@
 //        /// </summary>
 //        [Column("Domain")]
 //        public string Domain { get; set; }
-        
+
 //        /// <summary>
 //        /// Gets or sets the timestamp for when the redirect was created.
 //        /// </summary>

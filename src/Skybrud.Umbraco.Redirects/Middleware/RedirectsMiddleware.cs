@@ -13,9 +13,9 @@ using Umbraco.Cms.Core.Services;
 #pragma warning disable 1591
 
 namespace Skybrud.Umbraco.Redirects.Middleware {
-    
+
     public class RedirectsMiddleware {
-        
+
         private readonly RequestDelegate _next;
         private readonly IEventAggregator _eventAggregator;
         private readonly IRuntimeState _runtimeState;
@@ -46,22 +46,22 @@ namespace Skybrud.Umbraco.Redirects.Middleware {
             }
 
             context.Response.OnStarting(() => {
-                
+
                 switch (context.Response.StatusCode) {
-                    
+
                     case StatusCodes.Status404NotFound: {
 
                         // Get the URI of the inbound request
                         Uri uri = context.Request.GetUri();
-                            
+
                         // Invoke the pre lookup event
                         RedirectPreLookupNotification preLookup = new(context);
                         _eventAggregator.Publish<IRedirectPreLookupNotification>(preLookup);
-            
+
                         // Get the destination URL from the arguments (in case a value has been set
                         // from an notification handler)
                         string destinationUrl = preLookup.DestinationUrl;
-                            
+
                         // Declare a variable for the redirect (either from the pre lookup or a lookup via the service)
                         IRedirect redirect = preLookup.Redirect ?? _redirectsService.GetRedirectByRequest(context.Request);
 
@@ -70,7 +70,7 @@ namespace Skybrud.Umbraco.Redirects.Middleware {
 
                         // Determine the redirect type
                         RedirectType redirectType = preLookup.RedirectType ?? redirect?.Type ?? RedirectType.Temporary;
-                        
+
                         // Calculate the destination URL
                         destinationUrl ??= _redirectsService.GetDestinationUrl(redirect, uri);
 
@@ -85,7 +85,7 @@ namespace Skybrud.Umbraco.Redirects.Middleware {
                         // The destination URL should have a value at this point. If the value is empty, it's most
                         // likely because it was emptied via the post look up notification
                         if (string.IsNullOrWhiteSpace(destinationUrl)) return Task.CompletedTask;
-                        
+
                         // Respond with a redirect based on the redirect type
                         switch (redirectType) {
 
@@ -93,12 +93,12 @@ namespace Skybrud.Umbraco.Redirects.Middleware {
                             case RedirectType.Permanent:
                                 context.Response.Redirect(destinationUrl, true);
                                 break;
-                                    
+
                             // If redirect is of type temporary, trigger a 307 redirect
                             case RedirectType.Temporary:
                                 context.Response.Redirect(destinationUrl, false, true);
                                 break;
-                            
+
                         }
 
                         break;

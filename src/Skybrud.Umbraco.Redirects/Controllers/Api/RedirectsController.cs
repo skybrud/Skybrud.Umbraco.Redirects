@@ -28,13 +28,13 @@ using Umbraco.Extensions;
 // ReSharper disable IntroduceOptionalParameters.Local
 
 namespace Skybrud.Umbraco.Redirects.Controllers.Api {
-    
+
     /// <summary>
     /// API controller for managing redirects.
     /// </summary>
     [PluginController("Skybrud")]
     public class RedirectsController : UmbracoAuthorizedApiController {
-        
+
         private readonly ILogger<RedirectsController> _logger;
         private readonly IRedirectsService _redirects;
         private readonly RedirectsBackOfficeHelper _backOffice;
@@ -91,14 +91,14 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
 
                 // Add the redirect
                 IRedirect redirect = _redirects.AddRedirect(model);
-                
+
                 // Map the result for the API
                 return new JsonResult(_backOffice.Map(redirect));
 
             } catch (RedirectsException ex) {
 
                 if (!ex.Is404) _logger.LogError(ex, ex.Message);
-                
+
                 // Generate the error response
                 return Error(ex);
 
@@ -108,9 +108,9 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
 
         [HttpPost]
         public ActionResult EditRedirect(Guid redirectId, [FromBody] EditRedirectOptions model) {
-            
+
             try {
-                
+
                 // Get a reference to the redirect
                 IRedirect redirect = _redirects.GetRedirectByKey(redirectId);
                 if (redirect == null) throw new RedirectNotFoundException();
@@ -124,7 +124,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                 string[] urlParts = model.OriginalUrl.Split('?');
                 string url = urlParts[0].TrimEnd('/');
                 string query = urlParts.Length == 2 ? urlParts[1] : string.Empty;
-				
+
                 redirect.RootKey = model.RootNodeKey;
                 redirect.Url = url;
                 redirect.QueryString = query;
@@ -141,14 +141,14 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
             } catch (RedirectsException ex) {
 
                 if (!ex.Is404) _logger.LogError(ex, ex.Message);
-                
+
                 // Generate the error response
                 return Error(ex);
 
             }
 
         }
-        
+
         /// <summary>
         /// Edits the redirect with the specified <paramref name="redirectId"/>.
         /// </summary>
@@ -166,7 +166,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         public ActionResult EditRedirect(Guid rootNodeKey, Guid redirectId, string url,
             string linkMode, int linkId, Guid linkKey, string linkUrl,
             bool permanent = true, bool forward = false) {
-            
+
             try {
 
                 // Get a reference to the redirect
@@ -210,21 +210,21 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
 
                 // Save/update the redirect
                 _redirects.SaveRedirect(redirect);
-                
+
                 // Map the result for the API
                 return new JsonResult(_backOffice.Map(redirect));
 
             } catch (RedirectsException ex) {
 
                 if (!ex.Is404) _logger.LogError(ex, ex.Message);
-                
+
                 // Generate the error response
                 return Error(ex);
-            
+
             }
 
         }
-        
+
         /// <summary>
         /// Deletes the redirect with the specified <paramref name="redirectId"/>.
         /// </summary>
@@ -240,17 +240,17 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
 
                 // Delete the redirect
                 _redirects.DeleteRedirect(redirect);
-                
+
                 // Map the result for the API
                 return new JsonResult(_backOffice.Map(redirect));
 
             } catch (RedirectsException ex) {
 
                 if (!ex.Is404) _logger.LogError(ex, ex.Message);
-                
+
                 // Generate the error response
                 return Error(ex);
-            
+
             }
 
         }
@@ -299,7 +299,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
             }
 
         }
-        
+
         [HttpGet]
         public ActionResult GetRedirectsForNode(string type, Guid key) {
 
@@ -310,7 +310,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                 switch (type) {
 
                     case "content":
-                        
+
                         // Get a reference to the content item
                         IContent content1 = _contentService.GetById(key);
 
@@ -322,14 +322,14 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                         if (_umbracoContextAccessor.TryGetUmbracoContext(out IUmbracoContext umbraco)) {
                             content2 = umbraco.Content.GetById(key);
                         }
-                        
+
                         // Initialize a new model instance
                         node = new RedirectNodeModel(content1, content2);
 
                         break;
 
                     case "media":
-                        
+
                         // Get a reference to the media item
                         IMedia media1 = _mediaService.GetById(key);
 
@@ -341,7 +341,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                         if (_umbracoContextAccessor.TryGetUmbracoContext(out umbraco)) {
                             media2 = umbraco.Content.GetById(key);
                         }
-                        
+
                         // Initialize a new model instance
                         node = new RedirectNodeModel(media1, media2);
 
@@ -350,25 +350,25 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                     default:
                         throw new RedirectsException(HttpStatusCode.BadRequest, $"Unsupported node type: {type}");
 
-                    
+
                 }
-                
+
                 // get the redirects via the redirects service
                 IRedirect[] redirects = _redirects.GetRedirectsByNodeKey(node.Type, key);
-                
+
                 // Generate the response
                 return new JsonResult(new {
                     node,
                     redirects = _backOffice.Map(redirects)
                 });
-            
+
             } catch (RedirectsException ex) {
-                
+
                 // Generate the error response
                 return Error(ex);
-            
+
             }
-        
+
         }
 
         private ActionResult Error(RedirectsException ex) {

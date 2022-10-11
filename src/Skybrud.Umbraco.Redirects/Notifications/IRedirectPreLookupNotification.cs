@@ -3,7 +3,7 @@ using Skybrud.Umbraco.Redirects.Models;
 using Umbraco.Cms.Core.Notifications;
 
 namespace Skybrud.Umbraco.Redirects.Notifications {
-    
+
     /// <summary>
     /// Interface describing the redirect pre lookup noticication.
     /// </summary>

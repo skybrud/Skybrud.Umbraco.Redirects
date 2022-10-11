@@ -23,7 +23,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
             domain = FindDomainForUri(domainService, uri);
             return domain != null;
         }
-        
+
         /// <summary>
         /// Finds the domain matching the specified uri using the domain service.
         /// </summary>
@@ -60,7 +60,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// </see>
         /// </remarks>
         internal static DomainAndUri SelectDomain(IEnumerable<Domain> domains, Uri uri, string culture = null, string defaultCulture = null, Func<IReadOnlyCollection<DomainAndUri>, Uri, string, string, DomainAndUri> filter = null)  {
-            
+
             // sanitize the list to have proper uris for comparison (scheme, path end with /)
             // we need to end with / because example.com/foo cannot match example.com/foobar
             // we need to order so example.com/foo matches before example.com/
@@ -124,7 +124,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
         private static bool IsBaseOf(DomainAndUri domain, Uri uri) => domain.Uri.EndPathWithSlash().IsBaseOf(uri);
 
         private static IReadOnlyCollection<DomainAndUri> SelectByBase(IReadOnlyCollection<DomainAndUri> domainsAndUris, Uri uri) {
-            
+
             // look for domains that would be the base of the uri
             // ie current is www.example.com/foo/bar, look for domain www.example.com
             var currentWithSlash = uri.EndPathWithSlash();
@@ -140,7 +140,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
         }
 
         private static IReadOnlyCollection<DomainAndUri> SelectByCulture(IReadOnlyCollection<DomainAndUri> domainsAndUris, string culture, string defaultCulture) {
-            
+
             // we try our best to match cultures, but may end with a bogus domain
 
             if (culture != null) // try the supplied culture
@@ -159,7 +159,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
         }
 
         private static DomainAndUri GetByCulture(IReadOnlyCollection<DomainAndUri> domainsAndUris, string culture, string defaultCulture) {
-            
+
             DomainAndUri domainAndUri;
 
             // we try our best to match cultures, but may end with a bogus domain

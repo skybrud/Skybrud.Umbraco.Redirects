@@ -2,12 +2,12 @@
 using Newtonsoft.Json;
 
 namespace Skybrud.Umbraco.Redirects.Models {
-    
+
     /// <summary>
     /// Interface describing the destination of a redirect.
     /// </summary>
     public interface IRedirectDestination {
-        
+
         /// <summary>
         /// Gets the ID of the selected content or media. If an URL has been selected, this will return <c>0</c>.
         /// </summary>

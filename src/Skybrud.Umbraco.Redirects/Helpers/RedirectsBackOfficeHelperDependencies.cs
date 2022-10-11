@@ -4,7 +4,7 @@ using Umbraco.Cms.Core.Hosting;
 using Umbraco.Cms.Core.Services;
 
 namespace Skybrud.Umbraco.Redirects.Helpers {
-    
+
     /// <summary>
     /// Class representing the dependencies for the <see cref="RedirectsBackOfficeHelperDependencies"/> class.
     /// </summary>
@@ -26,22 +26,22 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
         /// Gets the reference to the current <see cref="IRuntimeState"/>.
         /// </summary>
         public IRuntimeState RuntimeState { get; }
-        
+
         /// <summary>
         /// Gets the reference to the current <see cref="IDomainService"/>.
         /// </summary>
         public IDomainService DomainService { get; }
-        
+
         /// <summary>
         /// Gets the reference to the current <see cref="IContentService"/>.
         /// </summary>
         public IContentService ContentService { get; }
-        
+
         /// <summary>
         /// Gets the reference to the current <see cref="IMediaService"/>.
         /// </summary>
         public IMediaService MediaService { get; }
-        
+
         /// <summary>
         /// Gets the reference to the current <see cref="ILocalizedTextService"/>.
         /// </summary>

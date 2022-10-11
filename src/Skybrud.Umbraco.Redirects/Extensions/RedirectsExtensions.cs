@@ -11,12 +11,12 @@ using Umbraco.Extensions;
 // ReSharper disable SwitchStatementHandlesSomeKnownEnumValuesWithDefault
 
 namespace Skybrud.Umbraco.Redirects.Extensions {
-    
+
     /// <summary>
     /// Static class with various extension methods used throughout the redirects package.
     /// </summary>
     public static class RedirectsExtensions {
-        
+
         private static readonly string[] OutboundPropertyAliases = { "skyRedirect", "outboundRedirect" };
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace Skybrud.Umbraco.Redirects.Extensions {
         public static string GetDestinationUrl(this OutboundRedirect redirect, IRedirectsService redirectsService) {
             return redirectsService.GetDestinationUrl(redirect);
         }
-        
+
         /// <summary>
         /// Returns the calculated destination URL for the specified <paramref name="redirect"/>.
         /// </summary>
@@ -39,7 +39,7 @@ namespace Skybrud.Umbraco.Redirects.Extensions {
         public static string GetDestinationUrl(this OutboundRedirect redirect, Uri uri, IRedirectsService redirectsService) {
             return redirectsService.GetDestinationUrl(redirect, uri);
         }
-        
+
         /// <summary>
         /// Returns the <see cref="Uri"/> of the specified <paramref name="request"/>.
         /// </summary>
@@ -54,7 +54,7 @@ namespace Skybrud.Umbraco.Redirects.Extensions {
                 Query = request.QueryString.ToUriComponent()
             }.Uri;
         }
-        
+
         /// <summary>
         /// Sets the destination of <paramref name="redirect"/> to the specified <paramref name="url"/>.
         /// </summary>
@@ -64,7 +64,7 @@ namespace Skybrud.Umbraco.Redirects.Extensions {
         public static T SetDestination<T>(this T redirect, string url) where T : IRedirect {
 
             if (string.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
-            
+
             return SetDestination(redirect, new RedirectDestination {
                 Url = url,
                 Query = string.Empty,
@@ -169,7 +169,7 @@ namespace Skybrud.Umbraco.Redirects.Extensions {
         /// <param name="propertyAliases">The aliases of the properties.</param>
         /// <returns>An instance of <see cref="IOutboundRedirect"/>.</returns>
         public static IOutboundRedirect GetOutboundRedirect(this IPublishedContent content, params string[] propertyAliases) {
-            
+
             if (propertyAliases == null) throw new ArgumentNullException(nameof(propertyAliases));
 
             foreach (string alias in propertyAliases) {

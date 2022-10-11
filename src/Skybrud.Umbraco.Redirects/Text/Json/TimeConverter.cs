@@ -10,7 +10,7 @@ using Skybrud.Essentials.Time.UnixTime;
 #pragma warning disable 1591
 
 namespace Skybrud.Umbraco.Redirects.Text.Json {
-    
+
     public class TimeConverter : JsonConverter<object> {
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace Skybrud.Umbraco.Redirects.Text.Json {
         }
 
         public override void Write(Utf8JsonWriter writer, object value, JsonSerializerOptions options) {
-            
+
             if (value == null) {
                 writer.WriteNullValue();
                 return;

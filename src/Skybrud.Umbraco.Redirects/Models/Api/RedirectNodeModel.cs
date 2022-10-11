@@ -19,13 +19,13 @@ namespace Skybrud.Umbraco.Redirects.Models.Api {
         public string Name { get; }
 
         public string Url { get; }
-        
+
         [MicrosoftJsonConverter(typeof(Text.Json.Enums.EnumCamelCaseConverter))]
         public RedirectDestinationType Type { get; }
 
         [JsonPropertyName("published")]
         public bool IsPublished { get; }
-        
+
         [JsonPropertyName("trashed")]
         public bool IsTrashed { get; }
 

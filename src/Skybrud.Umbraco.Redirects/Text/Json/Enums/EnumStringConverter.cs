@@ -6,9 +6,9 @@ using Skybrud.Essentials.Strings;
 #pragma warning disable 1591
 
 namespace Skybrud.Umbraco.Redirects.Text.Json.Enums {
-    
+
     public class EnumStringConverter : JsonConverterFactory {
-        
+
         private readonly TextCasing _casing;
 
         public EnumStringConverter() {
@@ -18,7 +18,7 @@ namespace Skybrud.Umbraco.Redirects.Text.Json.Enums {
         public EnumStringConverter(TextCasing casing) {
             _casing = casing;
         }
-        
+
         public sealed override bool CanConvert(Type typeToConvert) {
             return typeToConvert.IsEnum;
         }
@@ -29,7 +29,7 @@ namespace Skybrud.Umbraco.Redirects.Text.Json.Enums {
             return (JsonConverter) Activator.CreateInstance(type, new object[] { _casing });
 
         }
-            
+
     }
 
 }

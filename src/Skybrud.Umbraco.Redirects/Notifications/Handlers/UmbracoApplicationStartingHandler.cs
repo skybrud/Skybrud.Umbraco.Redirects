@@ -11,9 +11,9 @@ using Umbraco.Cms.Infrastructure.Scoping;
 #pragma warning disable 1591
 
 namespace Skybrud.Umbraco.Redirects.Notifications.Handlers {
-    
+
     public class UmbracoApplicationStartingHandler : INotificationHandler<UmbracoApplicationStartingNotification> {
-        
+
         private readonly IScopeProvider _scopeProvider;
         private readonly IMigrationPlanExecutor _migrationPlanExecutor;
         private readonly IKeyValueService _keyValueService;
@@ -35,16 +35,17 @@ namespace Skybrud.Umbraco.Redirects.Notifications.Handlers {
             // runtime level is less than "Run", we don't create the migration. This is fine as Umbraco will restart
             // after a successful install/upgrade, in which case the runtime level will be "Run" for the next startup
             if (_runtimeState.Level < RuntimeLevel.Run) return;
-            
+
             var plan = new MigrationPlan(RedirectsPackage.Alias);
-            
+
             plan.From(string.Empty)
                 .To<CreateTableMigration>("2.0.0-alpha001")
                 .To<RemoveIsRegexColumnMigration>("2.0.0-alpha002")
                 .To<DummyMigration>("2.0.0-alpha008")
                 .To<FixRootKeyValue>("2.0.5")
                 .To<DummyMigration>("2.1.1")
-                .To<AddDestinationColumnsMigration>("3.0.0-alpha008");
+                .To<AddDestinationColumnsMigration>("3.0.0-alpha008")
+                .To<RemoveRootIdColumnMigration>("4.0.4");
 
             var upgrader = new Upgrader(plan);
 
