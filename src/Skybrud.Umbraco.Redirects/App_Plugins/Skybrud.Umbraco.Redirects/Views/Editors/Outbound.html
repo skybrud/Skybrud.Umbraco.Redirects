@@ -1,5 +1,8 @@
 ﻿<div ng-controller="SkybrudUmbracoRedirects.OutboundRedirectEditor.Controller as vm">
-    <div class="skybrud-outbound-redirect">
+    <button type="button" ng-if="!model.value.destination" class="umb-node-preview-add" ng-click="vm.addLink()" style="max-width: initial;">
+        <localize key="redirects_selectDestination">Select destination</localize>
+    </button>
+    <div class="skybrud-outbound-redirect" ng-if="model.value.destination">
         <div class="skybrud-outbound-redirect-properties">
             <div class="skybrud-outbound-redirect-property">
                 <div class="skybrud-outbound-redirect-label">
@@ -46,9 +49,6 @@
                             <a class="umb-node-preview__action umb-node-preview__action--red" href="" ng-click="vm.removeLink()"><localize key="general_remove">Remove</localize></a>
                         </div>
                     </div>
-                    <button type="button" ng-if="!model.value.destination" class="umb-node-preview-add" ng-click="vm.addLink()" style="max-width: initial;">
-                        <localize key="redirects_selectDestination">Select destination</localize>
-                    </button>
                 </div>
             </div>
         </div>
