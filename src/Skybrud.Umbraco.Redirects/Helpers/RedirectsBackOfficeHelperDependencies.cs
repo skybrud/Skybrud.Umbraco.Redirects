@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
+using Skybrud.Umbraco.Redirects.Config;
 using Umbraco.Cms.Core.Configuration.Models;
 using Umbraco.Cms.Core.Hosting;
 using Umbraco.Cms.Core.Services;
@@ -47,6 +48,11 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
         /// </summary>
         public ILocalizedTextService TextService { get; }
 
+        /// <summary>
+        /// Gets a reference to the options for the redirects page.
+        /// </summary>
+        public IOptions<RedirectsSettings> RedirectsSettings { get; }
+
         #endregion
 
         #region Constructors
@@ -61,9 +67,10 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
         /// <param name="mediaService"></param>
         /// <param name="textService"></param>
         /// <param name="globalSettings"></param>
+        /// <param name="redirectsSettings"></param>
         public RedirectsBackOfficeHelperDependencies(IOptions<GlobalSettings> globalSettings, IHostingEnvironment hostingEnvironment,
             IRuntimeState runtimeState, IDomainService domainService, IContentService contentService,
-            IMediaService mediaService, ILocalizedTextService textService) {
+            IMediaService mediaService, ILocalizedTextService textService, IOptions<RedirectsSettings> redirectsSettings) {
             GlobalSettings = globalSettings.Value;
             HostingEnvironment = hostingEnvironment;
             RuntimeState = runtimeState;
@@ -71,6 +78,7 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
             ContentService = contentService;
             MediaService = mediaService;
             TextService = textService;
+            RedirectsSettings = redirectsSettings;
         }
 
         #endregion
