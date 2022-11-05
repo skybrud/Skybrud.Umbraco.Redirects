@@ -2,6 +2,7 @@
 using Skybrud.Umbraco.Redirects.Config;
 using Umbraco.Cms.Core.Configuration.Models;
 using Umbraco.Cms.Core.Hosting;
+using Umbraco.Cms.Core.Security;
 using Umbraco.Cms.Core.Services;
 
 namespace Skybrud.Umbraco.Redirects.Helpers {
@@ -49,6 +50,11 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
         public ILocalizedTextService TextService { get; }
 
         /// <summary>
+        /// Gets a reference to the current <see cref="IBackOfficeSecurityAccessor"/>.
+        /// </summary>
+        public IBackOfficeSecurityAccessor BackOfficeSecurityAccessor { get; }
+
+        /// <summary>
         /// Gets a reference to the options for the redirects page.
         /// </summary>
         public IOptions<RedirectsSettings> RedirectsSettings { get; }
@@ -67,10 +73,12 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
         /// <param name="mediaService"></param>
         /// <param name="textService"></param>
         /// <param name="globalSettings"></param>
+        /// <param name="backOfficeSecurityAccessor"></param>
         /// <param name="redirectsSettings"></param>
         public RedirectsBackOfficeHelperDependencies(IOptions<GlobalSettings> globalSettings, IHostingEnvironment hostingEnvironment,
             IRuntimeState runtimeState, IDomainService domainService, IContentService contentService,
-            IMediaService mediaService, ILocalizedTextService textService, IOptions<RedirectsSettings> redirectsSettings) {
+            IMediaService mediaService, ILocalizedTextService textService,
+            IBackOfficeSecurityAccessor backOfficeSecurityAccessor, IOptions<RedirectsSettings> redirectsSettings) {
             GlobalSettings = globalSettings.Value;
             HostingEnvironment = hostingEnvironment;
             RuntimeState = runtimeState;
@@ -78,6 +86,7 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
             ContentService = contentService;
             MediaService = mediaService;
             TextService = textService;
+            BackOfficeSecurityAccessor = backOfficeSecurityAccessor;
             RedirectsSettings = redirectsSettings;
         }
 

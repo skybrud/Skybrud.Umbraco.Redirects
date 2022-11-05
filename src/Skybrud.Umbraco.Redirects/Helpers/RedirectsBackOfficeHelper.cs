@@ -34,6 +34,11 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
         public string BackOfficeUrl => Dependencies.GlobalSettings.GetBackOfficePath(Dependencies.HostingEnvironment);
 
         /// <summary>
+        /// Gets a reference to the current backoffice user.
+        /// </summary>
+        public IUser CurrentUser => Dependencies.BackOfficeSecurityAccessor.BackOfficeSecurity?.CurrentUser;
+
+        /// <summary>
         /// Gets a reference to the redirects settings.
         /// </summary>
         public RedirectsSettings Settings => Dependencies.RedirectsSettings.Value;
