@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Skybrud.Umbraco.Redirects.Config;
 using Skybrud.Umbraco.Redirects.ContentApps;
 using Skybrud.Umbraco.Redirects.Factories.References;
 using Skybrud.Umbraco.Redirects.Helpers;
@@ -20,6 +21,10 @@ namespace Skybrud.Umbraco.Redirects.Composers {
     public class RedirectsComposer : IComposer {
 
         public void Compose(IUmbracoBuilder builder) {
+
+            builder.Services.AddOptions<RedirectsSettings>()
+                .Bind(builder.Config.GetSection("Skybrud:Redirects"), o => o.BindNonPublicProperties = true)
+                .ValidateDataAnnotations();
 
             builder.Services.AddSingleton<RedirectsServiceDependencies>();
             builder.Services.AddSingleton<RedirectsBackOfficeHelperDependencies>();

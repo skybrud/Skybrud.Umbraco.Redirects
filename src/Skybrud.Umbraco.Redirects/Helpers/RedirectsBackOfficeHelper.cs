@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Skybrud.Essentials.Reflection;
+using Skybrud.Umbraco.Redirects.Config;
 using Skybrud.Umbraco.Redirects.Dashboards;
 using Skybrud.Umbraco.Redirects.Models;
 using Skybrud.Umbraco.Redirects.Models.Api;
@@ -31,6 +32,16 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
         /// Gets the back-office URL of Umbraco.
         /// </summary>
         public string BackOfficeUrl => Dependencies.GlobalSettings.GetBackOfficePath(Dependencies.HostingEnvironment);
+
+        /// <summary>
+        /// Gets a reference to the current backoffice user.
+        /// </summary>
+        public IUser CurrentUser => Dependencies.BackOfficeSecurityAccessor.BackOfficeSecurity?.CurrentUser;
+
+        /// <summary>
+        /// Gets a reference to the redirects settings.
+        /// </summary>
+        public RedirectsSettings Settings => Dependencies.RedirectsSettings.Value;
 
         #endregion
 
@@ -240,7 +251,10 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
         /// <param name="source">The source - eg. an instance <see cref="IContent"/>.</param>
         /// <param name="userGroups">The user groups of the current user.</param>
         /// <returns>An instance of <see cref="ContentApp"/>, or <c>null</c> if no content app should be shown.</returns>
-        public virtual ContentApp GetContentAppFor(object source, IEnumerable<IReadOnlyUserGroup> userGroups)  {
+        public virtual ContentApp GetContentAppFor(object source, IEnumerable<IReadOnlyUserGroup> userGroups) {
+
+            // Return null if the content app is disabled via appsettings.json
+            if (!Settings.ContentApp.Enabled) return null;
 
             switch (source) {
 
