@@ -256,18 +256,68 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
             // Return null if the content app is disabled via appsettings.json
             if (!Settings.ContentApp.Enabled) return null;
 
-            switch (source) {
+            return source switch {
+                IContent content => ShowContentApp(content, userGroups) ? GetDefaultContentApp() : null,
+                IMedia media => ShowContentApp(media, userGroups) ? GetDefaultContentApp() : null,
+                _ => null
+            };
 
-                case IContent content:
-                    return content.ContentType.IsElement ? null : GetDefaultContentApp();
+        }
 
-                case IMedia media:
-                    return media.ContentType.Alias == Constants.Conventions.MediaTypes.Folder ? null : GetDefaultContentApp();
+        /// <summary>
+        /// Returns whether to show the redirects content app for the specified <paramref name="content"/>.
+        /// </summary>
+        /// <param name="content">An instance of <see cref="IContent"/>.</param>
+        /// <param name="userGroups">The user groups of the current user.</param>
+        /// <returns><see langword="true"/> if the content app should be shown; otherwise, <see langword="false"/>.</returns>
+        protected virtual bool ShowContentApp(IContent content, IEnumerable<IReadOnlyUserGroup> userGroups) {
 
-                default:
-                    return null;
+            if (content.ContentType.IsElement) return false;
+            if (content.TemplateId == null) return false;
 
-            }
+            IReadOnlySet<string> show = Settings.ContentApp.Show;
+
+            // ReSharper disable PossibleMultipleEnumeration
+            // The underlying type is likely always HashSet<IReadOnlyUserGroup>, so we should care too much about multiple enumerations
+            if (userGroups.Any(group => show.Contains("+role/" + group.Alias))) return true;
+            if (userGroups.Any(group => show.Contains("-role/" + group.Alias))) return false;
+            // ReSharper restore PossibleMultipleEnumeration
+
+            if (show.Contains("-content/" + content.ContentType.Alias)) return false;
+            if (show.Contains("+content/" + content.ContentType.Alias)) return true;
+
+            if (show.Contains("-content/*")) return false;
+            if (show.Contains("+content/*")) return true;
+
+            return true;
+
+        }
+
+        /// <summary>
+        /// Returns whether to show the redirects content app for the specified <paramref name="media"/>.
+        /// </summary>
+        /// <param name="media">An instance of <see cref="IMedia"/>.</param>
+        /// <param name="userGroups">The user groups of the current user.</param>
+        /// <returns><see langword="true"/> if the content app should be shown; otherwise, <see langword="false"/>.</returns>
+        protected virtual bool ShowContentApp(IMedia media, IEnumerable<IReadOnlyUserGroup> userGroups) {
+
+            if (media.ContentType.Alias == Constants.Conventions.MediaTypes.Folder) return false;
+
+            IReadOnlySet<string> show = Settings.ContentApp.Show;
+
+            // ReSharper disable PossibleMultipleEnumeration
+            // The underlying type is likely always HashSet<IReadOnlyUserGroup>, so we should care too much about multiple enumerations
+            if (userGroups.Any(group => show.Contains("+role/" + group.Alias))) return true;
+            if (userGroups.Any(group => show.Contains("-role/" + group.Alias))) return false;
+            // ReSharper restore PossibleMultipleEnumeration
+
+            if (show.Contains("-media/" + media.ContentType.Alias)) return false;
+            if (show.Contains("+media/" + media.ContentType.Alias)) return true;
+
+            if (show.Contains("-media/*")) return false;
+            if (show.Contains("+media/*")) return true;
+
+            return true;
 
         }
 
