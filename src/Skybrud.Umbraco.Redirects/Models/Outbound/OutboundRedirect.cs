@@ -68,6 +68,31 @@ namespace Skybrud.Umbraco.Redirects.Models.Outbound {
             Destination = obj.GetObject("destination", RedirectDestination.Parse);
         }
 
+        /// <summary>
+        /// Initializes a new instance based on the specified <paramref name="type"/>, <paramref name="forward"/> and <paramref name="destination"/>.
+        /// </summary>
+        /// <param name="type">The type of the redirect.</param>
+        /// <param name="forward">Whether query string forwarding should be enabled.</param>
+        /// <param name="destination">The destination of the redirect.</param>
+        public OutboundRedirect(RedirectType type, bool forward, IRedirectDestination destination) : base(null) {
+            Type = type;
+            ForwardQueryString = forward;
+            Destination = destination;
+        }
+
+        /// <summary>
+        /// Initializes a new instance based on the specified <paramref name="type"/>, <paramref name="forward"/>, <paramref name="destination"/> and <paramref name="json"/>.
+        /// </summary>
+        /// <param name="type">The type of the redirect.</param>
+        /// <param name="forward">Whether query string forwarding should be enabled.</param>
+        /// <param name="destination">The destination of the redirect.</param>
+        /// <param name="json">A JSON object representing the redirect.</param>
+        public OutboundRedirect(RedirectType type, bool forward, IRedirectDestination destination, JObject json) : base(json) {
+            Type = type;
+            ForwardQueryString = forward;
+            Destination = destination;
+        }
+
         #endregion
 
         #region Static methods

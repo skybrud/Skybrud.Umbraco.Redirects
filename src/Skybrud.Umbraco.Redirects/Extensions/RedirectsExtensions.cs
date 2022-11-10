@@ -153,7 +153,7 @@ namespace Skybrud.Umbraco.Redirects.Extensions {
         /// <returns>An instance of <see cref="IOutboundRedirect"/>.</returns>
         public static IOutboundRedirect GetOutboundRedirect(this IPublishedContent content, string propertyAlias) {
             if (string.IsNullOrWhiteSpace(propertyAlias)) throw new ArgumentNullException(nameof(propertyAlias));
-            OutboundRedirect redirect = content.Value(propertyAlias) as OutboundRedirect;
+            IOutboundRedirect redirect = content.Value(propertyAlias) as IOutboundRedirect;
             return redirect ?? new OutboundRedirect();
         }
 
@@ -173,10 +173,57 @@ namespace Skybrud.Umbraco.Redirects.Extensions {
             if (propertyAliases == null) throw new ArgumentNullException(nameof(propertyAliases));
 
             foreach (string alias in propertyAliases) {
-                if (content.Value(alias) is OutboundRedirect redirect) return redirect;
+                if (content.Value(alias) is IOutboundRedirect redirect) return redirect;
             }
 
             return new OutboundRedirect();
+
+        }
+
+        /// <summary>
+        /// Returns an instance of <see cref="IOutboundRedirect"/> representing the outbound redirect from either the
+        /// <c>skyRedirect</c> or <c>outboundRedirect</c> properties.
+        ///
+        /// If the property doesn't hold a <see cref="IOutboundRedirect"/> value, <see langword="null"/> will be returned instead.
+        /// </summary>
+        /// <param name="content">The content item holding the outbound rediderect.</param>
+        /// <returns>An instance of <see cref="IOutboundRedirect"/> if successful; otherwise, <see langword="null"/>.</returns>
+        public static IOutboundRedirect GetOutboundRedirectOrDefault(this IPublishedContent content) {
+            return GetOutboundRedirectOrDefault(content, OutboundPropertyAliases);
+        }
+
+        /// <summary>
+        /// Returns an instance of <see cref="IOutboundRedirect"/> representing the outbound redirect from the property
+        /// with specified alias <paramref name="propertyAlias"/>.
+        ///
+        /// If the property doesn't hold a <see cref="IOutboundRedirect"/> value, <see langword="null"/> will be returned instead.
+        /// </summary>
+        /// <param name="content">The content item holding the outbound rediderect.</param>
+        /// <param name="propertyAlias">The alias of the property.</param>
+        /// <returns>An instance of <see cref="IOutboundRedirect"/> if successful; otherwise, <see langword="null"/>.</returns>
+        public static IOutboundRedirect GetOutboundRedirectOrDefault(this IPublishedContent content, string propertyAlias) {
+            if (string.IsNullOrWhiteSpace(propertyAlias)) throw new ArgumentNullException(nameof(propertyAlias));
+            return content.Value(propertyAlias) as IOutboundRedirect;
+        }
+
+        /// <summary>
+        /// Returns an instance of <see cref="IOutboundRedirect"/> representing the outbound redirect from the first property
+        /// matching the specified <paramref name="propertyAliases"/> where the value is an <see cref="IOutboundRedirect"/>.
+        ///
+        /// If the property doesn't hold a <see cref="IOutboundRedirect"/> value, <see langword="null"/> will be returned instead.
+        /// </summary>
+        /// <param name="content">The content item holding the outbound rediderect.</param>
+        /// <param name="propertyAliases">The aliases of the properties.</param>
+        /// <returns>An instance of <see cref="IOutboundRedirect"/> if successful; otherwise, <see langword="null"/>.</returns>
+        public static IOutboundRedirect GetOutboundRedirectOrDefault(this IPublishedContent content, params string[] propertyAliases) {
+
+            if (propertyAliases == null) throw new ArgumentNullException(nameof(propertyAliases));
+
+            foreach (string alias in propertyAliases) {
+                if (content.Value(alias) is IOutboundRedirect redirect) return redirect;
+            }
+
+            return null;
 
         }
 
