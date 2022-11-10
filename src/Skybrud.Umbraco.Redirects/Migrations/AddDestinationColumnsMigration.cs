@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
-using Skybrud.Essentials.Json;
+using Skybrud.Essentials.Json.Newtonsoft;
 using Skybrud.Umbraco.Redirects.Models;
 using Skybrud.Umbraco.Redirects.Models.Dtos;
 using Umbraco.Cms.Core.Hosting;
