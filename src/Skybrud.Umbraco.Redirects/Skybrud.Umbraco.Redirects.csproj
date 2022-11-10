@@ -4,6 +4,7 @@
     <LangVersion>9.0</LangVersion>
     <TargetFramework>net5.0</TargetFramework>
     <ContentTargetFolders>content</ContentTargetFolders>
+    <CheckEolTargetFramework>false</CheckEolTargetFramework>
   </PropertyGroup>
 
   <PropertyGroup>
