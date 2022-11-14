@@ -33,11 +33,18 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// </summary>
         public string Text { get; set; }
 
-        /// <summary>
-        /// Gets or sets the key the returned redirects should match. <see cref="Guid.Empty"/> indicates all global
-        /// redirects. Default is <c>null</c>, in which case this filter is disabled.
-        /// </summary>
+		/// <summary>
+		/// Gets or sets the key the returned redirects should match. <see cref="Guid.Empty"/> indicates all global
+		/// redirects. Default is <c>null</c>, in which case this filter is disabled.
+		/// </summary>
+		[Obsolete("Obsoleted in favour of RootNodeKeys, as a user may have access to more than one root node.")]
         public Guid? RootNodeKey { get; set; }
+
+		/// <summary>
+		/// Gets or sets the key the returned redirects should match. <see cref="Guid.Empty"/> indicates all global
+		/// redirects. Default is <c>null</c>, in which case this filter is disabled.
+		/// </summary>
+        public Guid[] RootNodeKeys { get; set; }
 
         #endregion
 

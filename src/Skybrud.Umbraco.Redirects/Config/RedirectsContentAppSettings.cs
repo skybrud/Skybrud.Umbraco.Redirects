@@ -10,6 +10,11 @@
         /// </summary>
         public bool Enabled { get; set; } = true;
 
+        /// <summary>
+        /// Gets or sets whether the user's start nodes should filter which redirects they have access to. Default is <see lanword="true"/>.
+        /// </summary>
+        public bool UserStartNodes { get; set; } = false;
+
     }
 
 }

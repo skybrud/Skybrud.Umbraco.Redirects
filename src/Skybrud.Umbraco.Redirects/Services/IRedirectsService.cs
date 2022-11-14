@@ -19,8 +19,6 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// <returns>An array of <see cref="RedirectDomain"/>.</returns>
         RedirectDomain[] GetDomains();
 
-        int[] GetUserAccessibleNodes(IUser umbracoUser);
-
         /// <summary>
         /// Adds a new redirect with the specified <paramref name="options"/>.
         /// </summary>
@@ -105,9 +103,8 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// Returns a paginated list of redirects matching the specified <paramref name="options"/>.
         /// </summary>
         /// <param name="options">The options the returned redirects should match.</param>
-        /// <param name="rootNodes">The user's root nodes that should be visible for security</param>
         /// <returns>An instance of <see cref="RedirectsSearchResult"/>.</returns>
-        RedirectsSearchResult GetRedirects(RedirectsSearchOptions options, Guid[] rootNodes);
+        RedirectsSearchResult GetRedirects(RedirectsSearchOptions options);
 
         /// <summary>
         /// Returns a collection with all redirects.
@@ -119,8 +116,15 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// Returns an array of all rode nodes configured in Umbraco.
         /// </summary>
         /// <returns>An array of <see cref="RedirectRootNode"/> representing the root nodes.</returns>
+        RedirectRootNode[] GetRootNodes();
+
+        /// <summary>
+        /// Returns an array of all rode nodes configured in Umbraco.
+        /// </summary>
+        /// <param name="user">An <see cref="IUser"/> object to determine access to root nodes.</param>
+        /// <returns>An array of <see cref="RedirectRootNode"/> representing the root nodes.</returns>
         RedirectRootNode[] GetRootNodes(IUser user);
-        
+
         /// <summary>
         /// Returns an array of redirects where the destination matches the specified <paramref name="nodeType"/> and <paramref name="nodeId"/>.
         /// </summary>

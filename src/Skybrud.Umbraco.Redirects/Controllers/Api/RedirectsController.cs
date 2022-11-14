@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +17,7 @@ using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.Membership;
 using Umbraco.Cms.Core.Models.PublishedContent;
+using Umbraco.Cms.Core.Security;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Web.BackOffice.Controllers;
@@ -40,7 +42,6 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         private readonly RedirectsBackOfficeHelper _backOffice;
         private readonly IContentService _contentService;
         private readonly IMediaService _mediaService;
-        private readonly IUserService _userService;
         private readonly IUmbracoContextAccessor _umbracoContextAccessor;
 
         #region Constructors
@@ -48,14 +49,12 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         public RedirectsController(ILogger<RedirectsController> logger, IRedirectsService redirectsService, RedirectsBackOfficeHelper backOffice,
             IContentService contentService,
             IMediaService mediaService,
-            IUserService userService,
             IUmbracoContextAccessor umbracoContextAccessor) {
             _logger = logger;
             _redirects = redirectsService;
             _backOffice = backOffice;
             _contentService = contentService;
             _mediaService = mediaService;
-            _userService = userService;
             _umbracoContextAccessor = umbracoContextAccessor;
         }
 
@@ -68,7 +67,9 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         [HttpGet]
         public ActionResult GetRootNodes() {
 
-	        RedirectRootNode[] rootNodes = _redirects.GetRootNodes(GetUser()).ToArray();
+	        var rootNodes = _backOffice.Settings.ContentApp.UserStartNodes
+		        ? _redirects.GetRootNodes(_backOffice.CurrentUser).ToArray()
+		        : _redirects.GetRootNodes();
 
 	        return new JsonResult(new
 	        {
@@ -262,29 +263,27 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         /// <param name="limit">The maximum amount of redirects to be returned per page.</param>
         /// <param name="type">The type of redirects that should be returned.</param>
         /// <param name="text">The text that the returned redirects should match.</param>
-        /// <param name="rootNodeKey">The root node key that the returned redirects should match. <c>null</c> means all redirects. <see cref="Guid.Empty"/> means all global redirects.</param>
+        /// <param name="rootNodeKeys">An array of root node keys that the returned redirects should match. <c>null</c> means all redirects. <see cref="Guid.Empty"/> means all global redirects.</param>
         /// <returns>A list of redirects.</returns>
         [HttpGet]
-        public ActionResult GetRedirects(int page = 1, int limit = 20, string type = null, string text = null, Guid? rootNodeKey = null) {
+        public ActionResult GetRedirects(int page = 1, int limit = 20, string type = null, string text = null, [FromQuery]Guid[] rootNodeKeys = null) {
 
             try {
+	            var rootKeys = _backOffice.Settings.ContentApp.UserStartNodes
+		            ? _redirects.GetRootNodes(_backOffice.CurrentUser).Select(p => p.Key)
+		            : _redirects.GetRootNodes().Select(p => p.Key);
 
                 // Initialize the search options
                 RedirectsSearchOptions options = new() {
                     Page = page,
                     Limit = limit,
                     Type = EnumUtils.ParseEnum(type, RedirectTypeFilter.All),
-                    Text = text
+                    Text = text,
+                    RootNodeKeys = (rootNodeKeys != null && rootNodeKeys.Any()) ? rootNodeKeys : rootKeys.ToArray()
                 };
 
-                if (rootNodeKey != null) options.RootNodeKey = rootNodeKey;
-
-                var rootKeys = _contentService.GetByIds(_redirects.GetUserAccessibleNodes(GetUser()))
-	                .Select(p => p.Key)
-	                .ToArray();
-                
                 // Make the search for redirects via the redirects service
-                RedirectsSearchResult result = _redirects.GetRedirects(options, rootKeys);
+                RedirectsSearchResult result = _redirects.GetRedirects(options);
 
                 // Map the result for the API
                 return new JsonResult(_backOffice.Map(result));
@@ -380,12 +379,6 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                 StatusCode = (int) ex.StatusCode
             };
 
-        }
-
-        private IUser GetUser()
-        {
-	        var currentUser = HttpContext.User.GetUmbracoIdentity();
-	        return _userService.GetByUsername(currentUser.Name);
         }
     }
 

@@ -5,7 +5,6 @@ using System.Web;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using NPoco;
-using NUglify.Helpers;
 using Skybrud.Essentials.Strings.Extensions;
 using Skybrud.Essentials.Time;
 using Skybrud.Umbraco.Redirects.Exceptions;
@@ -59,26 +58,6 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// <returns></returns>
         public RedirectDomain[] GetDomains() {
             return _domains.GetAll(false).Select(RedirectDomain.GetFromDomain).ToArray();
-        }
-
-        public int[] GetUserAccessibleNodes(IUser umbracoUser)
-        {
-	        var rootNodeIDs = umbracoUser.StartContentIds.ToList();
-	        var groupRootNodes = umbracoUser.Groups
-		        .Where(p => p.StartContentId.HasValue)
-		        .Select(p => p.StartContentId.Value)
-		        .ToArray();
-	        rootNodeIDs.AddRange(groupRootNodes);
-
-            // JH: Admin should access all nodes
-            if (rootNodeIDs.Count == 1 && rootNodeIDs.Single() == -1)
-            {
-	            rootNodeIDs.Clear();
-	            rootNodeIDs = GetDomains().Select(c => c.RootNodeId).ToList();
-            }
-
-            return rootNodeIDs.ToArray();
-
         }
 
         /// <summary>
@@ -376,9 +355,8 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// Returns a paginated list of redirects matching the specified <paramref name="options"/>.
         /// </summary>
         /// <param name="options">The options the returned redirects should match.</param>
-		/// <param name="rootNodes">The user's root nodes that should be visible for security</param>
         /// <returns>An instance of <see cref="RedirectsSearchResult"/>.</returns>
-        public RedirectsSearchResult GetRedirects(RedirectsSearchOptions options, Guid[] rootNodes) {
+        public RedirectsSearchResult GetRedirects(RedirectsSearchOptions options) {
 
             if (options == null) throw new ArgumentNullException(nameof(options));
 
@@ -389,10 +367,10 @@ namespace Skybrud.Umbraco.Redirects.Services {
             var sql = scope.SqlContext.Sql().Select<RedirectDto>().From<RedirectDto>();
 
             // Search by the rootNodeId
-            if (options.RootNodeKey != null) {
+            if (options.RootNodeKeys != null && options.RootNodeKeys.Any()) {
+	            sql = sql.Where<RedirectDto>(x => options.RootNodeKeys.Contains(x.RootKey));
+            } else if (options.RootNodeKey != null) {
 	            sql = sql.Where<RedirectDto>(x => x.RootKey == options.RootNodeKey);
-            } else if (rootNodes.Any()) {
-	            sql = sql.Where<RedirectDto>(x => rootNodes.Contains(x.RootKey));
             }
 
             // Search by the type
@@ -481,21 +459,46 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// Returns an array of all rode nodes configured in Umbraco.
         /// </summary>
         /// <returns>An array of <see cref="RedirectRootNode"/> representing the root nodes.</returns>
+        public RedirectRootNode[] GetRootNodes()
+        {
+	        var domainsByRootNodeId = GetDomains().GroupBy(x => x.RootNodeId);
+
+	        return (
+		        from domainGroup in domainsByRootNodeId
+		        let content = _contentService.GetById(domainGroup.First().RootNodeId)
+		        where content is { Trashed: false }
+		        orderby content.Id
+		        select RedirectRootNode.GetFromContent(content, domainGroup)
+	        ).ToArray();
+        }
+
+        /// <summary>
+        /// Returns an array of all rode nodes configured in Umbraco.
+        /// </summary>
+        /// <param name="user">An <see cref="IUser"/> with potential root node access restrictions.</param>
+        /// <returns>An array of <see cref="RedirectRootNode"/> representing the root nodes the user has access to.</returns>
         public RedirectRootNode[] GetRootNodes(IUser user)
         {
+	        var rootNodes = GetRootNodes();
+	        HashSet<int> rootNodeIds = new();
 
-	        var rootNodeIDs = GetUserAccessibleNodes(user);
-            // Multiple domains may be configured for a single node, so we need to group the domains before proceeding
-            var domainsByRootNodeId = GetDomains().GroupBy(x => x.RootNodeId);
+	        if (user.StartContentIds != null)
+	        {
+		        foreach (var rootNodeId in user.StartContentIds)
+		        {
+			        rootNodeIds.Add(rootNodeId);
+		        }
+	        }
 
-            return (
-                from domainGroup in domainsByRootNodeId
-                let content =  _contentService.GetById(domainGroup.First().RootNodeId)
-                where !content.Trashed && rootNodeIDs.Contains(content.Id)
-                orderby content.Id
-                select RedirectRootNode.GetFromContent(content, domainGroup)
-            ).ToArray();
+	        foreach (var group in user.Groups)
+	        {
+		        if (group.StartContentId != null)
+		        {
+			        rootNodeIds.Add(group.StartContentId.Value);
+		        }
+	        }
 
+	        return rootNodes.Where(rootNode => rootNodeIds.Any(x => rootNode.Path.Contains(x))).ToArray();
         }
 
         /// <summary>
