@@ -473,35 +473,6 @@ namespace Skybrud.Umbraco.Redirects.Services {
         }
 
         /// <summary>
-        /// Returns an array of all rode nodes configured in Umbraco.
-        /// </summary>
-        /// <param name="user">An <see cref="IUser"/> with potential root node access restrictions.</param>
-        /// <returns>An array of <see cref="RedirectRootNode"/> representing the root nodes the user has access to.</returns>
-        public RedirectRootNode[] GetRootNodes(IUser user)
-        {
-	        var rootNodes = GetRootNodes();
-	        HashSet<int> rootNodeIds = new();
-
-	        if (user.StartContentIds != null)
-	        {
-		        foreach (var rootNodeId in user.StartContentIds)
-		        {
-			        rootNodeIds.Add(rootNodeId);
-		        }
-	        }
-
-	        foreach (var group in user.Groups)
-	        {
-		        if (group.StartContentId != null)
-		        {
-			        rootNodeIds.Add(group.StartContentId.Value);
-		        }
-	        }
-
-	        return rootNodes.Where(rootNode => rootNodeIds.Any(x => rootNode.Path.Contains(x))).ToArray();
-        }
-
-        /// <summary>
         /// Returns the calculated destination URL for the specified <paramref name="redirect"/>.
         /// </summary>
         /// <param name="redirect">The redirect.</param>

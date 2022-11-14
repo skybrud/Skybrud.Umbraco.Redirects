@@ -67,8 +67,8 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         [HttpGet]
         public ActionResult GetRootNodes() {
 
-	        var rootNodes = _backOffice.Settings.ContentApp.UserStartNodes
-		        ? _redirects.GetRootNodes(_backOffice.CurrentUser).ToArray()
+	        var rootNodes = _backOffice.Settings.ContentApp.UseStartNodes
+		        ? _redirects.GetRootNodes(_backOffice.CurrentUser)
 		        : _redirects.GetRootNodes();
 
 	        return new JsonResult(new
@@ -269,7 +269,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         public ActionResult GetRedirects(int page = 1, int limit = 20, string type = null, string text = null, [FromQuery]Guid[] rootNodeKeys = null) {
 
             try {
-	            var rootKeys = _backOffice.Settings.ContentApp.UserStartNodes
+	            var rootKeys = _backOffice.Settings.ContentApp.UseStartNodes
 		            ? _redirects.GetRootNodes(_backOffice.CurrentUser).Select(p => p.Key)
 		            : _redirects.GetRootNodes().Select(p => p.Key);
 
