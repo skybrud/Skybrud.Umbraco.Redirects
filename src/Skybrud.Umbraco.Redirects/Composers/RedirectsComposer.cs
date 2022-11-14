@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Skybrud.Umbraco.Redirects.Config;
 using Skybrud.Umbraco.Redirects.ContentApps;
+using Skybrud.Umbraco.Redirects.Factories;
 using Skybrud.Umbraco.Redirects.Factories.References;
 using Skybrud.Umbraco.Redirects.Helpers;
 using Skybrud.Umbraco.Redirects.Manifests;
@@ -31,6 +32,8 @@ namespace Skybrud.Umbraco.Redirects.Composers {
 
             builder.Services.AddUnique<IRedirectsService, RedirectsService>();
             builder.Services.AddSingleton<RedirectsBackOfficeHelper>();
+
+            builder.Services.AddSingleton<RedirectsModelsFactory>();
 
             builder.ManifestFilters().Append<RedirectsManifestFilter>();
 

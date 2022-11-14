@@ -1,0 +1,53 @@
+﻿@import '_variables';
+
+.skybrud-outbound-redirect {
+
+    border: 1px solid @gray-9;
+    border-radius: @baseBorderRadius;
+    padding: 12px 15px;
+    max-width: @propertyEditorLimitedWidth;
+    box-sizing: border-box;
+
+    &-properties {
+        display: flex;
+        flex-direction: column;
+        gap: 20px 0;
+        flex: 1;
+    }
+
+    &-property {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 3px 20px;
+    }
+
+    &-label {
+        flex: 0;
+        font-size: 14px;
+        min-width: 250px;
+        font-weight: bold;
+    }
+
+    &-label small {
+        font-weight: normal;
+    }
+
+    &-value {
+        flex: 1;
+        min-width: 60%;
+    }
+
+    &-radio-list {
+        display: flex;
+        > div + div {
+            margin-left: 15px;
+        }
+    }
+
+    .umb-node-preview[single] {
+        border: 1px solid @gray-9;
+        border-radius: @baseBorderRadius;
+        padding: 12px 15px;
+    }
+
+}

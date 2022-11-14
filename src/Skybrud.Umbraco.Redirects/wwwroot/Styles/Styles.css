@@ -375,6 +375,48 @@
   max-width: initial;
   width: 100%;
 }
+.skybrud-outbound-redirect {
+  border: 1px solid #E9E9EB;
+  border-radius: 3px;
+  padding: 12px 15px;
+  max-width: 1100px;
+  box-sizing: border-box;
+}
+.skybrud-outbound-redirect-properties {
+  display: flex;
+  flex-direction: column;
+  gap: 20px 0;
+  flex: 1;
+}
+.skybrud-outbound-redirect-property {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px 20px;
+}
+.skybrud-outbound-redirect-label {
+  flex: 0;
+  font-size: 14px;
+  min-width: 250px;
+  font-weight: bold;
+}
+.skybrud-outbound-redirect-label small {
+  font-weight: normal;
+}
+.skybrud-outbound-redirect-value {
+  flex: 1;
+  min-width: 60%;
+}
+.skybrud-outbound-redirect-radio-list {
+  display: flex;
+}
+.skybrud-outbound-redirect-radio-list > div + div {
+  margin-left: 15px;
+}
+.skybrud-outbound-redirect .umb-node-preview[single] {
+  border: 1px solid #E9E9EB;
+  border-radius: 3px;
+  padding: 12px 15px;
+}
 /*
     New styling lives here while still "work in progress"
 */
