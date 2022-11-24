@@ -27,14 +27,10 @@
     <Reference Include="System.Web" />
     <PackageReference Include="Skybrud.Essentials" Version="1.1.41" />
     <PackageReference Include="Skybrud.WebApi.Json" Version="1.1.0" />
-    <PackageReference Include="UmbracoCms.Core" Version="8.6.0">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="UmbracoCms.Web" Version="8.6.0">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
+    <PackageReference Include="UmbracoCms.Core" Version="[8.6.0,9.0)" />
+    <PackageReference Include="UmbracoCms.Web" Version="[8.6.0,9.0)" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\**\*.css" />
     <Content Include="App_Plugins\Skybrud.Umbraco.Redirects\**\*.html" />
@@ -51,7 +47,7 @@
   <PropertyGroup>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(PackageId).xml</DocumentationFile>
   </PropertyGroup>
-  
+
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(ConfigurationName)'=='Release' AND '$(BuildTools)'=='1'">
     <Exec Command="&quot;$(ProjectDir)..\build\Skybrud.BuildTools.Tasks.exe&quot; &quot;postBuild&quot; &quot;$(ConfigurationName)&quot; &quot;$(ProjectPath)&quot; &quot;$(TargetPath)&quot;" />
   </Target>
