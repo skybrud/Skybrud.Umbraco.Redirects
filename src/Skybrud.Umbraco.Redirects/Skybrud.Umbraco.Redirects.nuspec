@@ -13,7 +13,7 @@
     <description>$description$</description>
     <tags>Umbraco, Redirects, 301, Content, Url, Umbraco-Marketplace</tags>
     <dependencies>
-      <dependency id="UmbracoCms.Core" version="(7.5.3,8.0]" />
+      <dependency id="UmbracoCms.Core" version="[7.5.3,8.0)" />
     </dependencies>
   </metadata>
 </package>
