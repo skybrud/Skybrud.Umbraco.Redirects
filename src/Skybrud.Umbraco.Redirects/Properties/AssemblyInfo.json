@@ -1,10 +1,10 @@
 {
   "title": "Skybrud.Umbraco.Redirects",
-  "description": "Skybrud.Umbraco.Redirects is a package to handle 301 redirects in Umbraco.",
+  "description": "Redirects manager for Umbraco.",
   "company": "Skybrud.dk",
   "product": "Skybrud.Umbraco.Redirects",
-  "copyright": "Copyright © 2020",
-  "version": "1.0.1.0",
-  "informationalVersion": "1.0.1",
-  "fileVersion": "0.0.2320.1"
+  "copyright": "Copyright © 2022",
+  "version": "1.0.2.0",
+  "informationalVersion": "1.0.2",
+  "fileVersion": "0.0.2320.2"
 }
