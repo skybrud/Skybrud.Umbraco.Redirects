@@ -11,7 +11,9 @@
     <iconUrl>http://www.skybrud.dk/img/5431sk/icon/favicon.ico</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <tags>Umbraco, Redirects, 301, Content, Url</tags>
-    <dependencies />
+    <tags>Umbraco, Redirects, 301, Content, Url, Umbraco-Marketplace</tags>
+    <dependencies>
+      <dependency id="UmbracoCms.Core" version="(7.5.3,8.0]" />
+    </dependencies>
   </metadata>
 </package>
