@@ -1,9 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <LangVersion>10.0</LangVersion>
+    <LangVersion>11.0</LangVersion>
     <TargetFramework>net6.0</TargetFramework>
-    <StaticWebAssetBasePath>App_Plugins/Skybrud.Umbraco.Redirects</StaticWebAssetBasePath>
+    <StaticWebAssetBasePath>App_Plugins/$(AssemblyName)</StaticWebAssetBasePath>
   </PropertyGroup>
 
   <PropertyGroup>
