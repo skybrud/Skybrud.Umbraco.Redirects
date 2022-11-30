@@ -12,7 +12,7 @@ URLs can be added to redirect to either a content item, media item or a custom U
   <tr>
     <td><strong>Umbraco:</strong></td>
     <td>
-      Umbraco 10
+      Umbraco 10 and 11
       <sub><sup>(and <a href="https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v3/main">Umbraco 9</a>, <a href="https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v2/main">Umbraco 8</a> and <a href="https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v1/main">Umbraco 7</a>)</sup></sub>
     </td>
   </tr>
@@ -33,16 +33,16 @@ URLs can be added to redirect to either a content item, media item or a custom U
 
 ## Installation
 
-The Umbraco 10 version of this package is only available via [NuGet](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects/4.0.5). To install the package, you can use either .NET CLI:
+The Umbraco 10 version of this package is only available via [NuGet](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects/4.0.6). To install the package, you can use either .NET CLI:
 
 ```
-dotnet add package Skybrud.Umbraco.Redirects --version 4.0.5
+dotnet add package Skybrud.Umbraco.Redirects --version 4.0.6
 ```
 
 or the older NuGet Package Manager:
 
 ```
-Install-Package Skybrud.Umbraco.Redirects -Version 4.0.5
+Install-Package Skybrud.Umbraco.Redirects -Version 4.0.6
 ```
 
 **Umbraco 9**  
