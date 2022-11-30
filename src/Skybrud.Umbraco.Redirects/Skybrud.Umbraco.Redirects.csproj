@@ -12,14 +12,14 @@
     <Authors>Anders Bjerner</Authors>
     <Company>Limbo</Company>
     <Title>Skybrud Redirects</Title>
-    <Description>Redirects manager for Umbraco 10.</Description>
+    <Description>Redirects manager for Umbraco.</Description>
     <Copyright>Copyright © 2022</Copyright>
   </PropertyGroup>
 
   <!-- Information for the NuGet package -->
   <PropertyGroup>
     <PackageId>Skybrud.Umbraco.Redirects</PackageId>
-    <PackageTags>Umbraco, Redirects, Redirect, 301, Content, Url, Skybrud, Limbo, Umbraco-Marketplace</PackageTags>
+    <PackageTags>Umbraco, Redirects, Redirect, 301, 307, Content, Url, Skybrud, Limbo, Umbraco-Marketplace</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://packages.skybrud.dk/skybrud.umbraco.redirects/</PackageProjectUrl>
     <PackageIcon>Limbo.png</PackageIcon>
