@@ -29,7 +29,7 @@ namespace Skybrud.Umbraco.Redirects.PropertyEditors {
 
         protected override IConfigurationEditor CreateConfigurationEditor() => new InboundRedirectsConfigurationEditor(_ioHelper, _editorConfigurationParser);
 
-        public override IDataValueEditor GetValueEditor(object configuration) {
+        public override IDataValueEditor GetValueEditor(object? configuration) {
 
             IDataValueEditor editor = base.GetValueEditor(configuration);
 

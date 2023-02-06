@@ -36,7 +36,7 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
         /// <summary>
         /// Gets a reference to the current backoffice user.
         /// </summary>
-        public IUser CurrentUser => Dependencies.BackOfficeSecurityAccessor.BackOfficeSecurity?.CurrentUser;
+        public IUser? CurrentUser => Dependencies.BackOfficeSecurityAccessor.BackOfficeSecurity?.CurrentUser;
 
         /// <summary>
         /// Gets a reference to the redirects settings.
@@ -195,12 +195,12 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
 
             string backOfficeBaseUrl = Dependencies.GlobalSettings.GetBackOfficePath(Dependencies.HostingEnvironment);
 
-            RedirectRootNodeModel rootNode = null;
+            RedirectRootNodeModel? rootNode = null;
             if (redirect.RootKey != Guid.Empty) {
 
                 if (!rootNodeLookup.TryGetValue(redirect.RootKey, out rootNode)) {
 
-                    if (!contentLookup.TryGetValue(redirect.RootKey, out IContent content)) {
+                    if (!contentLookup.TryGetValue(redirect.RootKey, out IContent? content)) {
                         content = Dependencies.ContentService.GetById(redirect.RootKey);
                         if (content != null) contentLookup.Add(content.Key, content);
                     }
@@ -215,7 +215,7 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
             RedirectDestinationModel destination;
             if (redirect.Destination.Type == RedirectDestinationType.Content) {
 
-                if (!contentLookup.TryGetValue(redirect.Destination.Key, out IContent content)) {
+                if (!contentLookup.TryGetValue(redirect.Destination.Key, out IContent? content)) {
                     content = Dependencies.ContentService.GetById(redirect.Destination.Key);
                     if (content != null) contentLookup.Add(content.Key, content);
                 }
@@ -226,7 +226,7 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
 
             } else if (redirect.Destination.Type == RedirectDestinationType.Media) {
 
-                if (!mediaLookup.TryGetValue(redirect.Destination.Key, out IMedia media)) {
+                if (!mediaLookup.TryGetValue(redirect.Destination.Key, out IMedia? media)) {
                     media = Dependencies.MediaService.GetById(redirect.Destination.Key);
                     if (media != null) mediaLookup.Add(media.Key, media);
                 }
@@ -251,7 +251,7 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
         /// <param name="source">The source - eg. an instance <see cref="IContent"/>.</param>
         /// <param name="userGroups">The user groups of the current user.</param>
         /// <returns>An instance of <see cref="ContentApp"/>, or <c>null</c> if no content app should be shown.</returns>
-        public virtual ContentApp GetContentAppFor(object source, IEnumerable<IReadOnlyUserGroup> userGroups) {
+        public virtual ContentApp? GetContentAppFor(object source, IEnumerable<IReadOnlyUserGroup> userGroups) {
 
             // Return null if the content app is disabled via appsettings.json
             if (!Settings.ContentApp.Enabled) return null;

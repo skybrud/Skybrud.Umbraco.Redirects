@@ -26,7 +26,7 @@ namespace Skybrud.Umbraco.Redirects.Text.Json.Enums {
         /// <inheritdoc />
         public sealed override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options) {
             var type = typeof(EnumStringConverter<>).MakeGenericType(typeToConvert);
-            return (JsonConverter) Activator.CreateInstance(type, new object[] { _casing });
+            return (JsonConverter) Activator.CreateInstance(type, _casing)!;
 
         }
 

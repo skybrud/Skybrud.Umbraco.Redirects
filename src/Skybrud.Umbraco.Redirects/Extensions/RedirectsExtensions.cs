@@ -25,7 +25,7 @@ namespace Skybrud.Umbraco.Redirects.Extensions {
         /// <param name="redirect">The redirect.</param>
         /// <param name="redirectsService">A reference to the current redirects service.</param>
         /// <returns>The destination URL.</returns>
-        public static string GetDestinationUrl(this OutboundRedirect redirect, IRedirectsService redirectsService) {
+        public static string? GetDestinationUrl(this OutboundRedirect redirect, IRedirectsService redirectsService) {
             return redirectsService.GetDestinationUrl(redirect);
         }
 
@@ -36,7 +36,7 @@ namespace Skybrud.Umbraco.Redirects.Extensions {
         /// <param name="uri">The inbound URL.</param>
         /// <param name="redirectsService">A reference to the current redirects service.</param>
         /// <returns>The destination URL.</returns>
-        public static string GetDestinationUrl(this OutboundRedirect redirect, Uri uri, IRedirectsService redirectsService) {
+        public static string? GetDestinationUrl(this OutboundRedirect redirect, Uri uri, IRedirectsService redirectsService) {
             return redirectsService.GetDestinationUrl(redirect, uri);
         }
 
@@ -90,7 +90,7 @@ namespace Skybrud.Umbraco.Redirects.Extensions {
                     return SetDestination(redirect, new RedirectDestination {
                         Id = content.Id,
                         Key = content.Key,
-                        Name = content.Name,
+                        Name = content.Name!,
                         Url = content.Url(),
                         Query = string.Empty,
                         Fragment = string.Empty,
@@ -101,7 +101,7 @@ namespace Skybrud.Umbraco.Redirects.Extensions {
                     return SetDestination(redirect, new RedirectDestination {
                         Id = content.Id,
                         Key = content.Key,
-                        Name = content.Name,
+                        Name = content.Name!,
                         Url = content.Url(),
                         Query = string.Empty,
                         Fragment = string.Empty,
@@ -153,7 +153,7 @@ namespace Skybrud.Umbraco.Redirects.Extensions {
         /// <returns>An instance of <see cref="IOutboundRedirect"/>.</returns>
         public static IOutboundRedirect GetOutboundRedirect(this IPublishedContent content, string propertyAlias) {
             if (string.IsNullOrWhiteSpace(propertyAlias)) throw new ArgumentNullException(nameof(propertyAlias));
-            IOutboundRedirect redirect = content.Value(propertyAlias) as IOutboundRedirect;
+            IOutboundRedirect? redirect = content.Value(propertyAlias) as IOutboundRedirect;
             return redirect ?? new OutboundRedirect();
         }
 
@@ -188,7 +188,7 @@ namespace Skybrud.Umbraco.Redirects.Extensions {
         /// </summary>
         /// <param name="content">The content item holding the outbound rediderect.</param>
         /// <returns>An instance of <see cref="IOutboundRedirect"/> if successful; otherwise, <see langword="null"/>.</returns>
-        public static IOutboundRedirect GetOutboundRedirectOrDefault(this IPublishedContent content) {
+        public static IOutboundRedirect? GetOutboundRedirectOrDefault(this IPublishedContent content) {
             return GetOutboundRedirectOrDefault(content, OutboundPropertyAliases);
         }
 
@@ -201,7 +201,7 @@ namespace Skybrud.Umbraco.Redirects.Extensions {
         /// <param name="content">The content item holding the outbound rediderect.</param>
         /// <param name="propertyAlias">The alias of the property.</param>
         /// <returns>An instance of <see cref="IOutboundRedirect"/> if successful; otherwise, <see langword="null"/>.</returns>
-        public static IOutboundRedirect GetOutboundRedirectOrDefault(this IPublishedContent content, string propertyAlias) {
+        public static IOutboundRedirect? GetOutboundRedirectOrDefault(this IPublishedContent content, string propertyAlias) {
             if (string.IsNullOrWhiteSpace(propertyAlias)) throw new ArgumentNullException(nameof(propertyAlias));
             return content.Value(propertyAlias) as IOutboundRedirect;
         }
@@ -215,7 +215,7 @@ namespace Skybrud.Umbraco.Redirects.Extensions {
         /// <param name="content">The content item holding the outbound rediderect.</param>
         /// <param name="propertyAliases">The aliases of the properties.</param>
         /// <returns>An instance of <see cref="IOutboundRedirect"/> if successful; otherwise, <see langword="null"/>.</returns>
-        public static IOutboundRedirect GetOutboundRedirectOrDefault(this IPublishedContent content, params string[] propertyAliases) {
+        public static IOutboundRedirect? GetOutboundRedirectOrDefault(this IPublishedContent content, params string[] propertyAliases) {
 
             if (propertyAliases == null) throw new ArgumentNullException(nameof(propertyAliases));
 

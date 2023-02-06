@@ -31,7 +31,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// Gets or sets a string value that should be present in either the text or URL of the returned redirects.
         /// Default is <c>null</c>.
         /// </summary>
-        public string Text { get; set; }
+        public string? Text { get; set; }
 
         /// <summary>
         /// Gets or sets the key the returned redirects should match. <see cref="Guid.Empty"/> indicates all global

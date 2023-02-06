@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -98,8 +99,8 @@ namespace Skybrud.Umbraco.Redirects.Models {
         private RedirectDestination(JObject json) {
             Id = json.GetInt32("id");
             Key = json.GetGuid("key");
-            Url = json.GetString("url");
-            Name = json.GetString("name");
+            Url = json.GetString("url")!;
+            Name = json.GetString("name")!;
             Query = json.GetString("query") ?? string.Empty;
             Fragment = json.GetString("fragment") ?? string.Empty;
             Type = json.GetEnum("type", RedirectDestinationType.Url);
@@ -114,7 +115,8 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// </summary>
         /// <param name="json">The JSON object representing the redirect destination.</param>
         /// <returns>An instance of <see cref="RedirectDestination"/>.</returns>
-        public static RedirectDestination Parse(JObject json) {
+        [return: NotNullIfNotNull(nameof(json))]
+        public static RedirectDestination? Parse(JObject? json) {
             return json == null ? null : new RedirectDestination(json);
         }
 

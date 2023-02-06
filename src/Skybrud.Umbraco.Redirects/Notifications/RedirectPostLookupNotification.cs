@@ -27,7 +27,7 @@ namespace Skybrud.Umbraco.Redirects.Notifications {
         /// <summary>
         /// Gets the redirect.
         /// </summary>
-        public IRedirect Redirect { get; }
+        public IRedirect? Redirect { get; }
 
         /// <summary>
         /// Gets or sets the type of the redirect. Only change this value if you wish to overwrite the default behaviour.
@@ -37,7 +37,7 @@ namespace Skybrud.Umbraco.Redirects.Notifications {
         /// <summary>
         /// Gets or sets the destination URL of the redirect.
         /// </summary>
-        public string DestinationUrl { get; set; }
+        public string? DestinationUrl { get; set; }
 
         #endregion
 
@@ -50,7 +50,7 @@ namespace Skybrud.Umbraco.Redirects.Notifications {
         /// <param name="redirect">The redirect indicating where the user should be redirected to.</param>
         /// <param name="redirectType">The redirect type.</param>
         /// <param name="destinationUrl">The destination URL.</param>
-        public RedirectPostLookupNotification(HttpContext context, IRedirect redirect, RedirectType redirectType, string destinationUrl) {
+        public RedirectPostLookupNotification(HttpContext context, IRedirect? redirect, RedirectType redirectType, string? destinationUrl) {
             HttpContext = context;
             Redirect = redirect;
             RedirectType = redirectType;

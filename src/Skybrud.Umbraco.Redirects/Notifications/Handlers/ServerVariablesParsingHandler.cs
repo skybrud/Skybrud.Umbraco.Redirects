@@ -18,7 +18,7 @@ namespace Skybrud.Umbraco.Redirects.Notifications.Handlers {
         public void Handle(ServerVariablesParsingNotification notification) {
 
             // Get or create the "skybrud" dictionary
-            if (!(notification.ServerVariables.TryGetValue("skybrud", out object value) && value is Dictionary<string, object> skybrud))  {
+            if (!(notification.ServerVariables.TryGetValue("skybrud", out object? value) && value is Dictionary<string, object> skybrud))  {
                 notification.ServerVariables["skybrud"] = skybrud = new Dictionary<string, object>();
             }
 

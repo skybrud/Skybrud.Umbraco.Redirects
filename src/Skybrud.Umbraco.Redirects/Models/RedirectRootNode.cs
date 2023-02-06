@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Newtonsoft.Json;
 using Umbraco.Cms.Core.Models;
@@ -40,11 +41,11 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// </summary>
         public string[] Domains { get; }
 
-        private RedirectRootNode(IContent content, IEnumerable<RedirectDomain> domains) {
+        private RedirectRootNode(IContent content, IEnumerable<RedirectDomain>? domains) {
             Id = content.Id;
             Key = content.Key;
-            Name = content.Name;
-            Icon = content.ContentType.Icon;
+            Name = content.Name!;
+            Icon = content.ContentType.Icon!;
             Domains = domains?.Select(x => x.Name).ToArray() ?? Array.Empty<string>();
         }
 
@@ -54,7 +55,8 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// <param name="content">The content item representing the root node.</param>
         /// <param name="domains">The domains asscoiated with the root node.</param>
         /// <returns>An instance of <see cref="RedirectRootNode"/>.</returns>
-        public static RedirectRootNode GetFromContent(IContent content, IEnumerable<RedirectDomain> domains) {
+        [return: NotNullIfNotNull(nameof(content))]
+        public static RedirectRootNode? GetFromContent(IContent? content, IEnumerable<RedirectDomain>? domains) {
             return content == null ? null : new RedirectRootNode(content, domains);
         }
 

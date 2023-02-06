@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Skybrud.Essentials.Strings.Extensions;
 using Umbraco.Cms.Core.Routing;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Extensions;
@@ -19,7 +21,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// <param name="uri">The URI.</param>
         /// <param name="domain">When this method returns, holds the domain if successful; otherwise, <c>null</c>.</param>
         /// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
-        public static bool TryGetDomain(IDomainService domainService, Uri uri, out Domain domain) {
+        public static bool TryGetDomain(IDomainService domainService, Uri uri, [NotNullWhen(true)] out Domain? domain) {
             domain = FindDomainForUri(domainService, uri);
             return domain != null;
         }
@@ -30,11 +32,9 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// <param name="domainService"></param>
         /// <param name="current">The uri, or null.</param>
         /// <returns>The domain</returns>
-        public static Domain FindDomainForUri(IDomainService domainService, Uri current) {
+        public static Domain? FindDomainForUri(IDomainService domainService, Uri current) {
             var domains = domainService.GetAll(false);
-            if (domains == null) return null;
-            DomainAndUri domain = SelectDomain(domains.Select(x => new Domain(x.Id, x.DomainName, x.RootContentId.GetValueOrDefault(), x.LanguageIsoCode, x.IsWildcard)), current);
-            return domain;
+            return SelectDomain(domains.Select(x => new Domain(x.Id, x.DomainName, x.RootContentId.GetValueOrDefault(), x.LanguageIsoCode, x.IsWildcard)), current);
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
         ///     <cref>https://github.com/umbraco/Umbraco-CMS/blob/193e24afd256b2994a0900c0e9739f3f3466c036/src/Umbraco.Web/Routing/DomainHelper.cs#L98</cref>
         /// </see>
         /// </remarks>
-        internal static DomainAndUri SelectDomain(IEnumerable<Domain> domains, Uri uri, string culture = null, string defaultCulture = null, Func<IReadOnlyCollection<DomainAndUri>, Uri, string, string, DomainAndUri> filter = null)  {
+        internal static DomainAndUri? SelectDomain(IEnumerable<Domain> domains, Uri uri, string? culture = null, string? defaultCulture = null, Func<IReadOnlyCollection<DomainAndUri>, Uri, string?, string?, DomainAndUri>? filter = null)  {
 
             // sanitize the list to have proper uris for comparison (scheme, path end with /)
             // we need to end with / because example.com/foo cannot match example.com/foobar
@@ -75,11 +75,11 @@ namespace Skybrud.Umbraco.Redirects.Services {
                 return null;
 
             // sanitize cultures
-            culture = culture.NullOrWhiteSpaceAsNull();
-            defaultCulture = defaultCulture.NullOrWhiteSpaceAsNull();
+            culture = culture.NullIfWhiteSpace();
+            defaultCulture = defaultCulture.NullIfWhiteSpace();
 
-            if (uri == null)
-            {
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+            if (uri == null) {
                 // no uri - will only rely on culture
                 return GetByCulture(domainsAndUris, culture, defaultCulture);
             }
@@ -139,7 +139,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
             return baseDomains;
         }
 
-        private static IReadOnlyCollection<DomainAndUri> SelectByCulture(IReadOnlyCollection<DomainAndUri> domainsAndUris, string culture, string defaultCulture) {
+        private static IReadOnlyCollection<DomainAndUri>? SelectByCulture(IReadOnlyCollection<DomainAndUri> domainsAndUris, string? culture, string? defaultCulture) {
 
             // we try our best to match cultures, but may end with a bogus domain
 
@@ -156,11 +156,12 @@ namespace Skybrud.Umbraco.Redirects.Services {
             }
 
             return null;
+
         }
 
-        private static DomainAndUri GetByCulture(IReadOnlyCollection<DomainAndUri> domainsAndUris, string culture, string defaultCulture) {
+        private static DomainAndUri GetByCulture(IReadOnlyCollection<DomainAndUri> domainsAndUris, string? culture, string? defaultCulture) {
 
-            DomainAndUri domainAndUri;
+            DomainAndUri? domainAndUri;
 
             // we try our best to match cultures, but may end with a bogus domain
 
@@ -177,6 +178,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
             }
 
             return domainsAndUris.First(); // what else?
+
         }
 
     }

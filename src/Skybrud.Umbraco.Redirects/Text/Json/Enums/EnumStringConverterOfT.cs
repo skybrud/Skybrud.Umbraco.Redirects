@@ -15,7 +15,7 @@ namespace Skybrud.Umbraco.Redirects.Text.Json.Enums {
             _casing = casing;
         }
 
-        public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
+        public override T? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
 
             switch (reader.TokenType) {
 
@@ -23,7 +23,7 @@ namespace Skybrud.Umbraco.Redirects.Text.Json.Enums {
                     return default;
 
                 case JsonTokenType.String:
-                    return (T) EnumUtils.ParseEnum(reader.GetString(), typeof(T));
+                    return (T) EnumUtils.ParseEnum(reader.GetString()!, typeof(T));
 
                 default:
                     throw new Exception($"Unsupported token type: {reader.TokenType}");
@@ -32,7 +32,7 @@ namespace Skybrud.Umbraco.Redirects.Text.Json.Enums {
 
         }
 
-        public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options) {
+        public override void Write(Utf8JsonWriter writer, T? value, JsonSerializerOptions options) {
 
             if (value == null) {
                 writer.WriteNullValue();

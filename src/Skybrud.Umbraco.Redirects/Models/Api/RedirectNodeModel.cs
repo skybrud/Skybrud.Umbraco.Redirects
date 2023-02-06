@@ -18,7 +18,7 @@ namespace Skybrud.Umbraco.Redirects.Models.Api {
 
         public string Name { get; }
 
-        public string Url { get; }
+        public string? Url { get; }
 
         [MicrosoftJsonConverter(typeof(Text.Json.Enums.EnumCamelCaseConverter))]
         public RedirectDestinationType Type { get; }
@@ -29,20 +29,20 @@ namespace Skybrud.Umbraco.Redirects.Models.Api {
         [JsonPropertyName("trashed")]
         public bool IsTrashed { get; }
 
-        public RedirectNodeModel(IContent content, IPublishedContent published) {
+        public RedirectNodeModel(IContent content, IPublishedContent? published) {
             Id = content.Id;
             Key = content.Key;
-            Name = content.Name;
+            Name = content.Name!;
             Type = RedirectDestinationType.Content;
             IsPublished = content.Published;
             IsTrashed = content.Trashed;
             Url = published?.Url();
         }
 
-        public RedirectNodeModel(IMedia media, IPublishedContent published) {
+        public RedirectNodeModel(IMedia media, IPublishedContent? published) {
             Id = media.Id;
             Key = media.Key;
-            Name = media.Name;
+            Name = media.Name!;
             Type = RedirectDestinationType.Media;
             IsPublished = true;
             IsTrashed = media.Trashed;
