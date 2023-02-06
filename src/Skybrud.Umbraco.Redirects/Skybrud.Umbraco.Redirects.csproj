@@ -10,13 +10,13 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>4.0.6</VersionPrefix>
+    <VersionPrefix>4.0.7</VersionPrefix>
     <VersionSuffix Condition="'$(Configuration)'=='Debug'">build$([System.DateTime]::UtcNow.ToString(`yyyyMMddHHmm`))</VersionSuffix>
     <Authors>Anders Bjerner</Authors>
     <Company>Limbo</Company>
     <Title>Skybrud Redirects</Title>
     <Description>Redirects manager for Umbraco.</Description>
-    <Copyright>Copyright © 2022</Copyright>
+    <Copyright>Copyright © 2023</Copyright>
   </PropertyGroup>
 
   <!-- Information for the NuGet package -->
