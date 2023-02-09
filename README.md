@@ -75,6 +75,15 @@ For the Umbraco 7 version of this package, see the [**v1/main**](https://github.
 
 
 
+<br /><br />
+
+## Add-ons
+
+- [**Skybrud.Umbraco.Redirects.Import**](https://github.com/skybrud/Skybrud.Umbraco.Redirects.Import)  
+Add-on for handling imports and exports of redirects supporting formats like CSV, XLSX and JSON.
+
+
+
 
 
 <br /><br />
