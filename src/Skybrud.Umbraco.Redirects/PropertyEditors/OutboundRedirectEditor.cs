@@ -21,7 +21,7 @@ namespace Skybrud.Umbraco.Redirects.PropertyEditors {
             _backOfficeHelper = backOfficeHelper;
         }
 
-        public override IDataValueEditor GetValueEditor(object configuration) {
+        public override IDataValueEditor GetValueEditor(object? configuration) {
 
             IDataValueEditor editor = base.GetValueEditor(configuration);
 

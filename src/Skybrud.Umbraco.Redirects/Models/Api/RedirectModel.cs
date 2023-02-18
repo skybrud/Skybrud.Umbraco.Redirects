@@ -15,7 +15,7 @@ namespace Skybrud.Umbraco.Redirects.Models.Api {
 
         public Guid Key => _redirect.Key;
 
-        public RedirectRootNodeModel RootNode { get; }
+        public RedirectRootNodeModel? RootNode { get; }
 
         public string Path => _redirect.Path;
 
@@ -39,7 +39,7 @@ namespace Skybrud.Umbraco.Redirects.Models.Api {
         [JsonPropertyName("forward")]
         public bool ForwardQueryString => _redirect.ForwardQueryString;
 
-        public RedirectModel(IRedirect redirect, RedirectRootNodeModel rootNode, RedirectDestinationModel destination) {
+        public RedirectModel(IRedirect redirect, RedirectRootNodeModel? rootNode, RedirectDestinationModel destination) {
             _redirect = redirect;
             RootNode = rootNode;
             Destination = destination;

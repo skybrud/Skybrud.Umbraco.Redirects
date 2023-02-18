@@ -45,7 +45,7 @@ namespace Skybrud.Umbraco.Redirects.Factories {
         /// </summary>
         /// <param name="json">A <see cref="JObject"/> instance representing the outbound redirect.</param>
         /// <returns>An instance of <see cref="OutboundRedirect"/>.</returns>
-        public virtual IOutboundRedirect CreateOutboundRedirect(JObject json) {
+        public virtual IOutboundRedirect? CreateOutboundRedirect(JObject? json) {
 
             if (json == null) return null;
 
@@ -56,19 +56,19 @@ namespace Skybrud.Umbraco.Redirects.Factories {
             bool forward = json.GetBoolean("forward");
 
             // Parse the destination
-            RedirectDestination destination = json.GetObject("destination", RedirectDestination.Parse);
+            RedirectDestination? destination = json.GetObject("destination", RedirectDestination.Parse);
             if (destination is not { IsValid: true }) return null;
 
             // Look up the current URL for content and media
             switch (destination.Type) {
 
                 case RedirectDestinationType.Content:
-                    IPublishedContent content = UmbracoContext?.Content?.GetById(destination.Key);
+                    IPublishedContent? content = UmbracoContext.Content?.GetById(destination.Key);
                     if (content != null) destination.Url = content.Url();
                     break;
 
                 case RedirectDestinationType.Media:
-                    IPublishedContent media = UmbracoContext?.Media?.GetById(destination.Key);
+                    IPublishedContent? media = UmbracoContext.Media?.GetById(destination.Key);
                     if (media != null) destination.Url = media.Url();
                     break;
 

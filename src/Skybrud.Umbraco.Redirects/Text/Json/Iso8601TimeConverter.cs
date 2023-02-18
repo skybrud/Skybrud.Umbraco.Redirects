@@ -9,7 +9,7 @@ namespace Skybrud.Umbraco.Redirects.Text.Json {
 
     public class Iso8601TimeConverter : JsonConverter<EssentialsTime> {
 
-        public override EssentialsTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
+        public override EssentialsTime? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
 
             switch (reader.TokenType) {
 
@@ -26,7 +26,7 @@ namespace Skybrud.Umbraco.Redirects.Text.Json {
 
         }
 
-        public override void Write(Utf8JsonWriter writer, EssentialsTime value, JsonSerializerOptions options) {
+        public override void Write(Utf8JsonWriter writer, EssentialsTime? value, JsonSerializerOptions options) {
 
             if (value == null) {
                 writer.WriteNullValue();

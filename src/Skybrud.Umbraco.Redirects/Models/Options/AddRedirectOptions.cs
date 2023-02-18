@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.AspNetCore.Builder;
 using Newtonsoft.Json;
 
 namespace Skybrud.Umbraco.Redirects.Models.Options {
@@ -34,13 +33,13 @@ namespace Skybrud.Umbraco.Redirects.Models.Options {
         /// Gets or set the original URL the redirect.
         /// </summary>
         [JsonProperty("originalUrl")]
-        public string OriginalUrl { get; set; }
+        public string? OriginalUrl { get; set; }
 
         /// <summary>
         /// Gets or set the destination of the redirect.
         /// </summary>
         [JsonProperty("destination")]
-        public RedirectDestination Destination { get; set; }
+        public RedirectDestination Destination { get; set; } = null!;
 
         /// <summary>
         /// Gets or set whether the redirect is permanent.

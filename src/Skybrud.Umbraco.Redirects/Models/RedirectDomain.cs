@@ -1,5 +1,6 @@
 ﻿//using Newtonsoft.Json;
 
+using System.Diagnostics.CodeAnalysis;
 using Newtonsoft.Json;
 using Umbraco.Cms.Core.Models;
 
@@ -50,14 +51,15 @@ namespace Skybrud.Umbraco.Redirects.Models {
 
         #endregion
 
-        #region Constructors
+        #region Static methods
 
         /// <summary>
         /// Initializes a new instance from the specified Umbraco <paramref name="domain"/>.
         /// </summary>
         /// <param name="domain">The Umbraco domain.</param>
         /// <returns>An instance of <see cref="RedirectDomain"/>.</returns>
-        public static RedirectDomain GetFromDomain(IDomain domain) {
+        [return: NotNullIfNotNull(nameof(domain))]
+        public static RedirectDomain? GetFromDomain(IDomain? domain) {
             return domain == null ? null : new RedirectDomain(domain);
         }
 

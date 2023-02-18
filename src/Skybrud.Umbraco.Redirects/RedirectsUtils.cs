@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 using Skybrud.Essentials.Json.Newtonsoft;
 using Skybrud.Essentials.Reflection;
@@ -46,7 +47,7 @@ namespace Skybrud.Umbraco.Redirects {
 
             string url = redirect.Destination.Url;
             string query = redirect.Destination.Query;
-            string fragment = null;
+            string? fragment = null;
 
             // Isolate the fragment if specified in the URL
             int pos1 = url.IndexOf('#');
@@ -163,8 +164,8 @@ namespace Skybrud.Umbraco.Redirects {
 
         }
 
-        internal static T GetService<T>()  {
-            return (T) StaticServiceProvider.Instance.GetService(typeof(T));
+        internal static T GetService<T>() where T : notnull {
+            return StaticServiceProvider.Instance.GetRequiredService<T>();
         }
 
     }

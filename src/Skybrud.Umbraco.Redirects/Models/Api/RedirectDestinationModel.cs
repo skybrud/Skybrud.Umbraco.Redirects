@@ -38,10 +38,10 @@ namespace Skybrud.Umbraco.Redirects.Models.Api {
         public bool IsPublished { get; }
 
         [JsonPropertyName("backOfficeUrl")]
-        public string BackOfficeUrl { get; set; }
+        public string? BackOfficeUrl { get; set; }
 
         [JsonPropertyName("warning")]
-        public string Warning {
+        public string? Warning {
             get {
                 if (IsNull) return "deleted";
                 if (IsTrashed) return "trashed";
@@ -55,6 +55,8 @@ namespace Skybrud.Umbraco.Redirects.Models.Api {
         public RedirectDestinationModel(IRedirectDestination destination) {
 
             _destination = destination;
+
+            Name = _destination.Name;
 
             switch (Type) {
 
@@ -78,7 +80,7 @@ namespace Skybrud.Umbraco.Redirects.Models.Api {
 
         }
 
-        public RedirectDestinationModel(IRedirect redirect, IContent content) {
+        public RedirectDestinationModel(IRedirect redirect, IContent? content) {
             _destination = redirect.Destination;
             Name = content?.Name ?? redirect.Destination.Name;
             Icon = content?.ContentType.Icon ?? "icon-article";
@@ -88,7 +90,7 @@ namespace Skybrud.Umbraco.Redirects.Models.Api {
             BackOfficeUrl = $"/umbraco/#/content/content/edit/{redirect.Destination.Id}";
         }
 
-        public RedirectDestinationModel(IRedirect redirect, IMedia media) {
+        public RedirectDestinationModel(IRedirect redirect, IMedia? media) {
             _destination = redirect.Destination;
             Name = media?.Name ?? redirect.Destination.Name;
             Icon = media?.ContentType.Icon ?? "icon-picture";

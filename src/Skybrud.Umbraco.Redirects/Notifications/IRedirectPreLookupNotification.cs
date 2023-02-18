@@ -23,7 +23,7 @@ namespace Skybrud.Umbraco.Redirects.Notifications {
         /// Gets or sets the redirect. If a redirect is set from the pre lookup notification, the redirects package will use
         /// this redirect, and skip any further lookups.
         /// </summary>
-        IRedirect Redirect { get; set; }
+        IRedirect? Redirect { get; set; }
 
         /// <summary>
         /// Gets or sets the type of the redirect. Only change this value if you wish to overwrite the default behaviour.
@@ -33,7 +33,7 @@ namespace Skybrud.Umbraco.Redirects.Notifications {
         /// <summary>
         /// Gets or sets the destination URL of the redirect. Usually it should be necessary to change this value, but you can do so to force a specific destination URL.
         /// </summary>
-        string DestinationUrl { get; set; }
+        string? DestinationUrl { get; set; }
 
     }
 

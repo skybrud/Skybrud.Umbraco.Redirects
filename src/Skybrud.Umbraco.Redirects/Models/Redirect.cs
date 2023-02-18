@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 using Skybrud.Essentials.Enums;
@@ -50,7 +51,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         [JsonProperty("path")]
         public string Path {
             get => Dto.Path;
-            set => Dto.Path = value?.TrimEnd('/');
+            set => Dto.Path = value.TrimEnd('/');
         }
 
         /// <summary>
@@ -75,13 +76,13 @@ namespace Skybrud.Umbraco.Redirects.Models {
                 if (string.IsNullOrWhiteSpace(value)) throw new ArgumentNullException(nameof(value));
 
                 // Remove the fragment
-                value.Split('#', out value);
+                value.Split('#', out value!);
 
                 // Split the path and query
-                value.Split('?', out string path, out string query);
+                value.Split('?', out string? path, out string? query);
 
                 // Update the path and query
-                Path = path;
+                Path = path!;
                 QueryString = query ?? string.Empty;
 
             }
@@ -114,7 +115,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         [System.Text.Json.Serialization.JsonConverter(typeof(Iso8601TimeConverter))]
         public EssentialsTime CreateDate {
             get => _createDate;
-            set { _createDate = value ?? EssentialsTime.Zero; Dto.Created = _createDate.DateTimeOffset.ToUniversalTime().DateTime; }
+            set { _createDate = value; Dto.Created = _createDate.DateTimeOffset.ToUniversalTime().DateTime; }
         }
 
         /// <summary>
@@ -124,7 +125,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         [System.Text.Json.Serialization.JsonConverter(typeof(Iso8601TimeConverter))]
         public EssentialsTime UpdateDate {
             get => _updateDate;
-            set { _updateDate = value ?? EssentialsTime.Zero; Dto.Updated = _updateDate.DateTimeOffset.ToUniversalTime().DateTime; }
+            set { _updateDate = value; Dto.Updated = _updateDate.DateTimeOffset.ToUniversalTime().DateTime; }
         }
 
         /// <summary>
@@ -199,7 +200,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         #region Static methods
 
         internal static Redirect CreateFromDto(RedirectDto dto) {
-            return dto == null ? null : new Redirect(dto);
+            return new Redirect(dto);
         }
 
         #endregion

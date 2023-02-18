@@ -12,15 +12,15 @@ namespace Skybrud.Umbraco.Redirects.Models.Api {
 
         public Guid Key { get; }
 
-        public string Name { get; }
+        public string? Name { get; }
 
-        public string Icon { get; }
+        public string? Icon { get; }
 
-        public string BackOfficeUrl { get; }
+        public string? BackOfficeUrl { get; }
 
         public string[] Domains { get; }
 
-        public RedirectRootNodeModel(IRedirect redirect, IContent content, string[] domains, string backOfficeBaseUrl) {
+        public RedirectRootNodeModel(IRedirect redirect, IContent? content, string[]? domains, string backOfficeBaseUrl) {
             Id = content?.Id ?? 0;
             Key = content?.Key ?? redirect.RootKey;
             Name = content?.Name;
@@ -29,7 +29,7 @@ namespace Skybrud.Umbraco.Redirects.Models.Api {
             BackOfficeUrl = $"{backOfficeBaseUrl}/#/content/content/edit/{Id}";
         }
 
-        public RedirectRootNodeModel(IRedirect redirect, IContent content, string[] domains, RedirectsBackOfficeHelper backOffice) {
+        public RedirectRootNodeModel(IRedirect redirect, IContent? content, string[]? domains, RedirectsBackOfficeHelper backOffice) {
             Id = content?.Id ?? 0;
             Key = content?.Key ?? redirect.RootKey;
             Name = content?.Name;

@@ -46,14 +46,14 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// </summary>
         /// <param name="redirectId">The numeric ID of the redirect.</param>
         /// <returns>An instance of <see cref="IRedirect"/>, or <c>null</c> if not found.</returns>
-        IRedirect GetRedirectById(int redirectId);
+        IRedirect? GetRedirectById(int redirectId);
 
         /// <summary>
         /// Gets the redirect mathing the specified GUID <paramref name="key"/>.
         /// </summary>
         /// <param name="key">The GUID key of the redirect.</param>
         /// <returns>An instance of <see cref="IRedirect"/>, or <c>null</c> if not found.</returns>
-        IRedirect GetRedirectByKey(Guid key);
+        IRedirect? GetRedirectByKey(Guid key);
 
         /// <summary>
         /// Gets the redirect matching the specified <paramref name="url"/>.
@@ -61,7 +61,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// <param name="rootNodeKey">The GUID of the root/side node. Use <see cref="Guid.Empty"/> for a global redirect.</param>
         /// <param name="url">The URL of the redirect.</param>
         /// <returns>An instance of <see cref="IRedirect"/>, or <c>null</c> if not found.</returns>
-        IRedirect GetRedirectByUrl(Guid rootNodeKey, string url);
+        IRedirect? GetRedirectByUrl(Guid rootNodeKey, string url);
 
         /// <summary>
         /// Returns the redirect matching the specified <paramref name="path"/> and <paramref name="query"/>, or <c>null</c> if not redirect is found.
@@ -70,28 +70,28 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// <param name="path">The path of the inbound inbound request.</param>
         /// <param name="query">The query string of the inbound request.</param>
         /// <returns>An instance of <see cref="IRedirect"/>, or <c>null</c> if no matching redirect found.</returns>
-        IRedirect GetRedirectByPathAndQuery(Guid rootNodeKey, string path, string query);
+        IRedirect? GetRedirectByPathAndQuery(Guid rootNodeKey, string path, string? query);
 
         /// <summary>
         /// Returns the first redirect matching the specified <paramref name="request"/>, or <c>null</c> if the request does not match any redirects.
         /// </summary>
         /// <param name="request">The request.</param>
         /// <returns>An instance of <see cref="IRedirect"/>, or <c>null</c> if no matching redirects were found.</returns>
-        IRedirect GetRedirectByRequest(HttpRequest request);
+        IRedirect? GetRedirectByRequest(HttpRequest request);
 
         /// <summary>
         /// Returns the first redirect matching the specified <paramref name="uri"/>, or <c>null</c> if the URI does not match any redirects.
         /// </summary>
         /// <param name="uri">The URI of the request.</param>
         /// <returns>An instance of <see cref="IRedirect"/>, or <c>null</c> if no matching redirects were found.</returns>
-        IRedirect GetRedirectByUri(Uri uri);
+        IRedirect? GetRedirectByUri(Uri uri);
 
         /// <summary>
         /// Returns the calculated destination URL for the specified <paramref name="redirect"/>.
         /// </summary>
         /// <param name="redirect">The redirect.</param>
         /// <returns>The destination URL.</returns>
-        string GetDestinationUrl(IRedirectBase redirect);
+        string? GetDestinationUrl(IRedirectBase redirect);
 
         /// <summary>
         /// Returns the calculated destination URL for the specified <paramref name="redirect"/>.
@@ -99,7 +99,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// <param name="redirect">The redirect.</param>
         /// <param name="uri">The inbound URL.</param>
         /// <returns>The destination URL.</returns>
-        string GetDestinationUrl(IRedirectBase redirect, Uri uri);
+        string? GetDestinationUrl(IRedirectBase redirect, Uri uri);
 
         /// <summary>
         /// Returns a paginated list of redirects matching the specified <paramref name="options"/>.

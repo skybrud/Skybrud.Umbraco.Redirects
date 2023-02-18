@@ -20,7 +20,7 @@ namespace Skybrud.Umbraco.Redirects.Models.Options {
         /// Gets or sets the key of the redirect.
         /// </summary>
         [JsonProperty("key")]
-        public string Key { get; set; }
+        public string? Key { get; set; }
 
         /// <summary>
         /// Gets or set the root node ID of the redirect.
@@ -38,13 +38,13 @@ namespace Skybrud.Umbraco.Redirects.Models.Options {
         /// Gets or set the original URL the redirect.
         /// </summary>
         [JsonProperty("originalurl")]
-        public string OriginalUrl { get; set; }
+        public string? OriginalUrl { get; set; }
 
         /// <summary>
         /// Gets or set the destination of the redirect.
         /// </summary>
         [JsonProperty("destination")]
-        public RedirectDestination Destination { get; set; }
+        public RedirectDestination? Destination { get; set; }
 
         /// <summary>
         /// Gets or set whether the redirect is permanent.

@@ -15,13 +15,12 @@ namespace Skybrud.Umbraco.Redirects.Factories.References {
 
         public IDataValueReference GetDataValueReference() => this;
 
-        public IEnumerable<UmbracoEntityReference> GetReferences(object value) {
+        public IEnumerable<UmbracoEntityReference> GetReferences(object? value) {
 
             List<UmbracoEntityReference> references = new List<UmbracoEntityReference>();
             if (value is not string json) return references;
 
-            IRedirectDestination destination = OutboundRedirect.Deserialize(json)?.Destination;
-            if (destination == null) return references;
+            IRedirectDestination destination = OutboundRedirect.Deserialize(json).Destination;
 
             switch (destination.Type) {
 
@@ -39,7 +38,7 @@ namespace Skybrud.Umbraco.Redirects.Factories.References {
 
         }
 
-        public bool IsForEditor(IDataEditor dataEditor) => dataEditor.Alias.InvariantEquals(OutboundRedirectEditor.EditorAlias);
+        public bool IsForEditor(IDataEditor? dataEditor) => dataEditor is not null && dataEditor.Alias.InvariantEquals(OutboundRedirectEditor.EditorAlias);
 
     }
 

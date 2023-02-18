@@ -81,14 +81,14 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         [HttpPost]
         public ActionResult AddRedirect([FromBody] JObject m) {
 
-            AddRedirectOptions model = m.ToObject<AddRedirectOptions>();
+            AddRedirectOptions? model = m.ToObject<AddRedirectOptions>();
 
             try {
 
                 // Some input validation
                 if (model == null) throw new RedirectsException("Failed parsing request body.");
                 if (string.IsNullOrWhiteSpace(model.OriginalUrl)) throw new RedirectsException(_backOffice.Localize("errorNoUrl"));
-                if (string.IsNullOrWhiteSpace(model.Destination?.Url)) throw new RedirectsException(_backOffice.Localize("errorNoDestination"));
+                if (string.IsNullOrWhiteSpace(model.Destination.Url)) throw new RedirectsException(_backOffice.Localize("errorNoDestination"));
 
                 // Add the redirect
                 IRedirect redirect = _redirects.AddRedirect(model);
@@ -113,7 +113,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
             try {
 
                 // Get a reference to the redirect
-                IRedirect redirect = _redirects.GetRedirectByKey(redirectId);
+                IRedirect? redirect = _redirects.GetRedirectByKey(redirectId);
                 if (redirect == null) throw new RedirectNotFoundException();
 
                 // Some input validation
@@ -171,7 +171,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
             try {
 
                 // Get a reference to the redirect
-                IRedirect redirect = _redirects.GetRedirectByKey(redirectId);
+                IRedirect? redirect = _redirects.GetRedirectByKey(redirectId);
                 if (redirect == null) throw new RedirectNotFoundException();
 
                 // Some input validation
@@ -193,7 +193,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                     Id = linkId,
                     Key = linkKey,
                     Type = type,
-                    Name = redirect.Destination?.Name
+                    Name = redirect.Destination.Name
                 };
 
                 // Split the URL and query string
@@ -236,7 +236,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
             try {
 
                 // Get a reference to the redirect
-                IRedirect redirect = _redirects.GetRedirectByKey(redirectId);
+                IRedirect? redirect = _redirects.GetRedirectByKey(redirectId);
                 if (redirect == null) throw new RedirectNotFoundException();
 
                 // Delete the redirect
@@ -266,11 +266,11 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         /// <param name="rootNodeKeys">An array of root node keys that the returned redirects should match. <c>null</c> means all redirects. <see cref="Guid.Empty"/> means all global redirects.</param>
         /// <returns>A list of redirects.</returns>
         [HttpGet]
-        public ActionResult GetRedirects(int page = 1, int limit = 20, string type = null, string text = null, [FromQuery]Guid[] rootNodeKeys = null) {
+        public ActionResult GetRedirects(int page = 1, int limit = 20, string? type = null, string? text = null, [FromQuery] Guid[]? rootNodeKeys = null) {
 
             try {
 	            var rootKeys = _backOffice.Settings.ContentApp.UseStartNodes
-		            ? _redirects.GetRootNodes(_backOffice.CurrentUser).Select(p => p.Key)
+		            ? _redirects.GetRootNodes(_backOffice.CurrentUser!).Select(p => p.Key)
 		            : _redirects.GetRootNodes().Select(p => p.Key);
 
                 // Initialize the search options
@@ -311,15 +311,15 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                     case "content":
 
                         // Get a reference to the content item
-                        IContent content1 = _contentService.GetById(key);
+                        IContent? content1 = _contentService.GetById(key);
 
                         // Trigger an exception if the content item couldn't be found
                         if (content1 == null) throw new RedirectsException(HttpStatusCode.NotFound, _backOffice.Localize("errorContentNoRedirects"));
 
                         // Look up the content via the content cahce
-                        IPublishedContent content2 = null;
-                        if (_umbracoContextAccessor.TryGetUmbracoContext(out IUmbracoContext umbraco)) {
-                            content2 = umbraco.Content.GetById(key);
+                        IPublishedContent? content2 = null;
+                        if (_umbracoContextAccessor.TryGetUmbracoContext(out IUmbracoContext? umbraco)) {
+                            content2 = umbraco.Content?.GetById(key);
                         }
 
                         // Initialize a new model instance
@@ -330,15 +330,15 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                     case "media":
 
                         // Get a reference to the media item
-                        IMedia media1 = _mediaService.GetById(key);
+                        IMedia? media1 = _mediaService.GetById(key);
 
                         // Trigger an exception if the media item couldn't be found
                         if (media1 == null) throw new RedirectsException(HttpStatusCode.NotFound, _backOffice.Localize("errorContentNoRedirects"));
 
                         // Look up the media via the content cahce
-                        IPublishedContent media2 = null;
+                        IPublishedContent? media2 = null;
                         if (_umbracoContextAccessor.TryGetUmbracoContext(out umbraco)) {
-                            media2 = umbraco.Content.GetById(key);
+                            media2 = umbraco.Content?.GetById(key);
                         }
 
                         // Initialize a new model instance

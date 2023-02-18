@@ -21,7 +21,7 @@ namespace Skybrud.Umbraco.Redirects {
         /// <summary>
         /// Gets the version of the package.
         /// </summary>
-        public static readonly Version Version = typeof(RedirectsPackage).Assembly.GetName().Version;
+        public static readonly Version Version = typeof(RedirectsPackage).Assembly.GetName().Version!;
 
         /// <summary>
         /// Gets the semantic version of the package.
@@ -37,7 +37,7 @@ namespace Skybrud.Umbraco.Redirects {
         /// Gets the URL of the issue tracker for this package.
         /// </summary>
         public const string IssuesUrl = "https://github.com/skybrud/Skybrud.Umbraco.Redirects/issues";
-        
+
         /// <summary>
         /// Gets the URL of the documentation for this package.
         /// </summary>

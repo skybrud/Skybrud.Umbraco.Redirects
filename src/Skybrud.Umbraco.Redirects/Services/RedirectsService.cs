@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Web;
 using Microsoft.AspNetCore.Http;
@@ -57,7 +58,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// </summary>
         /// <returns></returns>
         public RedirectDomain[] GetDomains() {
-            return _domains.GetAll(false).Select(RedirectDomain.GetFromDomain).ToArray();
+            return _domains.GetAll(false).Select(RedirectDomain.GetFromDomain).ToArray()!;
         }
 
         /// <summary>
@@ -93,9 +94,9 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// <param name="rootNodeKey">The key of the root node. Use <see cref="Guid.Empty"/> for a global redirect.</param>
         /// <param name="url">The URL of the redirect.</param>
         /// <returns>An instance of <see cref="Redirect"/>, or <c>null</c> if not found.</returns>
-        public virtual IRedirect GetRedirectByUrl(Guid rootNodeKey, string url) {
-            url.Split('?', out string path, out string query);
-            return GetRedirectByPathAndQuery(rootNodeKey, path, query);
+        public virtual IRedirect? GetRedirectByUrl(Guid rootNodeKey, string url) {
+            url.Split('?', out string? path, out string? query);
+            return GetRedirectByPathAndQuery(rootNodeKey, path!, query);
         }
 
         /// <summary>
@@ -105,7 +106,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// <param name="path">The path of the redirect.</param>
         /// <param name="query">The query string of the redirect.</param>
         /// <returns>An instance of <see cref="Redirect"/>, or <c>null</c> if not found.</returns>
-        public virtual IRedirect GetRedirectByPathAndQuery(Guid rootNodeKey, string path, string query) {
+        public virtual IRedirect? GetRedirectByPathAndQuery(Guid rootNodeKey, string path, string? query) {
 
             // Some input validation
             if (string.IsNullOrWhiteSpace(path)) throw new ArgumentNullException(nameof(path));
@@ -115,13 +116,13 @@ namespace Skybrud.Umbraco.Redirects.Services {
 
             RedirectDto dto;
 
-            using (var scope = _scopeProvider.CreateScope()) {
+            using (IScope scope = _scopeProvider.CreateScope()) {
 
                 // Generate the SQL for the query
                 var sql = scope.SqlContext.Sql()
                     .Select<RedirectDto>()
                     .From<RedirectDto>()
-                    .Where<RedirectDto>(x => x.RootKey == rootNodeKey && x.Path == path && x.QueryString == (query ?? string.Empty));
+                    .Where<RedirectDto>(x => x.RootKey == rootNodeKey && x.Path == path && x.QueryString == query);
 
                 // Make the call to the database
                 dto = scope.Database.FirstOrDefault<RedirectDto>(sql);
@@ -153,7 +154,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// </summary>
         /// <param name="request">The request.</param>
         /// <returns>An instance of <see cref="IRedirect"/>, or <c>null</c> if no matching redirects were found.</returns>
-        public IRedirect GetRedirectByRequest(HttpRequest request) {
+        public IRedirect? GetRedirectByRequest(HttpRequest request) {
 
             // Get the URI from the request
             Uri uri = request.GetUri();
@@ -168,27 +169,27 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// </summary>
         /// <param name="uri">The URI of the request.</param>
         /// <returns>An instance of <see cref="IRedirect"/>, or <c>null</c> if no matching redirects were found.</returns>
-        public IRedirect GetRedirectByUri(Uri uri) {
+        public IRedirect? GetRedirectByUri(Uri uri) {
 
             // Get the decoded path
             string path = HttpUtility.UrlDecode(uri.AbsolutePath);
 
             // Get the query string
-            string query = uri.PathAndQuery.Split('?').Skip(1).FirstOrDefault();
+            string? query = uri.PathAndQuery.Split('?').Skip(1).FirstOrDefault();
 
             // Get the current Umbraco context
-            _umbracoContextAccessor.TryGetUmbracoContext(out IUmbracoContext umbracoContext);
+            _umbracoContextAccessor.TryGetUmbracoContext(out IUmbracoContext? umbracoContext);
 
             // Determine the root node via domain of the request
             Guid rootKey = Guid.Empty;
-            if (TryGetDomain(uri, out Domain domain)) {
-                IPublishedContent root = umbracoContext?.Content?.GetById(domain.ContentId);
+            if (TryGetDomain(uri, out Domain? domain)) {
+                IPublishedContent? root = umbracoContext?.Content?.GetById(domain.ContentId);
                 if (root != null) rootKey = root.Key;
             }
 
             // Look for a site specific redirect
             if (rootKey != Guid.Empty) {
-                IRedirect redirect = GetRedirectByPathAndQuery(rootKey, path, query);
+                IRedirect? redirect = GetRedirectByPathAndQuery(rootKey, path, query);
                 if (redirect != null) return redirect;
             }
 
@@ -197,7 +198,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
 
         }
 
-        private bool TryGetDomain(Uri uri, out Domain domain) {
+        private bool TryGetDomain(Uri uri, [NotNullWhen(true)] out Domain? domain) {
             domain = DomainUtils.FindDomainForUri(_domains, uri);
             return domain != null;
         }
@@ -207,7 +208,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// </summary>
         /// <param name="redirectId">The numeric ID of the redirect.</param>
         /// <returns>An instance of <see cref="Redirect"/>, or <c>null</c> if not found.</returns>
-        public IRedirect GetRedirectById(int redirectId) {
+        public IRedirect? GetRedirectById(int redirectId) {
 
             // Validate the input
             if (redirectId == 0) throw new ArgumentException("redirectId must have a value", nameof(redirectId));
@@ -238,7 +239,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// </summary>
         /// <param name="key">The GUID key of the redirect.</param>
         /// <returns>An instance of <see cref="Redirect"/>, or <c>null</c> if not found.</returns>
-        public IRedirect GetRedirectByKey(Guid key) {
+        public IRedirect? GetRedirectByKey(Guid key) {
 
             RedirectDto dto;
 
@@ -267,21 +268,22 @@ namespace Skybrud.Umbraco.Redirects.Services {
             if (options == null) throw new ArgumentNullException(nameof(options));
 
             // Initialize the destination
-            RedirectDestination destination = new RedirectDestination {
+            RedirectDestination destination = new() {
                 Id = options.Destination.Id,
                 Key = options.Destination.Key,
                 Name = options.Destination.Name,
                 Url = options.Destination.Url,
+                // ReSharper disable NullCoalescingConditionIsAlwaysNotNullAccordingToAPIContract
                 Query = options.Destination.Query ?? string.Empty,
                 Fragment = options.Destination.Fragment ?? string.Empty,
+                // ReSharper restore NullCoalescingConditionIsAlwaysNotNullAccordingToAPIContract
                 Type = options.Destination.Type
             };
 
             // Initialize the new redirect and populate the properties
             Redirect item = new Redirect {
-
                 RootKey = options.RootNodeKey,
-                Url = options.OriginalUrl,
+                Url = options.OriginalUrl!,
                 CreateDate = EssentialsTime.UtcNow,
                 UpdateDate = EssentialsTime.UtcNow,
                 Type = options.Type,
@@ -305,7 +307,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
             }
 
             // Make the call to the database
-            return GetRedirectById(item.Id);
+            return GetRedirectById(item.Id)!;
 
         }
 
@@ -323,7 +325,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
             if (redirect is not Redirect r) throw new ArgumentException($"Redirect type is not supported: {redirect.GetType()}", nameof(redirect));
 
             // Check whether another redirect matches the new URL and query string
-            IRedirect existing = GetRedirectByPathAndQuery(redirect.RootKey, redirect.Url, redirect.QueryString);
+            IRedirect? existing = GetRedirectByPathAndQuery(redirect.RootKey, redirect.Url, redirect.QueryString);
             if (existing != null && existing.Id != redirect.Id) {
                 throw new RedirectsException("A redirect with the same URL and query string already exists.");
             }
@@ -424,7 +426,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
                 .ToArray();
 
             // Wrap the search result
-            RedirectsSearchResult result = new RedirectsSearchResult(all.Count, limit, offset, page, pages, items);
+            RedirectsSearchResult result = new(all.Count, limit, offset, page, pages, items);
 
             // Complete the scope
             scope.Complete();
@@ -444,10 +446,15 @@ namespace Skybrud.Umbraco.Redirects.Services {
             using var scope = _scopeProvider.CreateScope();
 
             // Generate the SQL for the query
-            var sql = scope.SqlContext.Sql().Select<RedirectDto>().From<RedirectDto>();
+            Sql<ISqlContext> sql = scope.SqlContext
+                .Sql()
+                .Select<RedirectDto>()
+                .From<RedirectDto>();
 
             // Make the call to the database
-            var redirects = scope.Database.Fetch<RedirectDto>(sql).Select(Redirect.CreateFromDto);
+            IEnumerable<Redirect> redirects = scope.Database
+                .Fetch<RedirectDto>(sql)
+                .Select(Redirect.CreateFromDto);
 
             scope.Complete();
 
@@ -477,7 +484,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// </summary>
         /// <param name="redirect">The redirect.</param>
         /// <returns>The destination URL.</returns>
-        public virtual string GetDestinationUrl(IRedirectBase redirect) {
+        public virtual string? GetDestinationUrl(IRedirectBase redirect) {
             return GetDestinationUrl(redirect, null);
         }
 
@@ -487,9 +494,9 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// <param name="redirect">The redirect.</param>
         /// <param name="uri">The inbound URL.</param>
         /// <returns>The destination URL.</returns>
-        public virtual string GetDestinationUrl(IRedirectBase redirect, Uri uri) {
+        public virtual string? GetDestinationUrl(IRedirectBase redirect, Uri? uri) {
 
-            if (string.IsNullOrWhiteSpace(redirect?.Destination?.Url)) return null;
+            if (string.IsNullOrWhiteSpace(redirect.Destination.Url)) return null;
 
             // Get the query string (if any)
             string query = redirect.Destination.Query;
@@ -501,11 +508,11 @@ namespace Skybrud.Umbraco.Redirects.Services {
             if (uri != null && uri.Query.HasValue() && redirect.ForwardQueryString) query = MergeQueryString(query, uri.Query);
 
             // For content and media, we need to look up the most recent URL
-            IPublishedContent content = null;
+            IPublishedContent? content = null;
             switch (redirect.Destination.Type) {
 
                 case RedirectDestinationType.Content:
-                    if (_umbracoContextAccessor.TryGetUmbracoContext(out IUmbracoContext context))  {
+                    if (_umbracoContextAccessor.TryGetUmbracoContext(out IUmbracoContext? context))  {
                         content = context.Content?.GetById(redirect.Destination.Key);
                     }
                     break;

@@ -53,19 +53,19 @@ namespace Skybrud.Umbraco.Redirects.Models.Schema {
         /// string.
         /// </summary>
         [Column("Url")]
-        public string Url { get; set; }
+        public string Url { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets the inbound query string of the redirect.
         /// </summary>
         [Column("QueryString")]
-        public string QueryString { get; set; }
+        public string QueryString { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets the mode/type of the destination link.
         /// </summary>
         [Column("DestinationType")]
-        public string DestinationType { get; set; }
+        public string DestinationType { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets the content or media ID of the destination link.
@@ -83,7 +83,7 @@ namespace Skybrud.Umbraco.Redirects.Models.Schema {
         /// Gets or sets the URL of the destination link.
         /// </summary>
         [Column("DestinationUrl")]
-        public string DestinationUrl { get; set; }
+        public string DestinationUrl { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets the timestamp for when the redirect was created.

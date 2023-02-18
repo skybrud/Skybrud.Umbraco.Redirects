@@ -15,7 +15,7 @@ namespace Skybrud.Umbraco.Redirects.ContentApps {
             _backOfficeHelper = backOfficeHelper;
         }
 
-        public ContentApp GetContentAppFor(object source, IEnumerable<IReadOnlyUserGroup> userGroups) {
+        public ContentApp? GetContentAppFor(object source, IEnumerable<IReadOnlyUserGroup> userGroups) {
             return _backOfficeHelper.GetContentAppFor(source, userGroups);
         }
 

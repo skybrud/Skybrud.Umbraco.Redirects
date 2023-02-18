@@ -60,10 +60,10 @@ namespace Skybrud.Umbraco.Redirects.Middleware {
 
                         // Get the destination URL from the arguments (in case a value has been set
                         // from an notification handler)
-                        string destinationUrl = preLookup.DestinationUrl;
+                        string? destinationUrl = preLookup.DestinationUrl;
 
                         // Declare a variable for the redirect (either from the pre lookup or a lookup via the service)
-                        IRedirect redirect = preLookup.Redirect ?? _redirectsService.GetRedirectByRequest(context.Request);
+                        IRedirect? redirect = preLookup.Redirect ?? _redirectsService.GetRedirectByRequest(context.Request);
 
                         // Return if we neither have a redirect or a destination URL
                         if (redirect == null && string.IsNullOrWhiteSpace(destinationUrl)) return Task.CompletedTask;
@@ -72,7 +72,7 @@ namespace Skybrud.Umbraco.Redirects.Middleware {
                         RedirectType redirectType = preLookup.RedirectType ?? redirect?.Type ?? RedirectType.Temporary;
 
                         // Calculate the destination URL
-                        destinationUrl ??= _redirectsService.GetDestinationUrl(redirect, uri);
+                        if (redirect is not null) destinationUrl ??= _redirectsService.GetDestinationUrl(redirect, uri);
 
                         // Invoke the post lookup event
                         RedirectPostLookupNotification postLookup = new(context, redirect, redirectType, destinationUrl);
