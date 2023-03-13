@@ -9,6 +9,7 @@ using Skybrud.Umbraco.Redirects.Services;
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Events;
 using Umbraco.Cms.Core.Services;
+using Umbraco.Cms.Core.Web;
 
 #pragma warning disable 1591
 
@@ -20,12 +21,14 @@ namespace Skybrud.Umbraco.Redirects.Middleware {
         private readonly IEventAggregator _eventAggregator;
         private readonly IRuntimeState _runtimeState;
         private readonly IRedirectsService _redirectsService;
+        private readonly IUmbracoContextFactory _umbracoContextFactory;
 
-        public RedirectsMiddleware(RequestDelegate next, IEventAggregator eventAggregator, IRuntimeState runtimeState, IRedirectsService redirectsService) {
+        public RedirectsMiddleware(RequestDelegate next, IEventAggregator eventAggregator, IRuntimeState runtimeState, IRedirectsService redirectsService, IUmbracoContextFactory umbracoContextFactory) {
             _next = next;
             _eventAggregator = eventAggregator;
             _runtimeState = runtimeState;
             _redirectsService = redirectsService;
+            _umbracoContextFactory = umbracoContextFactory;
         }
 
         public async Task InvokeAsync(HttpContext context) {
@@ -53,6 +56,9 @@ namespace Skybrud.Umbraco.Redirects.Middleware {
 
                         // Get the URI of the inbound request
                         Uri uri = context.Request.GetUri();
+
+                        // Make sure we have an Umbraco context (we need it for various lookups)
+                        using UmbracoContextReference reference = _umbracoContextFactory.EnsureUmbracoContext();
 
                         // Invoke the pre lookup event
                         RedirectPreLookupNotification preLookup = new(context);
