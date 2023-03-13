@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Skybrud.Essentials.Strings.Extensions;
 using Umbraco.Cms.Core.Manifest;
 
 namespace Skybrud.Umbraco.Redirects.Manifests {
@@ -10,7 +9,9 @@ namespace Skybrud.Umbraco.Redirects.Manifests {
         /// <inheritdoc />
         public void Filter(List<PackageManifest> manifests) {
             manifests.Add(new PackageManifest {
-                PackageName = RedirectsPackage.Alias.ToKebabCase(),
+                AllowPackageTelemetry = true,
+                PackageName = RedirectsPackage.Name,
+                Version = RedirectsPackage.InformationalVersion,
                 BundleOptions = BundleOptions.Independent,
                 Scripts = new[] {
                     $"/App_Plugins/{RedirectsPackage.Alias}/Scripts/Services/RedirectsService.js",

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Umbraco.Cms.Core.Semver;
 
 namespace Skybrud.Umbraco.Redirects {
@@ -24,9 +25,14 @@ namespace Skybrud.Umbraco.Redirects {
         public static readonly Version Version = typeof(RedirectsPackage).Assembly.GetName().Version!;
 
         /// <summary>
+        /// Gets the informational version of the package.
+        /// </summary>
+        public static readonly string InformationalVersion = FileVersionInfo.GetVersionInfo(typeof(RedirectsPackage).Assembly.Location).ProductVersion!;
+
+        /// <summary>
         /// Gets the semantic version of the package.
         /// </summary>
-        public static readonly SemVersion SemVersion = RedirectsUtils.GetSemVersion();
+        public static readonly SemVersion SemVersion = InformationalVersion;
 
         /// <summary>
         /// Gets the URL of the GitHub repository for this package.
