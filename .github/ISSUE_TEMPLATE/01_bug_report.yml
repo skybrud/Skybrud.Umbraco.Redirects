@@ -22,7 +22,8 @@ body:
     label: "Bug description"
     description: "Describe the bug."
     placeholder: >
-      Try to pinpoint it as much as possible.      
+      Try to pinpoint it as much as possible.
+      
       Try to state the actual problem, and not just what you think the solution might be.
   validations:
     required: true
