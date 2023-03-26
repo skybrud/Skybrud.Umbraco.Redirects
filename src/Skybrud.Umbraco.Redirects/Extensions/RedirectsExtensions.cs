@@ -25,7 +25,7 @@ namespace Skybrud.Umbraco.Redirects.Extensions {
         /// <param name="redirect">The redirect.</param>
         /// <param name="redirectsService">A reference to the current redirects service.</param>
         /// <returns>The destination URL.</returns>
-        public static string? GetDestinationUrl(this OutboundRedirect redirect, IRedirectsService redirectsService) {
+        public static string GetDestinationUrl(this OutboundRedirect redirect, IRedirectsService redirectsService) {
             return redirectsService.GetDestinationUrl(redirect);
         }
 
@@ -36,7 +36,7 @@ namespace Skybrud.Umbraco.Redirects.Extensions {
         /// <param name="uri">The inbound URL.</param>
         /// <param name="redirectsService">A reference to the current redirects service.</param>
         /// <returns>The destination URL.</returns>
-        public static string? GetDestinationUrl(this OutboundRedirect redirect, Uri uri, IRedirectsService redirectsService) {
+        public static string GetDestinationUrl(this OutboundRedirect redirect, Uri uri, IRedirectsService redirectsService) {
             return redirectsService.GetDestinationUrl(redirect, uri);
         }
 

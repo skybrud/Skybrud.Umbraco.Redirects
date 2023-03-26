@@ -87,7 +87,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// </summary>
         /// <param name="redirect">The redirect.</param>
         /// <returns>The destination URL.</returns>
-        string? GetDestinationUrl(IRedirectBase redirect);
+        string GetDestinationUrl(IRedirectBase redirect);
 
         /// <summary>
         /// Returns the calculated destination URL for the specified <paramref name="redirect"/>.
@@ -95,7 +95,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// <param name="redirect">The redirect.</param>
         /// <param name="uri">The inbound URL.</param>
         /// <returns>The destination URL.</returns>
-        string? GetDestinationUrl(IRedirectBase redirect, Uri uri);
+        string GetDestinationUrl(IRedirectBase redirect, Uri uri);
 
         /// <summary>
         /// Returns a paginated list of redirects matching the specified <paramref name="options"/>.

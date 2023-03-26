@@ -6,6 +6,7 @@ using System.Web;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using NPoco;
+using Skybrud.Essentials.Common;
 using Skybrud.Essentials.Strings.Extensions;
 using Skybrud.Essentials.Time;
 using Skybrud.Umbraco.Redirects.Exceptions;
@@ -480,7 +481,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// </summary>
         /// <param name="redirect">The redirect.</param>
         /// <returns>The destination URL.</returns>
-        public virtual string? GetDestinationUrl(IRedirectBase redirect) {
+        public virtual string GetDestinationUrl(IRedirectBase redirect) {
             return GetDestinationUrl(redirect, null);
         }
 
@@ -490,9 +491,10 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// <param name="redirect">The redirect.</param>
         /// <param name="uri">The inbound URL.</param>
         /// <returns>The destination URL.</returns>
-        public virtual string? GetDestinationUrl(IRedirectBase redirect, Uri? uri) {
+        public virtual string GetDestinationUrl(IRedirectBase redirect, Uri? uri) {
 
-            if (string.IsNullOrWhiteSpace(redirect.Destination.Url)) return null;
+            // Ideally a redirect should always have a destination URL. If it doesn't, it indicates a malformed redirect
+            if (string.IsNullOrWhiteSpace(redirect.Destination.Url)) throw new PropertyNotSetException(nameof(redirect.Destination.Url), "Redirect does not specify a destionation URL.");
 
             // Get the query string (if any)
             string query = redirect.Destination.Query;
