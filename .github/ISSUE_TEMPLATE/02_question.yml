@@ -1,0 +1,25 @@
+---
+name: Question
+description: "A question about Skybrud Redirects. Please read the documentation before submitting a question."
+labels: "type/question"
+body:
+- type: input
+  id: "version"
+  attributes:
+    label: "Which version of Skybrud Redirects are you using? (Please write the *exact* version, example: 4.0.8)"
+  validations:
+    required: true
+- type: input
+  id: "umbracoVersion"
+  attributes:
+    label: "Which Umbraco version are you using? (Please write the *exact* version, example: 10.1.0)"
+    description: "Use the help icon in the Umbraco backoffice to find the version you're using."
+  validations:
+    required: true
+- type: textarea
+  id: "description"
+  attributes:
+    label: "Question"
+    description: "Describe the question."
+  validations:
+    required: true
