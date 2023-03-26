@@ -1,6 +1,6 @@
 ---
 name: Question
-description: "A question about Skybrud Redirects. Please read the documentation before submitting a question."
+description: "A question about [Skybrud Redirects](https://packages.skybrud.dk/skybrud.umbraco.redirects/docs/). Please read the documentation before submitting a question."
 labels: "type/question"
 body:
 - type: input
