@@ -6,7 +6,8 @@ body:
 - type: markdown
   attributes:
     value: |
-      Make sure to read the [documentation](https://packages.skybrud.dk/skybrud.umbraco.redirects/docs/) before submitting a question.
+      Make sure to read the [documentation](https://packages.skybrud.dk/skybrud.umbraco.redirects/docs/) before submitting a question. |
+      ## Question
 - type: input
   id: "version"
   attributes:
