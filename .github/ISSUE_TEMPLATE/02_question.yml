@@ -1,8 +1,12 @@
 ---
 name: Question
-description: "A question about [Skybrud Redirects](https://packages.skybrud.dk/skybrud.umbraco.redirects/docs/). Please read the documentation before submitting a question."
+description: "A question about Skybrud Redirects. Please read the documentation before submitting a question."
 labels: "type/question"
 body:
+- type: markdown
+  attributes:
+    value: |
+      Make sure to read the [documentation](https://packages.skybrud.dk/skybrud.umbraco.redirects/docs/) before submitting a question.
 - type: input
   id: "version"
   attributes:
