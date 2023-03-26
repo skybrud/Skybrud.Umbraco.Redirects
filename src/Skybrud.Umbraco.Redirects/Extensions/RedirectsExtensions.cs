@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Skybrud.Umbraco.Redirects.Exceptions;
 using Skybrud.Umbraco.Redirects.Models;
 using Skybrud.Umbraco.Redirects.Models.Outbound;
@@ -7,6 +8,7 @@ using Skybrud.Umbraco.Redirects.Services;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Extensions;
 
+// ReSharper disable ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
 // ReSharper disable ConvertSwitchStatementToSwitchExpression
 // ReSharper disable SwitchStatementHandlesSomeKnownEnumValuesWithDefault
 
@@ -226,6 +228,107 @@ namespace Skybrud.Umbraco.Redirects.Extensions {
             return null;
 
         }
+
+        #region HttpContext
+
+        /// <summary>
+        /// Attempts to redirect the user if a matching redirect exists for the requested URL.
+        /// </summary>
+        /// <param name="context">The HTTP context.</param>
+        /// <returns><see langword="true"/> if a redirect is found; otherwise, <see langword="false"/>.</returns>
+        public static bool TryRedirectUser(this HttpContext context)  {
+            return TryRedirectUser(context.Response);
+        }
+
+        #endregion
+
+        #region HttpResponse
+
+        /// <summary>
+        /// Attempts to redirect the user if a matching redirect exists for the requested URL.
+        /// </summary>
+        /// <param name="response">The response.</param>
+        /// <returns><see langword="true"/> if a redirect is found; otherwise, <see langword="false"/>.</returns>
+        public static bool TryRedirectUser(this HttpResponse response) {
+
+            // Get a reference to the redirects service
+            IRedirectsService redirectsService = response.HttpContext.RequestServices.GetRequiredService<IRedirectsService>();
+
+            // Get the URI of the current request
+            Uri uri = response.HttpContext.Request.GetUri();
+
+            // Query the redirects service for a matching redirect
+            IRedirect? redirect = redirectsService.GetRedirectByUri(uri);
+            if (redirect?.Destination?.Url is null) return false;
+
+            // Redirect the user
+            response.Redirect(redirect, uri);
+
+            return true;
+
+        }
+
+        /// <summary>
+        /// Redirects the user to the destination of the specified <paramref name="redirect"/>.
+        /// </summary>
+        /// <param name="response">The response.</param>
+        /// <param name="redirect">The redirect.</param>
+        public static void Redirect(this HttpResponse response, IRedirect redirect) {
+            Redirect(response, redirect, response.HttpContext.Request.GetUri());
+        }
+
+        /// <summary>
+        /// Redirects the user to the destination of the specified <paramref name="redirect"/>.
+        /// </summary>
+        /// <param name="response">The response.</param>
+        /// <param name="redirect">The redirect.</param>
+        /// <param name="uri">The current URI.</param>
+        public static void Redirect(this HttpResponse response, IRedirect redirect, Uri uri) {
+
+            // Get a reference to the redirects service
+            IRedirectsService redirectsService = response.HttpContext.RequestServices.GetRequiredService<IRedirectsService>();
+
+            // Get the destination URL of the redirect
+            string destinationUrl = redirectsService.GetDestinationUrl(redirect, uri);
+
+            // Redirect the user
+            Redirect(response, destinationUrl, redirect.Type);
+
+        }
+
+        /// <summary>
+        /// Redirects the user to the specified <paramref name="destinationUrl"/>.
+        /// </summary>
+        /// <param name="response">The response.</param>
+        /// <param name="destinationUrl">The URL to which the user should be redirected.</param>
+        /// <param name="redirectType">The type of the redirect - either <see cref="RedirectType.Permanent"/>
+        /// (<c>301</c>) or <see cref="RedirectType.Temporary"/> (<c>307</c>).</param>
+        public static void Redirect(this HttpResponse response, string destinationUrl, RedirectType redirectType) {
+
+            // Respond with a redirect based on the redirect type
+            switch (redirectType) {
+
+                // If redirect is of type permanent, trigger a 301 redirect
+                case RedirectType.Permanent:
+                    response.Redirect(destinationUrl, true);
+                    break;
+
+                // If redirect is of type temporary, trigger a 307 redirect
+                case RedirectType.Temporary:
+                    response.Redirect(destinationUrl, false, true);
+                    break;
+
+                // Ideally we should have hit the default case, as all options should be handled above. If not, we
+                // create a new temporary redirect (307)
+                default:
+                    response.Redirect(destinationUrl, false, true);
+                    break;
+
+            }
+
+        }
+
+        #endregion
 
     }
 
