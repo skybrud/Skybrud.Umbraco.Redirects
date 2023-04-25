@@ -113,7 +113,7 @@
 
         // Any filters?
         if (vm.filters.rootNode && vm.filters.rootNode.key) {
-            args.rootNodeKey = vm.filters.rootNode.key;
+            args.rootNodeKeys = vm.filters.rootNode.key;
             vm.activeFilters++;
         }
 

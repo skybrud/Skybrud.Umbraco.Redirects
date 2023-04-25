@@ -13,6 +13,10 @@ namespace Skybrud.Umbraco.Redirects.Config {
         public bool Enabled { get; set; } = true;
 
         /// <summary>
+        /// Gets or sets whether the user's start nodes should filter which redirects they have access to. Default is <see langword="false"/>.
+        /// </summary>
+        public bool UseStartNodes { get; set; } = false;
+
         /// Gets or sets a list of content types and media types where the content app should or should not be shown.
         /// The format follows Umbraco's <c>show</c> option - eg. <c>+content/*</c> enables the content app for all
         /// content.

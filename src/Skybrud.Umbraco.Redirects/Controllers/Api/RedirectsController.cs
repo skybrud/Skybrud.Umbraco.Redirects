@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
@@ -12,12 +13,17 @@ using Skybrud.Umbraco.Redirects.Models;
 using Skybrud.Umbraco.Redirects.Models.Api;
 using Skybrud.Umbraco.Redirects.Models.Options;
 using Skybrud.Umbraco.Redirects.Services;
+using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Models;
+using Umbraco.Cms.Core.Models.Membership;
 using Umbraco.Cms.Core.Models.PublishedContent;
+using Umbraco.Cms.Core.Security;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Web.BackOffice.Controllers;
 using Umbraco.Cms.Web.Common.Attributes;
+using Umbraco.Cms.Web.Common.UmbracoContext;
+using Umbraco.Extensions;
 
 #pragma warning disable 1591
 
@@ -61,13 +67,15 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         [HttpGet]
         public ActionResult GetRootNodes() {
 
-            RedirectRootNode[] rootNodes = _redirects.GetRootNodes();
+	        var rootNodes = _backOffice.Settings.ContentApp.UseStartNodes
+		        ? _redirects.GetRootNodes(_backOffice.CurrentUser)
+		        : _redirects.GetRootNodes();
 
-            return new JsonResult(new {
-                total = rootNodes.Length,
-                items = rootNodes.Select(x => new RedirectRootNodeModel(x, _backOffice))
-            });
-
+	        return new JsonResult(new
+	        {
+		        total = rootNodes.Length,
+		        items = rootNodes.Select(x => new RedirectRootNodeModel(x, _backOffice))
+	        });
         }
 
         [HttpPost]
@@ -255,12 +263,15 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         /// <param name="limit">The maximum amount of redirects to be returned per page.</param>
         /// <param name="type">The type of redirects that should be returned.</param>
         /// <param name="text">The text that the returned redirects should match.</param>
-        /// <param name="rootNodeKey">The root node key that the returned redirects should match. <c>null</c> means all redirects. <see cref="Guid.Empty"/> means all global redirects.</param>
+        /// <param name="rootNodeKeys">An array of root node keys that the returned redirects should match. <c>null</c> means all redirects. <see cref="Guid.Empty"/> means all global redirects.</param>
         /// <returns>A list of redirects.</returns>
         [HttpGet]
-        public ActionResult GetRedirects(int page = 1, int limit = 20, string? type = null, string? text = null, Guid? rootNodeKey = null) {
+        public ActionResult GetRedirects(int page = 1, int limit = 20, string? type = null, string? text = null, [FromQuery] Guid[]? rootNodeKeys = null) {
 
             try {
+	            var rootKeys = _backOffice.Settings.ContentApp.UseStartNodes
+		            ? _redirects.GetRootNodes(_backOffice.CurrentUser!).Select(p => p.Key)
+		            : _redirects.GetRootNodes().Select(p => p.Key);
 
                 // Initialize the search options
                 RedirectsSearchOptions options = new() {
@@ -268,7 +279,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                     Limit = limit,
                     Type = EnumUtils.ParseEnum(type, RedirectTypeFilter.All),
                     Text = text,
-                    RootNodeKey = rootNodeKey
+                    RootNodeKeys = (rootNodeKeys != null && rootNodeKeys.Any()) ? rootNodeKeys : rootKeys.ToArray()
                 };
 
                 // Make the search for redirects via the redirects service
@@ -369,7 +380,6 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
             };
 
         }
-
     }
 
 }

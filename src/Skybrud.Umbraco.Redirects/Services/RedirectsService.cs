@@ -14,6 +14,7 @@ using Skybrud.Umbraco.Redirects.Extensions;
 using Skybrud.Umbraco.Redirects.Models;
 using Skybrud.Umbraco.Redirects.Models.Dtos;
 using Skybrud.Umbraco.Redirects.Models.Options;
+using Umbraco.Cms.Core.Models.Membership;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Routing;
 using Umbraco.Cms.Core.Services;
@@ -369,7 +370,11 @@ namespace Skybrud.Umbraco.Redirects.Services {
             var sql = scope.SqlContext.Sql().Select<RedirectDto>().From<RedirectDto>();
 
             // Search by the rootNodeId
-            if (options.RootNodeKey != null) sql = sql.Where<RedirectDto>(x => x.RootKey == options.RootNodeKey.Value);
+            if (options.RootNodeKeys != null && options.RootNodeKeys.Any()) {
+	            sql = sql.Where<RedirectDto>(x => options.RootNodeKeys.Contains(x.RootKey));
+            } else if (options.RootNodeKey != null) {
+	            sql = sql.Where<RedirectDto>(x => x.RootKey == options.RootNodeKey);
+            }
 
             // Search by the type
             if (options.Type != RedirectTypeFilter.All) {
@@ -398,6 +403,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
                         ||
                         (x.Path.Contains(url) && x.QueryString.Contains(query))
                     ));
+
                 }
             }
 
@@ -461,19 +467,17 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// Returns an array of all rode nodes configured in Umbraco.
         /// </summary>
         /// <returns>An array of <see cref="RedirectRootNode"/> representing the root nodes.</returns>
-        public RedirectRootNode[] GetRootNodes()  {
+        public RedirectRootNode[] GetRootNodes()
+        {
+	        var domainsByRootNodeId = GetDomains().GroupBy(x => x.RootNodeId);
 
-            // Multiple domains may be configured for a single node, so we need to group the domains before proceeding
-            var domainsByRootNodeId = GetDomains().GroupBy(x => x.RootNodeId);
-
-            return (
-                from domainGroup in domainsByRootNodeId
-                let content =  _contentService.GetById(domainGroup.First().RootNodeId)
-                where content is { Trashed: false }
-                orderby content.Id
-                select RedirectRootNode.GetFromContent(content, domainGroup)
-            ).ToArray();
-
+	        return (
+		        from domainGroup in domainsByRootNodeId
+		        let content = _contentService.GetById(domainGroup.First().RootNodeId)
+		        where content is { Trashed: false }
+		        orderby content.Id
+		        select RedirectRootNode.GetFromContent(content, domainGroup)
+	        ).ToArray();
         }
 
         /// <summary>

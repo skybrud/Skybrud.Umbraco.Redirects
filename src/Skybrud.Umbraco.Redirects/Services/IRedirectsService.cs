@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+
 using Microsoft.AspNetCore.Http;
 using Skybrud.Umbraco.Redirects.Models;
 using Skybrud.Umbraco.Redirects.Models.Options;
+
+using Umbraco.Cms.Core.Models.Membership;
 
 namespace Skybrud.Umbraco.Redirects.Services {
 
@@ -115,6 +119,35 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// </summary>
         /// <returns>An array of <see cref="RedirectRootNode"/> representing the root nodes.</returns>
         RedirectRootNode[] GetRootNodes();
+
+        /// <summary>
+        /// Returns an array of all rode nodes configured in Umbraco.
+        /// </summary>
+        /// <param name="user">An <see cref="IUser"/> with potential root node access restrictions.</param>
+        /// <returns>An array of <see cref="RedirectRootNode"/> representing the root nodes the user has access to.</returns>
+        RedirectRootNode[] GetRootNodes(IUser user)
+        {
+	        var rootNodes = GetRootNodes();
+	        HashSet<int> rootNodeIds = new();
+
+	        if (user.StartContentIds != null)
+	        {
+		        foreach (var rootNodeId in user.StartContentIds)
+		        {
+			        rootNodeIds.Add(rootNodeId);
+		        }
+	        }
+
+	        foreach (var group in user.Groups)
+	        {
+		        if (group.StartContentId != null)
+		        {
+			        rootNodeIds.Add(group.StartContentId.Value);
+		        }
+	        }
+
+	        return rootNodes.Where(rootNode => rootNodeIds.Any(x => rootNode.Path.Contains(x))).ToArray();
+        }
 
         /// <summary>
         /// Returns an array of redirects where the destination matches the specified <paramref name="nodeType"/> and <paramref name="nodeId"/>.
