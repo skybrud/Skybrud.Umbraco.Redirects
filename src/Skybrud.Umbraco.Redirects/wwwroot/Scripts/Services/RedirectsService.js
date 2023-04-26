@@ -296,6 +296,10 @@
 
             return result;
 
+        },
+
+        getCulturesByNodeId: function(id) {
+            return $http.get("/umbraco/api/Redirects/GetCultures?id=" + id);
         }
 
     };

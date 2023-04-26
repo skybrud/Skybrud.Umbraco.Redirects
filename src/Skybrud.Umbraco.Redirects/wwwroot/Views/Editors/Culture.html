@@ -1,0 +1,3 @@
+<div class="SkybrudUmbracoRedirects RedirectsRootId" ng-controller="SkybrudUmbracoRedirects.Culture.Controller as vm">
+    <select ng-options="item as item.name for item in model.config.cultures track by item.alias" ng-model="model.culture" ng-change="vm.updated()"></select>
+</div>

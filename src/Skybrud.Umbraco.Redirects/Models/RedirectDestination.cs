@@ -77,6 +77,12 @@ namespace Skybrud.Umbraco.Redirects.Models {
         public RedirectDestinationType Type { get; set; }
 
         /// <summary>
+        /// Gets or sets the culture of the destination, if any.
+        /// </summary>
+        [JsonProperty("culture")]
+        public string? Culture { get; set; }
+
+        /// <summary>
         /// Gets whether the link is valid.
         /// </summary>
         [JsonIgnore]
@@ -103,6 +109,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
             Name = json.GetString("name")!;
             Query = json.GetString("query") ?? string.Empty;
             Fragment = json.GetString("fragment") ?? string.Empty;
+            Culture = json.GetString("culture");
             Type = json.GetEnum("type", RedirectDestinationType.Url);
         }
 

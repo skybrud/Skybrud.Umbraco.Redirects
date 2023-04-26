@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Skybrud.Umbraco.Redirects.Models;
 using Skybrud.Umbraco.Redirects.Models.Options;
+using Umbraco.Extensions;
 
 namespace Skybrud.Umbraco.Redirects.Services {
 
@@ -125,12 +127,36 @@ namespace Skybrud.Umbraco.Redirects.Services {
         IRedirect[] GetRedirectsByNodeId(RedirectDestinationType nodeType, int nodeId);
 
         /// <summary>
+        /// Returns an array of redirects where the destination matches the specified <paramref name="nodeType"/>, <paramref name="nodeId"/> and <paramref name="culture"/>.
+        /// </summary>
+        /// <param name="nodeType">The type of the destination node.</param>
+        /// <param name="nodeId">The numeric ID of the destination node.</param>
+        /// <param name="culture">The culture the returned redirects should match.</param>
+        /// <returns>An array of <see cref="IRedirect"/>.</returns>
+        public IRedirect[] GetRedirectsByNodeId(RedirectDestinationType nodeType, int nodeId, string? culture) {
+            var redirects = GetRedirectsByNodeId(nodeType, nodeId);
+            return string.IsNullOrWhiteSpace(culture) ? redirects : redirects.Where(x => culture.InvariantEquals(x.Destination.Culture)).ToArray();
+        }
+
+        /// <summary>
         /// Returns an array of redirects where the destination matches the specified <paramref name="nodeType"/> and <paramref name="nodeKey"/>.
         /// </summary>
         /// <param name="nodeType">The type of the destination node.</param>
         /// <param name="nodeKey">The key (GUID) of the destination node.</param>
         /// <returns>An array of <see cref="IRedirect"/>.</returns>
         IRedirect[] GetRedirectsByNodeKey(RedirectDestinationType nodeType, Guid nodeKey);
+
+        /// <summary>
+        /// Returns an array of redirects where the destination matches the specified <paramref name="nodeType"/>, <paramref name="nodeKey"/> and <paramref name="culture"/>.
+        /// </summary>
+        /// <param name="nodeType">The type of the destination node.</param>
+        /// <param name="nodeKey">The key (GUID) of the destination node.</param>
+        /// <param name="culture">The culture the returned redirects should match.</param>
+        /// <returns>An array of <see cref="IRedirect"/>.</returns>
+        public IRedirect[] GetRedirectsByNodeKey(RedirectDestinationType nodeType, Guid nodeKey, string? culture) {
+            var redirects = GetRedirectsByNodeKey(nodeType, nodeKey);
+            return string.IsNullOrWhiteSpace(culture) ? redirects : redirects.Where(x => culture.InvariantEquals(x.Destination.Culture)).ToArray();
+        }
 
     }
 

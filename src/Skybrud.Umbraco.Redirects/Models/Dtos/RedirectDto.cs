@@ -95,6 +95,12 @@ namespace Skybrud.Umbraco.Redirects.Models.Dtos {
         public string DestinationFragment { get; set; } = null!;
 
         /// <summary>
+        /// Gets or sets the culture of the destination link. Used when the destination is a content node that varies by culture.
+        /// </summary>
+        [Column("DestinationCulture")]
+        public string DestinationCulture { get; set; } = null!;
+
+        /// <summary>
         /// Gets or sets the timestamp for when the redirect was created.
         /// </summary>
         [Column("Created")]

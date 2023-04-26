@@ -17,6 +17,7 @@ namespace Skybrud.Umbraco.Redirects.Manifests {
                     $"/App_Plugins/{RedirectsPackage.Alias}/Scripts/Services/RedirectsService.js",
                     $"/App_Plugins/{RedirectsPackage.Alias}/Scripts/Controllers/Dashboards/Default.js",
                     $"/App_Plugins/{RedirectsPackage.Alias}/Scripts/Controllers/Dialogs/Redirect.js",
+                    $"/App_Plugins/{RedirectsPackage.Alias}/Scripts/Controllers/Editors/Culture.js",
                     $"/App_Plugins/{RedirectsPackage.Alias}/Scripts/Controllers/Editors/Inbound.js",
                     $"/App_Plugins/{RedirectsPackage.Alias}/Scripts/Controllers/Editors/Destination.js",
                     $"/App_Plugins/{RedirectsPackage.Alias}/Scripts/Controllers/Editors/Outbound.js",

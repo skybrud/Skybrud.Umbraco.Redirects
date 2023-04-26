@@ -13,7 +13,7 @@
                 <umb-box>
                     <umb-box-content ng-show="vm.settingsApp.active">
                         <div class="redirects-basic-options">
-                            <umb-property property="property" ng-repeat="property in model.properties">
+                            <umb-property property="property" ng-repeat="property in model.properties" ng-if="!property.hidden">
                                 <umb-property-editor model="property"></umb-property-editor>
                             </umb-property>
                         </div>
@@ -27,7 +27,7 @@
                         </div>
                     </umb-box-content>
                     <umb-box-content ng-show="vm.infoApp.active">
-                        <umb-property property="property" ng-repeat="property in model.infoProperties">
+                        <umb-property property="property" ng-repeat="property in model.infoProperties" ng-if="!property.hidden">
                             <umb-property-editor model="property"></umb-property-editor>
                         </umb-property>
                     </umb-box-content>

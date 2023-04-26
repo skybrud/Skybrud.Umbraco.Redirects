@@ -94,6 +94,8 @@
     <key alias="propertyOriginalUrlDescription">Angiv den oprindelige URL, der skal sende brugeren videre til den valgte destination.</key>
     <key alias="propertyDestination">Destination</key>
     <key alias="propertyDestinationDescription">Vælg den side eller URL, som brugeren skal sendes videre til.</key>
+    <key alias="propertyDestinationCulture">Kultur</key>
+    <key alias="propertyDestinationCultureDescription">Vælg den kultur, som brugeren skal sendes videre til.</key>
     <key alias="propertyRedirectTypeName">Type</key>
     <key alias="propertyRedirectTypeDescription">Vælg typen for dit redirect. Bemærk at browsere vil huske et permanent redirect.</key>
     <key alias="propertyCreateDate">Oprettelsesdato</key>

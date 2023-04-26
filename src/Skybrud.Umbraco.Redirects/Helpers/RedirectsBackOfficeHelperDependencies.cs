@@ -4,6 +4,7 @@ using Umbraco.Cms.Core.Configuration.Models;
 using Umbraco.Cms.Core.Hosting;
 using Umbraco.Cms.Core.Security;
 using Umbraco.Cms.Core.Services;
+using Umbraco.Cms.Core.Web;
 
 namespace Skybrud.Umbraco.Redirects.Helpers {
 
@@ -59,6 +60,16 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
         /// </summary>
         public IOptions<RedirectsSettings> RedirectsSettings { get; }
 
+        /// <summary>
+        /// Gets a reference to the current <see cref="ILocalizationService"/>.
+        /// </summary>
+        public ILocalizationService LocalizationService { get; }
+
+        /// <summary>
+        /// Gets a reference to the current <see cref="IUmbracoContextAccessor"/>.
+        /// </summary>
+        public IUmbracoContextAccessor UmbracoContextAccessor { get; }
+
         #endregion
 
         #region Constructors
@@ -75,10 +86,12 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
         /// <param name="globalSettings"></param>
         /// <param name="backOfficeSecurityAccessor"></param>
         /// <param name="redirectsSettings"></param>
+        /// <param name="localizationService"></param>
+        /// <param name="umbracoContextAccessor"></param>
         public RedirectsBackOfficeHelperDependencies(IOptions<GlobalSettings> globalSettings, IHostingEnvironment hostingEnvironment,
             IRuntimeState runtimeState, IDomainService domainService, IContentService contentService,
             IMediaService mediaService, ILocalizedTextService textService,
-            IBackOfficeSecurityAccessor backOfficeSecurityAccessor, IOptions<RedirectsSettings> redirectsSettings) {
+            IBackOfficeSecurityAccessor backOfficeSecurityAccessor, IOptions<RedirectsSettings> redirectsSettings, ILocalizationService localizationService, IUmbracoContextAccessor umbracoContextAccessor) {
             GlobalSettings = globalSettings.Value;
             HostingEnvironment = hostingEnvironment;
             RuntimeState = runtimeState;
@@ -88,6 +101,8 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
             TextService = textService;
             BackOfficeSecurityAccessor = backOfficeSecurityAccessor;
             RedirectsSettings = redirectsSettings;
+            LocalizationService = localizationService;
+            UmbracoContextAccessor = umbracoContextAccessor;
         }
 
         #endregion

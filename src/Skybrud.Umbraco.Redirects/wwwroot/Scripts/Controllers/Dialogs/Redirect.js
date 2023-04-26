@@ -16,6 +16,7 @@
     localizationService.localize("redirects_addNewRedirect").then(function (value) { $scope.model.title = value; });
 
     let destionation = null;
+    let culture = null;
 
     $scope.model.hiddenProperties = [];
 
@@ -27,6 +28,7 @@
         $scope.model.submitButtonLabelKey = "redirects_save";
 
         destionation = $scope.model.redirect.destination;
+        culture = $scope.model.redirect.culture ?? null;
 
         $scope.model.hiddenProperties.push({
             alias: "id",
@@ -94,18 +96,33 @@
         }
     });
 
-    $scope.model.properties.push({
-        alias: "destination",
-        label: "Destination",
-        labelKey: "redirects_propertyDestination",
-        description: "Select the page or URL the user should be redirected to.",
-        descriptionKey: "redirects_propertyDestinationDescription",
-        view: `/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/Destination.html?v=${cacheBuster}`,
-        value: destionation,
-        validation: {
-            mandatory: true
+    const properties = {
+        destionation: {
+            alias: "destination",
+            label: "Destination",
+            labelKey: "redirects_propertyDestination",
+            description: "Select the page or URL the user should be redirected to.",
+            descriptionKey: "redirects_propertyDestinationDescription",
+            view: `/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/Destination.html?v=${cacheBuster}`,
+            value: destionation,
+            validation: {
+                mandatory: true
+            }
+        },
+        culture: {
+            alias: "culture",
+            label: "Culture",
+            labelKey: "redirects_propertyDestinationCulture",
+            description: "Select the culture of the destination.",
+            descriptionKey: "redirects_propertyDestinationCultureDescription",
+            view: `/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/Culture.html?v=${cacheBuster}`,
+            value: destionation,
+            hidden: true
         }
-    });
+    };
+
+    $scope.model.properties.push(properties.destionation);
+    $scope.model.properties.push(properties.culture);
 
     $scope.model.advancedProperties = [
         {
@@ -286,6 +303,34 @@
 
     initLabels();
 
+    eventsService.on("skybrud.umbraco.redirects.destination.updated", function() {
+
+        // If the destination is "unset" or the destination is not a content node, the culture property should be hidden
+        if (properties.destionation.value.type != "content") {
+            properties.culture.value = null;
+            properties.culture.hidden = true;
+        }
+
+        skybrudRedirectsService.getCulturesByNodeId(properties.destionation.value.id).then(function(r) {
+            properties.culture.config = { cultures: r.data };
+            properties.culture.hidden = r.data.length == 0;
+            if (properties.culture.hidden) return;
+            properties.culture.culture = r.data[0];
+            properties.culture.value = r.data[0].alias;
+        });
+
+    });
+
+    if ($scope.model.redirect && $scope.model.redirect.destination && $scope.model.redirect.destination.type === "content") {
+        skybrudRedirectsService.getCulturesByNodeId($scope.model.redirect.destination.id).then(function(r) {
+            properties.culture.config = { cultures: r.data };
+            properties.culture.hidden = r.data.length == 0;
+            if (properties.culture.hidden) return;
+            properties.culture.culture = r.data.find(x => x.alias == $scope.model.redirect.destination.culture);
+            properties.culture.value = properties.culture.culture?.alias;
+        });
+    }
+
     vm.save = function () {
 
         // Map the properties back to an object we can send to the API
@@ -307,6 +352,9 @@
         } else {
             redirect.rootNodeKey = "00000000-0000-0000-0000-000000000000";
         }
+
+        // Copy the "culture" value to the destination
+        redirect.destination.culture = redirect.culture;
 
         if (redirect.key) {
             $http({

@@ -277,7 +277,8 @@ namespace Skybrud.Umbraco.Redirects.Services {
                 Query = options.Destination.Query ?? string.Empty,
                 Fragment = options.Destination.Fragment ?? string.Empty,
                 // ReSharper restore NullCoalescingConditionIsAlwaysNotNullAccordingToAPIContract
-                Type = options.Destination.Type
+                Type = options.Destination.Type,
+                Culture = options.Destination.Culture ?? string.Empty
             };
 
             // Initialize the new redirect and populate the properties

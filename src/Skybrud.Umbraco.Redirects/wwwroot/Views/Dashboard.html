@@ -71,8 +71,12 @@
                                     <localize key="redirects_url">URL</localize>
                                 </span>
                                 <small ng-if="redirect.destination.warning" class="color-red">({{redirect.destination.warning}})</small>
-                                <small ng-if="redirect.forward" title="Forward query string is enabled">
+                                <small class="forward" ng-if="redirect.forward" title="Forward query string is enabled">
                                     &nbsp;?&amp;
+                                </small>
+                                <small class="culture" ng-if="redirect.destination.culture" title="{{redirect.destination.cultureName}}">
+                                    <i class="icon-globe"></i>
+                                    {{redirect.destination.culture}}
                                 </small>
                             </div>
                             <div class="display-url">

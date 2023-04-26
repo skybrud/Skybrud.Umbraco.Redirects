@@ -104,6 +104,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
                 Dto.DestinationUrl = value.Url;
                 Dto.DestinationQuery = value.Query ?? string.Empty;
                 Dto.DestinationFragment = value.Fragment ?? string.Empty;
+                Dto.DestinationCulture = value.Culture ?? string.Empty;
             }
 
         }
@@ -188,7 +189,8 @@ namespace Skybrud.Umbraco.Redirects.Models {
                 Key = dto.DestinationKey,
                 Url = dto.DestinationUrl,
                 Query = dto.DestinationQuery,
-                Fragment = dto.DestinationFragment
+                Fragment = dto.DestinationFragment,
+                Culture = dto.DestinationCulture
             };
 
             Dto = dto;

@@ -79,7 +79,11 @@
                                 <span ng-if="redirect.destination.type == 'url'">
                                     <localize key="redirects_url">URL</localize>
                                 </span>
-                                <small ng-if="redirect.forward">&nbsp;?&amp;</small>
+                                <small class="forward" ng-if="redirect.forward">&nbsp;?&amp;</small>
+                                <small class="culture" ng-if="redirect.destination.culture" title="{{redirect.destination.cultureName}}">
+                                    <i class="icon-globe"></i>
+                                    {{redirect.destination.culture}}
+                                </small>
                             </div>
                             <div class="display-url">
                                 <a href="{{redirect.destination.displayUrl}}" rel="noopener noreferrer" target="_blank">{{redirect.destination.displayUrl}}</a>

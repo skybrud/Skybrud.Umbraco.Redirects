@@ -271,6 +271,9 @@
   font-size: 12px;
   line-height: 16px;
 }
+.SkybrudUmbracoRedirects .culture {
+  color: black;
+}
 .EditRedirectDialog,
 .AddRedirectDialog {
   position: static;

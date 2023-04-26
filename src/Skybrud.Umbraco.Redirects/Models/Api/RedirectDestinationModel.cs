@@ -14,7 +14,7 @@ namespace Skybrud.Umbraco.Redirects.Models.Api {
 
         public Guid Key => _destination.Key;
 
-        public string Url => _destination.Url;
+        public string Url { get; set; }
 
         public string Query => _destination.Query;
 
@@ -50,6 +50,12 @@ namespace Skybrud.Umbraco.Redirects.Models.Api {
             }
         }
 
+        [JsonPropertyName("culture")]
+        public string? Culture { get; set; }
+
+        [JsonPropertyName("cultureName")]
+        public string? CultureName { get; set; }
+
         public RedirectDestinationModel(IRedirect redirect) : this(redirect.Destination) { }
 
         public RedirectDestinationModel(IRedirectDestination destination) {
@@ -57,6 +63,7 @@ namespace Skybrud.Umbraco.Redirects.Models.Api {
             _destination = destination;
 
             Name = _destination.Name;
+            Url = _destination.Url;
 
             switch (Type) {
 
@@ -83,6 +90,7 @@ namespace Skybrud.Umbraco.Redirects.Models.Api {
         public RedirectDestinationModel(IRedirect redirect, IContent? content) {
             _destination = redirect.Destination;
             Name = content?.Name ?? redirect.Destination.Name;
+            Url = _destination.Url;
             Icon = content?.ContentType.Icon ?? "icon-article";
             IsNull = content == null;
             IsTrashed = content?.Trashed ?? false;
@@ -93,6 +101,7 @@ namespace Skybrud.Umbraco.Redirects.Models.Api {
         public RedirectDestinationModel(IRedirect redirect, IMedia? media) {
             _destination = redirect.Destination;
             Name = media?.Name ?? redirect.Destination.Name;
+            Url = _destination.Url;
             Icon = media?.ContentType.Icon ?? "icon-picture";
             IsNull = media == null;
             IsTrashed = media?.Trashed ?? false;

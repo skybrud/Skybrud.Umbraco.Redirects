@@ -62,6 +62,12 @@ namespace Skybrud.Umbraco.Redirects.Models {
         [JsonIgnore]
         bool IsValid { get; }
 
+        /// <summary>
+        /// Gets the culture of the destination, if any.
+        /// </summary>
+        [JsonProperty("culture")]
+        public string? Culture => null;
+
     }
 
 }

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Skybrud.Essentials.Reflection;
+using Skybrud.Essentials.Strings.Extensions;
 using Skybrud.Umbraco.Redirects.Config;
 using Skybrud.Umbraco.Redirects.Dashboards;
 using Skybrud.Umbraco.Redirects.Models;
@@ -11,7 +13,9 @@ using Umbraco.Cms.Core.Dashboards;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.ContentEditing;
 using Umbraco.Cms.Core.Models.Membership;
+using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Routing;
+using Umbraco.Cms.Core.Web;
 using Umbraco.Extensions;
 
 namespace Skybrud.Umbraco.Redirects.Helpers {
@@ -154,9 +158,10 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
             Dictionary<Guid, RedirectRootNodeModel> rootNodeLookup = new Dictionary<Guid, RedirectRootNodeModel>();
             Dictionary<Guid, IContent> contentLookup = new Dictionary<Guid, IContent>();
             Dictionary<Guid, IMedia> mediaLookup = new Dictionary<Guid, IMedia>();
+            Dictionary<string, ILanguage> languageLookup = new();
 
             IEnumerable<RedirectModel> items = result.Items
-                .Select(redirect => Map(redirect, rootNodeLookup, contentLookup, mediaLookup));
+                .Select(redirect => Map(redirect, rootNodeLookup, contentLookup, mediaLookup, languageLookup));
 
             return new {
                 result.Pagination,
@@ -174,7 +179,8 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
             Dictionary<Guid, RedirectRootNodeModel> rootNodeLookup = new();
             Dictionary<Guid, IContent> contentLookup = new();
             Dictionary<Guid, IMedia> mediaLookup = new();
-            return Map(redirect, rootNodeLookup, contentLookup, mediaLookup);
+            Dictionary<string, ILanguage> languageLookup = new();
+            return Map(redirect, rootNodeLookup, contentLookup, mediaLookup, languageLookup);
         }
 
         /// <summary>
@@ -186,11 +192,12 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
             Dictionary<Guid, RedirectRootNodeModel> rootNodeLookup = new();
             Dictionary<Guid, IContent> contentLookup = new();
             Dictionary<Guid, IMedia> mediaLookup = new();
-            return redirects.Select(redirect => Map(redirect, rootNodeLookup, contentLookup, mediaLookup));
+            Dictionary<string, ILanguage> languageLookup = new();
+            return redirects.Select(redirect => Map(redirect, rootNodeLookup, contentLookup, mediaLookup, languageLookup));
         }
 
         private RedirectModel Map(IRedirect redirect, Dictionary<Guid, RedirectRootNodeModel> rootNodeLookup,
-            Dictionary<Guid, IContent> contentLookup, Dictionary<Guid, IMedia> mediaLookup)
+            Dictionary<Guid, IContent> contentLookup, Dictionary<Guid, IMedia> mediaLookup, Dictionary<string, ILanguage> languageLookup)
         {
 
             string backOfficeBaseUrl = Dependencies.GlobalSettings.GetBackOfficePath(Dependencies.HostingEnvironment);
@@ -220,9 +227,31 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
                     if (content != null) contentLookup.Add(content.Key, content);
                 }
 
-                destination = new RedirectDestinationModel(redirect, content) {
-                    BackOfficeUrl = $"{backOfficeBaseUrl}/#/content/content/edit/{redirect.Destination.Id}"
-                };
+                // Initialize a new destination object
+                destination = new RedirectDestinationModel(redirect, content);
+
+                // I the destination refers to a specific culture, we fetch some additional information about the culture
+                if (redirect.Destination.Culture.HasValue(out string? culture)) {
+                    destination.Culture = culture;
+                    if (languageLookup.TryGetValue(culture, out ILanguage? language)) {
+                        destination.CultureName = language.CultureName;
+                    } else {
+                        language = Dependencies.LocalizationService.GetLanguageByIsoCode(culture);
+                        if (language is not null) {
+                            languageLookup.Add(culture, language);
+                            destination.CultureName = language.CultureName;
+                        }
+                    }
+                }
+
+                // Look up the current URL of the destination (with respect for the selected culture)
+                if (TryGetContent(redirect.Destination.Id, out IPublishedContent? published)) {
+                    string url = published.Url(destination.Culture);
+                    if (!string.IsNullOrEmpty(url)) destination.Url = url;
+                }
+
+                // Set the backoffice URL of the page
+                destination.BackOfficeUrl = $"{backOfficeBaseUrl}/#/content/content/edit/{redirect.Destination.Id}";
 
             } else if (redirect.Destination.Type == RedirectDestinationType.Media) {
 
@@ -231,9 +260,17 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
                     if (media != null) mediaLookup.Add(media.Key, media);
                 }
 
-                destination = new RedirectDestinationModel(redirect, media) {
-                    BackOfficeUrl = $"{backOfficeBaseUrl}/#/content/media/edit/{redirect.Destination.Id}"
-                };
+                // Initialize a new destination object
+                destination = new RedirectDestinationModel(redirect, media);
+
+                // Look up the current URL of the destination
+                if (TryGetMedia(redirect.Destination.Id, out IPublishedContent? published)) {
+                    string url = published.Url();
+                    if (!string.IsNullOrEmpty(url)) destination.Url = url;
+                }
+
+                // Set the backoffice URL of the media
+                destination.BackOfficeUrl = $"{backOfficeBaseUrl}/#/content/media/edit/{redirect.Destination.Id}";
 
             } else {
 
@@ -334,6 +371,60 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
                 View = $"/App_Plugins/Skybrud.Umbraco.Redirects/Views/ContentApp.html?v={GetCacheBuster()}",
                 Weight = 99
             };
+
+        }
+
+        /// <summary>
+        /// Attempts to get the <see cref="IPublishedContent"/> with the specified <paramref name="id"/>.
+        /// </summary>
+        /// <param name="id">The numeric ID.</param>
+        /// <param name="result">When this method returns, holds the <see cref="IPublishedContent"/> if successful; otherwise, <see langword="null"/>.</param>
+        /// <returns><see langword="true"/> if successful; otherwise, <see langword="false"/>.</returns>
+        public virtual bool TryGetContent(int id, [NotNullWhen(true)] out IPublishedContent? result) {
+
+            if (Dependencies.UmbracoContextAccessor.TryGetUmbracoContext(out IUmbracoContext? context)) {
+                result = context.Content?.GetById(id);
+                return result is not null;
+            }
+
+            result = null;
+            return false;
+
+        }
+
+        /// <summary>
+        /// Attempts to get the <see cref="IPublishedContent"/> with the specified <paramref name="key"/>.
+        /// </summary>
+        /// <param name="key">The GUID key.</param>
+        /// <param name="result">When this method returns, holds the <see cref="IPublishedContent"/> if successful; otherwise, <see langword="null"/>.</param>
+        /// <returns><see langword="true"/> if successful; otherwise, <see langword="false"/>.</returns>
+        public virtual bool TryGetContent(Guid key, [NotNullWhen(true)] out IPublishedContent? result) {
+
+            if (Dependencies.UmbracoContextAccessor.TryGetUmbracoContext(out IUmbracoContext? context)) {
+                result = context.Content?.GetById(key);
+                return result is not null;
+            }
+
+            result = null;
+            return false;
+
+        }
+
+        /// <summary>
+        /// Attempts to get the media with the specified <paramref name="id"/>.
+        /// </summary>
+        /// <param name="id">The numeric ID of the media.</param>
+        /// <param name="result">When this method returns, holds the <see cref="IPublishedContent"/> representing the media if successful; otherwise, <see langword="null"/>.</param>
+        /// <returns><see langword="true"/> if successful; otherwise, <see langword="false"/>.</returns>
+        public virtual bool TryGetMedia(int id, [NotNullWhen(true)] out IPublishedContent? result) {
+
+            if (Dependencies.UmbracoContextAccessor.TryGetUmbracoContext(out IUmbracoContext? context)) {
+                result = context.Media?.GetById(id);
+                return result is not null;
+            }
+
+            result = null;
+            return false;
 
         }
 
