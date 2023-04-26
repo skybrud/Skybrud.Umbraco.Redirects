@@ -1,4 +1,4 @@
-﻿angular.module("umbraco").controller("SkybrudUmbracoRedirects.RedirectDialog.Controller", function ($scope, $http, editorService, notificationsService, skybrudRedirectsService, localizationService, formHelper, eventsService) {
+﻿angular.module("umbraco").controller("SkybrudUmbracoRedirects.RedirectDialog.Controller", function ($scope, $routeParams, $http, editorService, notificationsService, skybrudRedirectsService, localizationService, formHelper, eventsService) {
 
     // Get the cache buster value
     const cacheBuster = Umbraco.Sys.ServerVariables.skybrud.redirects.cacheBuster;
@@ -320,13 +320,39 @@
             properties.culture.config = { cultures: r.data };
             properties.culture.hidden = r.data.length == 0;
             if (properties.culture.hidden) return;
-            properties.culture.culture = r.data[0];
-            properties.culture.value = r.data[0].alias;
+
+
+            let culture = null;
+
+            if ($routeParams.mculture) {
+                culture = r.data.find(x => x.alias == $routeParams.mculture.toLowerCase()) ?? r.data[0];
+            } else {
+                culture = r.data[0];
+            }
+
+
+            properties.culture.culture = culture;
+            properties.culture.value = culture.alias;
         });
 
     });
 
-    if ($scope.model.redirect && $scope.model.redirect.destination && $scope.model.redirect.destination.type === "content") {
+    if ($scope.model.destination) {
+
+        if ($scope.model.destination.type == "content") {
+            
+            skybrudRedirectsService.getCulturesByNodeId($scope.model.destination.id).then(function(r) {
+                properties.culture.config = { cultures: r.data };
+                properties.culture.hidden = r.data.length == 0;
+                if (properties.culture.hidden) return;
+                properties.culture.culture = r.data.find(x => x.alias == $routeParams.mculture.toLowerCase()) ?? r.data[0];
+                properties.culture.value = properties.culture.culture?.alias;
+            });
+        
+        }
+
+    } else if ($scope.model.redirect && $scope.model.redirect.destination && $scope.model.redirect.destination.type === "content") {
+        
         skybrudRedirectsService.getCulturesByNodeId($scope.model.redirect.destination.id).then(function(r) {
             properties.culture.config = { cultures: r.data };
             properties.culture.hidden = r.data.length == 0;
@@ -334,6 +360,7 @@
             properties.culture.culture = r.data.find(x => x.alias == $scope.model.redirect.destination.culture);
             properties.culture.value = properties.culture.culture?.alias;
         });
+    
     }
 
     vm.save = function () {
