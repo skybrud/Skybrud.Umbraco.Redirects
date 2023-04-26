@@ -53,7 +53,12 @@
         };
 
         if ($scope.model.destination) {
+
+            // The suggested URL may contain the scheme, domain and maybe a port number, in which case we need to strip them from the URL
+            $scope.model.destination.url = $scope.model.destination.url.replace(/^(http|https):\/\/(.+?)(|:[0-9]+)\//, "/");
+
             destionation = $scope.model.redirect = $scope.model.destination;
+        
         }
 
     }
