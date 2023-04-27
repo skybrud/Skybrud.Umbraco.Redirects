@@ -16,7 +16,6 @@
     localizationService.localize("redirects_addNewRedirect").then(function (value) { $scope.model.title = value; });
 
     let destionation = null;
-    let culture = null;
 
     $scope.model.hiddenProperties = [];
 
