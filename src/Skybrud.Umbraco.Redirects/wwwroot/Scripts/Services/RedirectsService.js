@@ -45,7 +45,7 @@
                     link.url = link.url.substr(0, pos);
                 }
             }
-            
+
             // Append the query and fragment to the anchor value (if specified)
             link.anchor = "";
             if (link.query) link.anchor = link.query;
@@ -136,7 +136,7 @@
             // Convert our link object to something Umbraco's link picker can understand
             const target = service.toUmbracoLink(link);
 
-            // Open the link picker overlay 
+            // Open the link picker overlay
             editorService.linkPicker({
                 size: "medium",
                 currentTarget: target,
@@ -151,13 +151,13 @@
 
                     // Invoke the callback (if specified)
                     if (callback) callback(newLink);
-                
+
                 },
                 close: function () {
                     editorService.close();
                 }
             });
-        
+
         },
 
         addRedirect: function (options) {
@@ -242,10 +242,10 @@
                 title: "Confirm delete",
                 content: `Are you sure you want to delete the redirect at <strong>${options.redirect.destination.displayUrl}</strong> ?`,
                 submit: function() {
-    
+
                     // Update the button state in the UI
                     overlay.submitButtonState = "busy";
-    
+
                     // Delete the redirect
                     service.deleteRedirect(options.redirect, function () {
                         if (typeof options.submit === "function") {
@@ -256,7 +256,7 @@
                     }, function () {
                         overlay.submitButtonState = "error";
                     });
-    
+
                 },
                 close: function() {
                     options.close(overlay);
@@ -270,7 +270,7 @@
             localizationService.localize("redirects_overlayDeleteMessage", [options.redirect.destination.displayUrl], overlay.content).then(function (value) {
                 overlay.content = value;
             });
-    
+
             // Open the overlay
             overlayService.confirmDelete(overlay);
 
@@ -298,8 +298,8 @@
 
         },
 
-        getCulturesByNodeId: function(id) {
-            return $http.get("/umbraco/api/Redirects/GetCultures?id=" + id);
+        getCulturesByNodeId: function (id) {
+            return $http.get(`${baseUrl}GetCultures?id=${id}`);
         }
 
     };

@@ -18,6 +18,7 @@ using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Web.BackOffice.Controllers;
 using Umbraco.Cms.Web.Common.Attributes;
+using Umbraco.Extensions;
 
 #pragma warning disable 1591
 
@@ -37,22 +38,46 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         private readonly IContentService _contentService;
         private readonly IMediaService _mediaService;
         private readonly IUmbracoContextAccessor _umbracoContextAccessor;
+        private readonly ILocalizationService _localizationService;
 
         #region Constructors
 
         public RedirectsController(ILogger<RedirectsController> logger, IRedirectsService redirectsService, RedirectsBackOfficeHelper backOffice,
             IContentService contentService,
             IMediaService mediaService,
-            IUmbracoContextAccessor umbracoContextAccessor) {
+            IUmbracoContextAccessor umbracoContextAccessor, ILocalizationService localizationService) {
             _logger = logger;
             _redirects = redirectsService;
             _backOffice = backOffice;
             _contentService = contentService;
             _mediaService = mediaService;
             _umbracoContextAccessor = umbracoContextAccessor;
+            _localizationService = localizationService;
         }
 
         #endregion
+
+        /// <summary>
+        /// Returns a list of cultures for the content node with the specified <paramref name="id"/>. If the node is not vary by culture, an empty list will be returned instead.
+        /// </summary>
+        /// <param name="id">The ID of the content node.</param>
+        /// <returns>A list of cultures.</returns>
+        [HttpGet]
+        public object GetCultures(int id)  {
+
+            var content = _umbracoContextAccessor.GetRequiredUmbracoContext().Content?.GetById(id);
+            if (content is null) return NotFound();
+
+            var cultures = content.Cultures;
+
+            if (cultures.Count == 1 && cultures.ContainsKey("")) return Array.Empty<object>();
+
+            return cultures.Select(x => new {
+                alias = x.Key,
+                name = _localizationService.GetLanguageByIsoCode(x.Key)?.CultureName
+            });
+
+        }
 
         /// <summary>
         /// Gets a list of root nodes based on the domains added to Umbraco. A root node will only be included in the
