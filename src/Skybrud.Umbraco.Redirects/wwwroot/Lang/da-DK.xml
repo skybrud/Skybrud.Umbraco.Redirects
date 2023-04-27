@@ -82,6 +82,7 @@
     <key alias="errorNoUrl">Du skal angive en URL for dit redirect.</key>
     <key alias="errorNoDestination">Du skal angive en destination for dit redirect.</key>
     <key alias="errorUnknownLinkMode">Den angivne linktype er ikke gyldig.</key>
+    <key alias="errorRedirectAlreadyExists">Et redirect med den samme URL og query string findes allerede.</key>
     <!-- Misc info and warnings -->
     <key alias="pageNoRedirects">Din side er endnu ikke oprettet. Du skal gemme eller publicere siden for, at kunne tilføje redirects.</key>
     <key alias="pageIsUnpublished">Denne side er endnu ikke blevet udgivet. Redirects til ikke-udgivne sider kan resultere i uventet adfærd - eksempelvis hvor besøgende bliver videresendt til en ikke-eksisterende URL.</key>

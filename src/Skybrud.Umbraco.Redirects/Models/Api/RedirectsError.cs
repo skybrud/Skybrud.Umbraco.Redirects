@@ -16,7 +16,7 @@ namespace Skybrud.Umbraco.Redirects.Models.Api {
         /// <summary>
         /// Gets the message of the error.
         /// </summary>
-        public string Error { get; }
+        public string Error { get; set; }
 
         /// <summary>
         /// Initializes a new instance based on the specified <paramref name="error"/> message.

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
 using Skybrud.Essentials.Reflection;
 using Skybrud.Essentials.Strings.Extensions;
@@ -46,6 +47,22 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
         /// Gets a reference to the redirects settings.
         /// </summary>
         public RedirectsSettings Settings => Dependencies.RedirectsSettings.Value;
+
+        /// <summary>
+        /// Gets the current <see cref="CultureInfo"/>.
+        /// </summary>
+        public CultureInfo CurrentCulture {
+            get {
+                try {
+                    if (CurrentUser is {} user && user.Language.HasValue(out string? language))  {
+                        return CultureInfo.GetCultureInfo(language);
+                    }
+                } catch {
+                    // Hello there!
+                }
+                return CultureInfo.CurrentCulture;
+            }
+        }
 
         #endregion
 

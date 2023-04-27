@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
@@ -39,13 +40,14 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         private readonly IMediaService _mediaService;
         private readonly IUmbracoContextAccessor _umbracoContextAccessor;
         private readonly ILocalizationService _localizationService;
+        private readonly ILocalizedTextService _localizedTextService;
 
         #region Constructors
 
         public RedirectsController(ILogger<RedirectsController> logger, IRedirectsService redirectsService, RedirectsBackOfficeHelper backOffice,
             IContentService contentService,
             IMediaService mediaService,
-            IUmbracoContextAccessor umbracoContextAccessor, ILocalizationService localizationService) {
+            IUmbracoContextAccessor umbracoContextAccessor, ILocalizationService localizationService, ILocalizedTextService localizedTextService) {
             _logger = logger;
             _redirects = redirectsService;
             _backOffice = backOffice;
@@ -53,6 +55,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
             _mediaService = mediaService;
             _umbracoContextAccessor = umbracoContextAccessor;
             _localizationService = localizationService;
+            _localizedTextService = localizedTextService;
         }
 
         #endregion
@@ -388,7 +391,11 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
         private ActionResult Error(RedirectsException ex) {
 
             // Initialize a new error model based on the exception
-            RedirectsError body = new RedirectsError(ex);
+            RedirectsError body = new(ex);
+
+            if (ex is RedirectsLocalizedException lex) {
+                body.Error = lex.GetLocalizedMessage(_localizedTextService, _backOffice.CurrentCulture);
+            }
 
             return new JsonResult(body) {
                 StatusCode = (int) ex.StatusCode

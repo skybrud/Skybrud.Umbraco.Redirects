@@ -302,6 +302,12 @@
 
     }
 
+    function getErrorMessage(response, fallback) {
+        if (response.data.error) return response.data.error;
+        if (response.data.meta?.error) return response.data.meta.error;
+        return fallback;
+    };
+
     function initOnDestinationUpdated() {
 
         // Subscribe to the event
@@ -426,7 +432,7 @@
     initLabels();
 
     init();
-
+   
     vm.save = function () {
 
         // Map the properties back to an object we can send to the API
@@ -466,7 +472,7 @@
                 $scope.model.submit(r);
             }, function (res) {
                 vm.loading = false;
-                notificationsService.error(vm.labels.saveFailedTitle, res && res.data && res.data.meta ? res.data.meta.error : vm.labels.saveFailedMessage);
+                notificationsService.error(vm.labels.saveFailedTitle, getErrorMessage(res, vm.labels.saveFailedMessage));
             });
         } else {
             $http({
@@ -479,7 +485,7 @@
                 $scope.model.submit(r);
             }, function (res) {
                 vm.loading = false;
-                notificationsService.error(vm.labels.addFailedTitle, res && res.data && res.data.meta ? res.data.meta.error : vm.labels.addFailedMessage);
+                notificationsService.error(vm.labels.addFailedTitle, getErrorMessage(res, vm.labels.addFailedMessage));
             });
         }
 

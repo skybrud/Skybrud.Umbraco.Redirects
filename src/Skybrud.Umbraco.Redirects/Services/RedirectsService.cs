@@ -293,7 +293,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
 
             // Does a matching redirect already exist?
             if (GetRedirectByPathAndQuery(options.RootNodeKey, item.Path, item.QueryString) != null) {
-                throw new RedirectsException("A redirect with the specified URL already exists.");
+                throw new RedirectAlreadyExistsException(item);
             }
 
             // Attempt to add the redirect to the database
@@ -326,9 +326,9 @@ namespace Skybrud.Umbraco.Redirects.Services {
             if (redirect is not Redirect r) throw new ArgumentException($"Redirect type is not supported: {redirect.GetType()}", nameof(redirect));
 
             // Check whether another redirect matches the new URL and query string
-            IRedirect? existing = GetRedirectByPathAndQuery(redirect.RootKey, redirect.Url, redirect.QueryString);
+            IRedirect? existing = GetRedirectByPathAndQuery(redirect.RootKey, redirect.Path, redirect.QueryString);
             if (existing != null && existing.Id != redirect.Id) {
-                throw new RedirectsException("A redirect with the same URL and query string already exists.");
+                throw new RedirectAlreadyExistsException(redirect);
             }
 
             // Update the timestamp for when the redirect was modified
