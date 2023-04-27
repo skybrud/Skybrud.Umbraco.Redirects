@@ -302,33 +302,7 @@
 
     }
 
-    function init() {
-    
-        if ($scope.model.destination) {
-    
-            if ($scope.model.destination.type == "content") {
-                
-                skybrudRedirectsService.getCulturesByNodeId($scope.model.destination.id).then(function(r) {
-                    properties.culture.config = { cultures: r.data };
-                    properties.culture.hidden = r.data.length == 0;
-                    if (properties.culture.hidden) return;
-                    properties.culture.culture = r.data.find(x => x.alias == $routeParams.mculture.toLowerCase()) ?? r.data[0];
-                    properties.culture.value = properties.culture.culture?.alias;
-                });
-            
-            }
-    
-        } else if ($scope.model.redirect && $scope.model.redirect.destination && $scope.model.redirect.destination.type === "content") {
-            
-            skybrudRedirectsService.getCulturesByNodeId($scope.model.redirect.destination.id).then(function(r) {
-                properties.culture.config = { cultures: r.data };
-                properties.culture.hidden = r.data.length == 0;
-                if (properties.culture.hidden) return;
-                properties.culture.culture = r.data.find(x => x.alias == $scope.model.redirect.destination.culture);
-                properties.culture.value = properties.culture.culture?.alias;
-            });
-        
-        }
+    function initOnDestinationUpdated() {
 
         // Subscribe to the event
         const unsubscribe = eventsService.on("skybrud.umbraco.redirects.destination.updated", function() {
@@ -365,6 +339,59 @@
         $scope.$on("$destroy", function () {
             unsubscribe();
         });
+
+    };
+
+    function initOnCultureUpdated() {
+
+        // Subscribe to the event
+        const unsubscribe = eventsService.on("skybrud.umbraco.redirects.culture.updated", function(_, args) {
+
+            if (!properties.destionation.value) return;
+            if (!args.culture) return;
+
+            // Update teh destination URL to reflect the selected culture
+            properties.destionation.value.url = args.culture.url;
+    
+        });
+        
+        // When the scope is destroyed we need to unsubscribe
+        $scope.$on("$destroy", function () {
+            unsubscribe();
+        });
+
+    };
+
+    function init() {
+    
+        if ($scope.model.destination) {
+    
+            if ($scope.model.destination.type == "content") {
+                
+                skybrudRedirectsService.getCulturesByNodeId($scope.model.destination.id).then(function(r) {
+                    properties.culture.config = { cultures: r.data };
+                    properties.culture.hidden = r.data.length == 0;
+                    if (properties.culture.hidden) return;
+                    properties.culture.culture = r.data.find(x => x.alias == $routeParams.mculture.toLowerCase()) ?? r.data[0];
+                    properties.culture.value = properties.culture.culture?.alias;
+                });
+            
+            }
+    
+        } else if ($scope.model.redirect && $scope.model.redirect.destination && $scope.model.redirect.destination.type === "content") {
+            
+            skybrudRedirectsService.getCulturesByNodeId($scope.model.redirect.destination.id).then(function(r) {
+                properties.culture.config = { cultures: r.data };
+                properties.culture.hidden = r.data.length == 0;
+                if (properties.culture.hidden) return;
+                properties.culture.culture = r.data.find(x => x.alias == $scope.model.redirect.destination.culture);
+                properties.culture.value = properties.culture.culture?.alias;
+            });
+        
+        }
+
+        initOnDestinationUpdated();
+        initOnCultureUpdated();
 
     }
 
