@@ -306,62 +306,75 @@
 
     }
 
-    initLabels();
-
-    eventsService.on("skybrud.umbraco.redirects.destination.updated", function() {
-
-        // If the destination is "unset" or the destination is not a content node, the culture property should be hidden
-        if (properties.destionation.value.type != "content") {
-            properties.culture.value = null;
-            properties.culture.hidden = true;
-        }
-
-        skybrudRedirectsService.getCulturesByNodeId(properties.destionation.value.id).then(function(r) {
-            properties.culture.config = { cultures: r.data };
-            properties.culture.hidden = r.data.length == 0;
-            if (properties.culture.hidden) return;
-
-
-            let culture = null;
-
-            if ($routeParams.mculture) {
-                culture = r.data.find(x => x.alias == $routeParams.mculture.toLowerCase()) ?? r.data[0];
-            } else {
-                culture = r.data[0];
-            }
-
-
-            properties.culture.culture = culture;
-            properties.culture.value = culture.alias;
-        });
-
-    });
-
-    if ($scope.model.destination) {
-
-        if ($scope.model.destination.type == "content") {
+    function init() {
+    
+        if ($scope.model.destination) {
+    
+            if ($scope.model.destination.type == "content") {
+                
+                skybrudRedirectsService.getCulturesByNodeId($scope.model.destination.id).then(function(r) {
+                    properties.culture.config = { cultures: r.data };
+                    properties.culture.hidden = r.data.length == 0;
+                    if (properties.culture.hidden) return;
+                    properties.culture.culture = r.data.find(x => x.alias == $routeParams.mculture.toLowerCase()) ?? r.data[0];
+                    properties.culture.value = properties.culture.culture?.alias;
+                });
             
-            skybrudRedirectsService.getCulturesByNodeId($scope.model.destination.id).then(function(r) {
+            }
+    
+        } else if ($scope.model.redirect && $scope.model.redirect.destination && $scope.model.redirect.destination.type === "content") {
+            
+            skybrudRedirectsService.getCulturesByNodeId($scope.model.redirect.destination.id).then(function(r) {
                 properties.culture.config = { cultures: r.data };
                 properties.culture.hidden = r.data.length == 0;
                 if (properties.culture.hidden) return;
-                properties.culture.culture = r.data.find(x => x.alias == $routeParams.mculture.toLowerCase()) ?? r.data[0];
+                properties.culture.culture = r.data.find(x => x.alias == $scope.model.redirect.destination.culture);
                 properties.culture.value = properties.culture.culture?.alias;
             });
         
         }
 
-    } else if ($scope.model.redirect && $scope.model.redirect.destination && $scope.model.redirect.destination.type === "content") {
-        
-        skybrudRedirectsService.getCulturesByNodeId($scope.model.redirect.destination.id).then(function(r) {
-            properties.culture.config = { cultures: r.data };
-            properties.culture.hidden = r.data.length == 0;
-            if (properties.culture.hidden) return;
-            properties.culture.culture = r.data.find(x => x.alias == $scope.model.redirect.destination.culture);
-            properties.culture.value = properties.culture.culture?.alias;
-        });
+        // Subscribe to the event
+        const unsubscribe = eventsService.on("skybrud.umbraco.redirects.destination.updated", function() {
+
+            // If the destination is "unset" or the destination is not a content node, the culture property should be hidden
+            if (properties.destionation.value.type != "content") {
+                properties.culture.value = null;
+                properties.culture.hidden = true;
+                return;
+            }
     
+            skybrudRedirectsService.getCulturesByNodeId(properties.destionation.value.id).then(function(r) {
+                properties.culture.config = { cultures: r.data };
+                properties.culture.hidden = r.data.length == 0;
+                if (properties.culture.hidden) return;
+    
+    
+                let culture = null;
+    
+                if ($routeParams.mculture) {
+                    culture = r.data.find(x => x.alias == $routeParams.mculture.toLowerCase()) ?? r.data[0];
+                } else {
+                    culture = r.data[0];
+                }
+    
+    
+                properties.culture.culture = culture;
+                properties.culture.value = culture.alias;
+            });
+    
+        });
+        
+        // When the scope is destroyed we need to unsubscribe
+        $scope.$on("$destroy", function () {
+            unsubscribe();
+        });
+
     }
+
+    initLabels();
+
+    init();
 
     vm.save = function () {
 
