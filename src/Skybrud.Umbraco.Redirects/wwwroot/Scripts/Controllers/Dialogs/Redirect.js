@@ -338,7 +338,7 @@
         const unsubscribe = eventsService.on("skybrud.umbraco.redirects.destination.updated", function() {
 
             // If the destination is "unset" or the destination is not a content node, the culture property should be hidden
-            if (properties.destionation.value.type != "content") {
+            if (!properties.destionation.value || properties.destionation.value.type != "content") {
                 properties.culture.value = null;
                 properties.culture.hidden = true;
                 return;
