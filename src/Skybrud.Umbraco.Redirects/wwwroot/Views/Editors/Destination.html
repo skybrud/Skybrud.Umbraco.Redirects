@@ -1,6 +1,6 @@
 ﻿<div ng-controller="SkybrudUmbracoRedirects.Editors.Destination.Controller as vm">
     <input type="hidden" ng-model="model.value" required />
-    <div ng-if="model.value" class="umb-node-preview" style="max-width: initial;">
+    <div ng-if="model.value" class="umb-node-preview" single style="max-width: initial;">
         <i ng-if="icon" class="umb-node-preview__icon icon-shopping-basket"></i>
         <div class="umb-node-preview__content">
             <div class="umb-node-preview__name">{{model.value.name}}</div>
