@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Skybrud.Essentials.Json.Newtonsoft;
@@ -104,6 +105,7 @@ namespace Skybrud.Umbraco.Redirects.Models.Outbound {
         /// <param name="json">An instance of <see cref="JObject"/> representing the redirect.</param>
         /// <returns>An instacne of <see cref="OutboundRedirect"/>, or <c>null</c> if <paramref name="json"/> is <c>null</c>.</returns>
         [return: NotNullIfNotNull(nameof(json))]
+        [Obsolete("Use the 'RedirectsModelsFactory.CreateOutboundRedirect' method instead.")]
         public static OutboundRedirect? Parse(JObject? json) {
             return json == null ? null : new OutboundRedirect(json);
         }
@@ -112,6 +114,7 @@ namespace Skybrud.Umbraco.Redirects.Models.Outbound {
         /// Deseralizes the specified JSON string into an instance of <see cref="OutboundRedirect"/>.
         /// </summary>
         /// <param name="json">The raw JSON to be parsed.</param>
+        [Obsolete("Use the 'RedirectsModelsFactory.CreateOutboundRedirect' method instead.")]
         public static OutboundRedirect Deserialize(string? json) {
             if (string.IsNullOrEmpty(json)) return new OutboundRedirect();
             if (json.StartsWith("{") && json.EndsWith("}")) return JsonUtils.ParseJsonObject(json, Parse)!;

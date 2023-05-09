@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
+using Skybrud.Essentials.Json.Newtonsoft;
 using Skybrud.Umbraco.Redirects.Models;
-using Skybrud.Umbraco.Redirects.Models.Outbound;
 using Skybrud.Umbraco.Redirects.PropertyEditors;
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Models.Editors;
@@ -9,20 +10,39 @@ using Umbraco.Extensions;
 
 #pragma warning disable 1591
 
+// ReSharper disable SwitchStatementMissingSomeEnumCasesNoDefault
+
 namespace Skybrud.Umbraco.Redirects.Factories.References {
 
     public class OutboundRedirectReferenceFactory : IDataValueReferenceFactory, IDataValueReference {
+
+        private readonly RedirectsModelsFactory _modelsFactory;
+
+        #region Constructors
+
+        public OutboundRedirectReferenceFactory(RedirectsModelsFactory modelsFactory)  {
+            _modelsFactory = modelsFactory;
+        }
+
+        #endregion
+
+        #region Member methods
 
         public IDataValueReference GetDataValueReference() => this;
 
         public IEnumerable<UmbracoEntityReference> GetReferences(object? value) {
 
-            List<UmbracoEntityReference> references = new List<UmbracoEntityReference>();
+            List<UmbracoEntityReference> references = new();
             if (value is not string json) return references;
 
-            IRedirectDestination destination = OutboundRedirect.Deserialize(json).Destination;
+            // Parse the raw JSON value
+            if (!JsonUtils.TryParseJsonObject(json, out JObject? result)) return references;
 
-            switch (destination.Type) {
+            // Parse the JSON object into a "IRedirectDestination" via the models factory
+            IRedirectDestination? destination = _modelsFactory.CreateOutboundRedirect(result)?.Destination;
+
+            // Handle "Media" and "Content" (but not "Url")
+            switch (destination?.Type) {
 
                 case RedirectDestinationType.Media:
                     references.Add(new UmbracoEntityReference(new GuidUdi("media", destination.Key)));
@@ -39,6 +59,8 @@ namespace Skybrud.Umbraco.Redirects.Factories.References {
         }
 
         public bool IsForEditor(IDataEditor? dataEditor) => dataEditor is not null && dataEditor.Alias.InvariantEquals(OutboundRedirectEditor.EditorAlias);
+
+        #endregion
 
     }
 
