@@ -6,9 +6,14 @@
     public class RedirectsSettings {
 
         /// <summary>
-        /// Gets settings for the redirects content app.
+        /// Gets the settings for the redirects content app.
         /// </summary>
-        public RedirectsContentAppSettings ContentApp { get; private set; } = new();
+        public RedirectsContentAppSettings ContentApp { get; } = new();
+
+        /// <summary>
+        /// Gets the settings for the redirects dashboard.
+        /// </summary>
+        public RedirectsDashboardSettings Dashboard { get; } = new();
 
     }
 

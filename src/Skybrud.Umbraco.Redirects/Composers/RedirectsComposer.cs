@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Skybrud.Essentials.Strings.Extensions;
 using Skybrud.Umbraco.Redirects.Config;
 using Skybrud.Umbraco.Redirects.ContentApps;
+using Skybrud.Umbraco.Redirects.Dashboards;
 using Skybrud.Umbraco.Redirects.Factories;
 using Skybrud.Umbraco.Redirects.Factories.References;
 using Skybrud.Umbraco.Redirects.Helpers;
@@ -54,6 +56,19 @@ namespace Skybrud.Umbraco.Redirects.Composers {
             });
 
             builder.DataValueReferenceFactories()?.Append<OutboundRedirectReferenceFactory>();
+
+            ConfigureDashboard(builder);
+
+        }
+
+        private static void ConfigureDashboard(IUmbracoBuilder builder) {
+
+            // The dashboard should be enabled by default, but if explicitly set to "false", we should remove it
+            bool dashboardEnabled = builder.Config
+                .GetSection("Skybrud:Redirects:Dashboard:Enabled").Value
+                .ToBoolean(true);
+
+            if (!dashboardEnabled) builder.Dashboards().Remove<RedirectsDashboard>();
 
         }
 
