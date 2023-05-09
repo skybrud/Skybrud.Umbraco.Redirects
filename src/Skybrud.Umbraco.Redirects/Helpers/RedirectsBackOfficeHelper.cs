@@ -172,9 +172,9 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
         /// <returns>An instance of <see cref="object"/>.</returns>
         public virtual object Map(RedirectsSearchResult result) {
 
-            Dictionary<Guid, RedirectRootNodeModel> rootNodeLookup = new Dictionary<Guid, RedirectRootNodeModel>();
-            Dictionary<Guid, IContent> contentLookup = new Dictionary<Guid, IContent>();
-            Dictionary<Guid, IMedia> mediaLookup = new Dictionary<Guid, IMedia>();
+            Dictionary<Guid, RedirectRootNodeModel> rootNodeLookup = new();
+            Dictionary<Guid, IContent> contentLookup = new();
+            Dictionary<Guid, IMedia> mediaLookup = new();
             Dictionary<string, ILanguage> languageLookup = new();
 
             IEnumerable<RedirectModel> items = result.Items

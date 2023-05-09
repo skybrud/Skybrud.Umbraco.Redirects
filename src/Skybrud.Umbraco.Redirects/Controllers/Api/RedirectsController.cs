@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
@@ -210,7 +209,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
                 }
 
                 // Initialize a new destination instance
-                RedirectDestination destination = new RedirectDestination {
+                RedirectDestination destination = new() {
                     Id = linkId,
                     Key = linkKey,
                     Type = type,

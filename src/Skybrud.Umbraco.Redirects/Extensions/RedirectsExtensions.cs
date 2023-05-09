@@ -19,7 +19,7 @@ namespace Skybrud.Umbraco.Redirects.Extensions {
     /// </summary>
     public static class RedirectsExtensions {
 
-        private static readonly string[] OutboundPropertyAliases = { "skyRedirect", "outboundRedirect" };
+        private static readonly string[] _outboundPropertyAliases = { "skyRedirect", "outboundRedirect" };
 
         /// <summary>
         /// Returns the calculated destination URL for the specified <paramref name="redirect"/>.
@@ -139,7 +139,7 @@ namespace Skybrud.Umbraco.Redirects.Extensions {
         /// <param name="content">The content item holding the outbound rediderect.</param>
         /// <returns>An instance of <see cref="IOutboundRedirect"/>.</returns>
         public static IOutboundRedirect GetOutboundRedirect(this IPublishedContent content) {
-            return GetOutboundRedirect(content, OutboundPropertyAliases);
+            return GetOutboundRedirect(content, _outboundPropertyAliases);
         }
 
         /// <summary>
@@ -191,7 +191,7 @@ namespace Skybrud.Umbraco.Redirects.Extensions {
         /// <param name="content">The content item holding the outbound rediderect.</param>
         /// <returns>An instance of <see cref="IOutboundRedirect"/> if successful; otherwise, <see langword="null"/>.</returns>
         public static IOutboundRedirect? GetOutboundRedirectOrDefault(this IPublishedContent content) {
-            return GetOutboundRedirectOrDefault(content, OutboundPropertyAliases);
+            return GetOutboundRedirectOrDefault(content, _outboundPropertyAliases);
         }
 
         /// <summary>

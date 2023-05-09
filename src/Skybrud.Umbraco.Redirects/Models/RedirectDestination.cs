@@ -57,10 +57,10 @@ namespace Skybrud.Umbraco.Redirects.Models {
         [JsonProperty("fullUrl")]
         public string FullUrl {
             get {
-                StringBuilder sb = new StringBuilder();
+                StringBuilder sb = new();
                 sb.Append(Url);
                 if (Query.HasValue()) {
-                    sb.Append(Url.Contains("?") ? '&' : '?');
+                    sb.Append(Url.Contains('?') ? '&' : '?');
                     sb.Append(Query);
                 }
                 if (Fragment.HasValue()) {
