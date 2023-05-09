@@ -524,8 +524,12 @@ namespace Skybrud.Umbraco.Redirects.Services {
 
             }
 
+            string? contentUrl = content?.Url(redirect.Destination.Culture);
+
+            if (string.IsNullOrWhiteSpace(contentUrl)) contentUrl = content?.Url(redirect.Destination.Culture);
+
             // Put the destination URL back together
-            return RedirectsUtils.ConcatUrl(content?.Url() ?? redirect.Destination.Url, query, fragment);
+            return RedirectsUtils.ConcatUrl(contentUrl ?? redirect.Destination.Url, query, fragment);
 
         }
 

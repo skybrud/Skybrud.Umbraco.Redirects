@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using Skybrud.Essentials.Reflection;
+using Skybrud.Essentials.Strings;
 using Skybrud.Essentials.Strings.Extensions;
 using Skybrud.Umbraco.Redirects.Config;
 using Skybrud.Umbraco.Redirects.Dashboards;
@@ -261,10 +262,15 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
                     }
                 }
 
-                // Look up the current URL of the destination (with respect for the selected culture)
+                // Look up the current URL and name of the destination (with respect for the selected culture)
                 if (TryGetContent(redirect.Destination.Id, out IPublishedContent? published)) {
+
                     string url = published.Url(destination.Culture);
                     if (!string.IsNullOrEmpty(url)) destination.Url = url;
+
+                    string? name = published.Name(destination.Culture);
+                    if (!string.IsNullOrEmpty(name)) destination.Name = name;
+
                 }
 
                 // Set the backoffice URL of the page

@@ -22,7 +22,7 @@ namespace Skybrud.Umbraco.Redirects.Models.Api {
 
         public string DisplayUrl => RedirectsUtils.ConcatUrl(Url, Query, Fragment);
 
-        public string Name { get; }
+        public string Name { get; set; }
 
         public string Icon { get; }
 

@@ -77,6 +77,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api {
             return cultures.Select(x => new {
                 alias = x.Key,
                 name = _localizationService.GetLanguageByIsoCode(x.Key)?.CultureName,
+                nodeName = content.Name(culture: x.Key),
                 url = content.Url(culture: x.Key)
             });
 

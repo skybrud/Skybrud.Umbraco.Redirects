@@ -54,7 +54,7 @@
         if ($scope.model.destination) {
 
             destionation = $scope.model.redirect.destination = $scope.model.destination;
-        
+
         }
 
     }
@@ -319,28 +319,28 @@
                 properties.culture.hidden = true;
                 return;
             }
-    
+
             skybrudRedirectsService.getCulturesByNodeId(properties.destionation.value.id).then(function(r) {
                 properties.culture.config = { cultures: r.data };
                 properties.culture.hidden = r.data.length == 0;
                 if (properties.culture.hidden) return;
-    
-    
+
+
                 let culture = null;
-    
+
                 if ($routeParams.mculture) {
                     culture = r.data.find(x => x.alias == $routeParams.mculture.toLowerCase()) ?? r.data[0];
                 } else {
                     culture = r.data[0];
                 }
-    
-    
+
+
                 properties.culture.culture = culture;
                 properties.culture.value = culture.alias;
             });
-    
+
         });
-        
+
         // When the scope is destroyed we need to unsubscribe
         $scope.$on("$destroy", function () {
             unsubscribe();
@@ -356,11 +356,12 @@
             if (!properties.destionation.value) return;
             if (!args.culture) return;
 
-            // Update teh destination URL to reflect the selected culture
+            // Update teh destination URL and name to reflect the selected culture
             properties.destionation.value.url = args.culture.url;
-    
+            properties.destionation.value.name = args.culture.nodeName;
+
         });
-        
+
         // When the scope is destroyed we need to unsubscribe
         $scope.$on("$destroy", function () {
             unsubscribe();
@@ -387,33 +388,33 @@
     }
 
     function init() {
-    
+
         if ($scope.model.destination) {
-    
+
             if ($scope.model.destination.type == "content") {
-                
+
                 skybrudRedirectsService.getCulturesByNodeId($scope.model.destination.id).then(function(r) {
-                    
+
                     // Set the property editor configuration with the available cultures
                     properties.culture.config = { cultures: r.data };
 
                     // Does the destination have any cultures?
                     properties.culture.hidden = r.data.length == 0;
                     if (properties.culture.hidden) return;
-                    
+
                     // Look for the selected culture - or use the first culture as fallback
                     properties.culture.culture = getCultureFromRoute(r.data);
                     properties.culture.value = properties.culture.culture?.alias;
-                    
+
                     // Make sure we set destination URL to the destination of the current culture
                     $scope.model.destination.url = properties.culture.culture.url;
-                
+
                 });
-            
+
             }
-    
+
         } else if ($scope.model.redirect && $scope.model.redirect.destination && $scope.model.redirect.destination.type === "content") {
-            
+
             skybrudRedirectsService.getCulturesByNodeId($scope.model.redirect.destination.id).then(function(r) {
                 properties.culture.config = { cultures: r.data };
                 properties.culture.hidden = r.data.length == 0;
@@ -421,7 +422,7 @@
                 properties.culture.culture = r.data.find(x => x.alias == $scope.model.redirect.destination.culture);
                 properties.culture.value = properties.culture.culture?.alias;
             });
-        
+
         }
 
         initOnDestinationUpdated();
@@ -432,7 +433,7 @@
     initLabels();
 
     init();
-   
+
     vm.save = function () {
 
         // Map the properties back to an object we can send to the API
