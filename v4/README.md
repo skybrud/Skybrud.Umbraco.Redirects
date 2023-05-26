@@ -1,5 +1,5 @@
 ---
-title: v4.0
+title: Version 4
 order: 7
 ---
 
