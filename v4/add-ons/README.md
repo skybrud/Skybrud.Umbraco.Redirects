@@ -1,3 +1,7 @@
+---
+order: 7
+---
+
 # Add-ons
 
 ## Import & Export
