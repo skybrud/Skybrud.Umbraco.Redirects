@@ -1,6 +1,6 @@
 ---
 title: FAQ
-teaser: See facts about the package. Might be worth starting here when troubleshooting the package.
+teaser: See facts about the package. Might be worth starting here when troubleshooting issues with the package.
 ---
 
 # FAQ
