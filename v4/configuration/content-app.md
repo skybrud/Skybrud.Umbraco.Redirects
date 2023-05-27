@@ -1,3 +1,7 @@
+---
+teaser: Read more about how to control the redirects content app.
+---
+
 # Content App
 
 The package features a content app, which by default is added to all content and media types, but not element types. If you wish to change the behavior of the content app, you can do so either `appsettings.json` or via your own code in C#.
