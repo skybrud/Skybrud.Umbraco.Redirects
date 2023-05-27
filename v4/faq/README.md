@@ -17,6 +17,6 @@ The best way to validate the status code is to access a non-existing URL on your
 
 ## Does the package support importing redirects?
 
-Not directly. Since this requires a few extra dependencies, this is available in the <a href="https://github.com/skybrud/Skybrud.Umbraco.Redirects.Import/" docs-href="/skybrud.umbraco.redirects.import/"><strong>Skybrud Redirects Import</strong></a> add-on.
+Not directly. Since this requires a few extra dependencies, the import functionality is available in the <a href="https://github.com/skybrud/Skybrud.Umbraco.Redirects.Import/" docs-href="/skybrud.umbraco.redirects.import/"><strong>Skybrud Redirects Import</strong></a> add-on.
 
-This add-on supports importing redirects from a CSV, XLSX or JSON file, as well as exporting existing redirects to the same formats.
+This add-on supports both importing redirects from a CSV, XLSX or JSON file, as well as exporting existing redirects to the same formats.
