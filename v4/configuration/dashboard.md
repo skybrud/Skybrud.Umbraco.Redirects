@@ -1,3 +1,7 @@
+---
+teaser: Read more about how to control the default redirects dashboard.
+---
+
 # Dashboard
 
 The main component of the package UI-wise is the dashboard where editors can see all existing redirects, as well as creating, editing and deleting redirects.
