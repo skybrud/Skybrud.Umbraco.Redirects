@@ -117,7 +117,7 @@
             description: "Select the culture of the destination.",
             descriptionKey: "redirects_propertyDestinationCultureDescription",
             view: `/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/Culture.html?v=${cacheBuster}`,
-            value: destionation,
+            value: null,
             hidden: true
         }
     };
