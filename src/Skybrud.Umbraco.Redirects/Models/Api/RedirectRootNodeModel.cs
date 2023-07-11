@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 using Skybrud.Umbraco.Redirects.Helpers;
 using Umbraco.Cms.Core.Models;
 
@@ -8,16 +10,28 @@ namespace Skybrud.Umbraco.Redirects.Models.Api {
 
     public class RedirectRootNodeModel {
 
+        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public int Id { get; }
 
+        [JsonProperty("key")]
+        [JsonPropertyName("key")]
         public Guid Key { get; }
 
+        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string? Name { get; }
 
+        [JsonProperty("icon")]
+        [JsonPropertyName("icon")]
         public string? Icon { get; }
 
+        [JsonProperty("backofficeUrl")]
+        [JsonPropertyName("backofficeUrl")]
         public string? BackOfficeUrl { get; }
 
+        [JsonProperty("domains")]
+        [JsonPropertyName("domains")]
         public string[] Domains { get; }
 
         public RedirectRootNodeModel(IRedirect redirect, IContent? content, string[]? domains, string backOfficeBaseUrl) {

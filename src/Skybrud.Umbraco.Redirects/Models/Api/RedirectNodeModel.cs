@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Extensions;
@@ -12,20 +13,32 @@ namespace Skybrud.Umbraco.Redirects.Models.Api {
 
     public class RedirectNodeModel {
 
+        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public int Id { get; }
 
+        [JsonProperty("key")]
+        [JsonPropertyName("key")]
         public Guid Key { get; }
 
+        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; }
 
+        [JsonProperty("url")]
+        [JsonPropertyName("url")]
         public string? Url { get; }
 
+        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         [MicrosoftJsonConverter(typeof(Text.Json.Enums.EnumCamelCaseConverter))]
         public RedirectDestinationType Type { get; }
 
+        [JsonProperty("publised")]
         [JsonPropertyName("published")]
         public bool IsPublished { get; }
 
+        [JsonProperty("trashed")]
         [JsonPropertyName("trashed")]
         public bool IsTrashed { get; }
 

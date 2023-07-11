@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 
 namespace Skybrud.Umbraco.Redirects.Models {
@@ -14,42 +15,49 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// Gets the total amount of items across all pages.
         /// </summary>
         [JsonProperty("total")]
+        [JsonPropertyName("total")]
         public int Total { get; }
 
         /// <summary>
         /// Gets the maximum amount of items per page.
         /// </summary>
         [JsonProperty("limit")]
+        [JsonPropertyName("limit")]
         public int Limit { get; }
 
         /// <summary>
         /// Gets the offset.
         /// </summary>
         [JsonProperty("offset")]
+        [JsonPropertyName("offset")]
         public int Offset { get; }
 
         /// <summary>
         /// Gets the current page.
         /// </summary>
         [JsonProperty("page")]
+        [JsonPropertyName("page")]
         public int Page { get; }
 
         /// <summary>
         /// Gets the total amout of pages.
         /// </summary>
         [JsonProperty("pages")]
+        [JsonPropertyName("pages")]
         public int Pages { get; }
 
         /// <summary>
         /// Gets the index of the first item on the page.
         /// </summary>
         [JsonProperty("from")]
+        [JsonPropertyName("from")]
         public int From { get; }
 
         /// <summary>
         /// Gets the index of the last item on the page.
         /// </summary>
         [JsonProperty("to")]
+        [JsonPropertyName("to")]
         public int To { get; }
 
         #endregion
