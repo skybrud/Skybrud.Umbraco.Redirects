@@ -15,41 +15,49 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// Gets the ID of the redirect.
         /// </summary>
         [JsonProperty("id")]
+        [JsonPropertyName("id")]
         int Id { get; }
 
         /// <summary>
         /// Gets the unique ID of the redirect.
         /// </summary>
         [JsonProperty("key")]
+        [JsonPropertyName("key")]
         Guid Key { get; }
 
         /// <summary>
         /// Gets or sets the root node key of the redirect.
         /// </summary>
         [JsonProperty("rootKey")]
+        [JsonPropertyName("rootKey")]
         Guid RootKey { get; set; }
 
         /// <summary>
         /// Gets or sets the inbound path of the redirect. The value value will not contain the domain or the query string.
         /// </summary>
         [JsonProperty("path")]
+        [JsonPropertyName("path")]
         string Path { get; set; }
 
         /// <summary>
         /// Gets or sets the inbound query string of the redirect.
         /// </summary>
         [JsonProperty("queryString")]
+        [JsonPropertyName("queryString")]
         string QueryString { get; set; }
 
         /// <summary>
         /// Gets or sets the inbound URL of the redirect.
         /// </summary>
         [JsonProperty("url")]
+        [JsonPropertyName("url")]
         public string Url { get; set; }
 
         /// <summary>
         /// Gets or sets the destination of the redirect.
         /// </summary>
+        [JsonProperty("destination")]
+        [JsonPropertyName("destination")]
         public new IRedirectDestination Destination { get; set; }
 
         /// <summary>
@@ -77,6 +85,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// Gets or sets the timestamp for when the redirect was created.
         /// </summary>
         [JsonProperty("createDate", Order = 100)]
+        [JsonPropertyName("createDate")]
         [System.Text.Json.Serialization.JsonConverter(typeof(Iso8601TimeConverter))]
         public EssentialsTime CreateDate { get; }
 
@@ -84,6 +93,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// Gets or sets the timestamp for when the redirect was last updated.
         /// </summary>
         [JsonProperty("updateDate", Order = 101)]
+        [JsonPropertyName("updateDate")]
         [System.Text.Json.Serialization.JsonConverter(typeof(Iso8601TimeConverter))]
         public EssentialsTime UpdateDate { get; set; }
 

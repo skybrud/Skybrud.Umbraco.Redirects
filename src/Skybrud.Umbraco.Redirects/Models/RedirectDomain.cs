@@ -1,6 +1,7 @@
 ﻿//using Newtonsoft.Json;
 
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 using Umbraco.Cms.Core.Models;
 
@@ -16,26 +17,29 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// <summary>
         /// Gets a reference to the underlying <see cref="IDomain"/>.
         /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
-        [JsonIgnore]
         public IDomain Domain { get; }
 
         /// <summary>
         /// Gets the ID of the domain.
         /// </summary>
         [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public int Id { get; }
 
         /// <summary>
         /// Gets the name of the domain.
         /// </summary>
         [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; }
 
         /// <summary>
         /// Gets the root node ID of the domain.
         /// </summary>
         [JsonProperty("rootNodeId")]
+        [JsonPropertyName("rootNodeId")]
         public int RootNodeId { get; }
 
         #endregion

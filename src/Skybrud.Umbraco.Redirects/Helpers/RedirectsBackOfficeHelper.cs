@@ -4,7 +4,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using Skybrud.Essentials.Reflection;
-using Skybrud.Essentials.Strings;
 using Skybrud.Essentials.Strings.Extensions;
 using Skybrud.Umbraco.Redirects.Config;
 using Skybrud.Umbraco.Redirects.Dashboards;
@@ -181,10 +180,7 @@ namespace Skybrud.Umbraco.Redirects.Helpers {
             IEnumerable<RedirectModel> items = result.Items
                 .Select(redirect => Map(redirect, rootNodeLookup, contentLookup, mediaLookup, languageLookup));
 
-            return new {
-                result.Pagination,
-                items
-            };
+            return new RedirectList(result.Pagination, items);
 
         }
 

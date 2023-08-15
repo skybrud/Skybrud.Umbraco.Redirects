@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace Skybrud.Umbraco.Redirects.Models {
 
@@ -13,12 +14,14 @@ namespace Skybrud.Umbraco.Redirects.Models {
         /// Gets pagination information about the collection.
         /// </summary>
         [JsonProperty("pagination")]
+        [JsonPropertyName("pagination")]
         public RedirectsSearchResultPagination Pagination { get; }
 
         /// <summary>
         /// Gets an array representing the items of the collection.
         /// </summary>
         [JsonProperty("items")]
+        [JsonPropertyName("items")]
         public IRedirect[] Items { get; }
 
         #endregion
