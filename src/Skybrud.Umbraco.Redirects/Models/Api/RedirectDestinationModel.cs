@@ -59,7 +59,7 @@ namespace Skybrud.Umbraco.Redirects.Models.Api {
         [JsonPropertyName("published")]
         public bool IsPublished { get; }
 
-        [JsonProperty("backofficeUrl")]
+        [JsonProperty("backOfficeUrl")]
         [JsonPropertyName("backOfficeUrl")]
         public string? BackOfficeUrl { get; set; }
 
