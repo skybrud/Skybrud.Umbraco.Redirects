@@ -18,7 +18,7 @@ namespace Skybrud.Umbraco.Redirects.Notifications {
         public HttpContext HttpContext { get; protected set; }
 
         /// <inheritdoc />
-        public virtual Uri Uri => HttpContext.Request.GetUri();
+        public virtual Uri Uri => HttpContext.Request.GetUriForRedirects();
 
         /// <inheritdoc />
         public virtual string RawUrl => HttpContext.Request.GetDisplayUrl();

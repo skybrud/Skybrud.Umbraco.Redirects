@@ -55,7 +55,7 @@ namespace Skybrud.Umbraco.Redirects.Middleware {
                     case StatusCodes.Status404NotFound: {
 
                         // Get the URI of the inbound request
-                        Uri uri = context.Request.GetUri();
+                        Uri uri = context.Request.GetUriForRedirects();
 
                         // Make sure we have an Umbraco context (we need it for various lookups)
                         using UmbracoContextReference reference = _umbracoContextFactory.EnsureUmbracoContext();

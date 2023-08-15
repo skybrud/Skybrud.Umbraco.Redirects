@@ -157,7 +157,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
         public IRedirect? GetRedirectByRequest(HttpRequest request) {
 
             // Get the URI from the request
-            Uri uri = request.GetUri();
+            Uri uri = request.GetUriForRedirects();
 
             // Look for redirects by the URI
             return GetRedirectByUri(uri);
