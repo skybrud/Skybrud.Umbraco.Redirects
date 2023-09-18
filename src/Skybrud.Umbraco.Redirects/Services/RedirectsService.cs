@@ -524,9 +524,26 @@ namespace Skybrud.Umbraco.Redirects.Services {
 
             }
 
-            string? contentUrl = content?.Url(redirect.Destination.Culture);
+            // For legacy reasons the package saves empty values as empty strings instead of null values, but for
+            // variants, specifying an emtpy string or null when calling the "Url" method gives you different results,
+            // so we need to account for that
+            string? culture = redirect.Destination.Culture.NullIfWhiteSpace();
 
-            if (string.IsNullOrWhiteSpace(contentUrl)) contentUrl = content?.Url(redirect.Destination.Culture);
+            // If the destination is a published content or media item, we try to get the current URL of that item
+            // instead of the saved URL, as the item's URL may have changed. Content that vary by culture are a bit
+            // tricky, as the extension "Url()" extension method will return "#" if supplied an unsupported culture
+            string? contentUrl = null;
+            if (content is not null) {
+                if (string.IsNullOrWhiteSpace(culture)) {
+                    contentUrl = content.Url();
+                } else {
+                    contentUrl = content.Url(culture);
+                    if (contentUrl == "#" || string.IsNullOrWhiteSpace(contentUrl)) contentUrl = content.Url();
+                }
+            }
+
+            // Better be sure
+            if (contentUrl == "#") contentUrl = null;
 
             // Put the destination URL back together
             return RedirectsUtils.ConcatUrl(contentUrl ?? redirect.Destination.Url, query, fragment);
