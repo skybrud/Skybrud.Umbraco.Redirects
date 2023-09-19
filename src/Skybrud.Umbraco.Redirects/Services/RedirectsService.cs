@@ -524,7 +524,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
 
             }
 
-            // For legacy reasons the package saves empty values as empty strings instead of null values, but for
+            // For legacy reasons, the package saves empty values as empty strings instead of null values, but for
             // variants, specifying an emtpy string or null when calling the "Url" method gives you different results,
             // so we need to account for that
             string? culture = redirect.Destination.Culture.NullIfWhiteSpace();
