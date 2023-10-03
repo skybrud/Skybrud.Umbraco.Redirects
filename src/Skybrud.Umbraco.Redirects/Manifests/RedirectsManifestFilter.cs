@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
 using Umbraco.Cms.Core.Manifest;
 
 namespace Skybrud.Umbraco.Redirects.Manifests {
@@ -8,7 +9,9 @@ namespace Skybrud.Umbraco.Redirects.Manifests {
 
         /// <inheritdoc />
         public void Filter(List<PackageManifest> manifests) {
-            manifests.Add(new PackageManifest {
+
+            // Initialize a new manifest filter for this package
+            PackageManifest manifest = new() {
                 AllowPackageTelemetry = true,
                 PackageName = RedirectsPackage.Name,
                 Version = RedirectsPackage.InformationalVersion,
@@ -31,7 +34,21 @@ namespace Skybrud.Umbraco.Redirects.Manifests {
                 Stylesheets = new[] {
                     $"/App_Plugins/{RedirectsPackage.Alias}/Styles/Styles.css"
                 }
-            });
+            };
+
+            // The "PackageId" property isn't available prior to Umbraco 12, and since the package is build against
+            // Umbraco 10, we need to use reflection for setting the property value for Umbraco 12+. Ideally this
+            // shouldn't fail, but we might at least add a try/catch to be sure
+            try {
+                PropertyInfo? property = manifest.GetType().GetProperty("PackageId");
+                property?.SetValue(manifest, RedirectsPackage.Alias);
+            } catch {
+                // We don't really care about the exception
+            }
+
+            // Append the manifest
+            manifests.Add(manifest);
+
         }
 
     }
