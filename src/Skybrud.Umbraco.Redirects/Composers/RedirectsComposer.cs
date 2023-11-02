@@ -48,6 +48,7 @@ namespace Skybrud.Umbraco.Redirects.Composers {
                 options.AddFilter(new UmbracoPipelineFilter(
                     "SkybrudRedirects",
                     _ => { },
+                    _ => { },
                     applicationBuilder => {
                         applicationBuilder.UseMiddleware<RedirectsMiddleware>();
                     },

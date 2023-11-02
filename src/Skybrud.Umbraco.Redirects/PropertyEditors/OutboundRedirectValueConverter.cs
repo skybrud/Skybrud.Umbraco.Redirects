@@ -34,10 +34,6 @@ namespace Skybrud.Umbraco.Redirects.PropertyEditors {
             return _modelsFactory.CreateOutboundRedirect(inter as JObject);
         }
 
-        public override object? ConvertIntermediateToXPath(IPublishedElement owner, IPublishedPropertyType propertyType, PropertyCacheLevel referenceCacheLevel, object? inter, bool preview) {
-            return null;
-        }
-
         public override PropertyCacheLevel GetPropertyCacheLevel(IPublishedPropertyType propertyType) {
             return PropertyCacheLevel.None;
         }

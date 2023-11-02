@@ -21,10 +21,6 @@ namespace Skybrud.Umbraco.Redirects.PropertyEditors {
             return new InboundRedirects();
         }
 
-        public override object? ConvertIntermediateToXPath(IPublishedElement owner, IPublishedPropertyType propertyType, PropertyCacheLevel referenceCacheLevel, object? inter, bool preview) {
-            return null;
-        }
-
         public override Type GetPropertyValueType(IPublishedPropertyType propertyType) {
             return typeof(InboundRedirects);
         }

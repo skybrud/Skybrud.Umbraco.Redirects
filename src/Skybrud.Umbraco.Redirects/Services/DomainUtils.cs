@@ -34,7 +34,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// <returns>The domain</returns>
         public static Domain? FindDomainForUri(IDomainService domainService, Uri current) {
             var domains = domainService.GetAll(false);
-            return SelectDomain(domains.Select(x => new Domain(x.Id, x.DomainName, x.RootContentId.GetValueOrDefault(), x.LanguageIsoCode, x.IsWildcard)), current);
+            return SelectDomain(domains.Select(x => new Domain(x.Id, x.DomainName, x.RootContentId.GetValueOrDefault(), x.LanguageIsoCode, x.IsWildcard, x.SortOrder)), current);
         }
 
         /// <summary>
