@@ -12,20 +12,18 @@ URLs can be added to redirect to either a content item, media item or a custom U
 <table>
   <tr>
     <td><strong>License:</strong></td>
-    <td><a href="https://github.com/skybrud/Skybrud.Umbraco.Redirects/blob/v4/main/LICENSE.md"><strong>MIT License</strong></a></td>
+    <td><a href="https://github.com/skybrud/Skybrud.Umbraco.Redirects/blob/v13/main/LICENSE.md"><strong>MIT License</strong></a></td>
   </tr>
   <tr>
     <td><strong>Umbraco:</strong></td>
     <td>
-      Umbraco 10, 11 and 12
-      <sub><sup>(and <a href="https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v3/main">Umbraco 9</a>, <a href="https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v2/main">Umbraco 8</a> and <a href="https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v1/main">Umbraco 7</a>)</sup></sub>
+      Umbraco 13
     </td>
   </tr>
   <tr>
     <td><strong>Target Framework:</strong></td>
     <td>
-      .NET 6
-      <sub><sup>(and <a href="https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v3/main">.NET 5</a>, <a href="https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v2/main">.NET 4.7.2</a>, and <a href="https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v1/main">.NET 4.5</a>)</sup></sub>
+      .NET 8
     </td>
   </tr>
 </table>
@@ -38,19 +36,22 @@ URLs can be added to redirect to either a content item, media item or a custom U
 
 ## Installation
 
-**Umbraco 10, 11 and 12**  
+**Umbraco 13**  
 
-Version 4 of this package supports Umbraco versions 10, 11 and 12. The package is only available via [NuGet](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects/4.0.17). To install the package, you can use either .NET CLI:
+Version 13 of this package supports Umbraco versions 13. The package is only available via [NuGet](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects/13.0.0-alpha001). To install the package, you can use either .NET CLI:
 
 ```
-dotnet add package Skybrud.Umbraco.Redirects --version 4.0.17
+dotnet add package Skybrud.Umbraco.Redirects --version 13.0.0-alpha001
 ```
 
 or the NuGet Package Manager:
 
 ```
-Install-Package Skybrud.Umbraco.Redirects -Version 4.0.17
+Install-Package Skybrud.Umbraco.Redirects -Version 13.0.0-alpha001
 ```
+
+**Umbraco 10, 11 and 12**  
+For the Umbraco 10-12 version of this package, see the [**v4/main**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v4/main) branch instead.
 
 **Umbraco 9**  
 For the Umbraco 9 version of this package, see the [**v3/main**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v3/main) branch instead.
