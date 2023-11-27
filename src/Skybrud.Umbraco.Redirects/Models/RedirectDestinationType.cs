@@ -6,7 +6,7 @@ namespace Skybrud.Umbraco.Redirects.Models {
     /// <summary>
     /// Enum describing the type of the link.
     /// </summary>
-    [NewtonsoftJsonConverter(typeof(Essentials.Json.Converters.Enums.EnumCamelCaseConverter))]
+    [NewtonsoftJsonConverter(typeof(Essentials.Json.Newtonsoft.Converters.Enums.EnumCamelCaseConverter))]
     [MicrosoftJsonConverter(typeof(Text.Json.Enums.EnumCamelCaseConverter))]
     public enum RedirectDestinationType {
 

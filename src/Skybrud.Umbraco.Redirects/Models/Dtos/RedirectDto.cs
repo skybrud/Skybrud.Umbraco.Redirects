@@ -1,7 +1,5 @@
 ﻿using System;
-using Newtonsoft.Json;
 using NPoco;
-using Skybrud.Essentials.Json.Converters.Time;
 using Skybrud.Umbraco.Redirects.Models.Schema;
 using Umbraco.Cms.Infrastructure.Persistence.DatabaseAnnotations;
 
@@ -104,14 +102,12 @@ namespace Skybrud.Umbraco.Redirects.Models.Dtos {
         /// Gets or sets the timestamp for when the redirect was created.
         /// </summary>
         [Column("Created")]
-        [JsonConverter(typeof(TimeConverter))]
         public DateTime Created { get; set; }
 
         /// <summary>
         /// Gets or sets the timestamp for when the redirect was last updated.
         /// </summary>
         [Column("Updated")]
-        [JsonConverter(typeof(TimeConverter))]
         public DateTime Updated { get; set; }
 
         /// <summary>
