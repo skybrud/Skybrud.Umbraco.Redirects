@@ -91,7 +91,7 @@
         description: "Specify the original URL to match from which the user should be redirected to the destination.",
         descriptionKey: "redirects_propertyOriginalUrlDescription",
         view: `/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/OriginalUrl.html?v=${cacheBuster}`,
-        value: $scope.model.redirect && $scope.model.redirect.url ? $scope.model.redirect.url + ($scope.model.redirect.queryString ? `?${$scope.model.redirect.queryString}` : "") : "",
+        value: $scope.model.redirect && $scope.model.redirect.url ? $scope.model.redirect.url : "",
         validation: {
             mandatory: true
         }
