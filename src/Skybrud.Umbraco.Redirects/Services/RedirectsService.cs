@@ -95,8 +95,8 @@ namespace Skybrud.Umbraco.Redirects.Services {
         /// <param name="url">The URL of the redirect.</param>
         /// <returns>An instance of <see cref="Redirect"/>, or <c>null</c> if not found.</returns>
         public virtual IRedirect? GetRedirectByUrl(Guid rootNodeKey, string url) {
-            url.Split('?', out string? path, out string? query);
-            return GetRedirectByPathAndQuery(rootNodeKey, path!, query);
+            url.Split('?', out string path, out string? query);
+            return GetRedirectByPathAndQuery(rootNodeKey, path, query);
         }
 
         /// <summary>
