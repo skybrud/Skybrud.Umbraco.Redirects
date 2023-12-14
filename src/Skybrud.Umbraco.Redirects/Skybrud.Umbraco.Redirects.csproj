@@ -34,9 +34,9 @@
   <!-- Include NuGet dependencies -->
   <ItemGroup>
     <PackageReference Include="Skybrud.Essentials" Version="1.1.54" />
-    <PackageReference Include="Umbraco.Cms.Core" Version="[13.0.0-rc1,13.999)" />
-    <PackageReference Include="Umbraco.Cms.Web.Website" Version="[13.0.0-rc1,13.999)" />
-    <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="[13.0.0-rc1,13.999)" />
+    <PackageReference Include="Umbraco.Cms.Core" Version="[13.0.0,13.999)" />
+    <PackageReference Include="Umbraco.Cms.Web.Website" Version="[13.0.0,13.999)" />
+    <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="[13.0.0,13.999)" />
   </ItemGroup>
 
   <!-- Include backoffice assets -->
