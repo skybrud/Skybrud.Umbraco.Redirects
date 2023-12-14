@@ -118,28 +118,29 @@ namespace Skybrud.Umbraco.Redirects.Services {
 
             using (IScope scope = _scopeProvider.CreateScope()) {
 
-                // Generate the SQL for the query
+                // Generate the base of the SQL for the query
                 var sql = scope.SqlContext.Sql()
                     .Select<RedirectDto>()
-                    .From<RedirectDto>()
-                    .Where<RedirectDto>(x => x.RootKey == rootNodeKey && x.Path == path && x.QueryString == query);
+                    .From<RedirectDto>();
+
+                // If a specific root node isn't specified, the WHERE clause can be simplified a bit. On the other
+                // hand, if a specific root node is specified, the WHERE clause should be looking for both site
+                // specific redirects and global redirects. In case there is a match for both a site specific redirect
+                // and a global redirect, the ORDER BY clause is used to ensure that we're looking at site specific
+                // redirects first, then global redirects second
+                if (rootNodeKey == Guid.Empty) {
+                    sql = sql
+                        .Where<RedirectDto>(x => x.RootKey == Guid.Empty && x.Path == path && x.QueryString == query);
+                } else {
+                    sql = sql
+                        .Where<RedirectDto>(x => (x.RootKey == rootNodeKey || x.RootKey == Guid.Empty) && x.Path == path && x.QueryString == query)
+                        .OrderByDescending<RedirectDto>(x => x.RootKey);
+                }
 
                 // Make the call to the database
                 dto = scope.Database.FirstOrDefault<RedirectDto>(sql);
 
-                if (dto == null && query != string.Empty) {
-
-                    // no redirect found, try with forwardQueryString = true, and no querystring
-                    sql = scope.SqlContext.Sql()
-                        .Select<RedirectDto>()
-                        .From<RedirectDto>()
-                        .Where<RedirectDto>(x => x.RootKey == rootNodeKey && x.Path == path && x.ForwardQueryString);
-
-                    // Make the call to the database
-                    dto = scope.Database.FirstOrDefault<RedirectDto>(sql);
-
-                }
-
+                // Finish the scope
                 scope.Complete();
 
             }
@@ -187,14 +188,8 @@ namespace Skybrud.Umbraco.Redirects.Services {
                 if (root != null) rootKey = root.Key;
             }
 
-            // Look for a site specific redirect
-            if (rootKey != Guid.Empty) {
-                IRedirect? redirect = GetRedirectByPathAndQuery(rootKey, path, query);
-                if (redirect != null) return redirect;
-            }
-
-            // Look for a global redirect
-            return GetRedirectByPathAndQuery(Guid.Empty, path, query);
+            // Look for a matching redirect
+            return GetRedirectByPathAndQuery(rootKey, path, query);
 
         }
 
