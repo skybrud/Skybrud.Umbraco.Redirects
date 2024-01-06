@@ -1,7 +1,6 @@
 # Skybrud Redirects
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/skybrud/Skybrud.Umbraco.Redirects/blob/v4/main/LICENSE.md)
-[![NuGet](https://img.shields.io/nuget/vpre/Skybrud.Umbraco.Redirects.svg)](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects)
 [![NuGet](https://img.shields.io/nuget/dt/Skybrud.Umbraco.Redirects.svg)](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects)
 [![Umbraco Marketplace](https://img.shields.io/badge/umbraco-marketplace-%233544B1)](https://marketplace.umbraco.com/package/skybrud.umbraco.redirects)
 
@@ -41,13 +40,13 @@ URLs can be added to redirect to either a content item, media item or a custom U
 Version 13 of this package supports Umbraco version 13. The package is only available via [**NuGet**](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects/13.0.0). To install the package, you can use either the .NET CLI:
 
 ```
-dotnet add package Skybrud.Umbraco.Redirects --version 13.0.0
+dotnet add package Skybrud.Umbraco.Redirects --version 13.0.1
 ```
 
 or the NuGet Package Manager:
 
 ```
-Install-Package Skybrud.Umbraco.Redirects -Version 13.0.0
+Install-Package Skybrud.Umbraco.Redirects -Version 13.0.1
 ```
 
 **Umbraco 10, 11 and 12**  

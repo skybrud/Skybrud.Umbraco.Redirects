@@ -13,3 +13,8 @@ URLs can be added to redirect to either a content item, media item or a custom U
 - Package only handles custom redirects - eg. added manually by an editor. The package will let Umbraco handle redirects for renamed and moved pages
 
 - Includes an `IRedirectsService` for managing the redirects from your own code
+
+## Add-ons
+
+- [**Skybrud.Umbraco.Redirects.Import**](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects.Import)  
+Add-on for handling imports and exports of redirects supporting formats like CSV, XLSX and JSON.
