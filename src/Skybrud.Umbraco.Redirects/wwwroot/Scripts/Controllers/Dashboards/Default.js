@@ -210,7 +210,10 @@
     ];
 
     eventsService.emit("skybrud.umbraco.redirects.dashboard.init", {
-        buttonGroups: vm.buttonGroups
+        buttonGroups: vm.buttonGroups,
+        dashboard: {
+            updateList: vm.updateList
+        }
     });
 
 });
