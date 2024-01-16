@@ -183,7 +183,11 @@ namespace Skybrud.Umbraco.Redirects.Models {
             Dto.Key = Guid.NewGuid();
         }
 
-        internal Redirect(RedirectDto dto) {
+        /// <summary>
+        /// Initializes a new instance based on the specified <paramref name="dto"/>.
+        /// </summary>
+        /// <param name="dto">The DTO object received from the database.</param>
+        public Redirect(RedirectDto dto) {
 
             _createDate = new EssentialsTime(dto.Created);
             _updateDate = new EssentialsTime(dto.Updated);
