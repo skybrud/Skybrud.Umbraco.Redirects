@@ -114,7 +114,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
             path = path.Trim().TrimEnd('/');
             query = (query ?? string.Empty).Trim();
 
-            RedirectDto dto;
+            IReadOnlyList<RedirectDto> dtos;
 
             using (IScope scope = _scopeProvider.CreateScope()) {
 
@@ -130,22 +130,31 @@ namespace Skybrud.Umbraco.Redirects.Services {
                 // redirects first, then global redirects second
                 if (rootNodeKey == Guid.Empty) {
                     sql = sql
-                        .Where<RedirectDto>(x => x.RootKey == Guid.Empty && x.Path == path && x.QueryString == query);
+                        .Where<RedirectDto>(x => x.RootKey == Guid.Empty && x.Path == path && (x.QueryString == query || x.ForwardQueryString));
                 } else {
                     sql = sql
-                        .Where<RedirectDto>(x => (x.RootKey == rootNodeKey || x.RootKey == Guid.Empty) && x.Path == path && x.QueryString == query)
+                        .Where<RedirectDto>(x => (x.RootKey == rootNodeKey || x.RootKey == Guid.Empty) && x.Path == path && (x.QueryString == query || x.ForwardQueryString))
                         .OrderByDescending<RedirectDto>(x => x.RootKey);
                 }
 
                 // Make the call to the database
-                dto = scope.Database.FirstOrDefault<RedirectDto>(sql);
+                dtos = scope.Database.Fetch<RedirectDto>(sql);
 
                 // Finish the scope
                 scope.Complete();
 
             }
 
-            // Wrap the database row
+            // Return null if we haven't found any redirects at this point
+            if (dtos.Count == 0) return null;
+
+            // To support query string forwarding, we should only return a redirect that match either of the two criteria listed below:
+            // - query string forwarding isn't enabled and the query string is an exact match
+            // - query string forwarding is enabled and the query string is part of the query string of the inbound URI
+            string query1 = query.Length == 0 ? string.Empty : $"&{query[1..]}&";
+            RedirectDto? dto = dtos.FirstOrDefault(x => (!x.ForwardQueryString && query == x.QueryString) || (query1.Contains($"&{x.QueryString}&") && x.ForwardQueryString));
+
+            // Wrap the DTO
             return dto == null ? null : new Redirect(dto);
 
         }
