@@ -53,11 +53,6 @@
     <None Include="wwwroot\Scripts/Intellisense.js" />
   </ItemGroup>
 
-  <!-- Include the targets file -->
-  <ItemGroup>
-    <Content Include="../build/$(AssemblyName).targets" PackagePath="build\$(AssemblyName).targets" />
-  </ItemGroup>
-
   <!-- Include package icon and README for the NuGet -->
   <ItemGroup>
     <Content Include="../build/Limbo.png" Pack="true" PackagePath="\" />
