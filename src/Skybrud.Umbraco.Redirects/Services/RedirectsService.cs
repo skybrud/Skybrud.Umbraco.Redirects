@@ -151,7 +151,7 @@ namespace Skybrud.Umbraco.Redirects.Services {
             // To support query string forwarding, we should only return a redirect that match either of the two criteria listed below:
             // - query string forwarding isn't enabled and the query string is an exact match
             // - query string forwarding is enabled and the query string is part of the query string of the inbound URI
-            string query1 = query.Length == 0 ? string.Empty : $"&{query[1..]}&";
+            string query1 = query.Length == 0 ? string.Empty : $"&{query}&";
             RedirectDto? dto = dtos.FirstOrDefault(x => (!x.ForwardQueryString && query == x.QueryString) || (query1.Contains($"&{x.QueryString}&") && x.ForwardQueryString));
 
             // Wrap the DTO
