@@ -77,6 +77,7 @@
         view: `/App_Plugins/Skybrud.Umbraco.Redirects/Views/Editors/Site.html?v=${cacheBuster}`,
         value: $scope.model.redirect?.rootNode?.id ? $scope.model.redirect.rootNode.id : 0,
         config: {
+            redirect: $scope.model.redirect,
             rootNodes: vm.options.rootNodes
         },
         validation: {
