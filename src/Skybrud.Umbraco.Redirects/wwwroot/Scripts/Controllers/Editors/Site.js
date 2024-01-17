@@ -4,6 +4,8 @@
 
     vm.current = editorState.getCurrent();
 
+    vm.redirect = $scope.model.config.redirect;
+
     vm.rootNodes = [
         { id: 0, key: "", name: "All sites" }
     ];
@@ -17,7 +19,7 @@
     skybrudRedirectsService.getRootNodes().then(function (r) {
         r.data.items.forEach(function (rootNode) {
             vm.rootNodes.push(rootNode);
-            if (vm.current && (`,${vm.current.path},`).indexOf(`,${rootNode.id},`) > 0) {
+            if (vm.redirect.id === 0 && vm.current && (`,${vm.current.path},`).indexOf(`,${rootNode.id},`) > 0) {
                 $scope.model.value = rootNode.id;
             }
         });
