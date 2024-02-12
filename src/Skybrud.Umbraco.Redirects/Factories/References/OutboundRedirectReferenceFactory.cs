@@ -27,7 +27,7 @@ namespace Skybrud.Umbraco.Redirects.Factories.References {
                     break;
                 
                 case RedirectDestinationType.Content:
-                    references.Add(new UmbracoEntityReference(new GuidUdi("content", destination.Key)));
+                    references.Add(new UmbracoEntityReference(new GuidUdi("document", destination.Key)));
                     break;
 
             }
