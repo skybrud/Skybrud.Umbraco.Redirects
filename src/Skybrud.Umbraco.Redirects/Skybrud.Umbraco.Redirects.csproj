@@ -6,11 +6,11 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>2.1.5</Version>
+    <Version>2.1.6</Version>
     <Authors>Anders Bjerner</Authors>
     <Company>Limbo</Company>
     <Description>Redirects manager for Umbraco 8.</Description>
-    <Copyright>Copyright © 2022</Copyright>
+    <Copyright>Copyright © $([System.DateTime]::UtcNow.ToString(`yyyy`))</Copyright>
   </PropertyGroup>
 
   <PropertyGroup>
