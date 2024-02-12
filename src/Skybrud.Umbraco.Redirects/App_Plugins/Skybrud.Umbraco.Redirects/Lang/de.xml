@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+
+<language>
+  <area alias="dashboardTabs">
+    <key alias="Skybrud.Umbraco.Redirects">Weiterleitungen</key>
+  </area>
+  <area alias="redirects">
+    <key alias="add">Hinzufügen</key>
+    <key alias="save">Speichern</key>
+    <key alias="redirects">Weiterleiten</key>
+    <key alias="addNewRedirect">Neue Weiterleitung hinzufügen</key>
+    <key alias="addRedirect">Weiterleitung hinzufügen</key>
+    <key alias="editRedirect">Weiterleitung Editieren</key>
+    <key alias="saveRedirect">Weiterleitung speichern</key>
+    <key alias="cancel">Abbrechen</key>
+    <key alias="reload">Neu laden</key>
+    <key alias="edit">Bearbeiten</key>
+    <key alias="delete">Löschen</key>
+    <key alias="content">Contet</key>
+    <key alias="media">Media</key>
+    <key alias="url">URL</key>
+    <key alias="site">Seite</key>
+    <key alias="siteDescription">Wählen Sie die Site (oder den Stammknoten), für die die Umleitung gelten soll. Wenn keine Site ausgewählt wird, gilt die Umleitung für alle Domains/Sites in der Umbraco-Lösung.</key>
+    <key alias="allSites">Alle Seiten</key>
+    <key alias="originalUrl">Originale URL</key>
+    <key alias="destination">Zielort</key>
+    <key alias="redirectedTo">Weiterleiten nach</key>
+    <key alias="selectDestination">Zielort auswählen</key>
+    <key alias="created">Erstellt</key>
+    <key alias="updated">Bearbeitet</key>
+    <key alias="id">ID</key>
+    <key alias="labelNoRedirects">Es wurde noch keine Weiterleitungen hinzugefügt.</key>
+    <key alias="labelNoContentRedirects">Es wurden noch keine Weiterleitungen zu dieser Seite hinzugefügt.</key>
+    <key alias="labelNoMediaRedirects">Es wurden noch keine Weiterleitungen zu diesem Medium hinzugefügt.</key>
+    <key alias="labelNoSearchRedirects">Ihre Suche ergab keine Weiterleitungen.</key>
+    <key alias="pagination">Zeigt %0%-%1% von %2% - Seite %3% von %4%</key>
+    <key alias="urlNotValid"><![CDATA[Die angegebene URL ist nicht gültig. Eine gültige URL sollte wie folgt aussehen <code>/page</code> or <code>/page/subpage</code>.]]></key>
+    <key alias="addNewRedirectSubTitle">Füllen Sie die folgenden Felder aus, um eine neue Weiterleitung hinzuzufügen.</key>
+    <key alias="media_all">Alle Typen</key>
+    <key alias="media_content">Content</key>
+    <key alias="media_media">Media</key>
+    <key alias="media_url">URLs</key>
+    <key alias="labelPermanent">Dauerhaft</key>
+    <key alias="labelTemporary">Vorübergehend</key>
+    <key alias="labelPermanentRedirect">Permanente Weiterleitung</key>
+    <key alias="labelTemporaryRedirect">Temporäre Weiterleitung</key>
+    <key alias="labelEnabled">Aktiviert</key>
+    <key alias="labelDisabled">Deaktiviert</key>
+    <key alias="labelAdvancedOptions">Erweiterte Optionen</key>
+    <key alias="labelDeleteRedirectConfirm">Sind Sie sicher, dass Sie den Redirect bei %0% löschen wollen?</key>
+    <key alias="addSuccessfulTitle">Weiterleitung hinzugefügt</key>
+    <key alias="addSuccessfulMessage">Ihr Weiterleitung wurde erfolgreich hinzugefügt.</key>
+    <key alias="saveSuccessfulTitle">Weiterleitung gespeichert</key>
+    <key alias="saveSuccessfulMessage">Ihre Weiterleitung wurde erfolgreich gespeichert.</key>
+    <key alias="pageNoRedirects">Diese Seite ist noch nicht erstellt worden. Sie müssen die Seite speichern und veröffentlichen, um ihr Weiterleitungen hinzufügen zu können.</key>
+  </area>
+  <area alias="redirects">
+    <key alias="propertyRootNode">Website</key>
+    <key alias="propertyRootNodeDescription">Geben Sie die Website an, zu der die ursprüngliche URL gehört, die Sie abgleichen möchten.</key>
+    <key alias="propertyOriginalUrl">Originale URL</key>
+    <key alias="propertyOriginalUrlDescription">Geben Sie die ursprüngliche URL an, von der der Benutzer zum Ziel umgeleitet werden soll.</key>
+    <key alias="propertyDestination">Zielort</key>
+    <key alias="propertyDestinationDescription">Wählen Sie die Seite oder URL aus, an die der Benutzer weitergeleitet werden soll.</key>
+    <key alias="propertyRedirectType">Umleitungsart</key>
+    <key alias="propertyRedirectTypeDescription">Wählen Sie die Art der Weiterleitung. Beachten Sie, dass sich die Browser permanente Weiterleitungen merken.</key>
+    <key alias="propertyForwardQueryString">Abfrage-String weiterleiten</key>
+    <key alias="propertyForwardQueryStringDescription">Wenn diese Option aktiviert ist, wird der Query-String der ursprünglichen Anfrage an die Umleitungsstelle weitergeleitet (pass through)).</key>
+  </area>
+  <area alias="redirects">
+    <key alias="errorNoUrlTitle">Keine URL</key>
+    <key alias="errorNoUrlMessage">Sie müssen die ursprüngliche URL angeben.</key>
+    <key alias="errorInvalidUrlTitle">Ungültige URL</key>
+    <key alias="errorInvalidUrlMessage">Die angegebene URL ist nicht gültig.</key>
+    <key alias="errorNoLinkTitle">Kein Link</key>
+    <key alias="errorNoLinkMessage">Sie müssen eine Zielseite oder einen Link auswählen.</key>
+    <key alias="errorAddFailedTitle">Speichern fehlgeschlagen</key>
+    <key alias="errorAddFailedMessage">Die Weiterleitung konnte aufgrund eines Fehlers auf dem Server nicht gespeichert werden.</key>
+    <key alias="errorEditFailedTitle">Speichern fehlgeschlagen</key>
+    <key alias="errorEditFailedMessage">Die Weiterleitung konnte aufgrund eines Fehlers auf dem Server nicht gespeichert werden.</key>
+    <key alias="errorContentNoRedirects">Ein Inhaltselement mit der angegebenen ID konnte nicht gefunden werden.</key>
+    <key alias="errorMediaNoRedirects">Ein Medienelement mit der angegebenen ID konnte nicht gefunden werden.</key>
+    <key alias="errorNoUrl">Sie müssen eine URL für die Umleitung angeben.</key>
+    <key alias="errorNoDestination">Sie müssen einen Ziellink für die Umleitung angeben.</key>
+    <key alias="errorUnknownLinkMode">Der angegebene Verbindungsmodus ist nicht gültig.</key>
+  </area>
+</language>
