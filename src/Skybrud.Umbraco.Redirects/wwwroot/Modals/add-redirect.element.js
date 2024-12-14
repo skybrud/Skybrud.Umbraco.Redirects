@@ -60,6 +60,11 @@ export class AddRedirectModelElement extends UmbModalBaseElement {
 
         const self = this;
 
+        if (self.submitButtonState === "waiting") {
+            console.log("Ignoring submit button click as underlying logic hasn't finished yet...");
+            return;
+        }
+
         const rootNode = this.shadowRoot.querySelector("#rootNode");
         const originalUrl = this.shadowRoot.querySelector("#originalUrl");
         const destination = this.shadowRoot.querySelector("#destination");
@@ -94,15 +99,22 @@ export class AddRedirectModelElement extends UmbModalBaseElement {
 
         if (this.errors.length > 0) return;
 
+        self.submitButtonState = "waiting";
+        self.requestUpdate();
+
         RedirectsService.addRedirect(redirect).then(function (res) {
+            self.submitButtonState = "success";
             self.updateValue({ redirect: res.data });
             self.modalContext?.submit(res.data);
+            self.requestUpdate();
         }, function (res) {
+            self.submitButtonState = "failed";
             self._notificationContext?.peek("danger", {
                 data: {
                     message: "Adding redirect failed" + (res.data?.error ? ": " + res.data?.error : ".")
                 }
             });
+            self.requestUpdate();
         });
 
 
@@ -176,6 +188,7 @@ export class AddRedirectModelElement extends UmbModalBaseElement {
                             color='positive'
                             look="primary"
                             label="Submit"
+                            state="${this.submitButtonState}"
                             @click="${this.handleConfirm}"></uui-button>
                 </div>
             </umb-body-layout>
