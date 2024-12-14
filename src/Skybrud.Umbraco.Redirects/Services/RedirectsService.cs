@@ -80,12 +80,10 @@ public class RedirectsService : IRedirectsService {
                 Key = options.Destination.Key,
                 Name = options.Destination.Name,
                 Url = options.Destination.Url,
-                // ReSharper disable NullCoalescingConditionIsAlwaysNotNullAccordingToAPIContract
-                Query = options.Destination.Query ?? string.Empty,
-                Fragment = options.Destination.Fragment ?? string.Empty,
-                // ReSharper restore NullCoalescingConditionIsAlwaysNotNullAccordingToAPIContract
+                Query = options.Destination.Query.NullIfWhiteSpace(),
+                Fragment = options.Destination.Fragment.NullIfWhiteSpace(),
                 Type = options.Destination.Type,
-                Culture = options.Destination.Culture ?? string.Empty
+                Culture = options.Destination.Culture.NullIfWhiteSpace()
             }
         };
 
@@ -183,7 +181,7 @@ public class RedirectsService : IRedirectsService {
         if (string.IsNullOrWhiteSpace(path)) throw new ArgumentNullException(nameof(path));
 
         path = path.Trim().TrimEnd('/');
-        query = (query ?? string.Empty).Trim();
+        query = query.NullIfWhiteSpace();
 
         IReadOnlyList<RedirectDto> dtos;
 
@@ -200,7 +198,7 @@ public class RedirectsService : IRedirectsService {
             // and a global redirect, the ORDER BY clause is used to ensure that we're looking at site specific
             // redirects first, then global redirects second
             if (rootNodeKey == Guid.Empty) {
-                if (string.IsNullOrWhiteSpace(query)) {
+                if (query is null) {
                     sql = sql
                         .Where<RedirectDto>(x => x.RootKey == Guid.Empty && x.Path == path && (x.QueryString == null || x.ForwardQueryString));
                 } else {
@@ -208,9 +206,15 @@ public class RedirectsService : IRedirectsService {
                         .Where<RedirectDto>(x => x.RootKey == Guid.Empty && x.Path == path && (x.QueryString == query || x.ForwardQueryString));
                 }
             } else {
-                sql = sql
-                    .Where<RedirectDto>(x => (x.RootKey == rootNodeKey || x.RootKey == Guid.Empty) && x.Path == path && (x.QueryString == query || x.ForwardQueryString))
-                    .OrderByDescending<RedirectDto>(x => x.RootKey);
+                if (query is null) {
+                    sql = sql
+                        .Where<RedirectDto>(x => (x.RootKey == rootNodeKey || x.RootKey == Guid.Empty) && x.Path == path && (x.QueryString == null || x.ForwardQueryString))
+                        .OrderByDescending<RedirectDto>(x => x.RootKey);
+                } else {
+                    sql = sql
+                        .Where<RedirectDto>(x => (x.RootKey == rootNodeKey || x.RootKey == Guid.Empty) && x.Path == path && (x.QueryString == query || x.ForwardQueryString))
+                        .OrderByDescending<RedirectDto>(x => x.RootKey);
+                }
             }
 
             // Make the call to the database
@@ -227,7 +231,7 @@ public class RedirectsService : IRedirectsService {
         // To support query string forwarding, we should only return a redirect that match either of the two criteria listed below:
         // - query string forwarding isn't enabled and the query string is an exact match
         // - query string forwarding is enabled and the query string is part of the query string of the inbound URI
-        string query1 = query.Length == 0 ? string.Empty : $"&{query}&";
+        string query1 = query is null ? string.Empty : $"&{query}&";
         RedirectDto? dto = dtos.FirstOrDefault(x => (!x.ForwardQueryString && query.InvariantEquals(x.QueryString)) || (x.QueryString is null || x.QueryString.Length == 0 || query1.InvariantContains($"&{x.QueryString}&") && x.ForwardQueryString));
 
         // Wrap the DTO

@@ -74,7 +74,7 @@ public class Redirect : IRedirect {
 
             // Update the path and query
             Path = path;
-            QueryString = query ?? string.Empty;
+            QueryString = query.NullIfWhiteSpace();
 
         }
 
