@@ -3,7 +3,7 @@ import { LitElement, html, css, when } from "@umbraco-cms/backoffice/external/li
 import "@umbraco-cms/backoffice/components";
 import { UMB_MODAL_MANAGER_CONTEXT } from "@umbraco-cms/backoffice/modal";
 import { UMB_NOTIFICATION_CONTEXT } from "@umbraco-cms/backoffice/notification";
-import { UMB_LINK_PICKER_MODAL } from "/umbraco/backoffice/packages/multi-url-picker/link-picker-modal/link-picker-modal.token.js";
+import { UMB_LINK_PICKER_MODAL } from "@umbraco-cms/backoffice/multi-url-picker";
 
 import { RedirectsService } from "@skybrud-redirects/service";
 
