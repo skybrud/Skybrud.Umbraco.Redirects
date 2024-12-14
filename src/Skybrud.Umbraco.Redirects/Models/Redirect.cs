@@ -92,10 +92,11 @@ public class Redirect : IRedirect {
             Dto.DestinationId = value.Id;
             Dto.DestinationKey = value.Key;
             Dto.DestinationType = value.Type.ToString();
+            Dto.DestinationName = value.Name.NullIfWhiteSpace();
             Dto.DestinationUrl = value.Url;
-            Dto.DestinationQuery = value.Query;
-            Dto.DestinationFragment = value.Fragment;
-            Dto.DestinationCulture = value.Culture;
+            Dto.DestinationQuery = value.Query.NullIfWhiteSpace();
+            Dto.DestinationFragment = value.Fragment.NullIfWhiteSpace();
+            Dto.DestinationCulture = value.Culture.NullIfWhiteSpace();
         }
 
     }
@@ -164,6 +165,7 @@ public class Redirect : IRedirect {
             Type = type,
             //Id = dto.DestinationId,
             Key = dto.DestinationKey,
+            Name = dto.DestinationName,
             Url = dto.DestinationUrl,
             Query = dto.DestinationQuery,
             Fragment = dto.DestinationFragment,
