@@ -17,6 +17,8 @@ using Skybrud.Umbraco.Redirects.Models;
 using Skybrud.Umbraco.Redirects.Models.Api;
 using Skybrud.Umbraco.Redirects.Services;
 using Umbraco.Cms.Core.DependencyInjection;
+using Umbraco.Cms.Core.Models;
+using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Web.Common.Authorization;
@@ -330,12 +332,12 @@ public class RedirectsController : Controller {
             case RedirectDestinationType.Url:
                 if (!redirect.Destination.Url.StartsWith('/')) return;
                 if (redirect.Destination.Url.StartsWith("/media/")) {
-                    var media = StaticServiceProvider.Instance.GetRequiredService<IMediaService>().GetMediaByPath(redirect.Destination.Url);
+                    IMedia? media = StaticServiceProvider.Instance.GetRequiredService<IMediaService>().GetMediaByPath(redirect.Destination.Url);
                     if (media is not null && umbraco.Media?.GetById(media.Key) is { } published) {
                         redirect.Destination = new RedirectDestination(published);
                     }
                 } else {
-                    var content = umbraco.Content?.GetByRoute(redirect.Destination.Url);
+                    IPublishedContent? content = umbraco.Content?.GetByRoute(redirect.Destination.Url);
                     if (content is not null) {
                         redirect.Destination = new RedirectDestination(content);
                     }
