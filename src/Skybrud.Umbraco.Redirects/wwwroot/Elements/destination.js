@@ -7,6 +7,15 @@ import { UMB_LINK_PICKER_MODAL } from "@umbraco-cms/backoffice/multi-url-picker"
 
 import { RedirectsService } from "@skybrud-redirects/service";
 
+function parseMediaUrl(url) {
+
+    // The link picker modal (14.3.0) returns an absolute URL for media, where we just want the relative URL
+    if (url.indexOf(window.location.origin + "/") === 0) url = url.substr(window.location.origin.length);
+
+    return url;
+
+}
+
 export class RedirectsDestinationElement extends UmbElementMixin(LitElement) {
 
     get value() {
@@ -58,7 +67,6 @@ export class RedirectsDestinationElement extends UmbElementMixin(LitElement) {
 
         modalContext.onSubmit().then(function (value) {
 
-
             if (!value.link) {
                 alert("No link");
                 return;
@@ -89,7 +97,7 @@ export class RedirectsDestinationElement extends UmbElementMixin(LitElement) {
                             type: "media",
                             key: res.data.id,
                             name: res.data.variants[0].name,
-                            url: res.data.urls[0].url
+                            url: parseMediaUrl(res.data.urls[0].url)
                         };
                     });
                     break;
