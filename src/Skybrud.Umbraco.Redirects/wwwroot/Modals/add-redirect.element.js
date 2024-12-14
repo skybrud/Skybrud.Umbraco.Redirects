@@ -6,7 +6,7 @@ import { UMB_NOTIFICATION_CONTEXT } from '@umbraco-cms/backoffice/notification';
 import { RedirectsService } from "@skybrud-redirects/service";
 import "@skybrud-redirects/elements/destination";
 
-export class MyDialogElement extends UmbModalBaseElement {
+export class AddRedirectModelElement extends UmbModalBaseElement {
 
     get rootNodes() {
         return this._rootNodes;
@@ -209,6 +209,6 @@ export class MyDialogElement extends UmbModalBaseElement {
 
 }
 
-customElements.define("redirects-add-redirect", MyDialogElement);
+customElements.define("redirects-add-redirect", AddRedirectModelElement);
 
-export default MyDialogElement;
+export default AddRedirectModelElement;
