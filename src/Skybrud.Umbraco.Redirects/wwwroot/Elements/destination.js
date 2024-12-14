@@ -16,6 +16,26 @@ function parseMediaUrl(url) {
 
 }
 
+// Our destination/link object is slightly different from Umbraco's, so we need to convert it into
+// something Umbraco can understand
+function toUmbracoLink(value) {
+
+    if (!value) return null;
+
+    const link = {
+        name: value.name,
+        type: value.type === "content" ? "document" : value.type,
+        url: value.url
+    };
+
+    if (value.key) link.unique = value.key;
+    if (value.icon) link.icon = value.icon;
+    if (value.queryString) link.queryString = value.queryString;
+
+    return link;
+
+}
+
 export class RedirectsDestinationElement extends UmbElementMixin(LitElement) {
 
     get value() {
@@ -41,7 +61,6 @@ export class RedirectsDestinationElement extends UmbElementMixin(LitElement) {
 
     }
 
-
     connectedCallback() {
 
         super.connectedCallback();
@@ -59,11 +78,19 @@ export class RedirectsDestinationElement extends UmbElementMixin(LitElement) {
 
     }
 
-    add() {
+    edit() {
 
         const self = this;
 
-        const modalContext = this.modalManagerContext?.open(this, UMB_LINK_PICKER_MODAL);
+        const modalContext = this.modalManagerContext?.open(this, UMB_LINK_PICKER_MODAL, {
+            data: {
+                config: {},
+                index: null,
+            },
+            value: {
+                link: toUmbracoLink(self.value) ?? {},
+            },
+        });
 
         modalContext.onSubmit().then(function (value) {
 
@@ -123,15 +150,11 @@ export class RedirectsDestinationElement extends UmbElementMixin(LitElement) {
         this.value = null;
     }
 
-    edit() {
-        this.add();
-    }
-
     render() {
         return html`
             <div>
                 ${when(!this.value, () => html`
-                    <uui-button class="add-btn" look="placeholder" color="default" label="Add" @click=${this.add}>Add</uui-button>
+                    <uui-button class="add-btn" look="placeholder" color="default" label="Add" @click=${this.edit}>Add</uui-button>
                 `)}
                 ${when(this.value, () => html`
                     <uui-ref-node name="${this.value.name}" detail="${this.value.url}" selectable="false" selectOnly="true">
