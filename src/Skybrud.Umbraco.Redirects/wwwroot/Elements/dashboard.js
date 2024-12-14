@@ -11,6 +11,10 @@ import { RedirectsService } from "@skybrud-redirects/service";
 import { REDIRECTS_ADD_REDIRECT_MODAL } from "@skybrud-redirects/modals/add";
 import { REDIRECTS_EDIT_REDIRECT_MODAL } from "@skybrud-redirects/modals/edit";
 
+function ucfirst(value) {
+    return String(value).charAt(0).toUpperCase() + String(value).slice(1);
+}
+
 export class RedirectsDashboardElement extends UmbElementMixin(LitElement) {
 
     get text() {
@@ -114,7 +118,7 @@ export class RedirectsDashboardElement extends UmbElementMixin(LitElement) {
 
         const self = this;
 
-        const params = {limit: 10};
+        const params = { limit: 10 };
         if (page) params.page = page;
         if (this.rootNode && this.rootNode !== "all") params.rootNodeKey = this.rootNode;
         if (this.type && this.type !== "all") params.type = this.type;
@@ -123,7 +127,7 @@ export class RedirectsDashboardElement extends UmbElementMixin(LitElement) {
         self.loading = true;
 
         RedirectsService.getRedirects(params).then(function (res) {
-            setTimeout(function() {
+            setTimeout(function () {
                 self.redirects = res.data.items;
                 self.pagination = res.data.pagination;
                 self.loading = false;
@@ -177,29 +181,29 @@ export class RedirectsDashboardElement extends UmbElementMixin(LitElement) {
 
         const self = this;
 
-		if (!redirect?.key) return;
-		umbConfirmModal(this, {
-			headline: 'Delete',
-			content: html`
+        if (!redirect?.key) return;
+        umbConfirmModal(this, {
+            headline: 'Delete',
+            content: html`
 				<div style="width:500px">
 					<p>Are you sure you want to delete this redirect?</p>
 					Original URL: <strong>${redirect.url}</strong><br />
 					Destination URL: <strong>${redirect.destination.url}</strong>
 				</div>
 			`,
-			color: 'danger',
-			confirmLabel: 'Delete',
-		}).then(function() {
+            color: 'danger',
+            confirmLabel: 'Delete',
+        }).then(function () {
             RedirectsService.deleteRedirect(redirect).then(function () {
                 self._notificationContext?.peek("positive", { data: { message: "Redirect successfully deleted" } });
                 self.updateRedirects();
-            }, function() {
+            }, function () {
                 self._notificationContext?.peek("danger", { data: { message: "Deleting redirect failed" } });
             });
         }, function () {
             // model was cancelled
         });
-	}
+    }
 
     reload() {
         this.refreshing = true;
@@ -227,10 +231,24 @@ export class RedirectsDashboardElement extends UmbElementMixin(LitElement) {
     }
 
     renderDestinationType(r) {
-        if (r.destination.type === "url") return this.localize.term("redirects_url");
-        if (r.destination.type === "content") return this.localize.term("redirects_content") + (r.destination.name ? ": " + r.destination.name : "");
-        if (r.destination.type === "media") return this.localize.term("redirects_media") + (r.destination.name ? ": " + r.destination.name : "");
-        return "";
+
+        let type;
+        switch (r.destination.type) {
+            case "url": type = this.localize.term("redirects_url"); break;
+            case "content": type = this.localize.term("redirects_content"); break;
+            case "media": type = this.localize.term("redirects_media"); break;
+            default: type = ucfirst(r.destination.type); break;
+        }
+
+        return html`
+            ${when(r.destination.name, () => html`
+                ${type}:
+                <small>${r.destination.name}</small>
+            `, () => html`
+                ${type}
+            `)}
+        `;
+
     }
 
     render() {
