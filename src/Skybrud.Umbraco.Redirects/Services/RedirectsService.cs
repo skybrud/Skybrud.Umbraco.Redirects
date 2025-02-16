@@ -202,7 +202,7 @@ public class RedirectsService : IRedirectsService {
             if (rootNodeKey == Guid.Empty) {
                 if (string.IsNullOrWhiteSpace(query)) {
                     sql = sql
-                        .Where<RedirectDto>(x => x.RootKey == Guid.Empty && x.Path == path && (x.QueryString == null || x.ForwardQueryString));
+                        .Where<RedirectDto>(x => x.RootKey == Guid.Empty && x.Path == path && (x.QueryString == string.Empty || x.QueryString == null || x.ForwardQueryString));
                 } else {
                     sql = sql
                         .Where<RedirectDto>(x => x.RootKey == Guid.Empty && x.Path == path && (x.QueryString == query || x.ForwardQueryString));
@@ -227,8 +227,10 @@ public class RedirectsService : IRedirectsService {
         // To support query string forwarding, we should only return a redirect that match either of the two criteria listed below:
         // - query string forwarding isn't enabled and the query string is an exact match
         // - query string forwarding is enabled and the query string is part of the query string of the inbound URI
-        string query1 = query.Length == 0 ? string.Empty : $"&{query}&";
-        RedirectDto? dto = dtos.FirstOrDefault(x => (!x.ForwardQueryString && query.InvariantEquals(x.QueryString)) || (x.QueryString is null || x.QueryString.Length == 0 || query1.InvariantContains($"&{x.QueryString}&") && x.ForwardQueryString));
+        string query1 = string.IsNullOrEmpty(query) ? string.Empty : $"&{query}&";
+        RedirectDto? dto = dtos.FirstOrDefault(x => 
+            (!x.ForwardQueryString && query.InvariantEquals(x.QueryString)) 
+            || (string.IsNullOrEmpty(x.QueryString) || query1.InvariantContains($"&{x.QueryString}&") && x.ForwardQueryString));
 
         // Wrap the DTO
         return dto == null ? null : new Redirect(dto);

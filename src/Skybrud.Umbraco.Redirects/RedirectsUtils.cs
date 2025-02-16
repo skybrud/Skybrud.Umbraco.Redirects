@@ -25,7 +25,7 @@ internal class RedirectsUtils {
     /// <param name="query">The query string.</param>
     /// <returns>The combined URL.</returns>
     public static string ConcatUrl(string url, string? query) {
-        return $"{url}{(string.IsNullOrWhiteSpace(query) ? null : "?" + query)}";
+        return $"{url}{(string.IsNullOrWhiteSpace(query) ? null : NormalizeQueryString(query))}";
     }
 
     /// <summary>
@@ -36,7 +36,17 @@ internal class RedirectsUtils {
     /// <param name="fragment">The fragment.</param>
     /// <returns>The combined URL.</returns>
     public static string ConcatUrl(string url, string? query, string? fragment) {
-        return $"{url}{(string.IsNullOrWhiteSpace(query) ? null : "?" + query)}{fragment}";
+        return $"{url}{(string.IsNullOrWhiteSpace(query) ? null : NormalizeQueryString(query))}{fragment}";
+    }
+
+    /// <summary>
+    /// Returns a normalized query string based on <paramref name="query"/>. 
+    /// </summary>
+    /// <param name="query">The query string.</param>
+    /// <returns>The </returns>
+    private static string NormalizeQueryString(string query)
+    {
+        return $"?{query.Replace("?", "")}";
     }
 
     //public static bool NormalizeUrlParts(Redirect redirect) {

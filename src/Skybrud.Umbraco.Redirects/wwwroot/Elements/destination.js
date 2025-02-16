@@ -9,11 +9,11 @@ import { RedirectsService } from "@skybrud-redirects/service";
 
 export class RedirectsDestinationElement extends UmbElementMixin(LitElement) {
 
-    get value() {
+  get value() {
         return this._value;
     }
 
-    set value(v) {
+  set value(v) {
         this._value = v;
         this.requestUpdate();
     }
@@ -33,14 +33,14 @@ export class RedirectsDestinationElement extends UmbElementMixin(LitElement) {
     }
 
 
-    connectedCallback() {
+  connectedCallback() {
 
         super.connectedCallback();
 
         const value = this.innerText;
 
         try {
-            if (value) {
+          if (value) {
                 this.value = JSON.parse(value);
                 this.requestUpdate();
             }
@@ -48,66 +48,101 @@ export class RedirectsDestinationElement extends UmbElementMixin(LitElement) {
             console.error(ex);
         }
 
+  }
+
+  #createLinkPickerModal() {
+    let type = '';
+    let url = '';
+    let name = '';  
+    let queryString = '';
+    let unique = '';
+
+    if (this.value) {
+      type = this.value.type === 'content' ? 'document' : this.value.type;
+      url = this.value.url;
+      name = this.value.name;
+      queryString = this.value.query;
+      unique = this.value.key;
     }
 
-    add() {
+    const modalContext = this.modalManagerContext?.open(this, UMB_LINK_PICKER_MODAL, {
+      value: {
+        link: {
+          type: type,
+          url: url,
+          name: name,
+          queryString: queryString,
+          unique: unique
+        }
+      },
+      data: {
+        config: {
+          hideTarget: true
+        }
+      }
+    });
 
-        const self = this;
+    return modalContext;
+  }
 
-        const modalContext = this.modalManagerContext?.open(this, UMB_LINK_PICKER_MODAL);
+  add() {
 
-        modalContext.onSubmit().then(function (value) {
+    const self = this;
+    let modalContext = this.#createLinkPickerModal();
 
+    modalContext.onSubmit().then(function (value) {
+        if (!value.link) {
+            alert("No link");
+            return;
+        }
 
-            if (!value.link) {
-                alert("No link");
-                return;
-            }
+        if (!value.link.url) {
+            alert("No link URL");
+            return;
+        }
 
-            if (!value.link.url) {
-                alert("No link URL");
-                return;
-            }
+        switch (value.link.type) {
 
-            switch (value.link.type) {
+            case "document":
+            RedirectsService.getContent(value.link.unique).then(function (res) {
+                self.value = {
+                    type: "content",
+                    key: res.data.id,
+                    name: res.data.variants[0].name,
+                    url: res.data.urls[0].url,
+                    cultures: res.data.variants.filter(x => x.culture).map(x => x.culture),
+                    query: value.link.queryString
+              };
+              });
+              break;
 
-                case "document":
-                    RedirectsService.getContent(value.link.unique).then(function (res) {
-                        self.value = {
-                            type: "content",
-                            key: res.data.id,
-                            name: res.data.variants[0].name,
-                            url: res.data.urls[0].url,
-                            cultures: res.data.variants.filter(x => x.culture).map(x => x.culture)
-                        };
-                    });
-                    break;
-
-                case "media":
-                    RedirectsService.getMedia(value.link.unique).then(function (res) {
-                        self.value = {
-                            type: "media",
-                            key: res.data.id,
-                            name: res.data.variants[0].name,
-                            url: res.data.urls[0].url
-                        };
-                    });
-                    break;
-
-                case "external":
+          case "media":
+                RedirectsService.getMedia(value.link.unique).then(function (res) {
                     self.value = {
-                        type: "external",
-                        url: value.url
+                        type: "media",
+                        key: res.data.id,
+                        name: res.data.variants[0].name,
+                        url: res.data.urls[0].url
                     };
-                    break;
+                });
+                break;
 
-            }
+          case "external":
+                self.value = {
+                    type: "Url",
+                    url: value.link.url,
+                    name: value.link.name,
+                    query: value.link.queryString
+                };
+                break;
 
-        }, function () {
+      }          
 
-            // Model closed by the user
+    }, function () {
 
-        });
+    // Model closed by the user
+
+    });
 
     }
 

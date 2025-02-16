@@ -174,7 +174,7 @@ public class RedirectsController : Controller {
             // Update the redirect with the updated values
             redirect.RootKey = options.RootNodeKey;
             redirect.Url = url.TrimEnd('/');
-            redirect.QueryString = query;
+            redirect.QueryString = query ?? string.Empty;
             redirect.Destination = options.Destination;
             redirect.IsPermanent = options.IsPermanent;
             redirect.ForwardQueryString = options.ForwardQueryString;

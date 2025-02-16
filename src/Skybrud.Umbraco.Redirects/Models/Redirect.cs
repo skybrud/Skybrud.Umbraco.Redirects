@@ -93,9 +93,9 @@ public class Redirect : IRedirect {
             Dto.DestinationKey = value.Key;
             Dto.DestinationType = value.Type.ToString();
             Dto.DestinationUrl = value.Url;
-            Dto.DestinationQuery = value.Query;
-            Dto.DestinationFragment = value.Fragment;
-            Dto.DestinationCulture = value.Culture;
+            Dto.DestinationQuery = value.Query ?? string.Empty;
+            Dto.DestinationFragment = value.Fragment ?? string.Empty;
+            Dto.DestinationCulture = value.Culture ?? string.Empty;
         }
 
     }

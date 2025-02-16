@@ -73,7 +73,7 @@ function putJson(url, body, config) {
     return put(url, config);
 }
 
-function _delete(url) {
+function _delete(url, config) {
     if (!config) config = {};
     config.method = "DELETE";
     return hi(url, config);
