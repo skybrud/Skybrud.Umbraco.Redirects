@@ -18,7 +18,7 @@ URLs can be added to redirect to either a content item, media item or a custom U
   <tr>
     <td><strong>Umbraco:</strong></td>
     <td>
-      Umbraco 13
+      Umbraco 14
     </td>
   </tr>
   <tr>
@@ -37,19 +37,22 @@ URLs can be added to redirect to either a content item, media item or a custom U
 
 ## Installation
 
-**Umbraco 13**  
+**Umbraco 14**  
 
-Version 13 of this package supports Umbraco version 13. The package is only available via [**NuGet**](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects/13.0.4). To install the package, you can use either the .NET CLI:
+Version 14 of this package supports Umbraco version 14. The package is only available via [**NuGet**](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects/14.0.0-alpha002). To install the package, you can use either the .NET CLI:
 
 ```
-dotnet add package Skybrud.Umbraco.Redirects --version 13.0.4
+dotnet add package Skybrud.Umbraco.Redirects --version 14.0.0-alpha002
 ```
 
 or the NuGet Package Manager:
 
 ```
-Install-Package Skybrud.Umbraco.Redirects -Version 13.0.4
+Install-Package Skybrud.Umbraco.Redirects -Version 14.0.0-alpha002
 ```
+
+**Umbraco 13**  
+For the Umbraco 10-12 version of this package, see the [**v13/main**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v13/main) branch instead.
 
 **Umbraco 10, 11 and 12**  
 For the Umbraco 10-12 version of this package, see the [**v4/main**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v4/main) branch instead.
