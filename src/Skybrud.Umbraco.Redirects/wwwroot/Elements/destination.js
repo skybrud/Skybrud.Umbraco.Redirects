@@ -24,7 +24,7 @@ function toUmbracoLink(value) {
 
     const link = {
         name: value.name,
-        type: value.type === "content" ? "document" : value.type,
+        type: value.type === "content" ? "document" : (value.type === "url" ? "external" : value.type),
         url: value.url
     };
 
@@ -33,6 +33,54 @@ function toUmbracoLink(value) {
     if (value.queryString) link.queryString = value.queryString;
 
     return link;
+
+}
+
+function addQueryAndFragment(value, link) {
+
+    // If a query string value has been specified, we need to separate the actual query string and
+    // the fragment, as the field in the UI may be used for both
+    if (link.queryString) {
+        const pos = link.queryString.indexOf("#");
+        if (pos >= 0) {
+            value.query = link.queryString.substr(0, pos);
+            value.fragment = link.queryString.substr(pos);
+        } else {
+            value.query = link.queryString.substr(0, pos) || null;
+            value.fragment = null;
+        }
+        return;
+    }
+
+    // If the query string value wasn't specified, we should check the specified URL for a
+    // fragment.If found, we strip it from the URL and add a "fragment" property instead
+    const pos2 = value.url.indexOf("#");
+    if (pos2 >= 0) {
+        value.fragment = value.url.substr(pos2);
+        value.url = value.url.substr(0, pos2);
+    }
+
+    // And then also if the URL contains a query string part, we strip that in a similar way
+    const pos3 = value.url.indexOf("?");
+    if (pos3 >= 0) {
+        value.query = value.url.substr(pos3);
+        value.url = value.url.substr(0, pos3);
+    }
+
+}
+
+function fromExternal(link) {
+
+    const value = {
+        type: "url",
+        url: link.url,
+        name: link.name,
+        icon: "icon-link"
+    };
+
+    addQueryAndFragment(value, link);
+
+    return value;
 
 }
 
@@ -84,7 +132,9 @@ export class RedirectsDestinationElement extends UmbElementMixin(LitElement) {
 
         const modalContext = this.modalManagerContext?.open(this, UMB_LINK_PICKER_MODAL, {
             data: {
-                config: {},
+                config: {
+                    hideTarget: true
+                },
                 index: null,
             },
             value: {
@@ -93,6 +143,8 @@ export class RedirectsDestinationElement extends UmbElementMixin(LitElement) {
         });
 
         modalContext.onSubmit().then(function (value) {
+
+            console.log(value);
 
             if (!value.link) {
                 alert("No link");
@@ -112,9 +164,10 @@ export class RedirectsDestinationElement extends UmbElementMixin(LitElement) {
                             type: "content",
                             key: res.data.id,
                             name: res.data.variants[0].name,
-                            url: res.data.urls[0].url,
+                            url: res.data.urls[0].url + (value.link.queryString ? value.link.queryString : ""),
                             cultures: res.data.variants.filter(x => x.culture).map(x => x.culture)
                         };
+                        addQueryAndFragment(self.value, link);
                     });
                     break;
 
@@ -124,23 +177,21 @@ export class RedirectsDestinationElement extends UmbElementMixin(LitElement) {
                             type: "media",
                             key: res.data.id,
                             name: res.data.variants[0].name,
-                            url: parseMediaUrl(res.data.urls[0].url)
+                            url: parseMediaUrl(res.data.urls[0].url) + (value.link.queryString ? value.link.queryString : "")
                         };
+                        addQueryAndFragment(self.value, link);
                     });
                     break;
 
                 case "external":
-                    self.value = {
-                        type: "external",
-                        url: value.url
-                    };
+                    self.value = fromExternal(value.link);
                     break;
 
             }
 
         }, function () {
 
-            // Model closed by the user
+            // Modal closed by the user
 
         });
 
@@ -157,7 +208,8 @@ export class RedirectsDestinationElement extends UmbElementMixin(LitElement) {
                     <uui-button class="add-btn" look="placeholder" color="default" label="Add" @click=${this.edit}>Add</uui-button>
                 `)}
                 ${when(this.value, () => html`
-                    <uui-ref-node name="${this.value.name}" detail="${this.value.url}" selectable="false" selectOnly="true">
+                    <uui-ref-node name="${this.value.name}" detail="${this.value.url}${this.value.query}${this.value.fragment}" selectable="false" selectOnly="true">
+                      <uui-icon slot="icon" name="${this.value.icon}"></uui-icon>
                       <uui-action-bar slot="actions">
                         <uui-button @click="${this.edit}" label="${this.localize.term("general_edit")}"><uui-icon name="edit" aria-hidden="true"></uui-icon></uui-button>
                         <uui-button @click="${this.reset}" label="${this.localize.term("general_delete")}" color="danger"><uui-icon name="delete" aria-hidden="true"></uui-icon></uui-button>
