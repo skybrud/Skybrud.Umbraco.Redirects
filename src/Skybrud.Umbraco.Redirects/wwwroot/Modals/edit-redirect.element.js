@@ -65,7 +65,7 @@ export class EditRedirectModalElement extends UmbModalBaseElement {
 
         // Update the component value
         this.updateValue({
-            title: redirect?.key ? "Edit redirect" : "Add new redirect",
+            title: redirect?.key ? self.localize.term("redirects_editRedirectTitle") : self.localize.term("redirects_addRedirectTitle"),
             redirect: redirect
         });
 

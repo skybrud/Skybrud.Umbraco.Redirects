@@ -205,7 +205,9 @@ export class RedirectsDestinationElement extends UmbElementMixin(LitElement) {
         return html`
             <div>
                 ${when(!this.value, () => html`
-                    <uui-button class="add-btn" look="placeholder" color="default" label="Add" @click=${this.edit}>Add</uui-button>
+                    <uui-button class="add-btn" look="placeholder" color="default" label="${this.localize.term("general_add")}" @click=${this.edit}>
+                        ${this.localize.term("general_add")}
+                    </uui-button>
                 `)}
                 ${when(this.value, () => html`
                     <uui-ref-node name="${this.value.name}" detail="${this.value.url}${this.value.query}${this.value.fragment}" selectable="false" selectOnly="true">

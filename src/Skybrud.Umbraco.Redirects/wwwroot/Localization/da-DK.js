@@ -2,6 +2,8 @@
 	redirects: {
 		save: "Gem",
 		addRedirect: "Tilføj redirect",
+		addRedirectTitle: "Tilføj nyt redirect",
+		editRedirectTitle: "Rediger redirect",
 		reload: "Genindlæs",
 		enabled: "Aktiveret",
 		disabled: "Deaktiveret",

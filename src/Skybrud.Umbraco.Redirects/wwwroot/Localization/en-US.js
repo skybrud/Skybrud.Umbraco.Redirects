@@ -2,6 +2,8 @@
 	redirects: {
 		save: "Save",
 		addRedirect: "Add redirect",
+		addRedirectTitle: "Add new redirect",
+		editRedirectTitle: "Edit redirect",
 		reload: "Reload",
 		enabled: "Enabled",
 		disabled: "Disabled",

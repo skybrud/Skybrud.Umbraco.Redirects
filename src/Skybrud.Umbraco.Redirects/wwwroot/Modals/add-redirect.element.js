@@ -121,8 +121,12 @@ export class AddRedirectModelElement extends UmbModalBaseElement {
     }
 
     render() {
+        const self = this;
+        function term(key) { return self.localize.term("redirects_" + key); }
+        function label(key) { return self.localize.term("redirectsLabels_" + key); }
+        function property(key) { return self.localize.term("redirectsProperties_" + key); }
         return html`
-            <umb-body-layout headline="Add new redirect">
+            <umb-body-layout headline="${term("addRedirectTitle")}">
                 <uui-box>
                     <div class="property">
                         <div>
@@ -139,55 +143,55 @@ export class AddRedirectModelElement extends UmbModalBaseElement {
                     </div>
                     <div class="property">
                         <div>
-                            <strong>Original URL<span style="color: red;">*</span></strong><br />
-                            <small>Specify the original URL to match from which the user should be redirected to the destination.</small>
+                                <strong>${property("originalUrl")}<span style="color: red;">*</span></strong><br />
+                                <small>${property("originalUrlDescription")}</small>
                         </div>
                         <div>
-                            <uui-input id="originalUrl" label="Original URL"></uui-input>
+                            <uui-input id="originalUrl" label="${property("originalUrl")}"></uui-input>
                         </div>
                     </div>
                     <div class="property">
                         <div>
-                            <strong>Destination<span style="color: red;">*</span></strong><br />
-                            <small>Select the page or URL the user should be redirected to.</small>
+                                <strong>${property("destination")}<span style="color: red;">*</span></strong><br />
+                                <small>${property("destinationDescription")}</small>
                         </div>
                         <div>
                             <redirects-destination id="destination"></redirects-destination>
                         </div>
                     </div>
-                    <h4>Advanced Options</h4>
+                        <h4>${label("advancedOptions")}</h4>
                     <div class="property">
                         <div>
-                            <strong>Redirect type</strong><br />
-                            <small>Select the type of the redirect. Notice that browsers will remember permanent redirects.</small>
+                            <strong>${property("redirectType")}</strong><br />
+                            <small>${property("redirectTypeDescription")}</small>
                         </div>
                         <div>
                             <uui-radio-group name="redirectType">
-                                <uui-radio id="redirectTypePermanent" value="permanent" label="Permanent" checked="checked"></uui-radio>
-                                <uui-radio id="redirectTypeTemporary" value="temporary" label="Temporary"></uui-radio>
+                                <uui-radio id="redirectTypePermanent" value="permanent" label="${term("permanent")}" checked="checked"></uui-radio>
+                                <uui-radio id="redirectTypeTemporary" value="temporary" label="${term("temporary")}"></uui-radio>
                             </uui-radio-group>
                         </div>
                     </div>
                     <div class="property">
                         <div>
-                            <strong>Forward query string</strong><br />
-                            <small>When enabled, the query string of the original request is forwarded to the redirect location (pass through).</small>
+                            <strong>${property("forwardQueryString")}</strong><br />
+                            <small>${property("forwardQueryStringDescription")}</small>
                         </div>
                         <div>
                             <uui-radio-group name="forward">
-                                <uui-radio id="forwardEnabled" value="enabled" label="Enabled"></uui-radio>
-                                <uui-radio id="forwardDisabled" value="disabled" label="Disabled" checked="true"></uui-radio>
+                                <uui-radio id="forwardEnabled" value="enabled" label="${term("enabled")}"></uui-radio>
+                                <uui-radio id="forwardDisabled" value="disabled" label="${term("disabled")}" checked="true"></uui-radio>
                             </uui-radio-group>
                         </div>
                     </div>
                 </uui-box>
                 <div slot="actions">
-                        <uui-button id="cancel" label="Cancel" @click="${this.handleCancel}">Cancel</uui-button>
+                        <uui-button id="cancel" label="${this.localize.term("general_cancel")}" @click="${this.handleCancel}">${this.localize.term("general_cancel")}</uui-button>
                         <uui-button
                             id="submit"
                             color='positive'
                             look="primary"
-                            label="Submit"
+                            label="${term("save")}"
                             state="${this.submitButtonState}"
                             @click="${this.handleConfirm}"></uui-button>
                 </div>
