@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Text.Json.Serialization;
 using System;
+using Skybrud.Umbraco.Redirects.Models;
 
 namespace Skybrud.Umbraco.Redirects.Services;
 

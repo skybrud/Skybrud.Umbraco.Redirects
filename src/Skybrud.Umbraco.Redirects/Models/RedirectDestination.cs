@@ -2,11 +2,10 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Skybrud.Essentials.Strings.Extensions;
-using Skybrud.Umbraco.Redirects.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Extensions;
 
-namespace Skybrud.Umbraco.Redirects.Services;
+namespace Skybrud.Umbraco.Redirects.Models;
 
 /// <summary>
 /// Class with information about the destination of a redirect.

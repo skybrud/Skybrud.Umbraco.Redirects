@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Text.Json.Serialization;
 using Newtonsoft.Json;
-using Skybrud.Umbraco.Redirects.Services;
 using Umbraco.Cms.Core.Models;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member

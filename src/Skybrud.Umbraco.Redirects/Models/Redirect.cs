@@ -4,7 +4,6 @@ using Skybrud.Essentials.Strings.Extensions;
 using Skybrud.Essentials.Time;
 using Skybrud.Umbraco.Redirects.Exceptions;
 using Skybrud.Umbraco.Redirects.Models.Dtos;
-using Skybrud.Umbraco.Redirects.Services;
 
 namespace Skybrud.Umbraco.Redirects.Models;
 

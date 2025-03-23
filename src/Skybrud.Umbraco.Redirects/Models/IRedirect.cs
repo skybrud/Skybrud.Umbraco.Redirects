@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using Skybrud.Essentials.Time;
-using Skybrud.Umbraco.Redirects.Services;
 using System;
 using System.Text.Json.Serialization;
 

@@ -1,7 +1,6 @@
 ﻿using System;
-using Skybrud.Umbraco.Redirects.Models;
 
-namespace Skybrud.Umbraco.Redirects.Services;
+namespace Skybrud.Umbraco.Redirects.Models;
 
 /// <summary>
 /// Interface describing the destination of a redirect.
