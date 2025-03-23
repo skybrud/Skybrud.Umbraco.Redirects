@@ -18,7 +18,8 @@
 		site: "Site",
 		allSites: "All sites",
 		globalRedirects: "Global redirects",
-		allTypes: "All types"
+		allTypes: "All types",
+		contentNotPublished: "The selected page isn't published. You can not create redirects for unpublished content."
 	},
 	redirectsTabs: {
 		settings: "Settings",

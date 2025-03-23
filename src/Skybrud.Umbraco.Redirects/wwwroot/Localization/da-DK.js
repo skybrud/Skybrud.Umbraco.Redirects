@@ -18,7 +18,8 @@
 		site: "Site",
 		allSites: "Alle sites",
 		globalRedirects: "Globale redirects",
-		allTypes: "Alle typer"
+		allTypes: "Alle typer",
+		contentNotPublished: "Det valgte indhold er ikke udgivet. Du kan ikke oprette redirects til sider, der ikke er udgivet."
 	},
 	redirectsTabs: {
 		settings: "Indstillinger",

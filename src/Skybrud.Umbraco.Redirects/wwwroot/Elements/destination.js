@@ -73,18 +73,31 @@ function addQueryAndFragment(value, link) {
 
 function fromContent(value, content) {
 
+    console.log(content);
+
     const link = {
         type: "content",
         key: content.id,
         name: content.variants[0].name,
-        url: content.urls[0].url,
-        cultures: content.variants.filter(x => x.culture).map(x => x.culture)
+        icon: content.documentType.icon,
+        url: content.urls && content.urls.length > 0 ? content.urls[0].url : null,
+        cultures: content.variants.filter(x => x.culture).map(x => x.culture),
+        null: false,
+        trashed: content.isTrashed,
+        published: true
     };
+
+    // If the selected content only has a single variant, and that variant is a draft, we know that
+    // the content currently isn't published
+    // TODO: support variants
+    if (content.variants.length && content.variants[0].state == "Draft") {
+        link.published = false;
+    }
 
     addQueryAndFragment(value, value.link);
 
     // Make sure that we set the display URL with proper path, query string and fragment
-    link.displayUrl = link.url + (value.query ? "?" + value.query : "") + value.fragment;
+    link.displayUrl = link.url ? link.url + (value.query ? "?" + value.query : "") + (value.fragment ?? "") : null;
 
     return link;
 
@@ -236,6 +249,9 @@ export class RedirectsDestinationElement extends UmbElementMixin(LitElement) {
                     </uui-button>
                 `)}
                 ${when(this.value, () => html`
+                    ${when(this.value.published === false, () => html`
+                        <div style="color: red;">${this.localize.term("redirects_contentNotPublished")}</div>
+                    `)}
                     <uui-ref-node name="${this.value.name}" detail="${this.value.displayUrl}" selectable="false" selectOnly="true">
                       <uui-icon slot="icon" name="${this.value.icon}"></uui-icon>
                       <uui-action-bar slot="actions">
