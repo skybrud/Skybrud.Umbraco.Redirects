@@ -121,7 +121,7 @@ public class ApiRedirectDestination {
         IsNull = content == null;
         IsTrashed = content?.Trashed ?? false;
         IsPublished = content?.Published ?? false;
-        BackOfficeUrl = $"/umbraco/#/content/content/edit/{redirect.Destination.Id}";
+        BackOfficeUrl = $"/umbraco/section/content/workspace/document/edit/{redirect.Destination.Key}";
     }
 
     public ApiRedirectDestination(IRedirect redirect, IMedia? media) {
@@ -132,7 +132,7 @@ public class ApiRedirectDestination {
         IsNull = media == null;
         IsTrashed = media?.Trashed ?? false;
         IsPublished = !IsNull;
-        BackOfficeUrl = $"/umbraco/#/media/media/edit/{redirect.Destination.Id}";
+        BackOfficeUrl = $"/umbraco/section/media/workspace/media/edit/{redirect.Destination.Key}";
     }
 
 }
