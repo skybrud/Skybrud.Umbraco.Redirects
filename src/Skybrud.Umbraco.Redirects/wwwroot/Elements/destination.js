@@ -30,7 +30,8 @@ function toUmbracoLink(value) {
 
     if (value.key) link.unique = value.key;
     if (value.icon) link.icon = value.icon;
-    if (value.queryString) link.queryString = value.queryString;
+    if (value.query) link.queryString = value.query[0] === "?" ? value.query : "?" + value.query;
+    if (value.fragment) link.queryString = (link.queryString ?? "") + value.fragment;
 
     return link;
 
@@ -40,7 +41,7 @@ function addQueryAndFragment(value, link) {
 
     // If a query string value has been specified, we need to separate the actual query string and
     // the fragment, as the field in the UI may be used for both
-    if (link.queryString) {
+    if (link?.queryString) {
         const pos = link.queryString.indexOf("#");
         if (pos >= 0) {
             value.query = link.queryString.substr(0, pos);
@@ -49,6 +50,7 @@ function addQueryAndFragment(value, link) {
             value.query = link.queryString.substr(0, pos) || null;
             value.fragment = null;
         }
+        if (value.query && value.query[0] === "?") value.query = value.query.substr(1);
         return;
     }
 
@@ -63,9 +65,47 @@ function addQueryAndFragment(value, link) {
     // And then also if the URL contains a query string part, we strip that in a similar way
     const pos3 = value.url.indexOf("?");
     if (pos3 >= 0) {
-        value.query = value.url.substr(pos3);
+        value.query = value.url.substr(pos3 + 1);
         value.url = value.url.substr(0, pos3);
     }
+
+}
+
+function fromContent(value, content) {
+
+    const link = {
+        type: "content",
+        key: content.id,
+        name: content.variants[0].name,
+        url: content.urls[0].url,
+        cultures: content.variants.filter(x => x.culture).map(x => x.culture)
+    };
+
+    addQueryAndFragment(value, value.link);
+
+    // Make sure that we set the display URL with proper path, query string and fragment
+    link.displayUrl = link.url + (value.query ? "?" + value.query : "") + value.fragment;
+
+    return link;
+
+}
+
+function fromMedia(value, media) {
+
+    const link = {
+        type: "media",
+        key: media.id,
+        name: media.variants[0].name,
+        icon: media.mediaType.icon,
+        url: parseMediaUrl(media.urls[0].url)
+    };
+
+    addQueryAndFragment(link, value);
+
+    // Make sure that we set the display URL with proper path, query string and fragment
+    link.displayUrl = link.url + (link.query ? "?" + link.query : "") + (link.fragment ?? "");
+
+    return link;
 
 }
 
@@ -137,14 +177,13 @@ export class RedirectsDestinationElement extends UmbElementMixin(LitElement) {
                 },
                 index: null,
             },
+            modal: { size: 'medium' },
             value: {
                 link: toUmbracoLink(self.value) ?? {},
             },
         });
 
         modalContext.onSubmit().then(function (value) {
-
-            console.log(value);
 
             if (!value.link) {
                 alert("No link");
@@ -160,26 +199,13 @@ export class RedirectsDestinationElement extends UmbElementMixin(LitElement) {
 
                 case "document":
                     RedirectsService.getContent(value.link.unique).then(function (res) {
-                        self.value = {
-                            type: "content",
-                            key: res.data.id,
-                            name: res.data.variants[0].name,
-                            url: res.data.urls[0].url + (value.link.queryString ? value.link.queryString : ""),
-                            cultures: res.data.variants.filter(x => x.culture).map(x => x.culture)
-                        };
-                        addQueryAndFragment(self.value, link);
+                        self.value = fromContent(value.link, res.data);
                     });
                     break;
 
                 case "media":
                     RedirectsService.getMedia(value.link.unique).then(function (res) {
-                        self.value = {
-                            type: "media",
-                            key: res.data.id,
-                            name: res.data.variants[0].name,
-                            url: parseMediaUrl(res.data.urls[0].url) + (value.link.queryString ? value.link.queryString : "")
-                        };
-                        addQueryAndFragment(self.value, link);
+                        self.value = fromMedia(value.link, res.data);
                     });
                     break;
 
@@ -210,7 +236,7 @@ export class RedirectsDestinationElement extends UmbElementMixin(LitElement) {
                     </uui-button>
                 `)}
                 ${when(this.value, () => html`
-                    <uui-ref-node name="${this.value.name}" detail="${this.value.url}${this.value.query}${this.value.fragment}" selectable="false" selectOnly="true">
+                    <uui-ref-node name="${this.value.name}" detail="${this.value.displayUrl}" selectable="false" selectOnly="true">
                       <uui-icon slot="icon" name="${this.value.icon}"></uui-icon>
                       <uui-action-bar slot="actions">
                         <uui-button @click="${this.edit}" label="${this.localize.term("general_edit")}"><uui-icon name="edit" aria-hidden="true"></uui-icon></uui-button>
