@@ -300,7 +300,7 @@ export class RedirectsDashboardElement extends UmbElementMixin(LitElement) {
                                         `)}
                                     </uui-table-cell>
                                     <uui-table-cell role="cell">
-                                        <a href="${item.url}" rel="noreferrer" target="_blank">${item.url}</a>
+                                        <a href="${item.fullUrl}" rel="noreferrer" target="_blank">${item.url}</a>
                                     </uui-table-cell>
                                     <uui-table-cell role="cell">
                                         ${when(item.type === "permanent", () => this.localize.term("redirects_permanent"))}

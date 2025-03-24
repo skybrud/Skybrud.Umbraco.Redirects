@@ -33,7 +33,11 @@ public class ApiRedirect {
 
     [JsonProperty("url")]
     [JsonPropertyName("url")]
-    public string Url => _redirect.Url;
+    public string Url { get; set; }
+
+    [JsonProperty("fullUrl")]
+    [JsonPropertyName("fullUrl")]
+    public string FullUrl { get; set; }
 
     [JsonProperty("destination")]
     [JsonPropertyName("destination")]
@@ -64,6 +68,7 @@ public class ApiRedirect {
     public ApiRedirect(IRedirect redirect, ApiRootNode? rootNode, ApiRedirectDestination destination) {
         _redirect = redirect;
         RootNode = rootNode;
+        FullUrl = Url = redirect.Url;
         Destination = destination;
     }
 

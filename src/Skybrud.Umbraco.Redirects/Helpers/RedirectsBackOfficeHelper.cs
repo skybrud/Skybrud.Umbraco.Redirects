@@ -194,7 +194,7 @@ public class RedirectsBackOfficeHelper {
             }
 
             // Set the backoffice URL of the page
-            destination.BackOfficeUrl = $"/umbraco/section/content/workspace/document/edit/{redirect.Destination.Id}";
+            destination.BackOfficeUrl = $"/umbraco/section/content/workspace/document/edit/{redirect.Destination.Key}";
 
         } else if (redirect.Destination.Type == RedirectDestinationType.Media) {
 
@@ -213,7 +213,7 @@ public class RedirectsBackOfficeHelper {
             }
 
             // Set the backoffice URL of the media
-            destination.BackOfficeUrl = $"/umbraco/section/content/workspace/document/edit/{redirect.Destination.Id}";
+            destination.BackOfficeUrl = $"/umbraco/section/content/workspace/document/edit/{redirect.Destination.Key}";
 
         } else {
 
@@ -221,7 +221,18 @@ public class RedirectsBackOfficeHelper {
 
         }
 
-        return new ApiRedirect(redirect, rootNode, destination);
+        // Determine the Umbraco base URL, if any
+        string? inboundBaseUrl;
+        if (redirect.RootKey != Guid.Empty && Dependencies.UmbracoContextAccessor.TryGetUmbracoContext(out IUmbracoContext? context)) {
+            inboundBaseUrl = context.Content?.GetById(redirect.RootKey)?.Url(mode: UrlMode.Absolute).TrimEnd('/');
+        } else if (!string.IsNullOrWhiteSpace(Dependencies.RedirectsSettings.Value.FrontendUrl)) {
+            inboundBaseUrl = Dependencies.RedirectsSettings.Value.FrontendUrl.TrimEnd('/');
+        } else {
+            inboundBaseUrl = null;
+        }
+
+        // Initialize and return a new API model for the redirect
+        return new ApiRedirect(redirect, rootNode, destination) { FullUrl = inboundBaseUrl + redirect.Url };
 
     }
     /// <summary>
