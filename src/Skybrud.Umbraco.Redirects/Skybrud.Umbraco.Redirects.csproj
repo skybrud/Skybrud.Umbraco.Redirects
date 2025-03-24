@@ -28,6 +28,14 @@
     <RepositoryUrl>https://github.com/skybrud/Skybrud.Umbraco.Redirects</RepositoryUrl>
   </PropertyGroup>
 
+  <!-- Include additional metadata in the assembly -->
+  <ItemGroup>
+    <AssemblyMetadata Include="PackageProjectUrl" Value="https://packages.limbo.works/skybrud.umbraco.redirects/" />
+    <AssemblyMetadata Include="DocumentationUrl" Value="https://packages.limbo.works/skybrud.umbraco.redirects/docs/v14/" />
+    <AssemblyMetadata Include="NuGetUrl" Value="https://www.nuget.org/packages/Skybrud.Umbraco.Redirects" />
+    <AssemblyMetadata Include="UmbracoMarketplaceUrl" Value="https://marketplace.umbraco.com/package/skybrud.umbraco.redirects" />
+  </ItemGroup>
+
   <!-- Include NuGet dependencies -->
   <ItemGroup>
     <PackageReference Include="Skybrud.Essentials" Version="1.1.57" />
