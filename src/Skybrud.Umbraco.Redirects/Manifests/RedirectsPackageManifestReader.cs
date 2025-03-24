@@ -12,6 +12,7 @@ public class RedirectsPackageManifestReader : IPackageManifestReader {
 
     public async Task<IEnumerable<PackageManifest>> ReadPackageManifestsAsync() {
 
+        const string alias = RedirectsPackage.Alias;
         string cacheBuster = RedirectsPackage.InformationalVersion.ToMd5Hash();
 
         List<PackageManifest> temp = [
@@ -24,17 +25,17 @@ public class RedirectsPackageManifestReader : IPackageManifestReader {
                         name = "redirects.entrypoint",
                         alias = "Skybrud.Umbraco.Redirects.EntryPoint",
                         type = "backofficeEntryPoint",
-                        js = "/App_Plugins/Skybrud.Umbraco.Redirects/EntryPoint.js?v=" + cacheBuster
+                        js = $"/App_Plugins/Skybrud.Umbraco.Redirects/EntryPoint.js?v={cacheBuster}"
                     }
                 ],
                 Importmap = new PackageManifestImportmap {
                     Imports = new Dictionary<string, string> {
-                        {"@skybrud-redirects/auth", "/App_Plugins/Skybrud.Umbraco.Redirects/RedirectsAuth.js?v=" + cacheBuster},
-                        {"@skybrud-redirects/package", "/App_Plugins/Skybrud.Umbraco.Redirects/RedirectsPackage.js?" + cacheBuster},
-                        {"@skybrud-redirects/service", "/App_Plugins/Skybrud.Umbraco.Redirects/RedirectsService.js?v=" + cacheBuster},
-                        {"@skybrud-redirects/modals/add", "/App_Plugins/Skybrud.Umbraco.Redirects/Modals/add-redirect.js?v=" + cacheBuster},
-                        {"@skybrud-redirects/modals/edit", "/App_Plugins/Skybrud.Umbraco.Redirects/Modals/edit-redirect.js?v=" + cacheBuster},
-                        {"@skybrud-redirects/elements/destination", "/App_Plugins/Skybrud.Umbraco.Redirects/Elements/Destination.js?v=" + cacheBuster}
+                        {"@skybrud-redirects/auth", $"/App_Plugins/{alias}/RedirectsAuth.js?v={cacheBuster}"},
+                        {"@skybrud-redirects/package", $"/App_Plugins/{alias}/RedirectsPackage.js?{cacheBuster}"},
+                        {"@skybrud-redirects/service", $"/App_Plugins/{alias}/RedirectsService.js?v={cacheBuster}"},
+                        {"@skybrud-redirects/modals/add", $"/App_Plugins/{alias}/Modals/add-redirect.js?v={cacheBuster}" },
+                        {"@skybrud-redirects/modals/edit", $"/App_Plugins/{alias}/Modals/edit-redirect.js?v={cacheBuster}"},
+                        {"@skybrud-redirects/elements/destination", $"/App_Plugins/{alias}/Elements/Destination.js?v={cacheBuster}"}
                     }
                 }
             }
