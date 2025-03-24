@@ -22,7 +22,7 @@ public class RedirectDestination : IRedirectDestination {
     /// <summary>
     /// Gets the GUID key of the selected content or media. If a URL has been selected, this will return <see cref="Guid.Empty"/>.
     /// </summary>
-    public Guid Key { get; set; }
+    public required Guid Key { get; set; }
 
     /// <summary>
     /// Gets the name of the destination, if any.
