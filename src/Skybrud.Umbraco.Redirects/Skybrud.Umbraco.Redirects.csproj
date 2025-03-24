@@ -38,7 +38,7 @@
 
   <!-- Include NuGet dependencies -->
   <ItemGroup>
-    <PackageReference Include="Skybrud.Essentials" Version="1.1.57" />
+    <PackageReference Include="Skybrud.Essentials" Version="1.1.58" />
     <PackageReference Include="Umbraco.Cms.Core" Version="[14.2.0,14.999)" />
     <PackageReference Include="Umbraco.Cms.Web.Website" Version="[14.2.0,14.999)" />
   </ItemGroup>
