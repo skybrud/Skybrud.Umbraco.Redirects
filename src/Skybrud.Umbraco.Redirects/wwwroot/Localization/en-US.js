@@ -1,26 +1,53 @@
-﻿export default {
-	redirects: {
-		save: "Save",
-		addRedirect: "Add redirect",
-		addRedirectTitle: "Add new redirect",
-		editRedirectTitle: "Edit redirect",
-		reload: "Reload",
-		enabled: "Enabled",
-		disabled: "Disabled",
-		temporary: "Temporary",
-		permanent: "Permanent",
-		content: "Content",
-		media: "Media",
-		url: "URL",
-		originalUrl: "Original URL",
-		type: "Type",
-		destination: "Destination",
-		site: "Site",
-		allSites: "All sites",
-		globalRedirects: "Global redirects",
-		allTypes: "All types",
-		contentNotPublished: "The selected page isn't published. You can not create redirects for unpublished content."
-	},
+﻿function meh(count, singular, plural) {
+	count = parseInt(count);
+	if (count === 1) return `${count} ${singular}`;
+	if (count > 1 || count === 0) return `${count} ${plural}`;
+	return plural;
+}
+
+const fromNow = {
+	ago: "ago",
+	in: "in",
+	day: "day",
+	days: (c) => meh(c, "day", "days"),
+	minute: "minute",
+	minutes: (c) => meh(c, "minute", "minutes"),
+	hour: "hour",
+	hours: (c) => meh(c, "hour", "hours"),
+	second: "second",
+	seconds: (c) => meh(c, "second", "seconds"),
+	now: "now",
+	and: "and",
+	na: "N/A",
+	items: (c) => meh(c, "item", "items"),
+	properties: (c) => meh(c, "property", "properties")
+};
+
+const misc = {
+	save: "Save",
+	addRedirect: "Add redirect",
+	addRedirectTitle: "Add new redirect",
+	editRedirectTitle: "Edit redirect",
+	reload: "Reload",
+	enabled: "Enabled",
+	disabled: "Disabled",
+	temporary: "Temporary",
+	permanent: "Permanent",
+	content: "Content",
+	media: "Media",
+	url: "URL",
+	originalUrl: "Original URL",
+	type: "Type",
+	destination: "Destination",
+	site: "Site",
+	allSites: "All sites",
+	globalRedirects: "Global redirects",
+	allTypes: "All types",
+	contentNotPublished: "The selected page isn't published. You can not create redirects for unpublished content."
+};
+
+export default {
+	redirects: Object.assign({}, misc, fromNow),
 	redirectsTabs: {
 		settings: "Settings",
 		info: "Info"

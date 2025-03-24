@@ -1,26 +1,51 @@
-﻿export default {
-	redirects: {
-		save: "Gem",
-		addRedirect: "Tilføj redirect",
-		addRedirectTitle: "Tilføj nyt redirect",
-		editRedirectTitle: "Rediger redirect",
-		reload: "Genindlæs",
-		enabled: "Aktiveret",
-		disabled: "Deaktiveret",
-		temporary: "Midlertidig",
-		permanent: "Permanent",
-		content: "Indhold",
-		media: "Medie",
-		url: "URL",
-		originalUrl: "Original URL",
-		type: "Type",
-		destination: "Destination",
-		site: "Site",
-		allSites: "Alle sites",
-		globalRedirects: "Globale redirects",
-		allTypes: "Alle typer",
-		contentNotPublished: "Det valgte indhold er ikke udgivet. Du kan ikke oprette redirects til sider, der ikke er udgivet."
-	},
+﻿function meh(count, singular, plural) {
+	count = parseInt(count);
+	if (count === 1) return `${count} ${singular}`;
+	if (count > 1 || count === 0) return `${count} ${plural}`;
+	return plural;
+}
+
+const fromNow = {
+	ago: "siden",
+	in: "om",
+	day: "dag",
+	days: (c) => meh(c, "dag", "dage"),
+	minute: "minut",
+	minutes: (c) => meh(c, "minut", "minutter"),
+	hour: "time",
+	hours: (c) => meh(c, "time", "timer"),
+	second: "sekund",
+	seconds: (c) => meh(c, "sekund", "sekunder"),
+	now: "nu",
+	and: "og",
+	na: "N/A"
+};
+
+const misc = {
+	save: "Gem",
+	addRedirect: "Tilføj redirect",
+	addRedirectTitle: "Tilføj nyt redirect",
+	editRedirectTitle: "Rediger redirect",
+	reload: "Genindlæs",
+	enabled: "Aktiveret",
+	disabled: "Deaktiveret",
+	temporary: "Midlertidig",
+	permanent: "Permanent",
+	content: "Indhold",
+	media: "Medie",
+	url: "URL",
+	originalUrl: "Original URL",
+	type: "Type",
+	destination: "Destination",
+	site: "Site",
+	allSites: "Alle sites",
+	globalRedirects: "Globale redirects",
+	allTypes: "Alle typer",
+	contentNotPublished: "Det valgte indhold er ikke udgivet. Du kan ikke oprette redirects til sider, der ikke er udgivet."
+};
+
+export default {
+	redirects: Object.assign({}, misc, fromNow),
 	redirectsTabs: {
 		settings: "Indstillinger",
 		info: "Info"

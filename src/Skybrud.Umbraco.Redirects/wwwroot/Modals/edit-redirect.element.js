@@ -208,7 +208,7 @@ export class EditRedirectModalElement extends UmbModalBaseElement {
                     </div>
                     <div>
                         ${this.localize.date(createDate, dateOptions)}
-                        <small>(<limbo-from-now>${this.value.redirect.createDate}</limbo-from-now>)</small>
+                        <small>(<redirects-from-now>${this.value.redirect.createDate}</redirects-from-now>)</small>
                     </div>
                 </div>
                 <div class="property">
@@ -217,7 +217,7 @@ export class EditRedirectModalElement extends UmbModalBaseElement {
                     </div>
                     <div>
                         ${this.localize.date(updateDate, dateOptions)}
-                        <small>(<limbo-from-now>${this.value.redirect.updateDate}</limbo-from-now>)</small>
+                        <small>(<redirects-from-now>${this.value.redirect.updateDate}</redirects-from-now>)</small>
                     </div>
                 </div>
             </uui-box>

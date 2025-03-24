@@ -4,6 +4,8 @@ import { RedirectsAuth } from "@skybrud-redirects/auth";
 import { RedirectsPackage } from "@skybrud-redirects/package";
 import { RedirectsService } from "@skybrud-redirects/service";
 
+import "@skybrud-redirects/elements/from-now";
+
 export const onInit = (_host, extensionRegistry) => {
 
     _host.consumeContext(UMB_AUTH_CONTEXT, (authContext) => {
