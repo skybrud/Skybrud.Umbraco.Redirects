@@ -37,43 +37,42 @@ function toUmbracoLink(value) {
 
 }
 
-function addQueryAndFragment(value, link) {
+function addQueryAndFragment(target, source) {
 
     // If a query string value has been specified, we need to separate the actual query string and
     // the fragment, as the field in the UI may be used for both
-    if (link?.queryString) {
-        const pos = link.queryString.indexOf("#");
+    if (source?.queryString) {
+        if (source.queryString === "#") return;
+        const pos = source.queryString.indexOf("#");
         if (pos >= 0) {
-            value.query = link.queryString.substr(0, pos);
-            value.fragment = link.queryString.substr(pos);
+            target.query = source.queryString.substr(0, pos);
+            target.fragment = source.queryString.substr(pos);
         } else {
-            value.query = link.queryString.substr(0, pos) || null;
-            value.fragment = null;
+            target.query = source.queryString;
+            target.fragment = null;
         }
-        if (value.query && value.query[0] === "?") value.query = value.query.substr(1);
+        if (target.query && target.query[0] === "?") target.query = target.query.substr(1);
         return;
     }
 
     // If the query string value wasn't specified, we should check the specified URL for a
     // fragment.If found, we strip it from the URL and add a "fragment" property instead
-    const pos2 = value.url.indexOf("#");
+    const pos2 = target.url.indexOf("#");
     if (pos2 >= 0) {
-        value.fragment = value.url.substr(pos2);
-        value.url = value.url.substr(0, pos2);
+        target.fragment = target.url.substr(pos2);
+        target.url = target.url.substr(0, pos2);
     }
 
     // And then also if the URL contains a query string part, we strip that in a similar way
-    const pos3 = value.url.indexOf("?");
+    const pos3 = target.url.indexOf("?");
     if (pos3 >= 0) {
-        value.query = value.url.substr(pos3 + 1);
-        value.url = value.url.substr(0, pos3);
+        target.query = target.url.substr(pos3 + 1);
+        target.url = target.url.substr(0, pos3);
     }
 
 }
 
 function fromContent(value, content) {
-
-    console.log(content);
 
     const link = {
         type: "content",
@@ -94,10 +93,10 @@ function fromContent(value, content) {
         link.published = false;
     }
 
-    addQueryAndFragment(value, value.link);
+    addQueryAndFragment(link, value);
 
     // Make sure that we set the display URL with proper path, query string and fragment
-    link.displayUrl = link.url ? link.url + (value.query ? "?" + value.query : "") + (value.fragment ?? "") : null;
+    link.displayUrl = link.url + (link.query ? "?" + link.query : "") + (link.fragment ?? "");
 
     return link;
 
