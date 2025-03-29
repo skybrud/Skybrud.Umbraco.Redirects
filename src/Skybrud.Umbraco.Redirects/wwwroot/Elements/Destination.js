@@ -125,6 +125,7 @@ function fromExternal(link) {
 
     const value = {
         type: "url",
+        key: "00000000-0000-0000-0000-000000000000",
         url: link.url,
         name: link.name,
         icon: "icon-link"
