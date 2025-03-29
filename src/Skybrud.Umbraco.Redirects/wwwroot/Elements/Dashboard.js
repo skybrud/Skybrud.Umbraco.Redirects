@@ -251,6 +251,24 @@ export class RedirectsDashboardElement extends UmbElementMixin(LitElement) {
 
     }
 
+    renderNoRedirects() {
+
+        if (this.text || this.rootNode || this.type) {
+            return html`
+                <div class="umb-empty-state -center">
+                    ${this.localize.term("redirectsLabels_noSearchRedirects")}
+                </div>
+            `;
+        }
+
+        return html`
+            <div class="umb-empty-state -center">
+                ${this.localize.term("redirectsLabels_noRedirects")}
+            </div>
+        `;
+
+    }
+
     render() {
         const typeToSearch = this.localize.term("general_typeToSearch");
         return html`
@@ -340,16 +358,7 @@ export class RedirectsDashboardElement extends UmbElementMixin(LitElement) {
                 `)}
             </div>
             ${when(this.loading, () => html`<uui-loader></uui-loader>`)}
-            ${when(this.redirects?.length === 0 && this.text, () => html`
-                <div class="umb-empty-state -center">
-                    ${this.localize.term("redirectsLabels_noSearchRedirects")}
-                </div>
-            `)}
-            ${when(this.redirects?.length === 0 && !this.text, () => html`
-                <div class="umb-empty-state -center">
-                    ${this.localize.term("redirectsLabels_noRedirects")}
-                </div>
-            `)}
+            ${when(this.redirects?.length === 0, () => this.renderNoRedirects())}
         `;
     }
 
