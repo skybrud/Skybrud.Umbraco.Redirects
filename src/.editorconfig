@@ -1,4 +1,4 @@
-# Version 1.0.7
+# Version 1.0.8
 
 # Remove the line below if you want to inherit .editorconfig settings from higher directories
 root = true
@@ -217,3 +217,4 @@ csharp_style_namespace_declarations = file_scoped:warning
 
 # Don't prefer or suggest primary constructors
 csharp_style_prefer_primary_constructors = false
+resharper_convert_to_primary_constructor_highlighting = none
