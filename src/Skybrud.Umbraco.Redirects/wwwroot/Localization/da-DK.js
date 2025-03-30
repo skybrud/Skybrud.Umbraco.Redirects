@@ -44,7 +44,9 @@ const misc = {
 	contentNotPublished: "Det valgte indhold er ikke udgivet. Du kan ikke oprette redirects til sider, der ikke er udgivet.",
 	deleted: "Slettet",
 	trashed: "Papirkurv",
-	unpublished: "Afpubliceret"
+	unpublished: "Afpubliceret",
+	pageExistsAtUrl: "En side findes allerede på denne URL.",
+	mediaExistsAtUrl: "Et medie findes allerede på denne URL."
 };
 
 export default {

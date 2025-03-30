@@ -46,7 +46,9 @@ const misc = {
 	contentNotPublished: "The selected page isn't published. You can not create redirects for unpublished content.",
 	deleted: "Deleted",
 	trashed: "Trashed",
-	unpublished: "Unpublished"
+	unpublished: "Unpublished",
+	pageExistsAtUrl: "A page already exists with this URL.",
+	mediaExistsAtUrl: "A media item already exists with this URL."
 };
 
 export default {

@@ -159,16 +159,16 @@ public class RedirectsBackOfficeHelper {
 
         string? urlWarning = null;
         if (redirect.Url.StartsWith("/media/")) {
-            var media = Dependencies.MediaService.GetMediaByPath(redirect.Url);
-            if (media is not null) urlWarning = "media_exists_at_url";
+            IMedia? media = Dependencies.MediaService.GetMediaByPath(redirect.Url);
+            if (media is not null) urlWarning = "mediaExistsAtUrl";
         } else if (Dependencies.UmbracoContextAccessor.TryGetUmbracoContext(out var umbracoContext)) {
             if (umbracoContext.Content is { } contentCache) {
                 if (rootNode is not null) {
                     IPublishedContent? content = contentCache.GetByRoute($"{rootNode.Id}{redirect.Url}");
-                    if (content is not null) urlWarning = "page_exists_at_url";
+                    if (content is not null) urlWarning = "pageExistsAtUrl";
                 } else {
                     IPublishedContent? content = contentCache.GetByRoute($"{redirect.Url}");
-                    if (content is not null) urlWarning = "page_exists_at_url";
+                    if (content is not null) urlWarning = "pageExistsAtUrl";
                 }
             }
         }
