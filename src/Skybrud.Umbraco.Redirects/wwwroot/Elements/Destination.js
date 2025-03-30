@@ -133,6 +133,9 @@ function fromExternal(link) {
 
     addQueryAndFragment(value, link);
 
+    // Make sure that we set the display URL with proper path, query string and fragment
+    link.displayUrl = link.url + (link.query ? "?" + link.query : "") + (link.fragment ?? "");
+
     return value;
 
 }
