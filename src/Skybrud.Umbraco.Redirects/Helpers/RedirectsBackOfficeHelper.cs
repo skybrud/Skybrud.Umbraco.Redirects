@@ -157,6 +157,22 @@ public class RedirectsBackOfficeHelper {
             }
         }
 
+        string? urlWarning = null;
+        if (redirect.Url.StartsWith("/media/")) {
+            var media = Dependencies.MediaService.GetMediaByPath(redirect.Url);
+            if (media is not null) urlWarning = "media_exists_at_url";
+        } else if (Dependencies.UmbracoContextAccessor.TryGetUmbracoContext(out var umbracoContext)) {
+            if (umbracoContext.Content is { } contentCache) {
+                if (rootNode is not null) {
+                    IPublishedContent? content = contentCache.GetByRoute($"{rootNode.Id}{redirect.Url}");
+                    if (content is not null) urlWarning = "page_exists_at_url";
+                } else {
+                    IPublishedContent? content = contentCache.GetByRoute($"{redirect.Url}");
+                    if (content is not null) urlWarning = "page_exists_at_url";
+                }
+            }
+        }
+
         ApiRedirectDestination destination;
         if (redirect.Destination.Type == RedirectDestinationType.Content) {
 
@@ -232,7 +248,10 @@ public class RedirectsBackOfficeHelper {
         }
 
         // Initialize and return a new API model for the redirect
-        return new ApiRedirect(redirect, rootNode, destination) { FullUrl = inboundBaseUrl + redirect.Url };
+        return new ApiRedirect(redirect, rootNode, destination) {
+            FullUrl = inboundBaseUrl + redirect.Url,
+            UrlWarning = urlWarning
+        };
 
     }
     /// <summary>

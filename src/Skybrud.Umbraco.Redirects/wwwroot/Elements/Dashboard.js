@@ -269,6 +269,14 @@ export class RedirectsDashboardElement extends UmbElementMixin(LitElement) {
 
     }
 
+    renderDestinationWarning(item) {
+        console.log(item.url + " => ", item);
+        if (item.destination.null) return html`<small class=\"warning\">${this.localize.term("redirects_deleted")}</small>`;
+        if (item.destination.trashed) return html`<small class=\"warning\">${this.localize.term("redirects_trashed")}</small>`;
+        if (item.destination.published === false) return html`<small class=\"warning\">${this.localize.term("redirects_unpublished")}</small>`;
+        return "";
+    }
+
     render() {
         const typeToSearch = this.localize.term("general_typeToSearch");
         return html`
@@ -319,6 +327,9 @@ export class RedirectsDashboardElement extends UmbElementMixin(LitElement) {
                                     </uui-table-cell>
                                     <uui-table-cell role="cell">
                                         <a href="${item.fullUrl}" rel="noreferrer" target="_blank">${item.url}</a>
+                                        ${when(item.urlWarning, () => html`
+                                            <div><small class=\"warning\">${this.localize.term("redirects_" + this.urlWarning)}</small></div>
+                                        `)}
                                     </uui-table-cell>
                                     <uui-table-cell role="cell">
                                         ${when(item.type === "permanent", () => this.localize.term("redirects_permanent"))}
@@ -329,6 +340,7 @@ export class RedirectsDashboardElement extends UmbElementMixin(LitElement) {
                                     </uui-table-cell>
                                     <uui-table-cell role="cell">
                                         ${this.renderDestinationType(item)}
+                                        ${this.renderDestinationWarning(item)}
                                         ${when(item.forward, () => html`
                                             <small class="forward" title="Forward query string is enabled">&nbsp;?&amp;</small>
                                         `)}
@@ -365,6 +377,9 @@ export class RedirectsDashboardElement extends UmbElementMixin(LitElement) {
     static styles = css`
         :host > div {
             padding: 20px;
+        }
+        .warning {
+            color: red;
         }
         uui-box {
             margin-top: 20px;

@@ -41,7 +41,10 @@ const misc = {
 	allSites: "Alle sites",
 	globalRedirects: "Globale redirects",
 	allTypes: "Alle typer",
-	contentNotPublished: "Det valgte indhold er ikke udgivet. Du kan ikke oprette redirects til sider, der ikke er udgivet."
+	contentNotPublished: "Det valgte indhold er ikke udgivet. Du kan ikke oprette redirects til sider, der ikke er udgivet.",
+	deleted: "Slettet",
+	trashed: "Papirkurv",
+	unpublished: "Afpubliceret"
 };
 
 export default {

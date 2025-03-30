@@ -43,7 +43,10 @@ const misc = {
 	allSites: "All sites",
 	globalRedirects: "Global redirects",
 	allTypes: "All types",
-	contentNotPublished: "The selected page isn't published. You can not create redirects for unpublished content."
+	contentNotPublished: "The selected page isn't published. You can not create redirects for unpublished content.",
+	deleted: "Deleted",
+	trashed: "Trashed",
+	unpublished: "Unpublished"
 };
 
 export default {

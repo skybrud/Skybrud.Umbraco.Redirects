@@ -65,6 +65,11 @@ public class ApiRedirect {
     [JsonPropertyName("forward")]
     public bool ForwardQueryString => _redirect.ForwardQueryString;
 
+    [JsonProperty("urlWarning", NullValueHandling = NullValueHandling.Ignore)]
+    [JsonPropertyName("urlWarning")]
+    [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? UrlWarning { get; set; }
+
     public ApiRedirect(IRedirect redirect, ApiRootNode? rootNode, ApiRedirectDestination destination) {
         _redirect = redirect;
         RootNode = rootNode;
