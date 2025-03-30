@@ -317,7 +317,7 @@ export class RedirectsDashboardElement extends UmbElementMixin(LitElement) {
                             </uui-table-head>
                             ${repeat(this.redirects, (item) => item.key, (item) => html`
                                 <uui-table-row role="row">
-                                    <uui-table-cell role="cell">
+                                    <uui-table-cell role="cell" class="col-root-node">
                                         ${when(item.rootNode, () => html`
                                             <a href="${item.rootNode.backOfficeUrl}">${item.rootNode.name}</a>
                                         `)}
@@ -325,10 +325,10 @@ export class RedirectsDashboardElement extends UmbElementMixin(LitElement) {
                                             <span style="white-space: nowrap;">${this.localize.term("redirects_allSites")}</span>
                                         `)}
                                     </uui-table-cell>
-                                    <uui-table-cell role="cell">
+                                    <uui-table-cell role="cell" class="col-url">
                                         <a href="${item.fullUrl}" rel="noreferrer" target="_blank">${item.url}</a>
                                         ${when(item.urlWarning, () => html`
-                                            <div><small class=\"warning\">${this.localize.term("redirects_" + this.urlWarning)}</small></div>
+                                            <small class=\"warning\">${this.localize.term("redirects_" + item.urlWarning)}</small>
                                         `)}
                                     </uui-table-cell>
                                     <uui-table-cell role="cell">
@@ -380,6 +380,16 @@ export class RedirectsDashboardElement extends UmbElementMixin(LitElement) {
         }
         .warning {
             color: red;
+        }
+        .col-root-node {
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            max-width: 150px;
+        }
+        .col-url .warning {
+            display: block;
+            margin-top: -4px;
         }
         uui-box {
             margin-top: 20px;
