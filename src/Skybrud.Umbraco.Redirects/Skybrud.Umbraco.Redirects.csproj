@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <StaticWebAssetBasePath>App_Plugins/$(AssemblyName)</StaticWebAssetBasePath>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>14.0.0-beta001</VersionPrefix>
+    <VersionPrefix>15.0.0-beta000</VersionPrefix>
     <VersionSuffix Condition="'$(Configuration)'=='Debug'">build$([System.DateTime]::UtcNow.ToString(`yyyyMMddHHmm`))</VersionSuffix>
     <Authors>Anders Bjerner</Authors>
     <Company>Limbo</Company>
@@ -31,7 +31,7 @@
   <!-- Include additional metadata in the assembly -->
   <ItemGroup>
     <AssemblyMetadata Include="PackageProjectUrl" Value="https://packages.limbo.works/skybrud.umbraco.redirects/" />
-    <AssemblyMetadata Include="DocumentationUrl" Value="https://packages.limbo.works/skybrud.umbraco.redirects/docs/v14/" />
+    <AssemblyMetadata Include="DocumentationUrl" Value="https://packages.limbo.works/skybrud.umbraco.redirects/docs/v15/" />
     <AssemblyMetadata Include="NuGetUrl" Value="https://www.nuget.org/packages/Skybrud.Umbraco.Redirects" />
     <AssemblyMetadata Include="UmbracoMarketplaceUrl" Value="https://marketplace.umbraco.com/package/skybrud.umbraco.redirects" />
   </ItemGroup>
@@ -39,8 +39,8 @@
   <!-- Include NuGet dependencies -->
   <ItemGroup>
     <PackageReference Include="Skybrud.Essentials" Version="1.1.58" />
-    <PackageReference Include="Umbraco.Cms.Core" Version="[14.2.0,14.999)" />
-    <PackageReference Include="Umbraco.Cms.Web.Website" Version="[14.2.0,14.999)" />
+    <PackageReference Include="Umbraco.Cms.Core" Version="[15.0.0,15.999)" />
+    <PackageReference Include="Umbraco.Cms.Web.Website" Version="[15.0.0,15.999)" />
   </ItemGroup>
 
   <!-- Include package icon and README for the NuGet package -->

@@ -1,6 +1,6 @@
 # Skybrud Redirects
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/skybrud/Skybrud.Umbraco.Redirects/blob/v4/main/LICENSE.md)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/skybrud/Skybrud.Umbraco.Redirects/blob/v15/main/LICENSE.md)
 [![NuGet](https://img.shields.io/nuget/v/Skybrud.Umbraco.Redirects.svg)](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects)
 [![NuGet](https://img.shields.io/nuget/dt/Skybrud.Umbraco.Redirects.svg)](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects)
 [![Umbraco Marketplace](https://img.shields.io/badge/umbraco-marketplace-%233544B1)](https://marketplace.umbraco.com/package/skybrud.umbraco.redirects)
@@ -18,7 +18,7 @@ URLs can be added to redirect to either a content item, media item or a custom U
   <tr>
     <td><strong>Umbraco:</strong></td>
     <td>
-      Umbraco 14
+      Umbraco 15
     </td>
   </tr>
   <tr>
@@ -39,20 +39,23 @@ URLs can be added to redirect to either a content item, media item or a custom U
 
 **Umbraco 14**  
 
-Version 14 of this package supports Umbraco version 14. The package is only available via [**NuGet**](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects/14.0.0-beta001). To install the package, you can use either the .NET CLI:
+Version 14 of this package supports Umbraco version 14. The package is only available via [**NuGet**](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects/15.0.0-beta001). To install the package, you can use either the .NET CLI:
 
 ```
-dotnet add package Skybrud.Umbraco.Redirects --version 14.0.0-beta001
+dotnet add package Skybrud.Umbraco.Redirects --version 15.0.0-beta001
 ```
 
 or the NuGet Package Manager:
 
 ```
-Install-Package Skybrud.Umbraco.Redirects -Version 14.0.0-beta001
+Install-Package Skybrud.Umbraco.Redirects -Version 15.0.0-beta001
 ```
 
+**Umbraco 14**  
+For the Umbraco 14 version of this package, see the [**v14/main**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v14/main) branch instead.
+
 **Umbraco 13**  
-For the Umbraco 10-12 version of this package, see the [**v13/main**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v13/main) branch instead.
+For the Umbraco 13 version of this package, see the [**v13/main**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v13/main) branch instead.
 
 **Umbraco 10, 11 and 12**  
 For the Umbraco 10-12 version of this package, see the [**v4/main**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v4/main) branch instead.

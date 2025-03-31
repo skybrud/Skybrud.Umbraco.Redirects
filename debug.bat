@@ -1,2 +1,2 @@
 @echo off
-dotnet build src/Skybrud.Umbraco.Redirects --configuration Debug /t:rebuild /t:pack -p:PackageOutputPath=c:\nuget\Umbraco14
+dotnet build src/Skybrud.Umbraco.Redirects --configuration Debug /t:rebuild /t:pack -p:PackageOutputPath=c:\nuget\Umbraco15
