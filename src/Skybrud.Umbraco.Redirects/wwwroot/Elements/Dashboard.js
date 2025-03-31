@@ -11,6 +11,8 @@ import { RedirectsService } from "@skybrud-redirects/service";
 import { REDIRECTS_ADD_REDIRECT_MODAL } from "@skybrud-redirects/modals/add";
 import { REDIRECTS_EDIT_REDIRECT_MODAL } from "@skybrud-redirects/modals/edit";
 
+import { RedirectsDashboardLoadEvent } from "@skybrud-redirects/events";
+
 function ucfirst(value) {
     return String(value).charAt(0).toUpperCase() + String(value).slice(1);
 }
@@ -87,6 +89,31 @@ export class RedirectsDashboardElement extends UmbElementMixin(LitElement) {
             { name: this.localize.term("redirects_url"), value: "url" }
         ];
 
+        this.addButton = {
+            alias: "add",
+            label: this.localize.term("redirects_addRedirect"),
+            action: this.add,
+            look: "primary",
+            color: "positive",
+            subButtons: []
+        };
+
+        this.reloadButton = {
+            alias: "reload",
+            label: this.localize.term("redirects_reload"),
+            action: this.reload,
+            look: "outline",
+            color: "default",
+            subButtons: []
+        };
+
+        this.dashboard = {
+            addButton: this.addButton,
+            reloadButton: this.reloadButton,
+            buttons: [this.addButton, this.reloadButton],
+            requestUpdate: self.requestUpdate
+        };
+
         RedirectsService.getRootNodes().then(function (res) {
 
             const temp = [
@@ -112,6 +139,10 @@ export class RedirectsDashboardElement extends UmbElementMixin(LitElement) {
             this._notificationContext = instance;
         });
 
+        window.dispatchEvent(new RedirectsDashboardLoadEvent("redirects.onDashboardLoad", {
+            dashboard: self.dashboard
+        }));
+
     }
 
     updateRedirects(page) {
@@ -132,6 +163,7 @@ export class RedirectsDashboardElement extends UmbElementMixin(LitElement) {
                 self.pagination = res.data.pagination;
                 self.loading = false;
                 self.refreshing = false;
+                self.reloadButton.state = null;
                 self.requestUpdate();
             }, 200);
         });
@@ -207,6 +239,7 @@ export class RedirectsDashboardElement extends UmbElementMixin(LitElement) {
 
     reload() {
         this.refreshing = true;
+        this.reloadButton.state = "waiting";
         this.updateRedirects();
     }
 
@@ -270,7 +303,6 @@ export class RedirectsDashboardElement extends UmbElementMixin(LitElement) {
     }
 
     renderDestinationWarning(item) {
-        console.log(item.url + " => ", item);
         if (item.destination.null) return html`<small class=\"warning\">${this.localize.term("redirects_deleted")}</small>`;
         if (item.destination.trashed) return html`<small class=\"warning\">${this.localize.term("redirects_trashed")}</small>`;
         if (item.destination.published === false) return html`<small class=\"warning\">${this.localize.term("redirects_unpublished")}</small>`;
@@ -295,13 +327,28 @@ export class RedirectsDashboardElement extends UmbElementMixin(LitElement) {
                         </uui-select>
                         <uui-input id="search" label="${typeToSearch}" style="flex: 1;" placeholder="${typeToSearch}" @keyup=${this.onKeyUp}></uui-input>
                     </div>
-                    <div style="justify-self: right;">
-                        <uui-button look="primary" color="positive" label="Add" @click=${this.add}>
-                            ${this.localize.term("redirects_addRedirect")}
-                        </uui-button>
-                        <uui-button look="outline" color="default" label="Reload" state="${this.refreshing ? 'waiting' : ''}" @click=${this.reload}>
-                            ${this.localize.term("redirects_reload")}
-                        </uui-button>
+                    <div style="justify-self: right; display: flex; gap: 10px;">
+                        ${repeat(this.dashboard.buttons, (button) => button.alias, (button) => html`
+                            <uui-button-group>
+                                <uui-button look="${button.look}" color="${button.color}" label="${button.label}" state="${button.state}" @click=${button.action}>
+                                    ${button.label}
+                                </uui-button>
+                                ${when(button.subButtons?.length > 0, () => html`
+                                    <uui-button popovertarget="my-popover" look="${button.look}" color="${button.color}">
+                                        <uui-symbol-more></uui-symbol-more>
+                                    </uui-button>
+                                    <uui-popover-container id="my-popover" placement="bottom-end">
+                                        <div style="display: flex; flex-direction: column;">
+                                            ${repeat(button.subButtons, (sub) => sub.alias, (sub) => html`
+                                                <uui-button look="${sub.look}" label="${sub.label}" @click=${sub.action}>
+                                                    ${sub.label}
+                                                </uui-button>
+                                            `)}
+                                        </div>
+                                    </uui-popover-container>
+                                `)}
+                            </uui-button-group>
+                        `)}
                     </div>
                 </div>
                 ${when(this.redirects?.length > 0, () => html`
@@ -377,6 +424,9 @@ export class RedirectsDashboardElement extends UmbElementMixin(LitElement) {
     static styles = css`
         :host > div {
             padding: 20px;
+        }
+        uui-symbol-more {
+            fill: #fff;
         }
         .warning {
             color: red;

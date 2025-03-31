@@ -6,6 +6,8 @@ import { UMB_NOTIFICATION_CONTEXT } from '@umbraco-cms/backoffice/notification';
 import { RedirectsService } from "@skybrud-redirects/service";
 import "@skybrud-redirects/elements/destination";
 
+import { RedirectsModalLoadEvent } from "@skybrud-redirects/events";
+
 export class AddRedirectModelElement extends UmbModalBaseElement {
 
     get rootNodes() {
@@ -35,6 +37,11 @@ export class AddRedirectModelElement extends UmbModalBaseElement {
             this._notificationContext = instance;
         });
 
+        this.redirect = {
+            redirectType: "permanent",
+            forward: false
+        };
+
         RedirectsService.getRootNodes().then(function (res) {
 
             const temp = [
@@ -46,6 +53,11 @@ export class AddRedirectModelElement extends UmbModalBaseElement {
             });
 
             self.rootNodes = temp;
+
+            window.dispatchEvent(new RedirectsModalLoadEvent("redirects.onModalLoad", {
+                action: "add",
+                redirect: self.redirect
+            }));
 
         });
 
@@ -166,8 +178,8 @@ export class AddRedirectModelElement extends UmbModalBaseElement {
                             <small>${property("redirectTypeDescription")}</small>
                         </div>
                         <div>
-                            <uui-radio-group name="redirectType">
-                                <uui-radio id="redirectTypePermanent" value="permanent" label="${term("permanent")}" checked="checked"></uui-radio>
+                            <uui-radio-group name="redirectType" value="${this.redirect.redirectType}">
+                                <uui-radio id="redirectTypePermanent" value="permanent" label="${term("permanent")}"></uui-radio>
                                 <uui-radio id="redirectTypeTemporary" value="temporary" label="${term("temporary")}"></uui-radio>
                             </uui-radio-group>
                         </div>
@@ -178,9 +190,9 @@ export class AddRedirectModelElement extends UmbModalBaseElement {
                             <small>${property("forwardQueryStringDescription")}</small>
                         </div>
                         <div>
-                            <uui-radio-group name="forward">
-                                <uui-radio id="forwardEnabled" value="enabled" label="${term("enabled")}"></uui-radio>
-                                <uui-radio id="forwardDisabled" value="disabled" label="${term("disabled")}" checked="true"></uui-radio>
+                            <uui-radio-group name="forward" value="${this.redirect.forward}">
+                                <uui-radio id="forwardEnabled" value="true" label="${term("enabled")}"></uui-radio>
+                                <uui-radio id="forwardDisabled" value="false" label="${term("disabled")}"></uui-radio>
                             </uui-radio-group>
                         </div>
                     </div>

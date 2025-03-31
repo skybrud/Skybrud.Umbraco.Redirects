@@ -6,6 +6,8 @@ import { UMB_NOTIFICATION_CONTEXT } from '@umbraco-cms/backoffice/notification';
 import { RedirectsService } from "@skybrud-redirects/service";
 import "@skybrud-redirects/elements/destination";
 
+import { RedirectsModalLoadEvent } from "@skybrud-redirects/events";
+
 export class EditRedirectModalElement extends UmbModalBaseElement {
 
     get tab() {
@@ -35,6 +37,8 @@ export class EditRedirectModalElement extends UmbModalBaseElement {
         const self = this;
 
         this.submitButtonState = null;
+
+        this.tabs = [];
 
         this.rootNodes = [
             { name: self.localize.term("redirects_allSites"), value: "00000000-0000-0000-0000-000000000000", selected: true }
@@ -91,6 +95,12 @@ export class EditRedirectModalElement extends UmbModalBaseElement {
             }
 
             self.rootNodes = temp;
+
+            window.dispatchEvent(new RedirectsModalLoadEvent("redirects.onModalLoad", {
+                action: "edit",
+                redirect: redirect,
+                tabs: self.tabs
+            }));
 
         });
 
@@ -243,6 +253,12 @@ export class EditRedirectModalElement extends UmbModalBaseElement {
                                 <uui-icon slot="icon" name="info"></uui-icon>
                                 ${this.localize.term("redirectsTabs_info")}
                             </uui-tab>
+                            ${repeat(self.tabs, (tab) => tab.alias, (tab) => html`
+                                <uui-tab @click="${() => this.changeTab(tab.alias)}" label="${tab.name ?? this.localize.term("redirectsTabs_" + tab.alias)}">
+                                    <uui-icon slot="icon" name="${tab.icon}"></uui-icon>
+                                    ${tab.name ?? this.localize.term("redirectsTabs_" + tab.alias)}
+                                </uui-tab>
+                            `)}
                         </uui-tab-group>
                     </div>
                 `)}
@@ -307,6 +323,9 @@ export class EditRedirectModalElement extends UmbModalBaseElement {
                     </uui-box>
                 `)}
                 ${when(this.tab === "info", () => this.renderInfo())}
+                ${repeat(self.tabs, (tab) => tab.alias, (tab) => html`
+                    ${when(this.tab === tab.alias, () => tab.render())}
+                `)}
                 <div slot="actions">
                     <uui-button id="cancel" label="${this.localize.term("general_cancel")}" @click="${this.handleCancel}"></uui-button>
                     <uui-button id="save" color="positive" look="primary" label="${term("save")}" ?disabled="${this.tab === "info"}" state="${this.submitButtonState}" ${this.tab === "info" ? "disabled" : ""} @click="${this.handleConfirm}"></uui-button>
