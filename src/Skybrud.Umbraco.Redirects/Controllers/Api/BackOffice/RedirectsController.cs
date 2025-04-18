@@ -31,7 +31,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api.BackOffice;
 [ApiController]
 [BackOfficeRoute("skybrud/redirects")]
 [Authorize(Policy = AuthorizationPolicies.SectionAccessContent)]
-[ApiVersion("1.0")]
+[ApiVersion("2.0")]
 [ApiExplorerSettings(GroupName = "Skybrud Redirects")]
 public class RedirectsController : Controller {
 
