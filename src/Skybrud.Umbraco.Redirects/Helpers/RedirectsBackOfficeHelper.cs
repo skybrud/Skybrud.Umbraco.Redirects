@@ -28,11 +28,6 @@ public class RedirectsBackOfficeHelper {
     protected RedirectsBackOfficeHelperDependencies Dependencies { get; }
 
     /// <summary>
-    /// Gets the back-office URL of Umbraco.
-    /// </summary>
-    public string BackOfficeUrl => Dependencies.GlobalSettings.GetBackOfficePath(Dependencies.HostingEnvironment);
-
-    /// <summary>
     /// Gets a reference to the current backoffice user.
     /// </summary>
     public IUser? CurrentUser => Dependencies.BackOfficeSecurityAccessor.BackOfficeSecurity?.CurrentUser;

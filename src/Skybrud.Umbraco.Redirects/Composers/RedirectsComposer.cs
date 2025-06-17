@@ -31,7 +31,7 @@ public class RedirectsComposer : IComposer {
         builder.Services.AddSingleton<IRedirectsService, RedirectsService>();
         builder.Services.AddSingleton<RedirectsBackOfficeHelper>();
 
-        builder.AddNotificationHandler<UmbracoApplicationStartingNotification, UmbracoApplicationStartingHandler>();
+        builder.AddNotificationAsyncHandler<UmbracoApplicationStartingNotification, UmbracoApplicationStartingHandler>();
 
         builder.Services.AddSingleton<IPackageManifestReader, RedirectsPackageManifestReader>();
 

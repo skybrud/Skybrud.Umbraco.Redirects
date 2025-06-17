@@ -1,4 +1,6 @@
-﻿using Skybrud.Umbraco.Redirects.Migrations;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Skybrud.Umbraco.Redirects.Migrations;
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Events;
 using Umbraco.Cms.Core.Migrations;
@@ -12,7 +14,7 @@ using Umbraco.Cms.Infrastructure.Scoping;
 
 namespace Skybrud.Umbraco.Redirects.Notifications.Handlers;
 
-public class UmbracoApplicationStartingHandler : INotificationHandler<UmbracoApplicationStartingNotification> {
+public class UmbracoApplicationStartingHandler : INotificationAsyncHandler<UmbracoApplicationStartingNotification> {
 
     private readonly IScopeProvider _scopeProvider;
     private readonly IMigrationPlanExecutor _migrationPlanExecutor;
@@ -29,12 +31,12 @@ public class UmbracoApplicationStartingHandler : INotificationHandler<UmbracoApp
         _runtimeState = runtimeState;
     }
 
-    public void Handle(UmbracoApplicationStartingNotification notification) {
+    public Task HandleAsync(UmbracoApplicationStartingNotification notification, CancellationToken cancellationToken) {
 
         // We don't really want the migration to run before Umbraco is either installed or upgraded, so if the
         // runtime level is less than "Run", we don't create the migration. This is fine as Umbraco will restart
         // after a successful install/upgrade, in which case the runtime level will be "Run" for the next startup
-        if (_runtimeState.Level < RuntimeLevel.Run) return;
+        if (_runtimeState.Level < RuntimeLevel.Run) return Task.CompletedTask;
 
         var plan = new MigrationPlan(RedirectsPackage.Alias);
 
@@ -53,7 +55,9 @@ public class UmbracoApplicationStartingHandler : INotificationHandler<UmbracoApp
 
         var upgrader = new Upgrader(plan);
 
-        upgrader.Execute(_migrationPlanExecutor, _scopeProvider, _keyValueService);
+        upgrader.ExecuteAsync(_migrationPlanExecutor, _scopeProvider, _keyValueService);
+
+        return Task.CompletedTask;
 
     }
 
