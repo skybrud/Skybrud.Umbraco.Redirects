@@ -7,6 +7,8 @@ import { UMB_LINK_PICKER_MODAL } from "@umbraco-cms/backoffice/multi-url-picker"
 
 import { RedirectsService } from "@skybrud-redirects/service";
 
+import { FAKE_UMB_PROPERTY_DATASET_CONTEXT, FakeUmbPropertyDatasetContext } from "/App_Plugins/Skybrud.Umbraco.Redirects/UmbPropertyDatasetContext.js";
+
 function parseMediaUrl(url) {
 
     // The link picker modal (14.3.0) returns an absolute URL for media, where we just want the relative URL
@@ -79,7 +81,7 @@ function fromContent(value, content) {
         key: content.id,
         name: content.variants[0].name,
         icon: content.documentType.icon,
-        url: content.urls && content.urls.length > 0 ? content.urls[0].url : null,
+        url: content.url,
         cultures: content.variants.filter(x => x.culture).map(x => x.culture),
         null: false,
         trashed: content.isTrashed,
@@ -109,7 +111,7 @@ function fromMedia(value, media) {
         key: media.id,
         name: media.variants[0].name,
         icon: media.mediaType.icon,
-        url: parseMediaUrl(media.urls[0].url)
+        url: parseMediaUrl(media.url)
     };
 
     addQueryAndFragment(link, value);
@@ -162,6 +164,8 @@ export class RedirectsDestinationElement extends UmbElementMixin(LitElement) {
         this.consumeContext(UMB_NOTIFICATION_CONTEXT, (instance) => {
             this.notificationContext = instance;
         });
+
+        this.provideContext(FAKE_UMB_PROPERTY_DATASET_CONTEXT, new FakeUmbPropertyDatasetContext(this, FAKE_UMB_PROPERTY_DATASET_CONTEXT));
 
     }
 

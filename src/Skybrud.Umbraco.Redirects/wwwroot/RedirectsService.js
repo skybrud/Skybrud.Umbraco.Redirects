@@ -104,11 +104,39 @@ export class RedirectsService {
     }
 
     static getContent(key) {
-        return get("/umbraco/management/api/v1/document/" + key);
+
+        return new Promise((resolve, reject) => {
+
+            get("/umbraco/management/api/v1/document/" + key).then(function (res1) {
+
+                get("/umbraco/management/api/v1/document/urls?id=" + key).then(function (res2) {
+                    res1.data.urls = res2.data[0].urlInfos.map(x => x.url);
+                    res1.data.url = res1.data.urls[0];
+                    resolve(res1);
+                });
+
+            })
+
+        });
+
     }
 
     static getMedia(key) {
-        return get("/umbraco/management/api/v1/media/" + key);
+
+        return new Promise((resolve, reject) => {
+
+            get("/umbraco/management/api/v1/media/" + key).then(function (res1) {
+
+                get("/umbraco/management/api/v1/media/urls?id=" + key).then(function (res2) {
+                    res1.data.urls = res2.data[0].urlInfos.map(x => x.url);
+                    res1.data.url = res1.data.urls[0];
+                    resolve(res1);
+                });
+
+            })
+
+        });
+
     }
 
     static getRootNodes() {
