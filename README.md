@@ -13,18 +13,18 @@ URLs can be added to redirect to either a content item, media item or a custom U
 <table>
   <tr>
     <td><strong>License:</strong></td>
-    <td><a href="https://github.com/skybrud/Skybrud.Umbraco.Redirects/blob/v13/main/LICENSE.md"><strong>MIT License</strong></a></td>
+    <td><a href="https://github.com/skybrud/Skybrud.Umbraco.Redirects/blob/v16/main/LICENSE.md"><strong>MIT License</strong></a></td>
   </tr>
   <tr>
     <td><strong>Umbraco:</strong></td>
     <td>
-      Umbraco 15
+      Umbraco 16
     </td>
   </tr>
   <tr>
     <td><strong>Target Framework:</strong></td>
     <td>
-      .NET 8
+      .NET 9
     </td>
   </tr>
 </table>
@@ -37,19 +37,22 @@ URLs can be added to redirect to either a content item, media item or a custom U
 
 ## Installation
 
-**Umbraco 14**  
+**Umbraco 16**  
 
-Version 14 of this package supports Umbraco version 14. The package is only available via [**NuGet**](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects/15.0.0-beta001). To install the package, you can use either the .NET CLI:
+Version 16 of this package supports Umbraco version 14. The package is only available via [**NuGet**](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects/16.0.0-beta001). To install the package, you can use either the .NET CLI:
 
 ```
-dotnet add package Skybrud.Umbraco.Redirects --version 15.0.0-beta001
+dotnet add package Skybrud.Umbraco.Redirects --version 16.0.0-beta001
 ```
 
 or the NuGet Package Manager:
 
 ```
-Install-Package Skybrud.Umbraco.Redirects -Version 15.0.0-beta001
+Install-Package Skybrud.Umbraco.Redirects -Version 16.0.0-beta001
 ```
+
+**Umbraco 15**  
+For the Umbraco 15 version of this package, see the [**v15/main**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v15/main) branch instead.
 
 **Umbraco 14**  
 For the Umbraco 14 version of this package, see the [**v14/main**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v14/main) branch instead.
