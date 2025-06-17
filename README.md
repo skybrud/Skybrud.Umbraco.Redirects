@@ -53,8 +53,9 @@ Install-Package Skybrud.Umbraco.Redirects -Version 13.0.8
 
 ### Other versions of Umbraco
 
-- [**`v15/main`**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v3/main) Umbraco 15
-- [**`v14/main`**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v3/main) Umbraco 14
+- [**`v16/main`**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v16/main) Umbraco 16
+- [**`v15/main`**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v15/main) Umbraco 15
+- [**`v14/main`**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v14/main) Umbraco 14
 - [**`v4/main`**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v4/main) Umbraco 10, 11 and 12
 - ~~[**`v3/main`**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v3/main) Umbraco 9~~ <sub title="Umbraco 9 has reached end-of-life"><sup>(EOL)</sup></sub>
 - ~~[**`v2/main`**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v2/main) Umbraco 8~~ <sub title="Umbraco 8 has reached end-of-life"><sup>(EOL)</sup></sub>
