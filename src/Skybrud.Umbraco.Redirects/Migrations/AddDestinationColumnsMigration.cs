@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Skybrud.Umbraco.Redirects.Models.Dtos;
 using Umbraco.Cms.Infrastructure.Migrations;
 
 namespace Skybrud.Umbraco.Redirects.Migrations;
 
-internal class AddDestinationColumnsMigration : MigrationBase {
+internal class AddDestinationColumnsMigration : AsyncMigrationBase {
 
     private readonly IWebHostEnvironment _webHostEnvironment;
 
@@ -13,12 +14,12 @@ internal class AddDestinationColumnsMigration : MigrationBase {
         _webHostEnvironment = webHostEnvironment;
     }
 
-    protected override void Migrate() {
+    protected override Task MigrateAsync() {
 
         try {
 
             // Save a backup of all redirects
-            var result = RedirectsUtils.SaveBackup(_webHostEnvironment, Database);
+            RedirectsUtils.SaveBackup(_webHostEnvironment, Database);
 
             // Add the "DestinationQuery" column to the database table
             if (!ColumnExists(RedirectDto.TableName, nameof(RedirectDto.DestinationQuery))) {
@@ -62,6 +63,8 @@ internal class AddDestinationColumnsMigration : MigrationBase {
             //    Logger.LogInformation("Updated redirect with key {Key}.", redirect.Key);
 
             //}
+
+            return Task.CompletedTask;
 
         } catch (Exception ex) {
 

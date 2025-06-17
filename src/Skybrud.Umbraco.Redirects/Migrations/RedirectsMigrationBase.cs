@@ -4,7 +4,7 @@
 
 namespace Skybrud.Umbraco.Redirects.Migrations;
 
-public abstract class RedirectsMigrationBase : MigrationBase {
+public abstract class RedirectsMigrationBase : AsyncMigrationBase {
 
     protected RedirectsMigrationBase(IMigrationContext context) : base(context) { }
 

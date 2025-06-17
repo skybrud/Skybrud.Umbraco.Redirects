@@ -1,14 +1,17 @@
-﻿using Umbraco.Cms.Infrastructure.Migrations;
+﻿using System.Threading.Tasks;
+using Umbraco.Cms.Infrastructure.Migrations;
 
 namespace Skybrud.Umbraco.Redirects.Migrations {
 
-    internal class DummyMigration  : MigrationBase {
+    internal class DummyMigration : AsyncMigrationBase {
 
         // Dummy migration class because I messed up the migration plan (╯°□°)╯︵ ┻━┻
 
         public DummyMigration(IMigrationContext context) : base(context) { }
 
-        protected override void Migrate() { }
+        protected override Task MigrateAsync() {
+            return Task.CompletedTask;
+        }
 
     }
 

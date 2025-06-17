@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Skybrud.Umbraco.Redirects.Models.Schemas;
 using Umbraco.Cms.Core.Services;
@@ -6,7 +7,7 @@ using Umbraco.Cms.Infrastructure.Migrations;
 
 namespace Skybrud.Umbraco.Redirects.Migrations;
 
-internal class FixRootKeyValue : MigrationBase {
+internal class FixRootKeyValue : AsyncMigrationBase {
 
     private readonly IContentService _contentService;
     private readonly ILogger<FixRootKeyValue> _logger;
@@ -16,9 +17,9 @@ internal class FixRootKeyValue : MigrationBase {
         _logger = logger;
     }
 
-    protected override void Migrate() {
+    protected override Task MigrateAsync() {
 
-        if (TableExists(RedirectSchema.TableName) == false) return;
+        if (TableExists(RedirectSchema.TableName) == false) return Task.CompletedTask;
 
         var rows = Database.Fetch<Row>("SELECT * FROM [SkybrudRedirects] WHERE [RootId] > 0 AND [RootKey] = '00000000-0000-0000-0000-000000000000';");
 
@@ -37,6 +38,8 @@ internal class FixRootKeyValue : MigrationBase {
             Database.Execute("UPDATE [SkybrudRedirects] SET [RootKey] = @0 WHERE [Key] = @1;", content.Key, row.Key);
 
         }
+
+        return Task.CompletedTask;
 
     }
 

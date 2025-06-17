@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Skybrud.Umbraco.Redirects.Models.Dtos;
 using Umbraco.Cms.Infrastructure.Migrations;
 
 namespace Skybrud.Umbraco.Redirects.Migrations;
 
-internal class AddDestinationNameColumnMigration : MigrationBase {
+internal class AddDestinationNameColumnMigration : AsyncMigrationBase {
 
     private readonly IWebHostEnvironment _webHostEnvironment;
 
@@ -13,7 +14,7 @@ internal class AddDestinationNameColumnMigration : MigrationBase {
         _webHostEnvironment = webHostEnvironment;
     }
 
-    protected override void Migrate() {
+    protected override Task MigrateAsync() {
 
         try {
 
@@ -29,6 +30,8 @@ internal class AddDestinationNameColumnMigration : MigrationBase {
                     .Nullable()
                     .Do();
             }
+
+            return Task.CompletedTask;
 
         } catch (Exception ex) {
 
