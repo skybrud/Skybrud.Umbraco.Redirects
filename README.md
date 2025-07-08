@@ -1,10 +1,13 @@
 # Skybrud Redirects
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/skybrud/Skybrud.Umbraco.Redirects/blob/v4/main/LICENSE.md)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/skybrud/Skybrud.Umbraco.Redirects/blob/v14/main/LICENSE.md)
 [![NuGet](https://img.shields.io/nuget/v/Skybrud.Umbraco.Redirects.svg)](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects)
 [![NuGet](https://img.shields.io/nuget/dt/Skybrud.Umbraco.Redirects.svg)](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects)
 [![Umbraco Marketplace](https://img.shields.io/badge/umbraco-marketplace-%233544B1)](https://marketplace.umbraco.com/package/skybrud.umbraco.redirects)
 [![Skybrud.Umbraco.Redirects at packages.limbo.works](https://img.shields.io/badge/limbo-packages-blue)](https://packages.limbo.works/skybrud.umbraco.redirects/)
+
+> [!WARNING]  
+> Umbraco has reached end-of-life for version 14. This package is no longer supported for this version of Umbraco.
 
 **Skybrud.Umbraco.Redirects** is a redirects manager for Umbraco. The package features a dashboard and property editor that let's users manage inbound redirects from within the Umbraco backoffice.
 
@@ -13,7 +16,7 @@ URLs can be added to redirect to either a content item, media item or a custom U
 <table>
   <tr>
     <td><strong>License:</strong></td>
-    <td><a href="https://github.com/skybrud/Skybrud.Umbraco.Redirects/blob/v13/main/LICENSE.md"><strong>MIT License</strong></a></td>
+    <td><a href="https://github.com/skybrud/Skybrud.Umbraco.Redirects/blob/v14/main/LICENSE.md"><strong>MIT License</strong></a></td>
   </tr>
   <tr>
     <td><strong>Umbraco:</strong></td>
@@ -37,34 +40,29 @@ URLs can be added to redirect to either a content item, media item or a custom U
 
 ## Installation
 
-**Umbraco 14**  
+### Umbraco 14
 
-Version 14 of this package supports Umbraco version 14. The package is only available via [**NuGet**](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects/14.0.0-beta001). To install the package, you can use either the .NET CLI:
+Version 14 of this package supports Umbraco version 14. The package is only available via [**NuGet**](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects/14.0.0). To install the package, you can use either the .NET CLI:
 
 ```
-dotnet add package Skybrud.Umbraco.Redirects --version 14.0.0-beta001
+dotnet add package Skybrud.Umbraco.Redirects --version 14.0.0
 ```
 
 or the NuGet Package Manager:
 
 ```
-Install-Package Skybrud.Umbraco.Redirects -Version 14.0.0-beta001
+Install-Package Skybrud.Umbraco.Redirects -Version 14.0.0
 ```
 
-**Umbraco 13**  
-For the Umbraco 10-12 version of this package, see the [**v13/main**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v13/main) branch instead.
+### Other versions of Umbraco
 
-**Umbraco 10, 11 and 12**  
-For the Umbraco 10-12 version of this package, see the [**v4/main**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v4/main) branch instead.
-
-**Umbraco 9**  
-For the Umbraco 9 version of this package, see the [**v3/main**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v3/main) branch instead.
-
-**Umbraco 8**  
-For the Umbraco 8 version of this package, see the [**v2/main**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v2/main) branch instead.
-
-**Umbraco 7**  
-For the Umbraco 7 version of this package, see the [**v1/main**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v1/main) branch instead.
+- [**`v16/main`**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v16/main) Umbraco 16
+- [**`v15/main`**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v15/main) Umbraco 15
+- [**`v13/main`**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v13/main) Umbraco 13
+- ~~[**`v4/main`**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v4/main) Umbraco 10, 11 and 12~~ <sub title="Umbraco 10, 11 and 12 have reached end-of-life"><sup>(EOL)</sup></sub>
+- ~~[**`v3/main`**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v3/main) Umbraco 9~~ <sub title="Umbraco 9 has reached end-of-life"><sup>(EOL)</sup></sub>
+- ~~[**`v2/main`**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v2/main) Umbraco 8~~ <sub title="Umbraco 8 has reached end-of-life"><sup>(EOL)</sup></sub>
+- ~~[**`v1/main`**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v1/main) Umbraco 7~~ <sub title="Umbraco 7 has reached end-of-life"><sup>(EOL)</sup></sub>
 
 
 
@@ -77,7 +75,7 @@ For the Umbraco 7 version of this package, see the [**v1/main**](https://github.
 
 - Property editor that can be added to either a content item or media item to show inbound redirects
 
-- Package only handles custom redirecs - eg. added manually by an editor. The package will let Umbraco 7.5+ handle redirects for renamed pages
+- Package only handles custom redirecs - e.g. added manually by an editor. The package will let Umbraco handle redirects for renamed and moved pages
 
 - Includes a `RedirectsService` for managing the redirects from your own code
 

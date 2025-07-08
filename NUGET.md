@@ -10,7 +10,7 @@ URLs can be added to redirect to either a content item, media item or a custom U
 
 - Property editor that can be added to either a content item or media item to show inbound redirects
 
-- Package only handles custom redirects - eg. added manually by an editor. The package will let Umbraco handle redirects for renamed and moved pages
+- Package only handles custom redirects - e.g. added manually by an editor. The package will let Umbraco handle redirects for renamed and moved pages
 
 - Includes an `IRedirectsService` for managing the redirects from your own code
 

@@ -1,10 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.168
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35919.96 d17.13
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CEEEBF65-93EE-47DF-8794-B7313BFDC517}"
 	ProjectSection(SolutionItems) = preProject
+		..\debug.bat = ..\debug.bat
+		..\LICENSE.md = ..\LICENSE.md
+		..\NUGET.md = ..\NUGET.md
+		..\README.md = ..\README.md
+		..\release.bat = ..\release.bat
 		WebEssentials-Settings.json = WebEssentials-Settings.json
 	EndProjectSection
 EndProject
