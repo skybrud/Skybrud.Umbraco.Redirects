@@ -55,8 +55,8 @@ Install-Package Skybrud.Umbraco.Redirects -Version 13.0.8
 
 - [**`v16/main`**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v16/main) Umbraco 16
 - [**`v15/main`**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v15/main) Umbraco 15
-- [**`v14/main`**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v14/main) Umbraco 14
-- [**`v4/main`**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v4/main) Umbraco 10, 11 and 12
+- ~~[**`v14/main`**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v14/main) Umbraco 14~~ <sub title="Umbraco 14 has reached end-of-life"><sup>(EOL)</sup></sub>
+- ~~[**`v4/main`**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v4/main) Umbraco 10, 11 and 12~~ <sub title="Umbraco 10, 11 and 12 have reached end-of-life"><sup>(EOL)</sup></sub>
 - ~~[**`v3/main`**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v3/main) Umbraco 9~~ <sub title="Umbraco 9 has reached end-of-life"><sup>(EOL)</sup></sub>
 - ~~[**`v2/main`**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v2/main) Umbraco 8~~ <sub title="Umbraco 8 has reached end-of-life"><sup>(EOL)</sup></sub>
 - ~~[**`v1/main`**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v1/main) Umbraco 7~~ <sub title="Umbraco 7 has reached end-of-life"><sup>(EOL)</sup></sub>
@@ -68,11 +68,11 @@ Install-Package Skybrud.Umbraco.Redirects -Version 13.0.8
 
 ## Features
 
-- Global dashboard for listing all redirects. Supports filtering and searching.
+- Global dashboard for listing all redirects. Supports filtering and searching
 
 - Property editor that can be added to either a content item or media item to show inbound redirects
 
-- Package only handles custom redirecs - e.g. added manually by an editor. The package will let Umbraco 7.5+ handle redirects for renamed pages
+- Package only handles custom redirecs - e.g. added manually by an editor. The package will let Umbraco 7.5+ handle redirects for renamed and moved pages
 
 - Includes a `RedirectsService` for managing the redirects from your own code
 
@@ -97,4 +97,4 @@ Add-on for handling imports and exports of redirects supporting formats like CSV
 
 ## Documentation
 
-- [Go to the documentation on **packages.skybrud.dk**](https://packages.skybrud.dk/skybrud.umbraco.redirects/docs/v4/)
+- [Go to the documentation on **packages.skybrud.dk**](https://packages.skybrud.dk/skybrud.umbraco.redirects/docs/v13/)
