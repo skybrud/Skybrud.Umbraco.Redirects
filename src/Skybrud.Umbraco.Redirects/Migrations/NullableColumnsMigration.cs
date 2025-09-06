@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using NPoco;
 using Skybrud.Umbraco.Redirects.Models.Dtos;
 using Umbraco.Cms.Infrastructure.Migrations;
 
@@ -17,17 +18,24 @@ internal class NullableColumnsMigration : AsyncMigrationBase {
     protected override Task MigrateAsync() {
 
         try {
-
             // Save a backup of all redirects
             RedirectsUtils.SaveBackup(_webHostEnvironment, Database);
 
-            Alter
-                .Table(RedirectDto.TableName)
-                .AlterColumn(nameof(RedirectDto.QueryString)).AsString().Nullable()
-                .AlterColumn(nameof(RedirectDto.DestinationQuery)).AsString().Nullable()
-                .AlterColumn(nameof(RedirectDto.DestinationFragment)).AsString().Nullable()
-                .AlterColumn(nameof(RedirectDto.DestinationCulture)).AsString().Nullable()
-                .Do();
+            if (DatabaseType == DatabaseType.SQLite) {
+                const string oldTableName = $"{RedirectDto.TableName}Old";
+                Rename.Table(RedirectDto.TableName).To(oldTableName).Do();
+                Create.Table<RedirectDto>().Do();
+                Database.Execute($"INSERT INTO [{RedirectDto.TableName}] SELECT * FROM [{oldTableName}]");
+                Delete.Table(oldTableName).Do();
+            } else {
+                Alter
+                    .Table(RedirectDto.TableName)
+                    .AlterColumn(nameof(RedirectDto.QueryString)).AsString().Nullable()
+                    .AlterColumn(nameof(RedirectDto.DestinationQuery)).AsString().Nullable()
+                    .AlterColumn(nameof(RedirectDto.DestinationFragment)).AsString().Nullable()
+                    .AlterColumn(nameof(RedirectDto.DestinationCulture)).AsString().Nullable()
+                    .Do();
+            }
 
             Database.Execute("UPDATE [SkybrudRedirects] SET [QueryString] = null WHERE [QueryString] = '';");
             Database.Execute("UPDATE [SkybrudRedirects] SET [DestinationQuery] = null WHERE [DestinationQuery] = '';");
