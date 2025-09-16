@@ -121,22 +121,22 @@ function fromMedia(value, media) {
 
 }
 
-function fromExternal(link) {
+function fromExternal(value) {
 
-    const value = {
+    const link = {
         type: "url",
         key: "00000000-0000-0000-0000-000000000000",
-        url: link.url,
-        name: link.name,
+        url: value.url,
+        name: value.name,
         icon: "icon-link"
     };
 
-    addQueryAndFragment(value, link);
+    addQueryAndFragment(link, value);
 
     // Make sure that we set the display URL with proper path, query string and fragment
     link.displayUrl = link.url + (link.query ? "?" + link.query : "") + (link.fragment ?? "");
 
-    return value;
+    return link;
 
 }
 
