@@ -69,6 +69,10 @@ public class RedirectsBackOfficeHelperDependencies {
     /// Gets a reference to the current <see cref="IUmbracoContextAccessor"/>.
     /// </summary>
     public IUmbracoContextAccessor UmbracoContextAccessor { get; }
+
+    /// <summary>
+    /// Gets a reference to the current <see cref="IDocumentUrlService"/>.
+    /// </summary>
     public IDocumentUrlService DocumentUrlService { get; }
 
     #endregion

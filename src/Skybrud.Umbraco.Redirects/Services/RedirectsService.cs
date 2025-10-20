@@ -116,7 +116,7 @@ public class RedirectsService : IRedirectsService {
         // Validate the input
         if (id == 0) throw new ArgumentException("Parameter 'id' must have a value.", nameof(id));
 
-        RedirectDto dto;
+        RedirectDto? dto;
 
         using (IScope scope = _scopeProvider.CreateScope()) {
 
@@ -147,7 +147,7 @@ public class RedirectsService : IRedirectsService {
         // Validate the input
         if (key == Guid.Empty) throw new ArgumentException("Parameter 'key' must have a value.", nameof(key));
 
-        RedirectDto dto;
+        RedirectDto? dto;
 
         using (IScope scope = _scopeProvider.CreateScope()) {
 
