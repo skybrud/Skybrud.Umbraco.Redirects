@@ -19,7 +19,9 @@ using Skybrud.Umbraco.Redirects.Services;
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
+using Umbraco.Cms.Core.PublishedCache;
 using Umbraco.Cms.Core.Services;
+using Umbraco.Cms.Core.Services.Navigation;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Web.Common.Authorization;
 using Umbraco.Cms.Web.Common.Routing;
@@ -40,15 +42,17 @@ public class RedirectsController : Controller {
     private readonly IRedirectsService _redirectsService;
     private readonly RedirectsBackOfficeHelper _backOfficeHelper;
     private readonly IUmbracoContextAccessor _umbracoContextAccessor;
+    private readonly IDocumentUrlService _documentUrlService;
 
     #region Constructors
 
-    public RedirectsController(ILogger<RedirectsController> logger, ILocalizedTextService localizedTextService, IRedirectsService redirectsService, RedirectsBackOfficeHelper backOfficeHelper, IUmbracoContextAccessor umbracoContextAccessor) {
+    public RedirectsController(ILogger<RedirectsController> logger, ILocalizedTextService localizedTextService, IRedirectsService redirectsService, RedirectsBackOfficeHelper backOfficeHelper, IUmbracoContextAccessor umbracoContextAccessor, IDocumentUrlService documentUrlService) {
         _logger = logger;
         _localizedTextService = localizedTextService;
         _redirectsService = redirectsService;
         _backOfficeHelper = backOfficeHelper;
         _umbracoContextAccessor = umbracoContextAccessor;
+        _documentUrlService = documentUrlService;
     }
 
     #endregion
@@ -337,8 +341,11 @@ public class RedirectsController : Controller {
                         redirect.Destination = new RedirectDestination(published);
                     }
                 } else {
-                    IPublishedContent? content = umbraco.Content?.GetByRoute(redirect.Destination.Url);
-                    if (content is not null) {
+
+                    // TODO: might need to specify the start node here????
+
+                    Guid? key = _documentUrlService.GetDocumentKeyByRoute(redirect.Destination.Url, null, null, false);
+                    if (key is not null && umbraco.Content?.GetById(key.Value) is { } content) {
                         redirect.Destination = new RedirectDestination(content);
                     }
                 }

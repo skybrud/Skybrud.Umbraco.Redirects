@@ -69,6 +69,7 @@ public class RedirectsBackOfficeHelperDependencies {
     /// Gets a reference to the current <see cref="IUmbracoContextAccessor"/>.
     /// </summary>
     public IUmbracoContextAccessor UmbracoContextAccessor { get; }
+    public IDocumentUrlService DocumentUrlService { get; }
 
     #endregion
 
@@ -88,10 +89,11 @@ public class RedirectsBackOfficeHelperDependencies {
     /// <param name="redirectsSettings"></param>
     /// <param name="languageService"></param>
     /// <param name="umbracoContextAccessor"></param>
+    /// <param name="documentUrlService"></param>
     public RedirectsBackOfficeHelperDependencies(IOptions<GlobalSettings> globalSettings, IHostingEnvironment hostingEnvironment,
         IRuntimeState runtimeState, IDomainService domainService, IContentService contentService,
         IMediaService mediaService, ILocalizedTextService textService,
-        IBackOfficeSecurityAccessor backOfficeSecurityAccessor, IOptions<RedirectsSettings> redirectsSettings, ILanguageService languageService, IUmbracoContextAccessor umbracoContextAccessor) {
+        IBackOfficeSecurityAccessor backOfficeSecurityAccessor, IOptions<RedirectsSettings> redirectsSettings, ILanguageService languageService, IUmbracoContextAccessor umbracoContextAccessor, IDocumentUrlService documentUrlService) {
         GlobalSettings = globalSettings.Value;
         HostingEnvironment = hostingEnvironment;
         RuntimeState = runtimeState;
@@ -103,6 +105,7 @@ public class RedirectsBackOfficeHelperDependencies {
         RedirectsSettings = redirectsSettings;
         LanguageService = languageService;
         UmbracoContextAccessor = umbracoContextAccessor;
+        DocumentUrlService = documentUrlService;
     }
 
     #endregion
