@@ -54,6 +54,7 @@ public class RedirectDto {
     /// Gets or sets the inbound query string of the redirect.
     /// </summary>
     [Column("QueryString")]
+    [NullSetting(NullSetting = NullSettings.Null)]
     public string? QueryString { get; set; } = null!;
 
     /// <summary>
@@ -84,24 +85,28 @@ public class RedirectDto {
     /// Gets or sets the URL of the destination link.
     /// </summary>
     [Column("DestinationQuery")]
+    [NullSetting(NullSetting = NullSettings.Null)]
     public string? DestinationQuery { get; set; }
 
     /// <summary>
     /// Gets or sets the URL of the destination link.
     /// </summary>
     [Column("DestinationFragment")]
+    [NullSetting(NullSetting = NullSettings.Null)]
     public string? DestinationFragment { get; set; }
 
     /// <summary>
     /// Gets or sets the name of the destination link.
     /// </summary>
     [Column("DestinationName")]
+    [NullSetting(NullSetting = NullSettings.Null)]
     public string? DestinationName { get; set; }
 
     /// <summary>
     /// Gets or sets the culture of the destination link. Used when the destination is a content node that varies by culture.
     /// </summary>
     [Column("DestinationCulture")]
+    [NullSetting(NullSetting = NullSettings.Null)]
     public string? DestinationCulture { get; set; }
 
     /// <summary>
