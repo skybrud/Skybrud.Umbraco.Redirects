@@ -49,20 +49,20 @@ export const onInit = (_host, extensionRegistry) => {
             extensionRegistry.register({
                 "type": "localization",
                 "alias": "Skybrud.Umbraco.Redirects.EnUS",
-                "name": "English (United States)",
+                "name": "English",
                 "js": () => import("./Localization/en-US.js?v=" + RedirectsPackage.cacheBuster),
                 "meta": {
-                    "culture": "en-US"
+                    "culture": "en"
                 }
             });
 
             extensionRegistry.register({
                 "type": "localization",
                 "alias": "Skybrud.Umbraco.Redirects.DaDk",
-                "name": "Danish (Denmark)",
+                "name": "Danish",
                 "js": () => import("./Localization/da-DK.js?v=" + RedirectsPackage.cacheBuster),
                 "meta": {
-                    "culture": "da-DK"
+                    "culture": "da"
                 }
             });
 
