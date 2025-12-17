@@ -108,6 +108,7 @@ export class RedirectsDashboardElement extends UmbElementMixin(LitElement) {
         };
 
         this.dashboard = {
+            element: this,
             addButton: this.addButton,
             reloadButton: this.reloadButton,
             buttons: [this.addButton, this.reloadButton],
