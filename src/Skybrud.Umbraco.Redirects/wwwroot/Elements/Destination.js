@@ -81,7 +81,7 @@ function fromContent(value, content) {
         key: content.id,
         name: content.variants[0].name,
         icon: content.documentType.icon,
-        url: content.url,
+        url: content.urls.find(x => x),
         cultures: content.variants.filter(x => x.culture).map(x => x.culture),
         null: false,
         trashed: content.isTrashed,
@@ -210,7 +210,7 @@ export class RedirectsDestinationElement extends UmbElementMixin(LitElement) {
                 return;
             }
 
-            if (!value.link.url) {
+            if (value.link.type !== "document" && !value.link.url) {
                 alert("No link URL");
                 return;
             }
@@ -219,7 +219,14 @@ export class RedirectsDestinationElement extends UmbElementMixin(LitElement) {
 
                 case "document":
                     RedirectsService.getContent(value.link.unique).then(function (res) {
-                        self.value = fromContent(value.link, res.data);
+                        const link = fromContent(value.link, res.data);
+                        if (link.url) {
+                            self.value = link;
+                        }
+                        else {
+                            alert("No URL for content");
+                            return;
+                        }
                     });
                     break;
 
