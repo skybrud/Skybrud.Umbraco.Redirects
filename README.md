@@ -39,16 +39,16 @@ URLs can be added to redirect to either a content item, media item or a custom U
 
 ### Umbraco 16
 
-Version 16 of this package supports Umbraco version 16. The package is only available via [**NuGet**](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects/16.0.1). To install the package, you can use either the .NET CLI:
+Version 16 of this package supports Umbraco version 16. The package is only available via [**NuGet**](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects/16.0.3). To install the package, you can use either the .NET CLI:
 
 ```
-dotnet add package Skybrud.Umbraco.Redirects --version 16.0.2
+dotnet add package Skybrud.Umbraco.Redirects --version 16.0.3
 ```
 
 or the NuGet Package Manager:
 
 ```
-Install-Package Skybrud.Umbraco.Redirects -Version 16.0.2
+Install-Package Skybrud.Umbraco.Redirects -Version 16.0.3
 ```
 
 ### Other versions of Umbraco
