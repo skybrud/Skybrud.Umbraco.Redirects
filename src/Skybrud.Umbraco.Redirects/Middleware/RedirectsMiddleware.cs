@@ -64,18 +64,32 @@ public class RedirectsMiddleware {
                     RedirectPreLookupNotification preLookup = new(context);
                     _eventAggregator.Publish<IRedirectPreLookupNotification>(preLookup);
 
+                    // Return right away if the notification has been marked as canceled by any of the handlers
+                    if (preLookup.Cancel) return Task.CompletedTask;
+
                     // Get the destination URL from the arguments (in case a value has been set
                     // from a notification handler)
-                    string? destinationUrl = null;//preLookup.DestinationUrl;
+                    string? destinationUrl = preLookup.DestinationUrl;
 
-                    // Declare a variable for the redirect (either from the pre lookup or a lookup via the service)
-                    IRedirect? redirect = /*preLookup.Redirect ?? */_redirectsService.GetRedirectByRequest(context.Request);
+                    // Declare a variable for the redirect (either from the pre lookup or a lookup via the service). If
+                    // a redirect is found via the pre lookup, we use that redirect instead, and skip the lookup via
+                    // the service. If a redirect isn't found, but a destination URL is specified, we use that
+                    // destination URL instead, and skip the lookup via the service. If neither a redirect nor a
+                    // destination URL is found, we perform a lookup via the service.
+                    IRedirect? redirect;
+                    if (preLookup.Redirect is not null) {
+                        redirect = preLookup.Redirect;
+                    } else if (!string.IsNullOrWhiteSpace(destinationUrl)) {
+                        redirect = null;
+                    } else {
+                        redirect = _redirectsService.GetRedirectByRequest(context.Request);
+                    }
 
                     // Return if we neither have a redirect nor a destination URL
                     if (redirect == null && string.IsNullOrWhiteSpace(destinationUrl)) return Task.CompletedTask;
 
                     // Determine the redirect type
-                    RedirectType redirectType = /*preLookup.RedirectType ??*/ redirect?.Type ?? RedirectType.Temporary;
+                    RedirectType redirectType = preLookup.RedirectType ?? redirect?.Type ?? RedirectType.Temporary;
 
                     // Calculate the destination URL
                     if (redirect is not null) destinationUrl ??= _redirectsService.GetDestinationUrl(redirect, uri);
@@ -85,7 +99,7 @@ public class RedirectsMiddleware {
                     _eventAggregator.Publish<IRedirectPostLookupNotification>(postLookup);
 
                     // Extract the values from the notification
-                    //redirectType = postLookup.RedirectType;
+                    redirectType = postLookup.RedirectType;
                     destinationUrl = postLookup.DestinationUrl;
 
                     // The destination URL should have a value at this point. If the value is empty, it's most
