@@ -24,6 +24,11 @@ public class RedirectPreLookupNotification : IRedirectPreLookupNotification {
     public virtual string RawUrl => HttpContext.Request.GetDisplayUrl();
 
     /// <summary>
+    /// Gets or sets a value indicating whether the request should be cancelled. If this value is set to <see langword="true"/>, the redirects package will skip any further lookups, and return a 404 response.
+    /// </summary>
+    public bool Cancel {  get; set; }
+
+    /// <summary>
     /// Gets or sets the redirect.
     /// </summary>
     public IRedirect? Redirect { get; set; }
