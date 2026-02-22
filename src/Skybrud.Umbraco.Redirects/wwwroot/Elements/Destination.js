@@ -210,26 +210,34 @@ export class RedirectsDestinationElement extends UmbElementMixin(LitElement) {
                 return;
             }
 
-            if (!value.link.url) {
-                alert("No link URL");
-                return;
-            }
-
             switch (value.link.type) {
 
                 case "document":
                     RedirectsService.getContent(value.link.unique).then(function (res) {
+                        res.data.url = res.data.urls.find(x => x);
+                        if (!res.data.url) {
+                            alert("No link URL");
+                            return;
+                        }
                         self.value = fromContent(value.link, res.data);
                     });
                     break;
 
                 case "media":
+                    if (!value.link.url) {
+                        alert("No link URL");
+                        return;
+                    }
                     RedirectsService.getMedia(value.link.unique).then(function (res) {
                         self.value = fromMedia(value.link, res.data);
                     });
                     break;
 
                 case "external":
+                    if (!value.link.url) {
+                        alert("No link URL");
+                        return;
+                    }
                     self.value = fromExternal(value.link);
                     break;
 
