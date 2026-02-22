@@ -32,7 +32,7 @@
     <key alias="updated">Opdateret</key>
     <key alias="id">ID</key>
     <key alias="forwardQueryString">Videresend query string</key>
-    <key alias="forwardQueryStringDescription">Når slået til, tilføjes en evt. query string fra det oprindelige request til redirect destinationen.</key>
+    <key alias="forwardQueryStringDescription">Når aktiveret, tilføjes en evt. query string fra den oprindelige request til redirect destinationen.</key>
     <key alias="labelUrlDescription">Angiv den oprindelige URL, der skal sende brugeren videre til den valgte destination.</key>
     <key alias="labelDestinationDescription">Vælg den side eller URL, som brugeren skal sendes videre til.</key>
     <key alias="labelNoRedirects">Der er endnu ikke blevet tilføjet nogle redirects.</key>

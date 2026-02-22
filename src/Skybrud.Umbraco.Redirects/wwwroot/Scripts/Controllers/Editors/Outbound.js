@@ -1,4 +1,4 @@
-﻿angular.module("umbraco").controller("SkybrudUmbracoRedirects.OutboundRedirectEditor.Controller", function ($scope, editorService, skybrudRedirectsService) {
+﻿angular.module("umbraco").controller("SkybrudUmbracoRedirects.OutboundRedirectEditor.Controller", function ($scope, editorService, skybrudRedirectsService, localizationService) {
 
     const vm = this;
 
@@ -64,6 +64,18 @@
             }
         ]
     };
+
+    vm.redirectType.options.forEach(option => {
+        localizationService.localize(option.labelKey).then(localizedLabel => {
+            option.label = localizedLabel;
+        });
+    });
+
+    vm.forward.options.forEach(option => {
+        localizationService.localize(option.labelKey).then(localizedLabel => {
+            option.label = localizedLabel;
+        });
+    });
 
     if ($scope.model.value && !$scope.model.value.destination) $scope.model.value = "";
 
