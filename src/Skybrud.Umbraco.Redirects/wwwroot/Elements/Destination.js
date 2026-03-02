@@ -220,6 +220,7 @@ export class RedirectsDestinationElement extends UmbElementMixin(LitElement) {
                             return;
                         }
                         self.value = fromContent(value.link, res.data);
+                        self.dispatchEvent(new CustomEvent("change", { detail: { value: self.value }, bubbles: true, composed: true }));
                     });
                     break;
 
@@ -230,6 +231,7 @@ export class RedirectsDestinationElement extends UmbElementMixin(LitElement) {
                     }
                     RedirectsService.getMedia(value.link.unique).then(function (res) {
                         self.value = fromMedia(value.link, res.data);
+                        self.dispatchEvent(new CustomEvent("change", { detail: { value: self.value }, bubbles: true, composed: true }));
                     });
                     break;
 
@@ -239,6 +241,7 @@ export class RedirectsDestinationElement extends UmbElementMixin(LitElement) {
                         return;
                     }
                     self.value = fromExternal(value.link);
+                    self.dispatchEvent(new CustomEvent("change", { detail: { value: self.value }, bubbles: true, composed: true }));
                     break;
 
             }
@@ -253,6 +256,7 @@ export class RedirectsDestinationElement extends UmbElementMixin(LitElement) {
 
     reset() {
         this.value = null;
+        this.dispatchEvent(new CustomEvent("change", { detail: { value: this.value }, bubbles: true, composed: true }));
     }
 
     render() {

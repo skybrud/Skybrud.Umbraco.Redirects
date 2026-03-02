@@ -25,6 +25,7 @@ using Umbraco.Cms.Core.Services.Navigation;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Web.Common.Authorization;
 using Umbraco.Cms.Web.Common.Routing;
+using Umbraco.Extensions;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
@@ -43,16 +44,18 @@ public class RedirectsController : Controller {
     private readonly RedirectsBackOfficeHelper _backOfficeHelper;
     private readonly IUmbracoContextAccessor _umbracoContextAccessor;
     private readonly IDocumentUrlService _documentUrlService;
+    private readonly ILanguageService _languageService;
 
     #region Constructors
 
-    public RedirectsController(ILogger<RedirectsController> logger, ILocalizedTextService localizedTextService, IRedirectsService redirectsService, RedirectsBackOfficeHelper backOfficeHelper, IUmbracoContextAccessor umbracoContextAccessor, IDocumentUrlService documentUrlService) {
+    public RedirectsController(ILogger<RedirectsController> logger, ILocalizedTextService localizedTextService, IRedirectsService redirectsService, RedirectsBackOfficeHelper backOfficeHelper, IUmbracoContextAccessor umbracoContextAccessor, IDocumentUrlService documentUrlService, ILanguageService languageService) {
         _logger = logger;
         _localizedTextService = localizedTextService;
         _redirectsService = redirectsService;
         _backOfficeHelper = backOfficeHelper;
         _umbracoContextAccessor = umbracoContextAccessor;
         _documentUrlService = documentUrlService;
+        _languageService = languageService;
     }
 
     #endregion
@@ -273,6 +276,34 @@ public class RedirectsController : Controller {
 
     }
 
+    /// <summary>
+    /// Returns a list of cultures for the content node with the specified <paramref name="key"/>. If the node does not vary by culture, an empty list will be returned instead.
+    /// </summary>
+    /// <param name="key">The GUID key of the content node.</param>
+    /// <returns>A list of cultures.</returns>
+    [HttpGet("content/{key:guid}/cultures")]
+    public object GetCultures(Guid key) {
+
+        // Get the content node in the cache
+        IPublishedContent? content = _umbracoContextAccessor.GetRequiredUmbracoContext().Content?.GetById(key);
+        if (content is null) return NotFound();
+
+        // Get the cultures for the content node
+        IReadOnlyDictionary<string, PublishedCultureInfo> cultures = content.Cultures;
+
+        // If the content node does not vary by culture, return an empty list
+        if (cultures.Count == 1 && cultures.ContainsKey("")) return Array.Empty<object>();
+
+        // Return the cultures with some additional info (alias, name, node name and URL)
+        return cultures.Select(x => new {
+            alias = x.Key,
+            name = _languageService.GetAsync(x.Key)?.Result?.CultureName,
+            nodeName = content.Name(culture: x.Key),
+            url = content.Url(culture: x.Key)
+        });
+
+    }
+
     [HttpGet]
     [Route("serverVariables")]
     public object GetServerVariables() {
@@ -318,9 +349,11 @@ public class RedirectsController : Controller {
         switch (redirect.Destination.Type) {
 
             case RedirectDestinationType.Content:
-                if (redirect.Destination.Key != Guid.Empty && redirect.Destination.Id == 0) {
+                if (redirect.Destination.Key != Guid.Empty) {
                     if (umbraco.Content?.GetById(redirect.Destination.Key) is { } content) {
                         redirect.Destination.Id = content.Id;
+                        redirect.Destination.Url = content.Url(culture: redirect.Destination.Culture);
+                        redirect.Destination.Name = content.Name(culture: redirect.Destination.Culture);
                     }
                 }
                 break;

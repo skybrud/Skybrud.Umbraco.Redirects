@@ -96,15 +96,25 @@ export class EditRedirectModalElement extends UmbModalBaseElement {
 
             self.rootNodes = temp;
 
-            window.dispatchEvent(new RedirectsModalLoadEvent("redirects.onModalLoad", {
-                action: "edit",
-                redirect: redirect,
-                tabs: self.tabs
-            }));
+            if (redirect?.destination?.type === "content") {
+                RedirectsService.getCultures(redirect.destination.key).then(function (res2) {
+                    self.cultures = res2.data;
+                    self.cultures.forEach(function (culture) {
+                        culture.value = culture.alias;
+                        culture.selected = culture.value === redirect.destination.culture;
+                    });
+                    self.requestUpdate();
+                });
+            } else {
+                self.cultures = [];
+                window.dispatchEvent(new RedirectsModalLoadEvent("redirects.onModalLoad", {
+                    action: "edit",
+                    redirect: redirect,
+                    tabs: self.tabs
+                }));
+            }
 
         });
-
-
     }
 
     handleCancel() {
@@ -120,6 +130,10 @@ export class EditRedirectModalElement extends UmbModalBaseElement {
         const destination = this.shadowRoot.querySelector("#destination");
         const redirectTypePermanent = this.shadowRoot.querySelector("#redirectTypePermanent");
         const forwardEnabled = this.shadowRoot.querySelector("#forwardEnabled");
+        const culture = this.shadowRoot.querySelector("#culture");
+
+        // Update the culture on the destination (if specified)
+        destination.value.culture = culture?.value ?? null;
 
         const redirect = {
             id: this.value.redirect.id,
@@ -295,6 +309,21 @@ export class EditRedirectModalElement extends UmbModalBaseElement {
                                 <redirects-destination id="destination">${JSON.stringify(this.value.redirect?.destination)}</redirects-destination>
                             </div>
                         </div>
+                        ${when(this.cultures?.length > 1, () => html`
+                            <div class="property">
+                                <div>
+                                <strong>${property("destinationCulture")}</strong><br />
+                                <small>${property("destinationCultureDescription")}</small>
+                                </div>
+                                <div>
+                                    <uui-select id="culture" label="Culture" .options=${this.cultures}>
+                                        ${repeat(this.cultures, (item) => item.key, (item) => html`
+                                            <option value="${item.value}">${item.name}</option>
+                                        `)}
+                                    </uui-select>
+                                </div>
+                            </div>
+                        `)}
                         <h4>${label("advancedOptions")}</h4>
                         <div class="property">
                             <div>

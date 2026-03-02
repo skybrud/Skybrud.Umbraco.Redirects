@@ -278,6 +278,12 @@ export class RedirectsDashboardElement extends UmbElementMixin(LitElement) {
             ${when(r.destination.name, () => html`
                 ${type}:
                 <small>${r.destination.name}</small>
+                ${when(r.destination.culture, () => html`
+                    <small title="${this.localize.term("redirectsProperties_destinationCulture")}: ${r.destination.cultureName}">
+                        <uui-icon name="icon-flag-alt"></uui-icon>
+                        ${r.destination.culture}
+                    </small>
+                `)}
             `, () => html`
                 ${type}
             `)}

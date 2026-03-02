@@ -1,4 +1,4 @@
-﻿import { html, css, repeat } from "@umbraco-cms/backoffice/external/lit";
+﻿import { html, css, repeat, when } from "@umbraco-cms/backoffice/external/lit";
 import { UmbModalBaseElement } from "@umbraco-cms/backoffice/modal";
 import { UMB_MODAL_MANAGER_CONTEXT } from "@umbraco-cms/backoffice/modal";
 import { UMB_NOTIFICATION_CONTEXT } from '@umbraco-cms/backoffice/notification';
@@ -80,10 +80,13 @@ export class AddRedirectModelElement extends UmbModalBaseElement {
         const rootNode = this.shadowRoot.querySelector("#rootNode");
         const originalUrl = this.shadowRoot.querySelector("#originalUrl");
         const destination = this.shadowRoot.querySelector("#destination");
+        const culture = this.shadowRoot.querySelector("#culture");
 
         const redirectTypeTemporary = this.shadowRoot.querySelector("#redirectTypeTemporary");
 
         const forwardEnabled = this.shadowRoot.querySelector("#forwardEnabled");
+
+        destination.value.culture = culture?.value ?? null;
 
         const redirect = {
             rootNodeKey: rootNode.value && rootNode.value != "all" ? rootNode.value : null,
@@ -129,6 +132,31 @@ export class AddRedirectModelElement extends UmbModalBaseElement {
             self.requestUpdate();
         });
 
+    }
+
+    handleDestinationChange(event) {
+
+        const self = this;
+
+        const dest = event.detail?.value;
+
+        if (!Array.isArray(dest.cultures)) {
+            this.cultures = [];
+            self.requestUpdate();
+            return;
+        }
+
+        RedirectsService.getCultures(dest.key).then(function (res) {
+            self.cultures = res.data;
+            if (self.cultures.length > 0) self.cultures[0].selected = true;
+
+            self.cultures.forEach(function (culture) {
+                culture.value = culture.alias;
+            });
+
+            console.log(res.data);
+            self.requestUpdate();
+        });
 
     }
 
@@ -155,8 +183,8 @@ export class AddRedirectModelElement extends UmbModalBaseElement {
                     </div>
                     <div class="property">
                         <div>
-                                <strong>${property("originalUrl")}<span style="color: red;">*</span></strong><br />
-                                <small>${property("originalUrlDescription")}</small>
+                            <strong>${property("originalUrl")}<span style="color: red;">*</span></strong><br />
+                            <small>${property("originalUrlDescription")}</small>
                         </div>
                         <div>
                             <uui-input id="originalUrl" label="${property("originalUrl")}"></uui-input>
@@ -164,14 +192,29 @@ export class AddRedirectModelElement extends UmbModalBaseElement {
                     </div>
                     <div class="property">
                         <div>
-                                <strong>${property("destination")}<span style="color: red;">*</span></strong><br />
-                                <small>${property("destinationDescription")}</small>
+                            <strong>${property("destination")}<span style="color: red;">*</span></strong><br />
+                            <small>${property("destinationDescription")}</small>
                         </div>
                         <div>
-                            <redirects-destination id="destination"></redirects-destination>
+                            <redirects-destination id="destination" @change="${(e) => this.handleDestinationChange(e)}"></redirects-destination>
                         </div>
                     </div>
-                        <h4>${label("advancedOptions")}</h4>
+                    ${when(this.cultures?.length > 1, () => html`
+                        <div class="property">
+                            <div>
+                            <strong>${property("destinationCulture")}</strong><br />
+                            <small>${property("destinationCultureDescription")}</small>
+                            </div>
+                            <div>
+                                <uui-select id="culture" label="Culture" .options=${this.cultures}>
+                                    ${repeat(this.cultures, (item) => item.key, (item) => html`
+                                        <option value="${item.value}">${item.name}</option>
+                                    `)}
+                                </uui-select>
+                            </div>
+                        </div>
+                    `)}
+                    <h4>${label("advancedOptions")}</h4>
                     <div class="property">
                         <div>
                             <strong>${property("redirectType")}</strong><br />

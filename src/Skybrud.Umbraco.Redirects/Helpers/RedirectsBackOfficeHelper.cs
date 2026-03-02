@@ -194,7 +194,7 @@ public class RedirectsBackOfficeHelper {
             }
 
             // Look up the current URL and name of the destination (with respect for the selected culture)
-            if (TryGetContent(redirect.Destination.Id, out IPublishedContent? published)) {
+            if (TryGetContent(redirect.Destination.Key, out IPublishedContent? published)) {
 
                 string url = published.Url(destination.Culture);
                 if (!string.IsNullOrEmpty(url)) destination.Url = url;

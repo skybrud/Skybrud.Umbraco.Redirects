@@ -121,6 +121,10 @@ export class RedirectsService {
 
     }
 
+    static getCultures(key) {
+        return get("/umbraco/skybrud/redirects/content/" + key + "/cultures");
+    }
+
     static getMedia(key) {
 
         return new Promise((resolve, reject) => {

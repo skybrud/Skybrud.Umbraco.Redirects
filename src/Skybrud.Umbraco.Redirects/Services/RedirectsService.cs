@@ -70,6 +70,15 @@ public class RedirectsService : IRedirectsService {
             UpdateDate = DateTime.UtcNow
         };
 
+        // For content nodes, we should try to get the current URL of the content item (e.g. following the selected culture)
+        if (options.Destination.Type is RedirectDestinationType.Content && _umbracoContextAccessor.TryGetUmbracoContext(out IUmbracoContext? umbracoContext)) {
+            IPublishedContent? content = umbracoContext.Content?.GetById(options.Destination.Key);
+            if (content is not null) {
+                options.Destination.Name = content.Name(culture: options.Destination.Culture);
+                options.Destination.Url = content.Url(culture: options.Destination.Culture);
+            }
+        }
+
         // Initialize a new redirect
         Redirect redirect = new(dto) {
             RootKey = options.RootNodeKey,
