@@ -186,6 +186,47 @@ export class EditRedirectModalElement extends UmbModalBaseElement {
 
     }
 
+    handleDestinationChange(event) {
+
+        const self = this;
+
+        const dest = event.detail?.value;
+
+        if (!dest || !Array.isArray(dest.cultures)) {
+            this.cultures = [];
+            self.requestUpdate();
+            return;
+        }
+
+        const destination = this.shadowRoot.querySelector("#destination");
+
+        RedirectsService.getCultures(dest.key).then(function (res) {
+            self.cultures = res.data;
+            if (self.cultures.length > 0) self.cultures[0].selected = true;
+            self.cultures.forEach(function (culture) {
+                culture.value = culture.alias;
+            });
+            const selected = self.cultures.find(x => x.selected);
+            if (selected) destination.setName(selected.nodeName);
+            if (selected) destination.setUrl(selected.url);
+            self.requestUpdate();
+        });
+
+    }
+
+    handleCultureChange(event) {
+
+        const culture = this.cultures?.find(x => x.value === event.target.value);
+        if (!culture?.url) return;
+
+        const destination = this.shadowRoot.querySelector("#destination");
+        if (!destination) return;
+
+        destination.setName(culture.nodeName);
+        destination.setUrl(culture.url);
+
+    }
+
     changeTab(alias) {
         this.tab = alias;
         this.requestUpdate();
@@ -306,7 +347,7 @@ export class EditRedirectModalElement extends UmbModalBaseElement {
                                 <small>${property("destinationDescription")}</small>
                             </div>
                             <div>
-                                <redirects-destination id="destination">${JSON.stringify(this.value.redirect?.destination)}</redirects-destination>
+                                <redirects-destination id="destination" @change="${(e) => this.handleDestinationChange(e)}">${JSON.stringify(this.value.redirect?.destination)}</redirects-destination>
                             </div>
                         </div>
                         ${when(this.cultures?.length > 1, () => html`
@@ -316,7 +357,7 @@ export class EditRedirectModalElement extends UmbModalBaseElement {
                                 <small>${property("destinationCultureDescription")}</small>
                                 </div>
                                 <div>
-                                    <uui-select id="culture" label="Culture" .options=${this.cultures}>
+                                    <uui-select id="culture" label="Culture" .options=${this.cultures} @change=${(e) => this.handleCultureChange(e)}>
                                         ${repeat(this.cultures, (item) => item.key, (item) => html`
                                             <option value="${item.value}">${item.name}</option>
                                         `)}

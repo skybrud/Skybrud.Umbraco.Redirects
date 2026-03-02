@@ -140,23 +140,38 @@ export class AddRedirectModelElement extends UmbModalBaseElement {
 
         const dest = event.detail?.value;
 
-        if (!Array.isArray(dest.cultures)) {
+        if (!dest || !Array.isArray(dest.cultures)) {
             this.cultures = [];
             self.requestUpdate();
             return;
         }
 
+        const destination = this.shadowRoot.querySelector("#destination");
+
         RedirectsService.getCultures(dest.key).then(function (res) {
             self.cultures = res.data;
             if (self.cultures.length > 0) self.cultures[0].selected = true;
-
             self.cultures.forEach(function (culture) {
                 culture.value = culture.alias;
             });
-
-            console.log(res.data);
+            const selected = self.cultures.find(x => x.selected);
+            if (selected) destination.setName(selected.nodeName);
+            if (selected) destination.setUrl(selected.url);
             self.requestUpdate();
         });
+
+    }
+
+    handleCultureChange(event) {
+
+        const culture = this.cultures?.find(x => x.value === event.target.value);
+        if (!culture?.url) return;
+
+        const destination = this.shadowRoot.querySelector("#destination");
+        if (!destination) return;
+
+        destination.setName(culture.nodeName);
+        destination.setUrl(culture.url);
 
     }
 
@@ -206,7 +221,7 @@ export class AddRedirectModelElement extends UmbModalBaseElement {
                             <small>${property("destinationCultureDescription")}</small>
                             </div>
                             <div>
-                                <uui-select id="culture" label="Culture" .options=${this.cultures}>
+                                <uui-select id="culture" label="Culture" .options=${this.cultures} @change=${(e) => this.handleCultureChange(e)}>
                                     ${repeat(this.cultures, (item) => item.key, (item) => html`
                                         <option value="${item.value}">${item.name}</option>
                                     `)}

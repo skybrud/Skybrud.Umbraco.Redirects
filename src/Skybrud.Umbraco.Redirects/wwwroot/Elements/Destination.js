@@ -285,6 +285,21 @@ export class RedirectsDestinationElement extends UmbElementMixin(LitElement) {
         this.dispatchEvent(new CustomEvent("change", { detail: { value: this.value }, bubbles: true, composed: true }));
     }
 
+    setName(name) {
+        if (!this.value || !name) return;
+        this.value.name = name;
+        this.requestUpdate();
+    }
+
+    setUrl(url) {
+        if (!this.value) return;
+
+        this.value.url = url;
+        this.value.displayUrl = url + (this.value.query ? "?" + this.value.query : "") + (this.value.fragment ? this.value.fragment : "");
+
+        this.requestUpdate();
+    }
+
     render() {
         return html`
             <div>
