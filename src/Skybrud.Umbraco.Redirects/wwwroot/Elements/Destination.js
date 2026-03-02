@@ -9,6 +9,8 @@ import { RedirectsService } from "@skybrud-redirects/service";
 
 import { FAKE_UMB_PROPERTY_DATASET_CONTEXT, FakeUmbPropertyDatasetContext } from "/App_Plugins/Skybrud.Umbraco.Redirects/UmbPropertyDatasetContext.js";
 
+import { extractUmbColorVariable } from "@umbraco-cms/backoffice/resources";
+
 function parseMediaUrl(url) {
 
     // The link picker modal (14.3.0) returns an absolute URL for media, where we just want the relative URL
@@ -106,11 +108,14 @@ function fromContent(value, content) {
 
 function fromMedia(value, media) {
 
+    const icon = content.documentType.icon.split(" ");
+
     const link = {
         type: "media",
         key: media.id,
         name: media.variants[0].name,
-        icon: media.mediaType.icon,
+        icon: icon[0],
+        color: icon.length > 1 ? icon.length[1] : null,
         url: parseMediaUrl(media.url)
     };
 
@@ -130,7 +135,8 @@ function fromExternal(value) {
         key: "00000000-0000-0000-0000-000000000000",
         url: value.url,
         name: value.name,
-        icon: "icon-link"
+        icon: "icon-link",
+        color: null
     };
 
     addQueryAndFragment(link, value);
@@ -139,6 +145,26 @@ function fromExternal(value) {
     link.displayUrl = link.url + (link.query ? "?" + link.query : "") + (link.fragment ?? "");
 
     return link;
+
+}
+
+function parseIcon(value) {
+    if (!value) return null;
+    const array = value.split(" ");
+    const color = array.length > 1 ? extractUmbColorVariable(array[1].replace("color-", "")) : null;
+    return { name: array[0], color: color ? `color:var(${color})` : null };
+}
+
+function updateItem(item) {
+
+    const icon = parseIcon(item.icon);
+
+    if (icon) {
+        item.iconName = icon.name;
+        item.iconColor = icon.color;
+    }
+
+    return item;
 
 }
 
@@ -177,7 +203,7 @@ export class RedirectsDestinationElement extends UmbElementMixin(LitElement) {
 
         try {
             if (value) {
-                this.value = JSON.parse(value);
+                this.value = updateItem(JSON.parse(value));
                 this.requestUpdate();
             }
         } catch (ex) {
@@ -219,7 +245,7 @@ export class RedirectsDestinationElement extends UmbElementMixin(LitElement) {
                             alert("No link URL");
                             return;
                         }
-                        self.value = fromContent(value.link, res.data);
+                        self.value = updateItem(fromContent(value.link, res.data));
                         self.dispatchEvent(new CustomEvent("change", { detail: { value: self.value }, bubbles: true, composed: true }));
                     });
                     break;
@@ -230,7 +256,7 @@ export class RedirectsDestinationElement extends UmbElementMixin(LitElement) {
                         return;
                     }
                     RedirectsService.getMedia(value.link.unique).then(function (res) {
-                        self.value = fromMedia(value.link, res.data);
+                        self.value = updateItem(fromMedia(value.link, res.data));
                         self.dispatchEvent(new CustomEvent("change", { detail: { value: self.value }, bubbles: true, composed: true }));
                     });
                     break;
@@ -240,7 +266,7 @@ export class RedirectsDestinationElement extends UmbElementMixin(LitElement) {
                         alert("No link URL");
                         return;
                     }
-                    self.value = fromExternal(value.link);
+                    self.value = updateItem(fromExternal(value.link));
                     self.dispatchEvent(new CustomEvent("change", { detail: { value: self.value }, bubbles: true, composed: true }));
                     break;
 
@@ -272,7 +298,7 @@ export class RedirectsDestinationElement extends UmbElementMixin(LitElement) {
                         <div style="color: red;">${this.localize.term("redirects_contentNotPublished")}</div>
                     `)}
                     <uui-ref-node name="${this.value.name}" detail="${this.value.displayUrl}" selectable="false" selectOnly="true">
-                      <uui-icon slot="icon" name="${this.value.icon}"></uui-icon>
+                      <uui-icon slot="icon" name="${this.value.iconName}" style="${this.value.iconColor}"></uui-icon>
                       <uui-action-bar slot="actions">
                         <uui-button @click="${this.edit}" label="${this.localize.term("general_edit")}"><uui-icon name="edit" aria-hidden="true"></uui-icon></uui-button>
                         <uui-button @click="${this.reset}" label="${this.localize.term("general_delete")}" color="danger"><uui-icon name="delete" aria-hidden="true"></uui-icon></uui-button>
