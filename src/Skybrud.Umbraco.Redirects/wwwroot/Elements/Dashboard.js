@@ -179,7 +179,7 @@ export class RedirectsDashboardElement extends UmbElementMixin(LitElement) {
 
         modalContext.onSubmit().then(function () {
             self.updateRedirects();
-            self._notificationContext?.peek("positive", { data: { message: "Successfully added new redirect" } });
+            self._notificationContext?.peek("positive", { data: { message: self.localize.term("redirects_addRedirectSuccess") } });
         }, function () {
             // modal closed by the user
         });
@@ -199,7 +199,7 @@ export class RedirectsDashboardElement extends UmbElementMixin(LitElement) {
 
         modalContext.onSubmit().then(function () {
             self.updateRedirects();
-            self._notificationContext?.peek("positive", { data: { message: "Successfully updated redirect" } });
+            self._notificationContext?.peek("positive", { data: { message: self.localize.term("redirects_editRedirectSuccess") } });
         }, function () {
             // modal closed by the user
         });
@@ -216,22 +216,22 @@ export class RedirectsDashboardElement extends UmbElementMixin(LitElement) {
 
         if (!redirect?.key) return;
         umbConfirmModal(this, {
-            headline: 'Delete',
+            headline: this.localize.term("redirects_deleteRedirectTitle"),
             content: html`
 				<div style="width:500px">
-					<p>Are you sure you want to delete this redirect?</p>
-					Original URL: <strong>${redirect.url}</strong><br />
-					Destination URL: <strong>${redirect.destination.url}</strong>
+					<p>${this.localize.term("redirects_deleteRedirectMessage")}</p>
+					${this.localize.term("redirects_originalUrl")}: <strong>${redirect.url}</strong><br />
+					${this.localize.term("redirects_destination")}: <strong>${redirect.destination.url}</strong>
 				</div>
 			`,
             color: 'danger',
-            confirmLabel: 'Delete',
+            confirmLabel: this.localize.term("general_delete"),
         }).then(function () {
             RedirectsService.deleteRedirect(redirect).then(function () {
-                self._notificationContext?.peek("positive", { data: { message: "Redirect successfully deleted" } });
+                self._notificationContext?.peek("positive", { data: { message: self.localize.term("redirects_deleteRedirectSuccess") } });
                 self.updateRedirects();
             }, function () {
-                self._notificationContext?.peek("danger", { data: { message: "Deleting redirect failed" } });
+                self._notificationContext?.peek("danger", { data: { message: self.localize.term("redirects_deleteRedirectFailed") } });
             });
         }, function () {
             // model was cancelled
@@ -404,10 +404,11 @@ export class RedirectsDashboardElement extends UmbElementMixin(LitElement) {
                                     </uui-table-cell>
                                     <uui-table-cell role="cell">
                                         <uui-action-bar style="justify-self: left;">
-						                    <uui-button label="Edit" look="secondary" pristine="" type="button" color="default" @click="${() => this.edit(item)}">
+
+						                    <uui-button label="Edit" title="${this.localize.term("redirects_editRedirectTitle")}" look="secondary" pristine="" type="button" color="default" @click="${() => this.edit(item)}">
 							                    <uui-icon name="edit" aria-hidden="true"></uui-icon>
 						                    </uui-button>
-						                    <uui-button label="Delete" look="secondary" pristine="" type="button" color="danger" @click="${() => this.delete(item)}">
+						                    <uui-button label="Delete" title="${this.localize.term("redirects_deleteRedirectTitle")}" look="secondary" pristine="" type="button" color="danger" @click="${() => this.delete(item)}">
 							                    <uui-icon name="delete" aria-hidden="true"></uui-icon>
 						                    </uui-button>
 					                    </uui-action-bar>
@@ -418,7 +419,14 @@ export class RedirectsDashboardElement extends UmbElementMixin(LitElement) {
                     </uui-box>
                     ${when(this.pagination?.pages > 1, () => html`
                         <div style="margin-top: 20px;">
-                            <uui-pagination current="${this.pagination.page}" total="${this.pagination.pages}" @change="${this.onPageChange}"></uui-pagination>
+                            <uui-pagination
+                                current="${this.pagination.page}"
+                                total="${this.pagination.pages}"
+                                firstLabel="${this.localize.term("general_first")}"
+                                previousLabel="${this.localize.term("general_previous")}"
+                                nextLabel="${this.localize.term("general_next")}"
+                                lastLabel="${this.localize.term("general_last")}"
+                                @change="${this.onPageChange}"></uui-pagination>
                         </div>
                     `)}
                 `)}
