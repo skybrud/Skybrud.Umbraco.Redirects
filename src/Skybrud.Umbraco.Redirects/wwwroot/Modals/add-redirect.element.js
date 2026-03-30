@@ -86,8 +86,6 @@ export class AddRedirectModelElement extends UmbModalBaseElement {
 
         const forwardEnabled = this.shadowRoot.querySelector("#forwardEnabled");
 
-        destination.value.culture = culture?.value ?? null;
-
         const redirect = {
             rootNodeKey: rootNode.value && rootNode.value != "all" ? rootNode.value : null,
             originalUrl: originalUrl.value,
@@ -113,6 +111,8 @@ export class AddRedirectModelElement extends UmbModalBaseElement {
         }
 
         if (this.errors.length > 0) return;
+
+        destination.value.culture = culture?.value ?? null;
 
         self.submitButtonState = "waiting";
         self.requestUpdate();

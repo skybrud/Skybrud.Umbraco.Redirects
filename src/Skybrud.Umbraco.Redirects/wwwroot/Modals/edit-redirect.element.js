@@ -132,9 +132,6 @@ export class EditRedirectModalElement extends UmbModalBaseElement {
         const forwardEnabled = this.shadowRoot.querySelector("#forwardEnabled");
         const culture = this.shadowRoot.querySelector("#culture");
 
-        // Update the culture on the destination (if specified)
-        destination.value.culture = culture?.value ?? null;
-
         const redirect = {
             id: this.value.redirect.id,
             key: this.value.redirect.key,
@@ -167,6 +164,9 @@ export class EditRedirectModalElement extends UmbModalBaseElement {
             self.requestUpdate();
             return;
         }
+
+        // Update the culture on the destination (if specified)
+        destination.value.culture = culture?.value ?? null;
 
         self.submitButtonState = "waiting";
         self.requestUpdate();
