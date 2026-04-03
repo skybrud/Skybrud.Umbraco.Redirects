@@ -85,6 +85,9 @@ export default {
 		updateDate: "Sidst opdateret"
 	},
 	redirectsErrors: {
+		validationErrors: "Valideringsfejl",
+		fieldRequired: "Feltet <strong>%0%</strong> er påkrævet.",
+		fieldInvalid: "Feltet <strong>%0%</strong> er ugyldigt.",
 		redirectAlreadyExists: "Et redirect med den samme URL og query string findes allerede."
 	}
 }

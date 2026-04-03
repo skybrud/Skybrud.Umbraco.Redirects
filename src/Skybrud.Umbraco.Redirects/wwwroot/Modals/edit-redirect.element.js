@@ -1,4 +1,4 @@
-﻿import { html, css, when, repeat } from "@umbraco-cms/backoffice/external/lit";
+﻿import { html, css, when, repeat, unsafeHTML } from "@umbraco-cms/backoffice/external/lit";
 import { UmbModalBaseElement } from "@umbraco-cms/backoffice/modal";
 import { UMB_MODAL_MANAGER_CONTEXT } from "@umbraco-cms/backoffice/modal";
 import { UMB_NOTIFICATION_CONTEXT } from '@umbraco-cms/backoffice/notification';
@@ -145,21 +145,20 @@ export class EditRedirectModalElement extends UmbModalBaseElement {
         this.errors = [];
 
         if (!redirect.originalUrl) {
-            this.errors.push("Original URL not specified.");
+            this.errors.push(unsafeHTML(this.localize.term("redirectsErrors_fieldRequired", this.localize.term("redirectsProperties_originalUrl"))));
         } else if (redirect.originalUrl.indexOf("/") !== 0) {
-            this.errors.push("Invalid original URL.");
+            this.errors.push(unsafeHTML(this.localize.term("redirectsErrors_fieldInvalid", this.localize.term("redirectsProperties_originalUrl"))));
         }
 
         if (!destination.value) {
-            this.errors.push("Destination not specified.");
-            return;
+            this.errors.push(unsafeHTML(this.localize.term("redirectsErrors_fieldRequired", this.localize.term("redirectsProperties_destination"))));
         } else if (!destination.value.url) {
-            this.errors.push("Destination URL not specified.");
-            return;
+            this.errors.push(unsafeHTML(this.localize.term("redirectsErrors_fieldInvalid", this.localize.term("redirectsProperties_destination"))));
         }
 
         if (this.errors.length > 0) {
-            console.log(redirect, this.errors);
+            console.error("Exiting due to validation errors: ", redirect, this.errors);
+            this.errors.title = this.localize.term("redirectsErrors_validationErrors");
             self.submitButtonState = "failed";
             self.requestUpdate();
             return;
@@ -319,6 +318,14 @@ export class EditRedirectModalElement extends UmbModalBaseElement {
                 `)}
                 ${when(this.tab === "settings", () => html`
                     <uui-box>
+                        ${when(this.errors?.length > 0, () => html`
+                            <div class="errors">
+                                <div>${this.errors.title}</div>
+                                <ul>
+                                    ${this.errors.map(error => html`<li>${error}</li>`)}
+                                </ul>
+                            </div>
+                        `)}
                         <div class="property">
                             <div>
                                 <strong>${this.localize.term("redirectsProperties_site")}</strong><br />
@@ -405,6 +412,13 @@ export class EditRedirectModalElement extends UmbModalBaseElement {
     }
 
     static styles = css`
+        .errors {
+            margion-bottom: 20px;
+            color: var(--uui-color-danger);
+            > div {
+                font-weight: bold;
+            }
+        }
         uui-tab {
             border-left: 1px solid var(--uui-color-divider-standalone);
         }
