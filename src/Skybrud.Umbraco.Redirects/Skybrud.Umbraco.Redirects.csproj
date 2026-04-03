@@ -36,6 +36,11 @@
     <AssemblyMetadata Include="UmbracoMarketplaceUrl" Value="https://marketplace.umbraco.com/package/skybrud.umbraco.redirects" />
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- Ignore MimeKit vulnerability as we don't care about transient dependencies -->
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-g7hc-96xr-gvvx" />
+  </ItemGroup>
+
   <!-- Include NuGet dependencies -->
   <ItemGroup>
     <PackageReference Include="Skybrud.Essentials" Version="1.1.64" />
