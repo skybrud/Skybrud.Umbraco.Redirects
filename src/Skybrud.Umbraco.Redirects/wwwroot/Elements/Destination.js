@@ -108,7 +108,7 @@ function fromContent(value, content) {
 
 function fromMedia(value, media) {
 
-    const icon = media.documentType.icon.split(" ");
+    const icon = media.mediaType.icon.split(" ");
 
     const link = {
         type: "media",
