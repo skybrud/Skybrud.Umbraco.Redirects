@@ -281,13 +281,46 @@ public class RedirectsService : IRedirectsService {
 
         // Determine the root node via domain of the request
         Guid rootKey = Guid.Empty;
+        string? culturePrefix = null;
+
         if (TryGetDomain(uri, out Domain? domain)) {
             IPublishedContent? root = umbracoContext?.Content?.GetById(domain.ContentId);
             if (root != null) rootKey = root.Key;
+
+            // Extract culture prefix from domain (e.g., "localhost:44315/de" -> "/de")
+            culturePrefix = GetDomainPath(domain);
         }
 
-        // Look for a matching redirect
-        return GetRedirectByPathAndQuery(rootKey, path, query);
+        // If no domain matched, try to extract culture prefix from the path itself
+        // Common patterns: /de/, /fr/, /en/, /it/
+        if (string.IsNullOrEmpty(culturePrefix)) {
+            culturePrefix = ExtractCulturePrefix(path);
+        }
+
+        // Strip culture prefix from path for redirect lookup
+        string pathWithoutCulture = path;
+        if (!string.IsNullOrEmpty(culturePrefix) && path.StartsWith(culturePrefix, StringComparison.OrdinalIgnoreCase)) {
+            pathWithoutCulture = path[culturePrefix.Length..];
+            if (string.IsNullOrEmpty(pathWithoutCulture)) pathWithoutCulture = "/";
+        }
+
+        // Try to find redirect with path without culture prefix first
+        var redirect = GetRedirectByPathAndQuery(rootKey, pathWithoutCulture, query);
+
+        // If not found and we stripped a prefix, also try the full path as fallback
+        if (redirect == null && pathWithoutCulture != path) {
+            redirect = GetRedirectByPathAndQuery(rootKey, path, query);
+        }
+
+        // If still not found and we have a root key, try global redirects
+        if (redirect == null && rootKey != Guid.Empty) {
+            redirect = GetRedirectByPathAndQuery(Guid.Empty, pathWithoutCulture, query);
+            if (redirect == null && pathWithoutCulture != path) {
+                redirect = GetRedirectByPathAndQuery(Guid.Empty, path, query);
+            }
+        }
+
+        return redirect;
 
     }
 
@@ -718,6 +751,43 @@ public class RedirectsService : IRedirectsService {
     protected virtual bool TryGetDomain(Uri uri, [NotNullWhen(true)] out Domain? domain) {
         domain = DomainUtils.FindDomainForUri(_domains, uri);
         return domain != null;
+    }
+
+    /// <summary>
+    /// Extracts the path prefix from a domain name.
+    /// For example, "localhost:44315/de" returns "/de", "example.com" returns "".
+    /// </summary>
+    /// <param name="domain">The domain.</param>
+    /// <returns>The path prefix including leading slash, or empty string if no path prefix.</returns>
+    private static string GetDomainPath(Domain domain) {
+        string name = domain.Name;
+        int slashIndex = name.IndexOf('/');
+        if (slashIndex < 0) return string.Empty;
+
+        string path = name[slashIndex..];
+        // Ensure path starts with / and doesn't end with /
+        if (!path.StartsWith('/')) path = "/" + path;
+        return path.TrimEnd('/');
+    }
+
+    /// <summary>
+    /// Extracts a culture prefix from the path if present.
+    /// Matches common patterns like /de/, /fr/, /en/, /it/, /rm/.
+    /// </summary>
+    /// <param name="path">The URL path.</param>
+    /// <returns>The culture prefix (e.g., "/de") or null if not found.</returns>
+    private static string? ExtractCulturePrefix(string path) {
+        if (string.IsNullOrEmpty(path) || path.Length < 3) return null;
+
+        // Match pattern: /xx/ or /xx at the start where xx is 2 lowercase letters
+        if (path[0] == '/' && path.Length >= 3 && char.IsLetter(path[1]) && char.IsLetter(path[2])) {
+            // Check if it's followed by / or end of string
+            if (path.Length == 3 || path[3] == '/') {
+                return path[..3]; // Returns "/de", "/fr", etc.
+            }
+        }
+
+        return null;
     }
 
     #endregion
