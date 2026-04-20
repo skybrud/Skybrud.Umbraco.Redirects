@@ -48,80 +48,91 @@ public class RedirectsMiddleware {
             return;
         }
 
-        // Check for redirects proactively BEFORE the request continues to Umbraco.
-        // This ensures redirects work even when Umbraco finds and renders a 404 page.
-        if (TryHandleRedirect(context)) {
-            return; // Redirect was performed, stop the pipeline
-        }
+        context.Response.OnStarting(() => {
+
+            switch (context.Response.StatusCode) {
+
+                case StatusCodes.Status404NotFound: {
+
+                    // Get the URI of the inbound request
+                    Uri uri = context.Request.GetUriForRedirects();
+
+                    // Make sure we have an Umbraco context (we need it for various lookups)
+                    using UmbracoContextReference reference = _umbracoContextFactory.EnsureUmbracoContext();
+
+                    // Invoke the pre lookup event
+                    RedirectPreLookupNotification preLookup = new(context);
+                    _eventAggregator.Publish<IRedirectPreLookupNotification>(preLookup);
+
+                    // Return right away if the notification has been marked as canceled by any of the handlers
+                    if (preLookup.Cancel) return Task.CompletedTask;
+
+                    // Get the destination URL from the arguments (in case a value has been set
+                    // from a notification handler)
+                    string? destinationUrl = preLookup.DestinationUrl;
+
+                    // Declare a variable for the redirect (either from the pre lookup or a lookup via the service). If
+                    // a redirect is found via the pre lookup, we use that redirect instead, and skip the lookup via
+                    // the service. If a redirect isn't found, but a destination URL is specified, we use that
+                    // destination URL instead, and skip the lookup via the service. If neither a redirect nor a
+                    // destination URL is found, we perform a lookup via the service.
+                    IRedirect? redirect;
+                    if (preLookup.Redirect is not null) {
+                        redirect = preLookup.Redirect;
+                    } else if (!string.IsNullOrWhiteSpace(destinationUrl)) {
+                        redirect = null;
+                    } else {
+                        redirect = _redirectsService.GetRedirectByRequest(context.Request);
+                    }
+
+                    // Return if we neither have a redirect nor a destination URL
+                    if (redirect == null && string.IsNullOrWhiteSpace(destinationUrl)) return Task.CompletedTask;
+
+                    // Determine the redirect type
+                    RedirectType redirectType = preLookup.RedirectType ?? redirect?.Type ?? RedirectType.Temporary;
+
+                    // Calculate the destination URL
+                    if (redirect is not null) destinationUrl ??= _redirectsService.GetDestinationUrl(redirect, uri);
+
+                    // Invoke the post lookup event
+                    RedirectPostLookupNotification postLookup = new(context, redirect, redirectType, destinationUrl);
+                    _eventAggregator.Publish<IRedirectPostLookupNotification>(postLookup);
+
+                    // Extract the values from the notification
+                    redirectType = postLookup.RedirectType;
+                    destinationUrl = postLookup.DestinationUrl;
+
+                    // The destination URL should have a value at this point. If the value is empty, it's most
+                    // likely because it was emptied via the post look up notification
+                    if (string.IsNullOrWhiteSpace(destinationUrl)) return Task.CompletedTask;
+
+                    // Respond with a redirect based on the redirect type
+                    switch (redirectType) {
+
+                        // If redirect is of type permanent, trigger a 301 redirect
+                        case RedirectType.Permanent:
+                            context.Response.Redirect(destinationUrl, true);
+                            break;
+
+                        // If redirect is of type temporary, trigger a 307 redirect
+                        case RedirectType.Temporary:
+                            context.Response.Redirect(destinationUrl, false, true);
+                            break;
+
+                    }
+
+                    break;
+
+                }
+
+            }
+
+            return Task.CompletedTask;
+
+        });
 
         await _next(context);
 
-    }
-
-    /// <summary>
-    /// Attempts to handle a redirect for the current request proactively.
-    /// </summary>
-    /// <param name="context">The HTTP context.</param>
-    /// <returns><c>true</c> if a redirect was performed; otherwise, <c>false</c>.</returns>
-    private bool TryHandleRedirect(HttpContext context) {
-
-        // Get the URI of the inbound request
-        Uri uri = context.Request.GetUriForRedirects();
-
-        // Make sure we have an Umbraco context (we need it for various lookups)
-        using UmbracoContextReference reference = _umbracoContextFactory.EnsureUmbracoContext();
-
-        // Invoke the pre lookup event
-        RedirectPreLookupNotification preLookup = new(context);
-        _eventAggregator.Publish<IRedirectPreLookupNotification>(preLookup);
-
-        // Return if the notification has been marked as canceled
-        if (preLookup.Cancel) return false;
-
-        // Get the destination URL from the arguments
-        string? destinationUrl = preLookup.DestinationUrl;
-
-        // Look for a redirect
-        IRedirect? redirect;
-        if (preLookup.Redirect is not null) {
-            redirect = preLookup.Redirect;
-        } else if (!string.IsNullOrWhiteSpace(destinationUrl)) {
-            redirect = null;
-        } else {
-            redirect = _redirectsService.GetRedirectByRequest(context.Request);
-        }
-
-        // Return if we neither have a redirect nor a destination URL
-        if (redirect == null && string.IsNullOrWhiteSpace(destinationUrl)) return false;
-
-        // Determine the redirect type
-        RedirectType redirectType = preLookup.RedirectType ?? redirect?.Type ?? RedirectType.Temporary;
-
-        // Calculate the destination URL
-        if (redirect is not null) destinationUrl ??= _redirectsService.GetDestinationUrl(redirect, uri);
-
-        // Invoke the post lookup event
-        RedirectPostLookupNotification postLookup = new(context, redirect, redirectType, destinationUrl);
-        _eventAggregator.Publish<IRedirectPostLookupNotification>(postLookup);
-
-        // Extract the values from the notification
-        redirectType = postLookup.RedirectType;
-        destinationUrl = postLookup.DestinationUrl;
-
-        // Return if destination URL was cleared
-        if (string.IsNullOrWhiteSpace(destinationUrl)) return false;
-
-        // Perform the redirect
-        switch (redirectType) {
-            case RedirectType.Permanent:
-                context.Response.Redirect(destinationUrl, true);
-                break;
-            case RedirectType.Temporary:
-                context.Response.Redirect(destinationUrl, false, true);
-                break;
-        }
-
-        return true;
     }
 
 }
