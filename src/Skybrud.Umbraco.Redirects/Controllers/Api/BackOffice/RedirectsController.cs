@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Skybrud.Essentials.Enums;
 using Skybrud.Essentials.Security.Extensions;
 using Skybrud.Essentials.Strings.Extensions;
+using Skybrud.Umbraco.Redirects.Config;
 using Skybrud.Umbraco.Redirects.Exceptions;
 using Skybrud.Umbraco.Redirects.Helpers;
 using Skybrud.Umbraco.Redirects.Models;
@@ -36,6 +38,7 @@ namespace Skybrud.Umbraco.Redirects.Controllers.Api.BackOffice;
 public class RedirectsController : Controller {
 
     private readonly ILogger<RedirectsController> _logger;
+    private readonly IOptions<RedirectsSettings> _settings;
     private readonly ILocalizedTextService _localizedTextService;
     private readonly IRedirectsService _redirectsService;
     private readonly RedirectsBackOfficeHelper _backOfficeHelper;
@@ -45,8 +48,9 @@ public class RedirectsController : Controller {
 
     #region Constructors
 
-    public RedirectsController(ILogger<RedirectsController> logger, ILocalizedTextService localizedTextService, IRedirectsService redirectsService, RedirectsBackOfficeHelper backOfficeHelper, IUmbracoContextAccessor umbracoContextAccessor, IDocumentUrlService documentUrlService, ILanguageService languageService) {
+    public RedirectsController(ILogger<RedirectsController> logger, IOptions<RedirectsSettings> settings, ILocalizedTextService localizedTextService, IRedirectsService redirectsService, RedirectsBackOfficeHelper backOfficeHelper, IUmbracoContextAccessor umbracoContextAccessor, IDocumentUrlService documentUrlService, ILanguageService languageService) {
         _logger = logger;
+        _settings = settings;
         _localizedTextService = localizedTextService;
         _redirectsService = redirectsService;
         _backOfficeHelper = backOfficeHelper;
@@ -306,7 +310,10 @@ public class RedirectsController : Controller {
     public object GetServerVariables() {
         return new {
             version = RedirectsPackage.InformationalVersion,
-            cacheBuster = RedirectsPackage.InformationalVersion.ToMd5Hash()
+            cacheBuster = RedirectsPackage.InformationalVersion.ToMd5Hash(),
+            dashboard = new {
+                limit = _settings.Value.Dashboard.Limit
+            }
         };
     }
 

@@ -7,6 +7,7 @@ import { umbConfirmModal } from '@umbraco-cms/backoffice/modal';
 import { UMB_MODAL_MANAGER_CONTEXT } from "@umbraco-cms/backoffice/modal";
 import { UMB_NOTIFICATION_CONTEXT } from '@umbraco-cms/backoffice/notification';
 
+import { RedirectsPackage } from "@skybrud-redirects/package";
 import { RedirectsService } from "@skybrud-redirects/service";
 import { REDIRECTS_ADD_REDIRECT_MODAL } from "@skybrud-redirects/modals/add";
 import { REDIRECTS_EDIT_REDIRECT_MODAL } from "@skybrud-redirects/modals/edit";
@@ -112,7 +113,8 @@ export class RedirectsDashboardElement extends UmbElementMixin(LitElement) {
             addButton: this.addButton,
             reloadButton: this.reloadButton,
             buttons: [this.addButton, this.reloadButton],
-            requestUpdate: self.requestUpdate
+            requestUpdate: self.requestUpdate,
+            settings: RedirectsPackage.dashboard
         };
 
         RedirectsService.getRootNodes().then(function (res) {
@@ -130,8 +132,6 @@ export class RedirectsDashboardElement extends UmbElementMixin(LitElement) {
 
         });
 
-        this.updateRedirects();
-
         this.consumeContext(UMB_MODAL_MANAGER_CONTEXT, (instance) => {
             this.modalManagerContext = instance;
         });
@@ -144,13 +144,15 @@ export class RedirectsDashboardElement extends UmbElementMixin(LitElement) {
             dashboard: self.dashboard
         }));
 
+        this.updateRedirects();
+
     }
 
     updateRedirects(page) {
 
         const self = this;
 
-        const params = { limit: 10 };
+        const params = { limit: this.dashboard.settings?.limit ?? null };
         if (page) params.page = page;
         if (this.rootNode && this.rootNode !== "all") params.rootNodeKey = this.rootNode;
         if (this.type && this.type !== "all") params.type = this.type;
