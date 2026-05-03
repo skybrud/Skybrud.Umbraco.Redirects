@@ -72,7 +72,7 @@ public class RedirectsService : IRedirectsService {
 
         // For content nodes, we should try to get the current URL of the content item (e.g. following the selected culture)
         if (options.Destination.Type is RedirectDestinationType.Content && _umbracoContextAccessor.TryGetUmbracoContext(out IUmbracoContext? umbracoContext)) {
-            IPublishedContent? content = umbracoContext.Content?.GetById(options.Destination.Key);
+            IPublishedContent? content = umbracoContext.Content.GetById(options.Destination.Key);
             if (content is not null) {
                 options.Destination.Name = content.Name(culture: options.Destination.Culture);
                 options.Destination.Url = content.Url(culture: options.Destination.Culture);
@@ -147,7 +147,7 @@ public class RedirectsService : IRedirectsService {
     }
 
     /// <summary>
-    /// Returns the redirect mathing the specified GUID <paramref name="key"/>, or <see langword="null"/> if not found.
+    /// Returns the redirect matching the specified GUID <paramref name="key"/>, or <see langword="null"/> if not found.
     /// </summary>
     /// <param name="key">The GUID key of the redirect.</param>
     /// <returns>An instance of <see cref="IRedirect"/>, or <see langword="null"/> if not found.</returns>
@@ -178,7 +178,7 @@ public class RedirectsService : IRedirectsService {
     }
 
     /// <summary>
-    /// Gets the redirect mathing the specified <paramref name="path"/> and <paramref name="query"/>, or <see langword="null"/> if not found.
+    /// Gets the redirect matching the specified <paramref name="path"/> and <paramref name="query"/>, or <see langword="null"/> if not found.
     /// </summary>
     /// <param name="rootNodeKey">The key of the root node. Use <see cref="Guid.Empty"/> for a global redirect.</param>
     /// <param name="path">The path of the redirect.</param>
@@ -282,7 +282,7 @@ public class RedirectsService : IRedirectsService {
         // Determine the root node via domain of the request
         Guid rootKey = Guid.Empty;
         if (TryGetDomain(uri, out Domain? domain)) {
-            IPublishedContent? root = umbracoContext?.Content?.GetById(domain.ContentId);
+            IPublishedContent? root = umbracoContext?.Content.GetById(domain.ContentId);
             if (root != null) rootKey = root.Key;
         }
 
@@ -605,7 +605,7 @@ public class RedirectsService : IRedirectsService {
     public virtual string GetDestinationUrl(IRedirectBase redirect, Uri? uri) {
 
         // Ideally a redirect should always have a destination URL. If it doesn't, it indicates a malformed redirect
-        if (string.IsNullOrWhiteSpace(redirect.Destination.Url)) throw new PropertyNotSetException(nameof(redirect.Destination.Url), "Redirect does not specify a destionation URL.");
+        if (string.IsNullOrWhiteSpace(redirect.Destination.Url)) throw new PropertyNotSetException(nameof(redirect.Destination.Url), "Redirect does not specify a destination URL.");
 
         // Get the query string (if any)
         string? query = redirect.Destination.Query;
@@ -622,20 +622,20 @@ public class RedirectsService : IRedirectsService {
 
             case RedirectDestinationType.Content:
                 if (_umbracoContextAccessor.TryGetUmbracoContext(out IUmbracoContext? context)) {
-                    content = context.Content?.GetById(redirect.Destination.Key);
+                    content = context.Content.GetById(redirect.Destination.Key);
                 }
                 break;
 
             case RedirectDestinationType.Media:
                 if (_umbracoContextAccessor.TryGetUmbracoContext(out context)) {
-                    content = context.Media?.GetById(redirect.Destination.Key);
+                    content = context.Media.GetById(redirect.Destination.Key);
                 }
                 break;
 
         }
 
         // For legacy reasons, the package saves empty values as empty strings instead of null values, but for
-        // variants, specifying an emtpy string or null when calling the "Url" method gives you different results,
+        // variants, specifying an empty string or null when calling the "Url" method gives you different results,
         // so we need to account for that
         string? culture = redirect.Destination.Culture.NullIfWhiteSpace();
 

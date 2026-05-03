@@ -15,7 +15,7 @@ namespace Skybrud.Umbraco.Redirects.Services;
 public static class DomainUtils {
 
     /// <summary>
-    /// Attemtps to get the domain matching the specified <paramref name="uri"/>
+    /// Attempts to get the domain matching the specified <paramref name="uri"/>
     /// </summary>
     /// <param name="domainService">The current <see cref="IDomainService"/>.</param>
     /// <param name="uri">The URI.</param>
