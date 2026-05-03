@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Text;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
@@ -19,9 +18,7 @@ using Skybrud.Umbraco.Redirects.Services;
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
-using Umbraco.Cms.Core.PublishedCache;
 using Umbraco.Cms.Core.Services;
-using Umbraco.Cms.Core.Services.Navigation;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Web.Common.Authorization;
 using Umbraco.Cms.Web.Common.Routing;
@@ -285,7 +282,7 @@ public class RedirectsController : Controller {
     public object GetCultures(Guid key) {
 
         // Get the content node in the cache
-        IPublishedContent? content = _umbracoContextAccessor.GetRequiredUmbracoContext().Content?.GetById(key);
+        IPublishedContent? content = _umbracoContextAccessor.GetRequiredUmbracoContext().Content.GetById(key);
         if (content is null) return NotFound();
 
         // Get the cultures for the content node
@@ -297,7 +294,7 @@ public class RedirectsController : Controller {
         // Return the cultures with some additional info (alias, name, node name and URL)
         return cultures.Select(x => new {
             alias = x.Key,
-            name = _languageService.GetAsync(x.Key)?.Result?.CultureName,
+            name = _languageService.GetAsync(x.Key).Result?.CultureName,
             nodeName = content.Name(culture: x.Key),
             url = content.Url(culture: x.Key)
         });
@@ -350,7 +347,7 @@ public class RedirectsController : Controller {
 
             case RedirectDestinationType.Content:
                 if (redirect.Destination.Key != Guid.Empty) {
-                    if (umbraco.Content?.GetById(redirect.Destination.Key) is { } content) {
+                    if (umbraco.Content.GetById(redirect.Destination.Key) is { } content) {
                         redirect.Destination.Id = content.Id;
                         redirect.Destination.Url = content.Url(culture: redirect.Destination.Culture);
                         redirect.Destination.Name = content.Name(culture: redirect.Destination.Culture);
@@ -360,7 +357,7 @@ public class RedirectsController : Controller {
 
             case RedirectDestinationType.Media:
                 if (redirect.Destination.Key != Guid.Empty && redirect.Destination.Id == 0) {
-                    if (umbraco.Media?.GetById(redirect.Destination.Key) is { } media) {
+                    if (umbraco.Media.GetById(redirect.Destination.Key) is { } media) {
                         redirect.Destination.Id = media.Id;
                     }
                 }
@@ -370,7 +367,7 @@ public class RedirectsController : Controller {
                 if (!redirect.Destination.Url.StartsWith('/')) return;
                 if (redirect.Destination.Url.StartsWith("/media/")) {
                     IMedia? media = StaticServiceProvider.Instance.GetRequiredService<IMediaService>().GetMediaByPath(redirect.Destination.Url);
-                    if (media is not null && umbraco.Media?.GetById(media.Key) is { } published) {
+                    if (media is not null && umbraco.Media.GetById(media.Key) is { } published) {
                         redirect.Destination = new RedirectDestination(published);
                     }
                 } else {
@@ -378,7 +375,7 @@ public class RedirectsController : Controller {
                     // TODO: might need to specify the start node here????
 
                     Guid? key = _documentUrlService.GetDocumentKeyByRoute(redirect.Destination.Url, null, null, false);
-                    if (key is not null && umbraco.Content?.GetById(key.Value) is { } content) {
+                    if (key is not null && umbraco.Content.GetById(key.Value) is { } content) {
                         redirect.Destination = new RedirectDestination(content);
                     }
                 }
@@ -403,18 +400,6 @@ public class RedirectsController : Controller {
 
         return new JsonResult(body) {
             StatusCode = (int) ex.StatusCode
-        };
-
-    }
-
-    private JsonResult Error(HttpStatusCode status, string message) {
-
-        // Initialize a new error model
-        ApiError body = new(message);
-
-        // Initialize and return the response
-        return new JsonResult(body) {
-            StatusCode = (int) status
         };
 
     }
