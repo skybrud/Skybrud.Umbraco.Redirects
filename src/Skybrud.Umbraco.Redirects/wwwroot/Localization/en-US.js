@@ -91,6 +91,7 @@ export default {
 		validationErrors: "Validation errors",
 		fieldRequired: "The field <strong>%0%</strong> is required.",
 		fieldInvalid: "The field <strong>%0%</strong> is invalid.",
-		redirectAlreadyExists: "A redirect with the same URL and query string already exists."
+		redirectAlreadyExists: "A redirect with the same URL and query string already exists.",
+		urlNotValid: "The specified URL is not valid. A valid URL should look like <code>/page</code> or <code>/page/subpage</code>."
 	}
 }

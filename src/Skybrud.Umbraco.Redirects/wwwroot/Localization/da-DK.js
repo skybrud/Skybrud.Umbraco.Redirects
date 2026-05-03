@@ -88,6 +88,7 @@ export default {
 		validationErrors: "Valideringsfejl",
 		fieldRequired: "Feltet <strong>%0%</strong> er påkrævet.",
 		fieldInvalid: "Feltet <strong>%0%</strong> er ugyldigt.",
-		redirectAlreadyExists: "Et redirect med den samme URL og query string findes allerede."
+		redirectAlreadyExists: "Et redirect med den samme URL og query string findes allerede.",
+		urlNotValid: "Den angivne URL er ikke gyldig. En gyldig URL bør f.eks.se ud som <code>/side</code> eller <code>/underside</code>."
 	}
 }
