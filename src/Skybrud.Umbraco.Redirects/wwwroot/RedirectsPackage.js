@@ -12,6 +12,10 @@
         return this._serverVariables["cacheBuster"];
     }
 
+    static get settings() {
+        return this._serverVariables["settings"];
+    }
+
     static get dashboard() {
         return this._serverVariables["dashboard"] ?? { limit: 20 };
     }

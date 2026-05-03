@@ -311,6 +311,7 @@ public class RedirectsController : Controller {
         return new {
             version = RedirectsPackage.InformationalVersion,
             cacheBuster = RedirectsPackage.InformationalVersion.ToMd5Hash(),
+            settings = _settings.Value,
             dashboard = new {
                 limit = _settings.Value.Dashboard.Limit
             }

@@ -3,8 +3,11 @@
 import { RedirectsAuth } from "@skybrud-redirects/auth";
 import { RedirectsPackage } from "@skybrud-redirects/package";
 import { RedirectsService } from "@skybrud-redirects/service";
+import { RedirectsDocumentCondition } from "@skybrud-redirects/conditions/document";
+import { RedirectsMediaCondition } from "@skybrud-redirects/conditions/media";
 
 import "@skybrud-redirects/elements/from-now";
+
 
 export const onInit = (_host, extensionRegistry) => {
 
@@ -79,6 +82,68 @@ export const onInit = (_host, extensionRegistry) => {
                 "name": "Edit Redirect Modal",
                 "element": "/App_Plugins/Skybrud.Umbraco.Redirects/Modals/edit-redirect.element.js?v=" + RedirectsPackage.cacheBuster,
             });
+
+            extensionRegistry.register({
+                type: "condition",
+                name: "Skybrud Redirects: Document Condition",
+                alias: "Skybrud.Umbraco.Redirects.Condition.Document",
+                api: RedirectsDocumentCondition
+            });
+
+            extensionRegistry.register({
+                type: "condition",
+                name: "Skybrud Redirects: Media Condition",
+                alias: "Skybrud.Umbraco.Redirects.Condition.Media",
+                api: RedirectsMediaCondition
+            });
+
+            if (RedirectsPackage.settings?.workspaceViews?.document?.enabled) {
+                extensionRegistry.register({
+                    type: "workspaceView",
+                    name: "Skybrud Redirects: Document Workspace View",
+                    alias: "Skybrud.Umbraco.Redirects.DocumentWorkspaceView",
+                    element: "/App_Plugins/Skybrud.Umbraco.Redirects/WorkspaceViews/Document.js?v=" + RedirectsPackage.cacheBuster,
+                    weight: RedirectsPackage.settings?.workspaceViews?.document?.weight ?? -100,
+                    meta: {
+                        label: "Redirects",
+                        pathname: "redirects",
+                        icon: "icon-arrow-right"
+                    },
+                    conditions: [
+                        {
+                            alias: "Umb.Condition.WorkspaceAlias",
+                            match: "Umb.Workspace.Document"
+                        },
+                        {
+                            alias: "Skybrud.Umbraco.Redirects.Condition.Document"
+                        }
+                    ]
+                });
+            }
+
+            if (RedirectsPackage.settings?.workspaceViews?.media?.enabled) {
+                extensionRegistry.register({
+                    type: "workspaceView",
+                    name: "Skybrud Redirects: Media Workspace View",
+                    alias: "Skybrud.Umbraco.Redirects.MediaWorkspaceView",
+                    element: "/App_Plugins/Skybrud.Umbraco.Redirects/WorkspaceViews/Media.js?v=" + RedirectsPackage.cacheBuster,
+                    weight: RedirectsPackage.settings?.workspaceViews?.media?.weight ?? -100,
+                    meta: {
+                        label: "Redirects",
+                        pathname: "redirects",
+                        icon: "icon-arrow-right"
+                    },
+                    conditions: [
+                        {
+                            alias: "Umb.Condition.WorkspaceAlias",
+                            match: "Umb.Workspace.Media"
+                        },
+                        {
+                            alias: "Skybrud.Umbraco.Redirects.Condition.Media"
+                        }
+                    ]
+                });
+            }
 
         });
 
