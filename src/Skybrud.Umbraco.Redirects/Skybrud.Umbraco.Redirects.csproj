@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>17.0.4</VersionPrefix>
+    <VersionPrefix>17.0.5</VersionPrefix>
     <VersionSuffix Condition="'$(Configuration)'=='Debug'">build$([System.DateTime]::UtcNow.ToString(`yyyyMMddHHmm`))</VersionSuffix>
     <Authors>Anders Bjerner</Authors>
     <Company>Limbo</Company>
@@ -36,9 +36,19 @@
     <AssemblyMetadata Include="UmbracoMarketplaceUrl" Value="https://marketplace.umbraco.com/package/skybrud.umbraco.redirects" />
   </ItemGroup>
 
+  <!-- Ignore vulnerabilities from transient dependencies -->
   <ItemGroup>
-    <!-- Ignore MimeKit vulnerability as we don't care about transient dependencies -->
+
+    <!-- Package 'MimeKit' 4.14.0 has a known moderate severity vulnerability -->
     <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-g7hc-96xr-gvvx" />
+
+    <!-- Package 'MailKit' 4.14.0 has a known moderate severity vulnerability -->
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-9j88-vvj5-vhgr" />
+
+    <!-- Package 'System.Security.Cryptography.Xml' 8.0.0 has a known high severity vulnerability -->
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-37gx-xxp4-5rgx" />
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-w3x6-4m5h-cxqf" />
+
   </ItemGroup>
 
   <!-- Include NuGet dependencies -->
