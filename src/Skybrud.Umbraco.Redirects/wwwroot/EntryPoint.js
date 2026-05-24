@@ -67,6 +67,16 @@ export const onInit = (_host, extensionRegistry) => {
             });
 
             extensionRegistry.register({
+                "type": "localization",
+                "alias": "Skybrud.Umbraco.Redirects.SvSe",
+                "name": "Swedish",
+                "js": () => import("./Localization/sv-SE.js?v=" + RedirectsPackage.cacheBuster),
+                "meta": {
+                    "culture": "sv"
+                }
+            });
+
+            extensionRegistry.register({
                 "type": "modal",
                 "alias": "Skybrud.Umbraco.Redirects.AddRedirectModal",
                 "name": "Add Redirect Modal",
