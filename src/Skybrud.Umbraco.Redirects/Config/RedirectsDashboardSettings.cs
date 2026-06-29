@@ -11,8 +11,8 @@ public class RedirectsDashboardSettings {
     public bool Enabled => true;
 
     /// <summary>
-    /// Gets or sets the default limit of redirects to show in the dashboard. Default is <c>20</c>.
+    /// Gets or sets the page size of the dashboard. Default is <c>20</c>.
     /// </summary>
-    public int Limit { get; set; } = 20;
+    public int PageSize { get; set; } = 20;
 
 }

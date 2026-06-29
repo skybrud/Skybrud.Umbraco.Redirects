@@ -313,7 +313,7 @@ public class RedirectsController : Controller {
             cacheBuster = RedirectsPackage.InformationalVersion.ToMd5Hash(),
             settings = _settings.Value,
             dashboard = new {
-                limit = _settings.Value.Dashboard.Limit
+                limit = _settings.Value.Dashboard.PageSize
             }
         };
     }

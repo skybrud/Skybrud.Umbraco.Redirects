@@ -17,6 +17,7 @@ public class RedirectsPackageManifestReader : IPackageManifestReader {
 
         List<PackageManifest> temp = [
             new PackageManifest {
+                Id = RedirectsPackage.Alias,
                 Name = RedirectsPackage.Name,
                 AllowTelemetry = true,
                 Version = RedirectsPackage.InformationalVersion,

@@ -12,6 +12,8 @@ using Skybrud.Umbraco.Redirects.Exceptions;
 using Skybrud.Umbraco.Redirects.Extensions;
 using Skybrud.Umbraco.Redirects.Models;
 using Skybrud.Umbraco.Redirects.Models.Dtos;
+using Skybrud.Umbraco.Redirects.Notifications;
+using Umbraco.Cms.Core.Events;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Routing;
 using Umbraco.Cms.Core.Services;
@@ -27,6 +29,7 @@ namespace Skybrud.Umbraco.Redirects.Services;
 /// </summary>
 public class RedirectsService : IRedirectsService {
 
+    private readonly IEventAggregator _eventAggregator;
     private readonly IScopeProvider _scopeProvider;
     private readonly IDomainService _domains;
     private readonly IContentService _contentService;
@@ -39,6 +42,7 @@ public class RedirectsService : IRedirectsService {
     /// </summary>
     /// <param name="dependencies">An instance of <see cref="RedirectsServiceDependencies"/>.</param>
     public RedirectsService(RedirectsServiceDependencies dependencies) {
+        _eventAggregator = dependencies.EventAggregator;
         _scopeProvider = dependencies.ScopeProvider;
         _domains = dependencies.Domains;
         _contentService = dependencies.ContentService;
@@ -101,6 +105,7 @@ public class RedirectsService : IRedirectsService {
             throw new RedirectAlreadyExistsException(redirect);
         }
 
+        // Insert the new DTO in the database
         try {
             scope.Database.Insert(redirect.Dto);
         } catch (Exception ex) {
@@ -111,7 +116,14 @@ public class RedirectsService : IRedirectsService {
         scope.Complete();
 
         // Get the created redirect again
-        return GetRedirectById(redirect.Id)!;
+        IRedirect? result = GetRedirectById(redirect.Id);
+        if (result is null) throw new RedirectsException("Failed creating redirect.");
+
+        // Broadcast the notification that a redirect was created
+        _eventAggregator.Publish(new RedirectAddedNotification(redirect));
+
+        // Return the redirect
+        return redirect;
 
     }
 
@@ -551,6 +563,9 @@ public class RedirectsService : IRedirectsService {
         // Complete the scope
         scope.Complete();
 
+        // Broadcast the notification that a redirect was saved
+        _eventAggregator.Publish(new RedirectSavedNotification(redirect));
+
         // Return the redirect
         return redirect;
 
@@ -580,6 +595,9 @@ public class RedirectsService : IRedirectsService {
 
         // Complete the scope
         scope.Complete();
+
+        // Broadcast the notification that a redirect was deleted
+        _eventAggregator.Publish(new RedirectDeletedNotification(redirect));
 
     }
 

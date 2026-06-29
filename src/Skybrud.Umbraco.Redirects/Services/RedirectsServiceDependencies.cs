@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Umbraco.Cms.Core.Events;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Infrastructure.Scoping;
@@ -16,6 +17,11 @@ public class RedirectsServiceDependencies {
     /// Gets the reference to the current <see cref="ILogger{RedirectsService}"/>.
     /// </summary>
     internal ILogger<RedirectsService> Logger { get; }
+
+    /// <summary>
+    /// Gets the reference to the current <see cref="IEventAggregator"/>.
+    /// </summary>
+    public IEventAggregator EventAggregator { get; }
 
     /// <summary>
     /// Gets the reference to the current <see cref="IScopeProvider"/>.
@@ -45,12 +51,14 @@ public class RedirectsServiceDependencies {
     /// Initializes a new instance based on the specified dependencies.
     /// </summary>
     /// <param name="logger"></param>
+    /// <param name="eventAggregator"></param>
     /// <param name="scopeProvider"></param>
     /// <param name="domains"></param>
     /// <param name="contentService"></param>
     /// <param name="umbracoContextAccessor"></param>
-    public RedirectsServiceDependencies(ILogger<RedirectsService> logger, IScopeProvider scopeProvider, IDomainService domains, IContentService contentService, IUmbracoContextAccessor umbracoContextAccessor) {
+    public RedirectsServiceDependencies(ILogger<RedirectsService> logger, IEventAggregator eventAggregator, IScopeProvider scopeProvider, IDomainService domains, IContentService contentService, IUmbracoContextAccessor umbracoContextAccessor) {
         Logger = logger;
+        EventAggregator = eventAggregator;
         ScopeProvider = scopeProvider;
         Domains = domains;
         ContentService = contentService;
