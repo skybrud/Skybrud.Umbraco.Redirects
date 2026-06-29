@@ -157,6 +157,8 @@ function parseIcon(value) {
 
 function updateItem(item) {
 
+    if (!item) return null;
+
     const icon = parseIcon(item.icon);
 
     if (icon) {
@@ -175,6 +177,7 @@ export class RedirectsDestinationElement extends UmbElementMixin(LitElement) {
     }
 
     set value(v) {
+        updateItem(v);
         this._value = v;
         this.requestUpdate();
     }

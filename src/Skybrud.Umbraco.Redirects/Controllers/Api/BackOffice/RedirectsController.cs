@@ -92,6 +92,22 @@ public class RedirectsController : Controller {
 
     }
 
+    [HttpGet("{type}/{key}")]
+    public object GetRedirects(string type, Guid key) {
+
+        if (!EnumUtils.TryParseEnum(type, out RedirectDestinationType nodeType) || nodeType == RedirectDestinationType.Url) {
+            return BadRequest($"Invalid node type '{type}'.");
+        }
+
+        IReadOnlyList<IRedirect> redirects = _redirectsService.GetRedirectsByNodeKey(nodeType, key);
+
+        return new {
+            total = redirects.Count,
+            items = redirects.Select(_backOfficeHelper.Map)
+        };
+
+    }
+
     [HttpPut("")]
     public object AddRedirect([FromBody] AddRedirectOptions options) {
 

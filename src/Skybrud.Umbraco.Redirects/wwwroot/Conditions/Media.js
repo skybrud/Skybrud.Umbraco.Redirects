@@ -9,8 +9,8 @@ export class RedirectsMediaCondition extends UmbConditionBase {
             this.observe(workspace.values, () => {
                 const data = workspace.getData();
                 if (!data || !data.mediaType) return;
-                console.log(data);
-                console.log(data.mediaType);
+                //console.log(data);
+                //console.log(data.mediaType);
                 this.permitted = data.mediaType.unique !== "f38bd2d7-65d0-48e6-95dc-87ce06ec2d3d";
                 args.onChange();
             });

@@ -151,6 +151,10 @@ export class RedirectsService {
         return get("/umbraco/skybrud/redirects/serverVariables");
     }
 
+    static getRedirectsForNode(type, key) {
+        return get(`/umbraco/skybrud/redirects/${type}/${key}`);
+    }
+
 }
 
 export default RedirectsService;

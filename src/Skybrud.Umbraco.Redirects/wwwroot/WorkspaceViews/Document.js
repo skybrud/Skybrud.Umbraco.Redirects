@@ -1,28 +1,21 @@
 ﻿import { UmbElementMixin } from "@umbraco-cms/backoffice/element-api";
 import { LitElement, html, css, repeat, when } from "@umbraco-cms/backoffice/external/lit";
 
-import '@umbraco-cms/backoffice/components';
-
-import { umbConfirmModal } from '@umbraco-cms/backoffice/modal';
-import { UMB_MODAL_MANAGER_CONTEXT } from "@umbraco-cms/backoffice/modal";
-import { UMB_NOTIFICATION_CONTEXT } from '@umbraco-cms/backoffice/notification';
-
-import { RedirectsPackage } from "@skybrud-redirects/package";
-import { RedirectsService } from "@skybrud-redirects/service";
-import { REDIRECTS_ADD_REDIRECT_MODAL } from "@skybrud-redirects/modals/add";
-import { REDIRECTS_EDIT_REDIRECT_MODAL } from "@skybrud-redirects/modals/edit";
-
-import { RedirectsDashboardLoadEvent } from "@skybrud-redirects/events";
-
+import { UMB_PROPERTY_DATASET_CONTEXT } from "@umbraco-cms/backoffice/property";
 import { UMB_DOCUMENT_WORKSPACE_CONTEXT } from "@umbraco-cms/backoffice/document";
+import { DocumentService } from "@umbraco-cms/backoffice/external/backend-api";
 
-function ucfirst(value) {
-    return String(value).charAt(0).toUpperCase() + String(value).slice(1);
+import { RedirectsService } from "@skybrud-redirects/service";
+import "@skybrud-redirects/elements/node";
+
+async function getUrls(key) {
+    const response = await DocumentService.getDocumentUrls({ query: { id: [key] } });
+    return response.data?.find(x => x.id === key)?.urlInfos ?? [];
 }
 
 export class RedirectsWorkspaceViewElement extends UmbElementMixin(LitElement) {
 
-    #workspace;
+    #node;
 
     constructor() {
 
@@ -30,55 +23,75 @@ export class RedirectsWorkspaceViewElement extends UmbElementMixin(LitElement) {
 
         const self = this;
 
-        this.consumeContext(UMB_DOCUMENT_WORKSPACE_CONTEXT, (context) => {
+        // We need the property dataset context order to determine the current variation/culture
+        this.consumeContext(UMB_PROPERTY_DATASET_CONTEXT, (datasetContext) => {
 
-            this.#workspace = context;
+            if (!datasetContext) return;
 
-            if (!context) return;
+            // Get current variant, then the culture of said variant
+            const variantId = datasetContext.getVariantId();
+            const culture = variantId.culture;
 
-            self.entity = {
-                unique: context.getUnique(),
-                isNew: context.getIsNew(),
-                //isTrashed: context.isTrashed(),
-                data: context.getData(),
-            };
+            // We need the workspace context in order to get various information about the current page
+            self.consumeContext(UMB_DOCUMENT_WORKSPACE_CONTEXT, (context) => {
 
-            self.entity.isTrashed = self.entity.data.isTrashed;
-            self.entity.isPublished = context.getVariants()?.some(v => v.state === "Published");
+                if (!context) return;
 
-            console.log(self.data);
+                // Get misc information
+                const key = context.getUnique();
+                const data = context.getData();
 
-            self.requestUpdate();
+                // The workspace context doesn't expose the page's URLs, so we need to fetch those separately
+                getUrls(key).then(function (urls) {
+
+                    // Get the variant specific name and URL
+                    const name = (data.variants.find(x => x.culture == culture) ?? data.variants[0]).name;
+                    let url = (urls.find(x => x.culture == culture) ?? urls[0]).url;
+                    if (url.indexOf(window.location.origin + "/") === 0) url = url.substr(window.location.origin.length);
+
+                    const cultures = [];
+
+                    RedirectsService.getCultures(key).then(function (res) {
+                        self.entity = {
+                            type: "content",
+                            key: key,
+                            name: name,
+                            icon: data.documentType.icon,
+                            url: url,
+                            culture: culture,
+                            cultures: data.variants.filter(x => x.culture).map(x => x.culture),
+                            null: false,
+                            new: context.getIsNew(),
+                            trashed: data.isTrashed,
+                            published: context.getVariants()?.some(v => v.state === "Published"),
+                            displayUrl: url,
+                            __cultures: res.data
+                        };
+                        self.requestUpdate();
+                    });
+
+                });
+
+            });
 
         });
 
     }
 
     render() {
-
-        if (this.entity.isNew) {
-            return html`
-                <div>You are in the process of creating this page, meaning you cannot yet add redirects to it. Save the page to continue, then you'll be able to add redirects.</div>
-            `;
-        }
-
-        if (this.entity.isTrashed) {
-            return html`
-                <div>This page is current trashed. Any redirect pointing to this page will not work.</div>
-            `;
-        }
-
-        if (!this.entity.isPublished) {
-            return html`
-                <div>This page is currently not published, meaning redirects pointing to it may not work.</div>
-            `;
-        }
-
-        return html`<div>
-            --<pre>${JSON.stringify(this.entity, null, 2)}</pre>--
-        </div>`;
-
+        return html`
+            <skybrud-redirects-node .node=${this.entity}></skybrud-redirects-node>
+        `;
     }
+
+    static styles = css`
+
+        :host {
+            display: block;
+            height: 100%;
+        }
+
+    `;
 
 };
 
