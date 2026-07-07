@@ -101,7 +101,6 @@ export default class SkybrudOutboundPropertyEditorElement extends UmbElementMixi
                     </div>
                 </div>
             </box>
-            <pre>${JSON.stringify(this.value, null, 2)}</pre>
         `;
 
     }
