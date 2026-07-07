@@ -155,6 +155,11 @@ export class RedirectsService {
         return get(`/umbraco/skybrud/redirects/${type}/${key}`);
     }
 
+    static async getCurrentUser() {
+        const response = await get("/umbraco/skybrud/redirects/users/current");
+        return response.data;
+    }
+
 }
 
 export default RedirectsService;

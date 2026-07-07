@@ -107,6 +107,32 @@ export const onInit = (_host, extensionRegistry) => {
                 api: RedirectsMediaCondition
             });
 
+            extensionRegistry.register({
+                type: "propertyEditorUi",
+                alias: "Skybrud.Umbraco.Redirects",
+                name: 'Skybrud Redirects: Inbound Redirects Property Editor UI',
+                element: () => import(`./Elements/InboundRedirects.js?v=${RedirectsPackage.cacheBuster}`),
+                meta: {
+                    label: "Inbound Redirects",
+                    icon: "icon-arrow-right",
+                    group: "Skybrud",
+                    propertyEditorSchemaAlias: "Skybrud.Umbraco.Redirects"
+                },
+            });
+
+            extensionRegistry.register({
+                type: "propertyEditorUi",
+                alias: "Skybrud.Umbraco.Redirects.Outbound",
+                name: 'Skybrud Redirects: Outbound Redirect Property Editor UI',
+                element: () => import(`./Elements/OutboundRedirect.js?v=${RedirectsPackage.cacheBuster}`),
+                meta: {
+                    label: "Outbound Redirect",
+                    icon: "icon-arrow-right",
+                    group: "Skybrud",
+                    propertyEditorSchemaAlias: "Skybrud.Umbraco.Redirects.OutboundRedirect"
+                },
+            });
+
             if (RedirectsPackage.settings?.workspaceViews?.document?.enabled) {
                 extensionRegistry.register({
                     type: "workspaceView",

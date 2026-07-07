@@ -303,6 +303,14 @@ public class RedirectsBackOfficeHelper {
 
     }
 
+    /// <summary>
+    /// Returns a list of the aliases of the user groups of the current backoffice user.
+    /// </summary>
+    /// <returns>A list of user group aliases.</returns>
+    public IReadOnlyList<string> GetUserGroups() {
+        return CurrentUser?.Groups.Select(x => x.Alias).ToArray() ?? [];
+    }
+
     #endregion
 
 }

@@ -19,6 +19,7 @@ using Skybrud.Umbraco.Redirects.Models.Api;
 using Skybrud.Umbraco.Redirects.Services;
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Core.Models;
+using Umbraco.Cms.Core.Models.Membership;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
@@ -356,6 +357,18 @@ public class RedirectsController : Controller {
             ContentType = "text/javascript",
             Content = sb.ToString()
         };
+
+    }
+
+    [HttpGet]
+    [Route("users/current")]
+    public object GetGroups() {
+        IUser user = _backOfficeHelper.CurrentUser ?? throw new InvalidOperationException("No current user found.");
+        return new JsonResult(new {
+            id = user.Id,
+            key = user.Key,
+            groups = user.Groups.Select(x => x.Alias)
+        });
 
     }
 

@@ -20,6 +20,26 @@ export class SkybrudRedirectsNodeElement extends UmbElementMixin(LitElement) {
     #modalManagerContext;
     #notificationContext;
     #list;
+    #showTitle;
+    #mode;
+
+    get showTitle() {
+        return this.#showTitle ?? true;
+    }
+
+    set showTitle(value) {
+        this.#showTitle = value !== false;
+        this.requestUpdate();
+    }
+
+    get mode() {
+        return this.#mode;
+    }
+
+    set mode(value) {
+        this.#mode = value;
+        this.requestUpdate();
+    }
 
     get node() {
         return this.#node;
@@ -29,6 +49,7 @@ export class SkybrudRedirectsNodeElement extends UmbElementMixin(LitElement) {
         this.#error = null;
         this.#redirects = null;
         this.#node = value;
+        this.#showTitle = true;
         if (value) {
             if (value.new) {
                 this.#error = { type: "info", content: "You are in the process of creating this page, meaning you cannot yet add redirects to it. Save the page to continue, then you'll be able to add redirects." };
@@ -213,12 +234,71 @@ export class SkybrudRedirectsNodeElement extends UmbElementMixin(LitElement) {
 
     }
 
+    #renderTable() {
+        return html`
+            <uui-table role="table">
+                <uui-table-head role="row">
+                    <uui-table-head-cell role="columnheader">${this.localize.term("redirects_site")}</uui-table-head-cell>
+                    <uui-table-head-cell role="columnheader" style="min-width: 250px;">${this.localize.term("redirects_originalUrl")}</uui-table-head-cell>
+                    <uui-table-head-cell role="columnheader">${this.localize.term("redirects_type")}</uui-table-head-cell>
+                    <uui-table-head-cell role="columnheader"></uui-table-head-cell>
+                    <uui-table-head-cell role="columnheader" style="width: 100%;">${this.localize.term("redirects_destination")}</uui-table-head-cell>
+                    <uui-table-head-cell role="columnheader"></uui-table-head-cell>
+                </uui-table-head>
+                ${repeat(this.#redirects, (item) => item.key, (item) => html`
+                    <uui-table-row role="row">
+                        <uui-table-cell role="cell" class="col-root-node">
+                            ${when(item.rootNode, () => html`
+                                <a href="${item.rootNode.backOfficeUrl}">${item.rootNode.name}</a>
+                            `)}
+                            ${when(!item.rootNode, () => html`
+                                <span style="white-space: nowrap;">${this.localize.term("redirects_allSites")}</span>
+                            `)}
+                        </uui-table-cell>
+                        <uui-table-cell role="cell" class="col-url">
+                            <a href="${item.fullUrl}" rel="noreferrer" target="_blank">${item.url}</a>
+                            ${when(item.urlWarning, () => html`
+                                <small class=\"warning\">${this.localize.term("redirects_" + item.urlWarning)}</small>
+                            `)}
+                        </uui-table-cell>
+                        <uui-table-cell role="cell">
+                            ${when(item.type === "permanent", () => this.localize.term("redirects_permanent"))}
+                            ${when(item.type === "temporary", () => this.localize.term("redirects_temporary"))}
+                        </uui-table-cell>
+                        <uui-table-cell role="cell">
+                            <uui-icon name="icon-arrow-right" aria-hidden="true"></uui-icon>
+                        </uui-table-cell>
+                        <uui-table-cell role="cell">
+                            ${this.renderDestinationType(item)}
+                            ${when(item.forward, () => html`
+                                <small class="forward" title="Forward query string is enabled">&nbsp;?&amp;</small>
+                            `)}
+                            <div class="displayUrl">
+                                <a href="${item.destination.displayUrl}" rel="noreferrer" target="_blank">${item.destination.displayUrl}</a>
+                            </div>
+                        </uui-table-cell>
+                        <uui-table-cell class="actions" role="cell">
+                            <uui-action-bar>
+                                <uui-button label="Edit" title="${this.localize.term("redirects_editRedirectTitle")}" look="secondary" pristine="" type="button" color="default" @click="${() => this.#edit(item)}">
+                                    <uui-icon name="edit" aria-hidden="true"></uui-icon>
+                                </uui-button>
+                                <uui-button label="Delete" title="${this.localize.term("redirects_deleteRedirectTitle")}" look="secondary" pristine="" type="button" color="danger" @click="${() => this.#delete(item)}">
+                                    <uui-icon name="delete" aria-hidden="true"></uui-icon>
+                                </uui-button>
+                            </uui-action-bar>
+                        </uui-table-cell>
+                    </uui-table-row>
+                `)}
+            </uui-table>
+        `;
+    }
+
     render() {
 
         return html`
-            <div class="stack ${this.#loading ? "loading" : ""}">
+            <div class="container ${this.#loading ? "loading" : ""} ${this.mode}">
                 <header>
-                    <h3>Redirects</h3>
+                    ${when(this.showTitle, () => html`<h3>Redirects</h3>`)}
                     <div class="actions">
                         ${when(this.#list?.actions, () => html`
                             ${repeat(this.#list.actions, (button) => button.alias, (button) => html`
@@ -257,62 +337,15 @@ export class SkybrudRedirectsNodeElement extends UmbElementMixin(LitElement) {
                     </div>
                 `)}
                 ${when(this.#redirects?.length > 0, () => html`
-                    <uui-box class="redirects" style="--uui-box-default-padding:0;">
-                        <uui-table role="table">
-                            <uui-table-head role="row">
-                                <uui-table-head-cell role="columnheader">${this.localize.term("redirects_site")}</uui-table-head-cell>
-                                <uui-table-head-cell role="columnheader" style="min-width: 250px;">${this.localize.term("redirects_originalUrl")}</uui-table-head-cell>
-                                <uui-table-head-cell role="columnheader">${this.localize.term("redirects_type")}</uui-table-head-cell>
-                                <uui-table-head-cell role="columnheader"></uui-table-head-cell>
-                                <uui-table-head-cell role="columnheader" style="width: 100%;">${this.localize.term("redirects_destination")}</uui-table-head-cell>
-                                <uui-table-head-cell role="columnheader"></uui-table-head-cell>
-                            </uui-table-head>
-                            ${repeat(this.#redirects, (item) => item.key, (item) => html`
-                                <uui-table-row role="row">
-                                    <uui-table-cell role="cell" class="col-root-node">
-                                        ${when(item.rootNode, () => html`
-                                            <a href="${item.rootNode.backOfficeUrl}">${item.rootNode.name}</a>
-                                        `)}
-                                        ${when(!item.rootNode, () => html`
-                                            <span style="white-space: nowrap;">${this.localize.term("redirects_allSites")}</span>
-                                        `)}
-                                    </uui-table-cell>
-                                    <uui-table-cell role="cell" class="col-url">
-                                        <a href="${item.fullUrl}" rel="noreferrer" target="_blank">${item.url}</a>
-                                        ${when(item.urlWarning, () => html`
-                                            <small class=\"warning\">${this.localize.term("redirects_" + item.urlWarning)}</small>
-                                        `)}
-                                    </uui-table-cell>
-                                    <uui-table-cell role="cell">
-                                        ${when(item.type === "permanent", () => this.localize.term("redirects_permanent"))}
-                                        ${when(item.type === "temporary", () => this.localize.term("redirects_temporary"))}
-                                    </uui-table-cell>
-                                    <uui-table-cell role="cell">
-                                        <uui-icon name="icon-arrow-right" aria-hidden="true"></uui-icon>
-                                    </uui-table-cell>
-                                    <uui-table-cell role="cell">
-                                        ${this.renderDestinationType(item)}
-                                        ${when(item.forward, () => html`
-                                            <small class="forward" title="Forward query string is enabled">&nbsp;?&amp;</small>
-                                        `)}
-                                        <div class="displayUrl">
-                                            <a href="${item.destination.displayUrl}" rel="noreferrer" target="_blank">${item.destination.displayUrl}</a>
-                                        </div>
-                                    </uui-table-cell>
-                                    <uui-table-cell class="actions" role="cell">
-                                        <uui-action-bar>
-						                    <uui-button label="Edit" title="${this.localize.term("redirects_editRedirectTitle")}" look="secondary" pristine="" type="button" color="default" @click="${() => this.#edit(item)}">
-							                    <uui-icon name="edit" aria-hidden="true"></uui-icon>
-						                    </uui-button>
-						                    <uui-button label="Delete" title="${this.localize.term("redirects_deleteRedirectTitle")}" look="secondary" pristine="" type="button" color="danger" @click="${() => this.#delete(item)}">
-							                    <uui-icon name="delete" aria-hidden="true"></uui-icon>
-						                    </uui-button>
-					                    </uui-action-bar>
-                                    </uui-table-cell>
-                                </uui-table-row>
-                            `)}
-                        </uui-table>
-                    </uui-box>
+                    ${when(this.mode === "property-editor", () => html`
+                        <div class="redirects">
+                            ${this.#renderTable()}
+                        </div>
+                    `, () => html`
+                        <uui-box style="--uui-box-default-padding:0;">
+                            ${this.#renderTable()}
+                        </uui-box>
+                    `)}
                     ${when(this.pagination?.pages > 1, () => html`
                         <div style="margin-top: 20px;">
                             <uui-pagination
@@ -337,13 +370,22 @@ export class SkybrudRedirectsNodeElement extends UmbElementMixin(LitElement) {
 
         :host {
             display: block;
-            min-height: 250px;
             height: 100%;
             position: relative;
         }
 
-        :host > div {
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
             padding: 20px;
+        }
+
+        .container.property-editor {
+            padding: 0;
+            uui-table {
+                border: 1px solid var(--uui-color-border);
+            }
         }
 
         uui-loader {
@@ -353,7 +395,7 @@ export class SkybrudRedirectsNodeElement extends UmbElementMixin(LitElement) {
             transform: translate(-50%, -50%);
         }
 
-        .loading uui-box,
+        .loading .redirects,
         .loading .umb-empty-state {
             opacity: 0.6;
             pointer-events: none
@@ -373,6 +415,7 @@ export class SkybrudRedirectsNodeElement extends UmbElementMixin(LitElement) {
         .actions {
             display: flex;
             gap: 10px;
+            margin-left: auto;
         }
 
         .alert {
@@ -404,12 +447,6 @@ export class SkybrudRedirectsNodeElement extends UmbElementMixin(LitElement) {
         .alert--danger {
             border-color: var(--uui-color-danger);
             background: color-mix(in srgb, var(--uui-color-danger) 8%, white);
-        }
-
-        .stack {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
         }
 
         uui-table-head-cell {

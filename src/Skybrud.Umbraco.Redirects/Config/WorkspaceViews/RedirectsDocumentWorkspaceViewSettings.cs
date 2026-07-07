@@ -23,8 +23,13 @@ public class RedirectsDocumentWorkspaceViewSettings {
     public bool RequireTemplate { get; set; } = true;
 
     /// <summary>
+    /// Gets or sets a set of user groups for which the workspace view for <c>Document</c> should be shown.
+    /// </summary>
+    public HashSet<string> UserGroups { get; set; } = []; // TODO: explain the format in the XML documentation
+
+    /// <summary>
     /// Gets or sets a set of content types where the workspace view for <c>Document</c> should be shown.
     /// </summary>
-    public HashSet<string> Show { get; set; } = []; // TODO: explain the format in the XML documentation
+    public HashSet<string> ContentTypes { get; set; } = []; // TODO: explain the format in the XML documentation
 
 }
