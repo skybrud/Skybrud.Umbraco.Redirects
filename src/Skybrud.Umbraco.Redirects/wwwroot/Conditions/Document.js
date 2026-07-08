@@ -53,8 +53,8 @@ export class RedirectsDocumentCondition extends UmbConditionBase {
         if (this.#userGroups.length === 0) return true;
         if (this.#userGroups.includes("+" + user.key)) return true;
         if (this.#userGroups.includes("-" + user.key)) return false;
-        if (user.groups.some(group => this.#userGroups.includes("+" + group.alias))) return true;
-        if (user.groups.some(group => this.#userGroups.includes("-" + group.alias))) return false;
+        if (user.groups.some(group => this.#userGroups.includes("+" + group))) return true;
+        if (user.groups.some(group => this.#userGroups.includes("-" + group))) return false;
         if (user.groups.some(group => this.#userGroups.includes("+*"))) return true;
         if (user.groups.some(group => this.#userGroups.includes("-*"))) return false;
         return !this.#userGroups.some(x => x[0] === "+");
