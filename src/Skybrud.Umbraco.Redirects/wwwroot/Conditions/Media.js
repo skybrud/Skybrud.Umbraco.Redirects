@@ -42,6 +42,7 @@ export class RedirectsMediaCondition extends UmbConditionBase {
             if (this.#mediaTypes.includes("+" + mediaType.alias)) return true;
             if (this.#mediaTypes.includes("-*")) return false;
             if (this.#mediaTypes.includes("+*")) return true;
+            return !this.#mediaTypes.some(x => x[0] === "+");
             return false;
         }
 
@@ -53,11 +54,11 @@ export class RedirectsMediaCondition extends UmbConditionBase {
         if (this.#userGroups.length === 0) return true;
         if (this.#userGroups.includes("+" + user.key)) return true;
         if (this.#userGroups.includes("-" + user.key)) return false;
-        if (user.groups.some(group => this.#userGroups.includes("+" + group.alias))) return true;
-        if (user.groups.some(group => this.#userGroups.includes("-" + group.alias))) return false;
+        if (user.groups.some(group => this.#userGroups.includes("+" + group))) return true;
+        if (user.groups.some(group => this.#userGroups.includes("-" + group))) return false;
         if (user.groups.some(group => this.#userGroups.includes("+*"))) return true;
         if (user.groups.some(group => this.#userGroups.includes("-*"))) return false;
-        return false;
+        return !this.#userGroups.some(x => x[0] === "+");
     }
 
 }

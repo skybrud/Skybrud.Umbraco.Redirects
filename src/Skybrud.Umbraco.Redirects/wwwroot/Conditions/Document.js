@@ -42,7 +42,7 @@ export class RedirectsDocumentCondition extends UmbConditionBase {
             if (this.#contentTypes.includes("+" + contentType.alias)) return true;
             if (this.#contentTypes.includes("-*")) return false;
             if (this.#contentTypes.includes("+*")) return true;
-            return false;
+            return !this.#contentTypes.some(x => x[0] === "+");
         }
 
         return true;
@@ -57,7 +57,7 @@ export class RedirectsDocumentCondition extends UmbConditionBase {
         if (user.groups.some(group => this.#userGroups.includes("-" + group.alias))) return false;
         if (user.groups.some(group => this.#userGroups.includes("+*"))) return true;
         if (user.groups.some(group => this.#userGroups.includes("-*"))) return false;
-        return false;
+        return !this.#userGroups.some(x => x[0] === "+");
     }
 
 }
