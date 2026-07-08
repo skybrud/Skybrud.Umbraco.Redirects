@@ -235,6 +235,7 @@ export class SkybrudRedirectsNodeElement extends UmbElementMixin(LitElement) {
     }
 
     #renderTable() {
+        if (!this.#redirects?.length > 0) return html``;
         return html`
             <uui-table role="table">
                 <uui-table-head role="row">
@@ -293,13 +294,21 @@ export class SkybrudRedirectsNodeElement extends UmbElementMixin(LitElement) {
         `;
     }
 
-    render() {
+    #renderTableWrapper() {
 
-        return html`
-            <div class="container ${this.#loading ? "loading" : ""} ${this.mode}">
-                <header>
-                    ${when(this.showTitle, () => html`<h3>Redirects</h3>`)}
-                    <div class="actions">
+        if (this.mode === "property-editor") {
+            return html`
+                <div class="redirects">
+                    ${this.#renderTable()}
+                </div>
+            `;
+        }
+
+        if (this.mode === "info-app") {
+            return html`
+
+                <uui-box headline="Redirects">
+                    <div slot="header-actions">
                         ${when(this.#list?.actions, () => html`
                             ${repeat(this.#list.actions, (button) => button.alias, (button) => html`
                                 <uui-button-group>
@@ -324,46 +333,130 @@ export class SkybrudRedirectsNodeElement extends UmbElementMixin(LitElement) {
                             `)}
                         `)}
                     </div>
-                </header>
-                ${when(this.#error, () => html`
-                    <div class="alert alert--warning">
-                        <uui-icon name="icon-alert"></uui-icon>
-                        <div>
-                            ${when(this.#error.title, () => html`
-                                <strong>${this.#error.title}</strong>
-                            `)}
-                            <p>${this.#error.content}</p>
-                        </div>
+                </uui-box>
+
+                <div class="redirects">
+                    ${this.#renderTable()}
+                </div>
+            `;
+        }
+
+        return html`
+            <div class="redirects">
+                ${this.#renderTable()}
+            </div>
+        `;
+
+    }
+
+    #renderActions() {
+        if (!this.#list?.actions) return html``;
+        return html`
+            ${repeat(this.#list.actions, (button) => button.alias, (button) => html`
+                <uui-button-group>
+                    <uui-button look="${button.look}" color="${button.color}" label="${button.label}" state="${button.state}" @click=${button.action}>
+                        ${button.label}
+                    </uui-button>
+                    ${when(button.subButtons?.length > 0, () => html`
+                        <uui-button popovertarget="my-popover" look="${button.look}" color="${button.color}">
+                            <uui-symbol-more></uui-symbol-more>
+                        </uui-button>
+                        <uui-popover-container id="my-popover" placement="bottom-end">
+                            <div style="display: flex; flex-direction: column;">
+                                ${repeat(button.subButtons, (sub) => sub.alias, (sub) => html`
+                                    <uui-button look="${sub.look}" label="${sub.label}" @click=${sub.action}>
+                                        ${sub.label}
+                                    </uui-button>
+                                `)}
+                            </div>
+                        </uui-popover-container>
+                    `)}
+                </uui-button-group>
+            `)}
+        `;
+    }
+
+    #renderErrors() {
+        if (!this.#error) return html``;
+        return html`
+            <div class="alert alert--warning">
+                <uui-icon name="icon-alert"></uui-icon>
+                <div>
+                    ${when(this.#error.title, () => html`
+                        <strong>${this.#error.title}</strong>
+                    `)}
+                    <p>${this.#error.content}</p>
+                </div>
+            </div>
+        `;
+    }
+
+    #renderInfoApp() {
+        return html`
+            <div class="container ${this.#loading ? "loading" : ""} ${this.mode}">
+                <uui-box headline="Redirects">
+                    <div slot="header-actions">
+                        ${this.#renderActions()}
                     </div>
-                `)}
+                    ${this.#renderErrors()}
+                    <div class="redirects">
+                        ${this.#renderTable()}
+                    </div>
+                    ${when(this.#loading, () => html`<uui-loader></uui-loader>`)}
+                    ${when(this.#redirects?.length === 0, () => this.#renderNoRedirects())}
+                </uui-box>
+            </div>
+        `;
+    }
+
+    #renderPropertyEditor() {
+        return html`
+            <div class="container ${this.#loading ? "loading" : ""} ${this.mode}">
+                <header>
+                    ${when(this.showTitle, () => html`<h3>Redirects</h3>`)}
+                    <div class="actions">
+                        ${this.#renderActions()}
+                    </div>
+                </header>
+                ${this.#renderErrors()}
                 ${when(this.#redirects?.length > 0, () => html`
-                    ${when(this.mode === "property-editor", () => html`
-                        <div class="redirects">
-                            ${this.#renderTable()}
-                        </div>
-                    `, () => html`
-                        <uui-box style="--uui-box-default-padding:0;">
-                            ${this.#renderTable()}
-                        </uui-box>
-                    `)}
-                    ${when(this.pagination?.pages > 1, () => html`
-                        <div style="margin-top: 20px;">
-                            <uui-pagination
-                                current="${this.pagination.page}"
-                                total="${this.pagination.pages}"
-                                firstLabel="${this.localize.term("general_first")}"
-                                previousLabel="${this.localize.term("general_previous")}"
-                                nextLabel="${this.localize.term("general_next")}"
-                                lastLabel="${this.localize.term("general_last")}"
-                                @change="${this.onPageChange}"></uui-pagination>
-                        </div>
-                    `)}
+                    <div class="redirects">
+                        ${this.#renderTable()}
+                    </div>
                 `)}
                 ${when(this.#loading, () => html`<uui-loader></uui-loader>`)}
                 ${when(this.#redirects?.length === 0, () => this.#renderNoRedirects())}
             </div>
         `;
 
+    }
+
+    #renderWorkspaceView() {
+        return html`
+            <div class="container ${this.#loading ? "loading" : ""} ${this.mode}">
+                <header>
+                    ${when(this.showTitle, () => html`<h3>Redirects</h3>`)}
+                    <div class="actions">
+                        ${this.#renderActions()}
+                    </div>
+                </header>
+                ${this.#renderErrors()}
+                ${when(this.#redirects?.length > 0, () => html`
+                    <uui-box style="--uui-box-default-padding:0;">
+                        ${this.#renderTable()}
+                    </uui-box>
+                `)}
+                ${when(this.#loading, () => html`<uui-loader></uui-loader>`)}
+                ${when(this.#redirects?.length === 0, () => this.#renderNoRedirects())}
+            </div>
+        `;
+
+    }
+
+    render() {
+        if (this.mode === "info-app") return this.#renderInfoApp();
+        if (this.mode === "property-editor") return this.#renderPropertyEditor();
+        return this.#renderWorkspaceView();
     }
 
     static styles = css`
@@ -379,6 +472,13 @@ export class SkybrudRedirectsNodeElement extends UmbElementMixin(LitElement) {
             flex-direction: column;
             gap: 20px;
             padding: 20px;
+        }
+
+        .container.info-app {
+            padding: 0;
+            uui-box {
+                --uui-box-default-padding: 0;
+            }
         }
 
         .container.property-editor {
