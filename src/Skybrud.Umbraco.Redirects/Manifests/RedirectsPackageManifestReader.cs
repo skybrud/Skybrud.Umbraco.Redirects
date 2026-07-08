@@ -41,6 +41,7 @@ public class RedirectsPackageManifestReader : IPackageManifestReader {
                         {"@skybrud-redirects/elements/node", $"/App_Plugins/{alias}/Elements/Node.js?v={cacheBuster}"},
                         {"@skybrud-redirects/elements/base", $"/App_Plugins/{alias}/Elements/Base.js?v={cacheBuster}"},
                         {"@skybrud-redirects/events", $"/App_Plugins/{alias}/Events/Index.js?v={cacheBuster}"},
+                        {"@skybrud-redirects/conditions/dashboard", $"/App_Plugins/{alias}/Conditions/Dashboard.js?v={cacheBuster}"},
                         {"@skybrud-redirects/conditions/document", $"/App_Plugins/{alias}/Conditions/Document.js?v={cacheBuster}"},
                         {"@skybrud-redirects/conditions/media", $"/App_Plugins/{alias}/Conditions/Media.js?v={cacheBuster}"}
                     }

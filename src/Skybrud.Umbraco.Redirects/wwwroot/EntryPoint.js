@@ -3,6 +3,7 @@
 import { RedirectsAuth } from "@skybrud-redirects/auth";
 import { RedirectsPackage } from "@skybrud-redirects/package";
 import { RedirectsService } from "@skybrud-redirects/service";
+import { RedirectsDashboardCondition } from "@skybrud-redirects/conditions/dashboard";
 import { RedirectsDocumentCondition } from "@skybrud-redirects/conditions/document";
 import { RedirectsMediaCondition } from "@skybrud-redirects/conditions/media";
 
@@ -20,24 +21,29 @@ export const onInit = (_host, extensionRegistry) => {
 
             RedirectsPackage.serverVariables = res.data;
 
-            extensionRegistry.register({
-                type: "dashboard",
-                name: "Redirects",
-                alias: "Skybrud.Umbraco.Redirects.Dashboard",
-                elementName: "redirects-dashboard",
-                js: () => import("./Elements/Dashboard.js?v=" + RedirectsPackage.cacheBuster),
-                weight: -10,
-                meta: {
-                    label: "Redirects",
-                    pathname: "redirects"
-                },
-                conditions: [
-                    {
-                        alias: "Umb.Condition.SectionAlias",
-                        match: "Umb.Section.Content"
-                    }
-                ]
-            });
+            if (RedirectsPackage.settings?.dashboard?.enabled) {
+                extensionRegistry.register({
+                    type: "dashboard",
+                    name: "Redirects",
+                    alias: "Skybrud.Umbraco.Redirects.Dashboard",
+                    elementName: "redirects-dashboard",
+                    js: () => import("./Elements/Dashboard.js?v=" + RedirectsPackage.cacheBuster),
+                    weight: RedirectsPackage.settings?.dashboard?.weight ?? -10,
+                    meta: {
+                        label: "Redirects",
+                        pathname: "redirects"
+                    },
+                    conditions: [
+                        {
+                            alias: "Umb.Condition.SectionAlias",
+                            match: "Umb.Section.Content"
+                        },
+                        {
+                            alias: "Skybrud.Umbraco.Redirects.Condition.Dashboard"
+                        }
+                    ]
+                });
+            }
 
             extensionRegistry.register({
                 "type": "localization",
@@ -105,6 +111,13 @@ export const onInit = (_host, extensionRegistry) => {
                 name: "Skybrud Redirects: Media Condition",
                 alias: "Skybrud.Umbraco.Redirects.Condition.Media",
                 api: RedirectsMediaCondition
+            });
+
+            extensionRegistry.register({
+                type: "condition",
+                name: "Skybrud Redirects: Dashboard Condition",
+                alias: "Skybrud.Umbraco.Redirects.Condition.Dashboard",
+                api: RedirectsDashboardCondition
             });
 
             extensionRegistry.register({
