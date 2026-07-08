@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
-using Skybrud.Umbraco.Redirects.Models;
 
-namespace Skybrud.Umbraco.Redirects.wwwroot.Modals.Outbound;
+namespace Skybrud.Umbraco.Redirects.Models.Outbound;
 
 /// <summary>
 /// Interface describing an outbound redirect.

@@ -4,7 +4,6 @@ using Skybrud.Essentials.Json.Newtonsoft.Extensions;
 using Skybrud.Essentials.Strings.Extensions;
 using Skybrud.Umbraco.Redirects.Models;
 using Skybrud.Umbraco.Redirects.Models.Outbound;
-using Skybrud.Umbraco.Redirects.wwwroot.Modals.Outbound;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Extensions;
@@ -65,12 +64,20 @@ public class RedirectsModelFactory {
 
             case RedirectDestinationType.Content:
                 IPublishedContent? content = UmbracoContext.Content.GetById(destination.Key);
-                if (content is not null) destination.Url = content.Url();
+                if (content is not null) {
+                    destination.Id = content.Id;
+                    // TODO: should we look up the current name?
+                    destination.Url = content.Url();
+                }
                 break;
 
             case RedirectDestinationType.Media:
                 IPublishedContent? media = UmbracoContext.Media.GetById(destination.Key);
-                if (media is not null) destination.Url = media.Url();
+                if (media is not null) {
+                    destination.Id = media.Id;
+                    // TODO: should we look up the current name?
+                    destination.Url = media.Url();
+                }
                 break;
 
         }
