@@ -66,8 +66,6 @@ export default class SkybrudOutboundPropertyEditorElement extends UmbElementMixi
         if (!destination) {
             return html`
                 <redirects-destination @change="${(e) => this.#onDestinationChange(e)}"></redirects-destination>
-
-                <pre>--${JSON.stringify(this.value, null, 2)}--</pre>
             `;
         }
 
