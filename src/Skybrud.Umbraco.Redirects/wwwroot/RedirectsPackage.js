@@ -17,6 +17,7 @@
     }
 
     static get dashboard() {
+        // TODO: ideally we should remove this as the same is exposed via settings.dashboard, but currently not sure if we're still using this anywhere in the codebase, so leaving it for now
         return this._serverVariables["dashboard"] ?? { limit: 20 };
     }
 

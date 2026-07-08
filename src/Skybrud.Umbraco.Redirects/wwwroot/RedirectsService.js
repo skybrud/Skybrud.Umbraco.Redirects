@@ -2,6 +2,8 @@
 
 function hi(url, config) {
 
+    // TODO: simplify this code to use async/await instead of promises
+
     if (!config) config = {};
     if (!config.method) config.method = "GET";
     if (!config.headers) config.headers = {};
