@@ -177,7 +177,7 @@ export class RedirectsDestinationElement extends UmbElementMixin(LitElement) {
     }
 
     set value(v) {
-        this._value = JSON.parse(JSON.stringify(v));
+        this._value = v ? JSON.parse(JSON.stringify(v)) : null;
         updateItem(this._value);
         this.requestUpdate();
     }
