@@ -37,35 +37,9 @@
   </ItemGroup>
 
   <!-- Ignore vulnerabilities from transient dependencies -->
-  <ItemGroup>
-
-    <!-- Package 'MessagePack' 3.1.4 has a known high severity vulnerability -->
-    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-382j-8mxh-c7x2" />
-    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-hv8m-jj95-wg3x" />
-    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-vh6j-jc39-fggf" />
-
-    <!-- Package 'MessagePack' 3.1.4 has a known medium severity vulnerability -->
-    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-qhmf-xw27-6rqr" />
-    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-q2h6-ghwm-5qm8" />
-    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-v72x-2h86-7f8m" />
-    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-2f33-pr97-265q" />
-    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-2x83-8g95-xh59" />
-    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-cj9g-3mj2-g8vv" />
-    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-cxmj-83gh-fp49" />
-    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-w567-gjr2-hm5j" />
-    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-wfr3-xj75-pfwh" />
-
-    <!-- Package 'MimeKit' 4.14.0 has a known moderate severity vulnerability -->
-    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-g7hc-96xr-gvvx" />
-
-    <!-- Package 'MailKit' 4.14.0 has a known moderate severity vulnerability -->
-    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-9j88-vvj5-vhgr" />
-
-    <!-- Package 'System.Security.Cryptography.Xml' 8.0.0 has a known high severity vulnerability -->
-    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-37gx-xxp4-5rgx" />
-    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-w3x6-4m5h-cxqf" />
-
-  </ItemGroup>
+  <PropertyGroup>
+    <NuGetAuditMode>direct</NuGetAuditMode>
+  </PropertyGroup>
 
   <!-- Include NuGet dependencies -->
   <ItemGroup>
