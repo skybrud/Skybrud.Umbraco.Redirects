@@ -170,6 +170,10 @@ function updateItem(item) {
 
 }
 
+function clone(value) {
+    return JSON.parse(JSON.stringify(value));
+}
+
 export class RedirectsDestinationElement extends UmbElementMixin(LitElement) {
 
     get value() {
@@ -250,6 +254,7 @@ export class RedirectsDestinationElement extends UmbElementMixin(LitElement) {
                         }
                         self.value = updateItem(fromContent(value.link, res.data));
                         self.dispatchEvent(new CustomEvent("change", { detail: { value: self.value }, bubbles: false, composed: false }));
+                        self.requestUpdate();
                     });
                     break;
 
@@ -261,6 +266,7 @@ export class RedirectsDestinationElement extends UmbElementMixin(LitElement) {
                     RedirectsService.getMedia(value.link.unique).then(function (res) {
                         self.value = updateItem(fromMedia(value.link, res.data));
                         self.dispatchEvent(new CustomEvent("change", { detail: { value: self.value }, bubbles: false, composed: false }));
+                        self.requestUpdate();
                     });
                     break;
 
@@ -271,6 +277,7 @@ export class RedirectsDestinationElement extends UmbElementMixin(LitElement) {
                     }
                     self.value = updateItem(fromExternal(value.link));
                     self.dispatchEvent(new CustomEvent("change", { detail: { value: self.value }, bubbles: false, composed: false }));
+                    self.requestUpdate();
                     break;
 
             }
@@ -315,7 +322,7 @@ export class RedirectsDestinationElement extends UmbElementMixin(LitElement) {
                     ${when(this.value.published === false, () => html`
                         <div style="color: red;">${this.localize.term("redirects_contentNotPublished")}</div>
                     `)}
-                    <uui-ref-node name="${this.value.name}" detail="${this.value.displayUrl}" readonly selectable="false" selectOnly="true">
+                    <uui-ref-node name="${this.value.name}" detail="${this.value.displayUrl ?? this.value.url}" readonly selectable="false" selectOnly="true">
                       <uui-icon slot="icon" name="${this.value.iconName}" style="${this.value.iconColor}"></uui-icon>
                       <uui-action-bar slot="actions">
                         <uui-button @click="${this.edit}" label="${this.localize.term("general_edit")}"><uui-icon name="edit" aria-hidden="true"></uui-icon></uui-button>

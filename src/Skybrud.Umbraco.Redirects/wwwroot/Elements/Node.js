@@ -326,7 +326,7 @@ export class SkybrudRedirectsNodeElement extends UmbElementMixin(LitElement) {
                     </div>
                 </header>
                 ${when(this.#error, () => html`
-                    <div class="alert alert--success">
+                    <div class="alert alert--warning">
                         <uui-icon name="icon-alert"></uui-icon>
                         <div>
                             ${when(this.#error.title, () => html`
@@ -424,8 +424,11 @@ export class SkybrudRedirectsNodeElement extends UmbElementMixin(LitElement) {
             padding: 1rem;
             border-left: 4px solid;
             border-radius: var(--uui-border-radius);
-            p {
+            p:first-child {
                 margin-top: 0;
+            }
+            p:last-child {
+                margin-bottom: 0;
             }
         }
 

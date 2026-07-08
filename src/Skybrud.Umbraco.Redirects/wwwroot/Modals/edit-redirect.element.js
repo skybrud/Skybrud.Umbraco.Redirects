@@ -357,7 +357,7 @@ export class EditRedirectModalElement extends UmbModalBaseElement {
                                 <redirects-destination id="destination" @change="${(e) => this.handleDestinationChange(e)}">${JSON.stringify(this.value.redirect?.destination)}</redirects-destination>
                             </div>
                         </div>
-                        ${when(this.cultures?.length > 1, () => html`
+                        ${when(this.cultures?.length > 0, () => html`
                             <div class="property">
                                 <div>
                                 <strong>${property("destinationCulture")}</strong><br />
