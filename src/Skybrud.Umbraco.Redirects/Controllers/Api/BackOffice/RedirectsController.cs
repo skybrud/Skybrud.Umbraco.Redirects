@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Skybrud.Essentials.Collections.Extensions;
 using Skybrud.Essentials.Enums;
 using Skybrud.Essentials.Security.Extensions;
 using Skybrud.Essentials.Strings.Extensions;
@@ -40,24 +42,24 @@ public class RedirectsController : Controller {
 
     private readonly ILogger<RedirectsController> _logger;
     private readonly IOptions<RedirectsSettings> _settings;
+    private readonly IContentService _contentService;
     private readonly ILocalizedTextService _localizedTextService;
     private readonly IRedirectsService _redirectsService;
     private readonly RedirectsBackOfficeHelper _backOfficeHelper;
     private readonly IUmbracoContextAccessor _umbracoContextAccessor;
     private readonly IDocumentUrlService _documentUrlService;
-    private readonly ILanguageService _languageService;
 
     #region Constructors
 
-    public RedirectsController(ILogger<RedirectsController> logger, IOptions<RedirectsSettings> settings, ILocalizedTextService localizedTextService, IRedirectsService redirectsService, RedirectsBackOfficeHelper backOfficeHelper, IUmbracoContextAccessor umbracoContextAccessor, IDocumentUrlService documentUrlService, ILanguageService languageService) {
+    public RedirectsController(ILogger<RedirectsController> logger, IOptions<RedirectsSettings> settings, IContentService contentService, ILocalizedTextService localizedTextService, IRedirectsService redirectsService, RedirectsBackOfficeHelper backOfficeHelper, IUmbracoContextAccessor umbracoContextAccessor, IDocumentUrlService documentUrlService) {
         _logger = logger;
         _settings = settings;
+        _contentService = contentService;
         _localizedTextService = localizedTextService;
         _redirectsService = redirectsService;
         _backOfficeHelper = backOfficeHelper;
         _umbracoContextAccessor = umbracoContextAccessor;
         _documentUrlService = documentUrlService;
-        _languageService = languageService;
     }
 
     #endregion
@@ -300,25 +302,22 @@ public class RedirectsController : Controller {
     /// <param name="key">The GUID key of the content node.</param>
     /// <returns>A list of cultures.</returns>
     [HttpGet("content/{key:guid}/cultures")]
-    public object GetCultures(Guid key) {
+    public async Task<ActionResult<IReadOnlyList<ApiCultureItem>>> GetCultures(Guid key) {
 
-        // Get the content node in the cache
-        IPublishedContent? content = _umbracoContextAccessor.GetRequiredUmbracoContext().Content.GetById(key);
-        if (content is null) return NotFound();
+        // We start by looking for a published version of the content, as this is the fastest
+        // approach, and still should expose the information that we need
+        if (_backOfficeHelper.TryGetContent(key, out IPublishedContent? content)) {
+            return Ok(await _backOfficeHelper.GetCultureItems(content));
+        }
 
-        // Get the cultures for the content node
-        IReadOnlyDictionary<string, PublishedCultureInfo> cultures = content.Cultures;
+        // If we didn't find a published version, we fall back to looking for an unpublished
+        // version of the content, which is slower
+        if (_contentService.GetById(key) is { } entity) {
+            return Ok(await _backOfficeHelper.GetCultureItems(entity));
+        }
 
-        // If the content node does not vary by culture, return an empty list
-        if (cultures.Count == 1 && cultures.ContainsKey("")) return Array.Empty<object>();
-
-        // Return the cultures with some additional info (alias, name, node name and URL)
-        return cultures.Select(x => new {
-            alias = x.Key,
-            name = _languageService.GetAsync(x.Key).Result?.CultureName,
-            nodeName = content.Name(culture: x.Key),
-            url = content.Url(culture: x.Key)
-        });
+        // If neither is found, we return a 404 response
+        return NotFound();
 
     }
 
@@ -362,12 +361,12 @@ public class RedirectsController : Controller {
 
     [HttpGet]
     [Route("users/current")]
-    public object GetGroups() {
+    public ActionResult<IReadOnlyList<ApiUserItem>> GetCurrentUser() {
         IUser user = _backOfficeHelper.CurrentUser ?? throw new InvalidOperationException("No current user found.");
-        return new JsonResult(new {
-            id = user.Id,
-            key = user.Key,
-            groups = user.Groups.Select(x => x.Alias)
+        return Ok(new ApiUserItem {
+            Id = user.Id,
+            Key = user.Key,
+            Groups = user.Groups.SelectList(x => x.Alias)
         });
 
     }

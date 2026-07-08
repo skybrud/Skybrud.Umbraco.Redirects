@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using Skybrud.Essentials.Strings.Extensions;
 using Skybrud.Umbraco.Redirects.Config;
 using Skybrud.Umbraco.Redirects.Models;
 using Skybrud.Umbraco.Redirects.Models.Api;
+using Umbraco.Cms.Core.Media.EmbedProviders;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.Membership;
 using Umbraco.Cms.Core.Models.PublishedContent;
+using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Extensions;
 
@@ -309,6 +312,55 @@ public class RedirectsBackOfficeHelper {
     /// <returns>A list of user group aliases.</returns>
     public IReadOnlyList<string> GetUserGroups() {
         return CurrentUser?.Groups.Select(x => x.Alias).ToArray() ?? [];
+    }
+
+    /// <summary>
+    /// Returns the culture keys available for the specified <paramref name="content"/>. If the content is not culture variant, an empty list is returned.
+    /// </summary>
+    /// <param name="content">The published content.</param>
+    /// <returns>A list of culture keys.</returns>
+    public virtual IReadOnlyList<string> GetCultureKeys(IPublishedContent content) {
+        string[] cultures = content.Cultures.Keys.ToArray();
+        return cultures is [""] ? [] : cultures;
+    }
+
+    /// <summary>
+    /// Returns a list of <see cref="ApiCultureItem"/> for the specified <paramref name="content"/>. If the content is not culture variant, an empty list is returned.
+    /// </summary>
+    /// <param name="content">The published content.</param>
+    /// <returns>A list of culture items.</returns>
+    public virtual async Task<IReadOnlyList<ApiCultureItem>> GetCultureItems(IPublishedContent content) {
+        List<ApiCultureItem> temp = [];
+        foreach (string cultureKey in GetCultureKeys(content)) {
+            ILanguage? language = await Dependencies.LanguageService.GetAsync(cultureKey);
+            temp.Add(new ApiCultureItem {
+                Alias = cultureKey,
+                Name = language?.CultureName,
+                NodeName = content.Name(culture: cultureKey),
+                Url = content.Url(culture: cultureKey)
+            });
+        }
+        return temp;
+    }
+
+    /// <summary>
+    /// Returns a list of <see cref="ApiCultureItem"/> for the specified <paramref name="content"/>. If the content is not culture variant, an empty list is returned.
+    /// </summary>
+    /// <param name="content">The published content.</param>
+    /// <returns>A list of culture items.</returns>
+    public virtual async Task<IReadOnlyList<ApiCultureItem>> GetCultureItems(IContent content) {
+        List<ApiCultureItem> temp = [];
+        foreach (string cultureKey in content.PublishedCultures) {
+            ILanguage? language = await Dependencies.LanguageService.GetAsync(cultureKey);
+            TryGetContent(content.Key, out IPublishedContent? published);
+            temp.Add(new ApiCultureItem {
+                Alias = cultureKey,
+                Name = language?.CultureName,
+                NodeName = content.GetPublishName(cultureKey),
+                Url = published?.Url(culture: cultureKey)
+            });
+        }
+        return temp;
     }
 
     #endregion
