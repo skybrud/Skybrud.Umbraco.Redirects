@@ -55,8 +55,8 @@ export class RedirectsElementBase extends UmbElementMixin(LitElement) {
 
                             // Get the variant specific name and URL
                             const name = (data.variants.find(x => x.culture == culture) ?? data.variants[0]).name;
-                            let url = (urls.find(x => x.culture == culture) ?? urls[0]).url;
-                            if (url.indexOf(window.location.origin + "/") === 0) url = url.substr(window.location.origin.length);
+                            let url = (urls.find(x => x.culture == culture) ?? urls[0])?.url;
+                            if (url && url.indexOf(window.location.origin + "/") === 0) url = url.substr(window.location.origin.length);
 
                             const cultures = [];
 
