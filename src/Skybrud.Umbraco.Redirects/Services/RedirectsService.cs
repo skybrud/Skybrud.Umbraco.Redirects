@@ -5,7 +5,7 @@ using System.Linq;
 using System.Web;
 using Microsoft.AspNetCore.Http;
 using NPoco;
-using Skybrud.Essentials.Collections.Extensions;
+using Skybrud.Essentials.Collections.Enumerables.Extensions;
 using Skybrud.Essentials.Common;
 using Skybrud.Essentials.Strings.Extensions;
 using Skybrud.Umbraco.Redirects.Exceptions;
