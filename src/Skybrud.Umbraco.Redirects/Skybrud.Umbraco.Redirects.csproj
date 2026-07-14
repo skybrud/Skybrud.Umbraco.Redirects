@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>17.0.5</VersionPrefix>
+    <VersionPrefix>18.0.0-alpha000</VersionPrefix>
     <VersionSuffix Condition="'$(Configuration)'=='Debug'">build$([System.DateTime]::UtcNow.ToString(`yyyyMMddHHmm`))</VersionSuffix>
     <Authors>Anders Bjerner</Authors>
     <Company>Limbo</Company>
@@ -54,8 +54,8 @@
   <!-- Include NuGet dependencies -->
   <ItemGroup>
     <PackageReference Include="Skybrud.Essentials" Version="1.1.67" />
-    <PackageReference Include="Umbraco.Cms.Core" Version="[17.0.0,17.999)" />
-    <PackageReference Include="Umbraco.Cms.Web.Website" Version="[17.0.0,17.999)" />
+    <PackageReference Include="Umbraco.Cms.Core" Version="[18.0.0,18.999)" />
+    <PackageReference Include="Umbraco.Cms.Web.Website" Version="[18.0.0,18.999)" />
   </ItemGroup>
 
   <!-- Include package icon and README for the NuGet package -->
