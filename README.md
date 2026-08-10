@@ -1,6 +1,6 @@
 # Skybrud Redirects
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/skybrud/Skybrud.Umbraco.Redirects/blob/v16/main/LICENSE.md)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/skybrud/Skybrud.Umbraco.Redirects/blob/v17/main/LICENSE.md)
 [![NuGet](https://img.shields.io/nuget/v/Skybrud.Umbraco.Redirects.svg)](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects)
 [![NuGet](https://img.shields.io/nuget/dt/Skybrud.Umbraco.Redirects.svg)](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects)
 [![Umbraco Marketplace](https://img.shields.io/badge/umbraco-marketplace-%233544B1)](https://marketplace.umbraco.com/package/skybrud.umbraco.redirects)
@@ -13,7 +13,7 @@ URLs can be added to redirect to either a content item, media item or a custom U
 <table>
   <tr>
     <td><strong>License:</strong></td>
-    <td><a href="https://github.com/skybrud/Skybrud.Umbraco.Redirects/blob/v16/main/LICENSE.md"><strong>MIT License</strong></a></td>
+    <td><a href="https://github.com/skybrud/Skybrud.Umbraco.Redirects/blob/v17/main/LICENSE.md"><strong>MIT License</strong></a></td>
   </tr>
   <tr>
     <td><strong>Umbraco:</strong></td>
@@ -37,9 +37,9 @@ URLs can be added to redirect to either a content item, media item or a custom U
 
 ## Installation
 
-### Umbraco 16
+### Umbraco 17
 
-Version 16 of this package supports Umbraco version 16. The package is only available via [**NuGet**](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects). To install the package, you can use either the .NET CLI:
+Version 17 of this package supports Umbraco version 17. The package is only available via [**NuGet**](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects). To install the package, you can use either the .NET CLI:
 
 ```
 dotnet add package Skybrud.Umbraco.Redirects --version 17.0.5
@@ -53,7 +53,8 @@ Install-Package Skybrud.Umbraco.Redirects -Version 17.0.5
 
 ### Other versions of Umbraco
 
-- [**`v16/main`**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v15/main) Umbraco 16
+- [**`v18/main`**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v18/main) Umbraco 18
+- [**`v16/main`**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v16/main) Umbraco 16
 - ~~[**`v15/main`**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v15/main) Umbraco 15~~ <sub title="Umbraco 15 has reached end-of-life"><sup>(EOL)</sup></sub>
 - ~~[**`v14/main`**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v14/main) Umbraco 14~~ <sub title="Umbraco 14 has reached end-of-life"><sup>(EOL)</sup></sub>
 - [**`v13/main`**](https://github.com/skybrud/Skybrud.Umbraco.Redirects/tree/v13/main) Umbraco 13
@@ -84,6 +85,9 @@ Install-Package Skybrud.Umbraco.Redirects -Version 17.0.5
 <br /><br />
 
 ## Add-ons
+
+- [**Skybrud.Umbraco.Redirects.Automate**](https://github.com/skybrud/Skybrud.Umbraco.Redirects.Automate)  
+Add-on for for Umbraco's Automate package.
 
 - [**Skybrud.Umbraco.Redirects.Import**](https://github.com/skybrud/Skybrud.Umbraco.Redirects.Import)  
 Add-on for handling imports and exports of redirects supporting formats like CSV, XLSX and JSON.
