@@ -117,6 +117,8 @@ export class RedirectsDashboardElement extends UmbElementMixin(LitElement) {
             settings: RedirectsPackage.dashboard
         };
 
+        this.dashboard.settings.debounce ??= 250;
+
         RedirectsService.getRootNodes().then(function (res) {
 
             const temp = [
@@ -161,14 +163,14 @@ export class RedirectsDashboardElement extends UmbElementMixin(LitElement) {
         self.loading = true;
 
         RedirectsService.getRedirects(params).then(function (res) {
-            setTimeout(function () {
+            //setTimeout(function () {
                 self.redirects = res.data.items;
                 self.pagination = res.data.pagination;
                 self.loading = false;
                 self.refreshing = false;
                 self.reloadButton.state = null;
                 self.requestUpdate();
-            }, 200);
+            //}, 200);
         });
 
     }
@@ -247,9 +249,16 @@ export class RedirectsDashboardElement extends UmbElementMixin(LitElement) {
     }
 
     onKeyUp() {
+
         const input = this.shadowRoot.querySelector("#search");
-        if (input.value == this.text) return;
-        this.text = input.value;
+
+        clearTimeout(this._textTimeout);
+
+        this._textTimeout = setTimeout(() => {
+            if (input.value == this.text) return;
+            this.text = input.value;
+        }, this.dashboard.settings.debounce);
+
     }
 
     onPageChange(e) {

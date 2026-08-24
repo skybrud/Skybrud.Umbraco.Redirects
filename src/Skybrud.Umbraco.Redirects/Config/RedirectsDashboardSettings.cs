@@ -23,6 +23,11 @@ public class RedirectsDashboardSettings {
     public int PageSize { get; set; } = 20;
 
     /// <summary>
+    /// Gets or sets the debounce time in milliseconds for the dashboard. Default is <c>250</c>.
+    /// </summary>
+    public int Debounce { get; set; } = 250;
+
+    /// <summary>
     /// Gets or sets a set of user groups for which the dashboard should be shown or hidden.
     /// </summary>
     public HashSet<string> UserGroups { get; set; } = [];

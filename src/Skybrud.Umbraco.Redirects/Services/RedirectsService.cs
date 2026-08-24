@@ -383,7 +383,16 @@ public class RedirectsService : IRedirectsService {
                 } else if (Guid.TryParse(options.Text, out Guid redirectKey)) {
                     sql = sql.Where<RedirectDto>(x => x.Key == redirectKey || x.Path.Contains(options.Text) || x.QueryString!.Contains(options.Text));
                 } else {
-                    sql = sql.Where<RedirectDto>(x => x.Path.Contains(options.Text) || x.QueryString!.Contains(options.Text) || x.DestinationName!.Contains(options.Text));
+                    string[] words = options.Text.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                    foreach (string word in words) {
+                        string value = word;
+                        sql = sql.Where<RedirectDto>(x =>
+                            x.Path.Contains(value) ||
+                            x.QueryString!.Contains(value) ||
+                            x.DestinationName!.Contains(value) ||
+                            x.DestinationUrl!.Contains(value)
+                        );
+                    }
                 }
             } else {
                 string url = parts[0];
