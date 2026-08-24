@@ -202,7 +202,7 @@ public class RedirectsBackOfficeHelper {
                 string url = published.Url(destination.Culture);
                 if (!string.IsNullOrEmpty(url)) destination.Url = url;
 
-                string? name = published.Name(destination.Culture);
+                string name = published.Name(destination.Culture);
                 if (!string.IsNullOrEmpty(name)) destination.Name = name;
 
             }
@@ -238,7 +238,7 @@ public class RedirectsBackOfficeHelper {
         // Determine the Umbraco base URL, if any
         string? inboundBaseUrl;
         if (redirect.RootKey != Guid.Empty && Dependencies.UmbracoContextAccessor.TryGetUmbracoContext(out IUmbracoContext? context)) {
-            inboundBaseUrl = context.Content?.GetById(redirect.RootKey)?.Url(mode: UrlMode.Absolute).TrimEnd('/');
+            inboundBaseUrl = context.Content.GetById(redirect.RootKey)?.Url(mode: UrlMode.Absolute).TrimEnd('/');
         } else if (!string.IsNullOrWhiteSpace(Dependencies.RedirectsSettings.Value.FrontendUrl)) {
             inboundBaseUrl = Dependencies.RedirectsSettings.Value.FrontendUrl.TrimEnd('/');
         } else {
@@ -261,7 +261,7 @@ public class RedirectsBackOfficeHelper {
     public virtual bool TryGetContent(int id, [NotNullWhen(true)] out IPublishedContent? result) {
 
         if (Dependencies.UmbracoContextAccessor.TryGetUmbracoContext(out IUmbracoContext? context)) {
-            result = context.Content?.GetById(id);
+            result = context.Content.GetById(id);
             return result is not null;
         }
 
@@ -279,7 +279,7 @@ public class RedirectsBackOfficeHelper {
     public virtual bool TryGetContent(Guid key, [NotNullWhen(true)] out IPublishedContent? result) {
 
         if (Dependencies.UmbracoContextAccessor.TryGetUmbracoContext(out IUmbracoContext? context)) {
-            result = context.Content?.GetById(key);
+            result = context.Content.GetById(key);
             return result is not null;
         }
 
@@ -297,7 +297,7 @@ public class RedirectsBackOfficeHelper {
     public virtual bool TryGetMedia(int id, [NotNullWhen(true)] out IPublishedContent? result) {
 
         if (Dependencies.UmbracoContextAccessor.TryGetUmbracoContext(out IUmbracoContext? context)) {
-            result = context.Media?.GetById(id);
+            result = context.Media.GetById(id);
             return result is not null;
         }
 
