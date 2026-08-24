@@ -59,4 +59,10 @@
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
 
+  <!-- Include custom appsettings schema -->
+  <ItemGroup>
+    <None Include="appsettings-schema.Skybrud.Umbraco.Redirects.json" Pack="true" PackagePath="" />
+    <None Include="buildTransitive\Skybrud.Umbraco.Redirects.targets" Pack="true" PackagePath="buildTransitive\" />
+  </ItemGroup>
+
 </Project>
