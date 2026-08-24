@@ -49,7 +49,7 @@ public class RedirectsException : Exception {
     /// </summary>
     /// <param name="message">The message of the exception.</param>
     /// <param name="innerException">An inner exception.</param>
-    public RedirectsException(string message, Exception innerException) : base(message, innerException) {
+    public RedirectsException(string message, Exception? innerException) : base(message, innerException) {
         StatusCode = HttpStatusCode.InternalServerError;
     }
 

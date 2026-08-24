@@ -6,13 +6,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Skybrud.Essentials.Strings.Extensions;
 using Skybrud.Umbraco.Redirects.Config;
+using Skybrud.Umbraco.Redirects.Exceptions;
 using Skybrud.Umbraco.Redirects.Models;
 using Skybrud.Umbraco.Redirects.Models.Api;
-using Umbraco.Cms.Core.Media.EmbedProviders;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.Membership;
 using Umbraco.Cms.Core.Models.PublishedContent;
-using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Extensions;
 
@@ -361,6 +360,34 @@ public class RedirectsBackOfficeHelper {
             });
         }
         return temp;
+    }
+
+    /// <summary>
+    /// Returns the localized message of <paramref name="exception"/>.
+    /// </summary>
+    /// <param name="exception">The exception to get the localized message for.</param>
+    /// <returns>The localized message.</returns>
+    public string Localize(RedirectsUserException exception) {
+        return Localize(exception, CurrentCulture);
+    }
+
+    /// <summary>
+    /// Returns the localized message of <paramref name="exception"/>.
+    /// </summary>
+    /// <param name="exception">The exception to get the localized message for.</param>
+    /// <param name="culture">The culture to use for localization.</param>
+    /// <returns>The localized message.</returns>
+    public virtual string Localize(RedirectsUserException exception, CultureInfo culture) {
+
+        int pos = exception.UserMessageKey.IndexOf('_');
+
+        string area = pos == -1 ? "skybrud" : exception.UserMessageKey[..pos];
+        string alias = pos == -1 ? exception.UserMessageKey : exception.UserMessageKey[(pos + 1)..];
+
+        string[] tokens = exception.UserMessageArgs.Select(x => string.Format(culture, "{0}", x)).ToArray();
+
+        return Dependencies.TextService.Localize(area, alias, culture, tokens);
+
     }
 
     #endregion

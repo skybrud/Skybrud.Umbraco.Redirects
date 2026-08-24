@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Org.BouncyCastle.Utilities.Encoders;
 using Skybrud.Essentials.Collections.Enumerables.Extensions;
 using Skybrud.Essentials.Enums;
 using Skybrud.Essentials.Security.Extensions;
@@ -430,12 +431,31 @@ public class RedirectsController : Controller {
 
     private JsonResult Error(RedirectsException ex) {
 
-        // Initialize a new error model based on the exception
-        ApiError body = new(ex);
+        string message;
+        object? data = null;
 
-        if (ex is RedirectsLocalizedException lex) {
-            body.Error = lex.GetLocalizedMessage(_localizedTextService, _backOfficeHelper.CurrentCulture);
+        switch (ex) {
+
+            case RedirectsUserException uex:
+                message = _backOfficeHelper.Localize(uex);
+                data = uex.Data;
+                break;
+
+            case RedirectsLocalizedException lex:
+                message = lex.GetLocalizedMessage(_localizedTextService, _backOfficeHelper.CurrentCulture);
+                break;
+
+            default:
+                // TODO: should we really return the exception message here?
+                message = ex.Message;
+                break;
+
+
+
         }
+
+        // Initialize a new error model based on the exception
+        ApiError body = new(message, data);
 
         return new JsonResult(body) {
             StatusCode = (int) ex.StatusCode
