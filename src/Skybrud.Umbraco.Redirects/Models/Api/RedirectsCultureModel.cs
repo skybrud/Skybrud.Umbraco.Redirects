@@ -3,7 +3,7 @@
 /// <summary>
 /// Model class representing a culture item in the API.
 /// </summary>
-public class ApiCultureItem {
+public class RedirectsCultureModel {
 
     /// <summary>
     /// Gets or sets the alias (or key) of the culture item. E.g. <c>da-DK</c> or <c>en-US</c>.

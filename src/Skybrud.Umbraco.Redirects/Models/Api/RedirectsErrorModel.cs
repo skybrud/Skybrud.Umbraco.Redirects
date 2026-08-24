@@ -8,7 +8,7 @@ namespace Skybrud.Umbraco.Redirects.Models.Api;
 /// <summary>
 /// Class representing a redirects error.
 /// </summary>
-public class ApiError {
+public class RedirectsErrorModel {
 
     /// <summary>
     /// Gets the status code of the error.
@@ -31,7 +31,7 @@ public class ApiError {
     /// Initializes a new instance based on the specified <paramref name="error"/> message.
     /// </summary>
     /// <param name="error">The error message.</param>
-    public ApiError(string error) {
+    public RedirectsErrorModel(string error) {
         StatusCode = HttpStatusCode.InternalServerError;
         Error = error;
     }
@@ -41,7 +41,7 @@ public class ApiError {
     /// </summary>
     /// <param name="error">The error message.</param>
     /// <param name="data">The data associated with the error.</param>
-    public ApiError(string error, object? data) {
+    public RedirectsErrorModel(string error, object? data) {
         StatusCode = HttpStatusCode.InternalServerError;
         Error = error;
         Data = data;
@@ -51,7 +51,7 @@ public class ApiError {
     /// Initializes a new instance based on the specified <paramref name="exception"/>.
     /// </summary>
     /// <param name="exception">The exception.</param>
-    public ApiError(RedirectsException exception) {
+    public RedirectsErrorModel(RedirectsException exception) {
         StatusCode = exception.StatusCode;
         Error = exception.Message;
     }

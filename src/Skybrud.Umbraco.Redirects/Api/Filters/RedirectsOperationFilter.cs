@@ -2,9 +2,9 @@
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
-namespace Skybrud.Umbraco.Redirects.Api;
+namespace Skybrud.Umbraco.Redirects.Api.Filters;
 
-public class RedirectsSecurityFilter : BackOfficeSecurityRequirementsOperationFilterBase {
+public class RedirectsOperationFilter : BackOfficeSecurityRequirementsOperationFilterBase {
 
     protected override string ApiName => RedirectsApiConstants.Alias;
 

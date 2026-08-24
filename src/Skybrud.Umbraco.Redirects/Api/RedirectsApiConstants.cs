@@ -12,4 +12,6 @@ public class RedirectsApiConstants {
 
     public const string GroupName = "Skybrud Redirects";
 
+    public const string Version = "1.0";
+
 }

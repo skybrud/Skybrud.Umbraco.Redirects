@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Text.Json.Serialization;
 
-namespace Skybrud.Umbraco.Redirects.Models;
+namespace Skybrud.Umbraco.Redirects.Models.Api;
+
+#pragma warning disable CS1591
 
 /// <summary>
 /// Class with pagination information about a collection of redirect items.
 /// </summary>
-public class RedirectsSearchResultPagination {
+public class RedirectListPagination {
 
     #region Properties
 
@@ -64,14 +66,32 @@ public class RedirectsSearchResultPagination {
     /// <param name="offset">The offset.</param>
     /// <param name="page">The page returned.</param>
     /// <param name="pages">The total amount of pages.</param>
-    public RedirectsSearchResultPagination(int total, int limit, int offset, int page, int pages) {
+    public RedirectListPagination(int total, int limit, int offset, int page, int pages) {
         Total = total;
         Limit = limit;
         Offset = offset;
         Page = page;
         Pages = pages;
         From = offset + 1;
-        To = To == 0 ? total : Math.Min(offset + limit, total);
+        To = Math.Min(offset + limit, total);
+    }
+
+    #endregion
+
+    #region Constructors
+
+    /// <summary>
+    /// Initializes a new instance based on the specified parameters.
+    /// </summary>
+    /// <param name="source">The source this instance should be based on.</param>
+    public RedirectListPagination(RedirectsSearchResultPagination source) {
+        Total = source.Total;
+        Limit = source.Limit;
+        Offset = source.Offset;
+        Page = source.Page;
+        Pages = source.Pages;
+        From = source.From;
+        To = source.To;
     }
 
     #endregion

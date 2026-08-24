@@ -6,7 +6,7 @@ namespace Skybrud.Umbraco.Redirects.Models.Api;
 /// <summary>
 /// Model class representing a user in the Umbraco backoffice.
 /// </summary>
-public class ApiUserItem {
+public class RedirectsUserModel {
 
     /// <summary>
     /// Gets or sets the numeric ID of the user.

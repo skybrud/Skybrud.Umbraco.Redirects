@@ -7,7 +7,7 @@ using Skybrud.Umbraco.Redirects.Text.Json;
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 namespace Skybrud.Umbraco.Redirects.Models.Api;
-public class ApiRedirect {
+public class RedirectItem {
 
     private readonly IRedirect _redirect;
 
@@ -21,7 +21,7 @@ public class ApiRedirect {
 
     [JsonProperty("rootNode")]
     [JsonPropertyName("rootNode")]
-    public ApiRootNode? RootNode { get; }
+    public RedirectsRootNodeModel? RootNode { get; }
 
     [JsonProperty("path")]
     [JsonPropertyName("path")]
@@ -41,7 +41,7 @@ public class ApiRedirect {
 
     [JsonProperty("destination")]
     [JsonPropertyName("destination")]
-    public ApiRedirectDestination Destination { get; }
+    public RedirectDestinationModel Destination { get; }
 
     [JsonProperty("createDate")]
     [JsonPropertyName("createDate")]
@@ -70,7 +70,7 @@ public class ApiRedirect {
     [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? UrlWarning { get; set; }
 
-    public ApiRedirect(IRedirect redirect, ApiRootNode? rootNode, ApiRedirectDestination destination) {
+    public RedirectItem(IRedirect redirect, RedirectsRootNodeModel? rootNode, RedirectDestinationModel destination) {
         _redirect = redirect;
         RootNode = rootNode;
         FullUrl = Url = redirect.Url;

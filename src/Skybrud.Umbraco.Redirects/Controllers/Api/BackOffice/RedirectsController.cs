@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Org.BouncyCastle.Utilities.Encoders;
 using Skybrud.Essentials.Collections.Enumerables.Extensions;
 using Skybrud.Essentials.Enums;
 using Skybrud.Essentials.Security.Extensions;
@@ -80,7 +78,9 @@ public class RedirectsController : Controller {
     /// <param name="text">The text that the returned redirects should match.</param>
     /// <returns>A list of redirects.</returns>
     [HttpGet]
-    public object Index(int page = 1, int limit = 20, Guid? rootNodeKey = null, string? type = null, string? text = null) {
+    [EndpointSummary("Returns a paginated list of redirects.")]
+    [EndpointDescription("Returns a paginated list of redirects based on the specified search options.")]
+    public RedirectSearchResultModel Index(int page = 1, int limit = 20, Guid? rootNodeKey = null, string? type = null, string? text = null) {
 
         // Initialize the search options
         RedirectsSearchOptions options = new() {
@@ -100,23 +100,27 @@ public class RedirectsController : Controller {
     }
 
     [HttpGet("{type}/{key}")]
-    public object GetRedirects(string type, Guid key) {
+    [EndpointSummary("Returns a list of redirects for a specific node.")]
+    [EndpointDescription("Returns the redirects for the specified node type and key.")]
+    public ActionResult<RedirectListModel> GetRedirects(string type, Guid key) {
 
+        // Parse the node type
         if (!EnumUtils.TryParseEnum(type, out RedirectDestinationType nodeType) || nodeType == RedirectDestinationType.Url) {
             return BadRequest($"Invalid node type '{type}'.");
         }
 
+        // Get the redirects for the specified node type and key
         IReadOnlyList<IRedirect> redirects = _redirectsService.GetRedirectsByNodeKey(nodeType, key);
 
-        return new {
-            total = redirects.Count,
-            items = redirects.Select(_backOfficeHelper.Map)
-        };
+        // Map the result for the API
+        return _backOfficeHelper.Map(redirects);
 
     }
 
     [HttpPut("")]
-    public object AddRedirect([FromBody] AddRedirectOptions options) {
+    [EndpointSummary("Adds a new redirect.")]
+    [EndpointDescription("Adds a new redirect with the specified options.")]
+    public ActionResult<RedirectItem> AddRedirect([FromBody] AddRedirectOptions options) {
 
         try {
 
@@ -146,7 +150,9 @@ public class RedirectsController : Controller {
     }
 
     [HttpGet("{id:int}")]
-    public object GetRedirect(int id) {
+    [EndpointSummary("Returns a redirect.")]
+    [EndpointDescription("Returns the redirect with the specified integer ID.")]
+    public ActionResult<RedirectItem> GetRedirect(int id) {
 
         try {
 
@@ -154,7 +160,10 @@ public class RedirectsController : Controller {
             IRedirect redirect = _redirectsService.GetRedirectById(id) ?? throw new RedirectNotFoundException(id);
 
             // Map the result for the API
-            return Ok(_backOfficeHelper.Map(redirect));
+            RedirectItem result = _backOfficeHelper.Map(redirect);
+
+            // Return the result
+            return Ok(result);
 
         } catch (RedirectsException ex) {
 
@@ -168,7 +177,9 @@ public class RedirectsController : Controller {
     }
 
     [HttpGet("{key:guid}")]
-    public object GetRedirect(Guid key) {
+    [EndpointSummary("Returns a redirect.")]
+    [EndpointDescription("Returns the redirect with the specified GUID key.")]
+    public ActionResult<RedirectItem> GetRedirect(Guid key) {
 
         try {
 
@@ -176,7 +187,10 @@ public class RedirectsController : Controller {
             IRedirect redirect = _redirectsService.GetRedirectByKey(key) ?? throw new RedirectNotFoundException(key);
 
             // Map the result for the API
-            return Ok(_backOfficeHelper.Map(redirect));
+            RedirectItem result = _backOfficeHelper.Map(redirect);
+
+            // Return the result
+            return Ok(result);
 
         } catch (RedirectsException ex) {
 
@@ -190,7 +204,9 @@ public class RedirectsController : Controller {
     }
 
     [HttpPatch("{key:guid}")]
-    public object EditRedirect(Guid key, [FromBody] EditRedirectOptions options) {
+    [EndpointSummary("Updates a redirect.")]
+    [EndpointDescription("Updates the redirect with the specified GUID key.")]
+    public ActionResult<RedirectItem> EditRedirect(Guid key, [FromBody] EditRedirectOptions options) {
 
         try {
 
@@ -220,7 +236,10 @@ public class RedirectsController : Controller {
             _redirectsService.SaveRedirect(redirect);
 
             // Map the result for the API
-            return Ok(_backOfficeHelper.Map(redirect));
+            RedirectItem result = _backOfficeHelper.Map(redirect);
+
+            // Return the result
+            return Ok(result);
 
         } catch (RedirectsException ex) {
 
@@ -234,7 +253,11 @@ public class RedirectsController : Controller {
     }
 
     [HttpDelete("{id:int}")]
-    public object DeleteRedirect(int id) {
+    [EndpointSummary("Deletes a redirect")]
+    [EndpointDescription("Deletes the redirect with the specified ID.")]
+    [ProducesResponseType(StatusCodes.Status204NoContent, Description = "No Content - The redirect was successfully deleted.")]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Description = "Not Found - The redirect with the specified ID was not found.")]
+    public IActionResult DeleteRedirect(int id) {
 
         try {
 
@@ -244,8 +267,8 @@ public class RedirectsController : Controller {
             // Delete the redirect
             _redirectsService.DeleteRedirect(redirect);
 
-            // Map the result for the API
-            return Ok(_backOfficeHelper.Map(redirect));
+            // Return a 204 No Content response to indicate successful deletion
+            return NoContent();
 
         } catch (RedirectsException ex) {
 
@@ -259,7 +282,11 @@ public class RedirectsController : Controller {
     }
 
     [HttpDelete("{key:guid}")]
-    public object DeleteRedirect(Guid key) {
+    [EndpointSummary("Deletes a redirect")]
+    [EndpointDescription("Deletes the redirect with the specified GUID key.")]
+    [ProducesResponseType(StatusCodes.Status204NoContent, Description = "No Content - The redirect was successfully deleted.")]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Description = "Not Found - The redirect with the specified GUID key was not found.")]
+    public IActionResult DeleteRedirect(Guid key) {
 
         try {
 
@@ -269,8 +296,8 @@ public class RedirectsController : Controller {
             // Delete the redirect
             _redirectsService.DeleteRedirect(redirect);
 
-            // Map the result for the API
-            return Ok(_backOfficeHelper.Map(redirect));
+            // Return a 204 No Content response to indicate successful deletion
+            return NoContent();
 
         } catch (RedirectsException ex) {
 
@@ -284,19 +311,20 @@ public class RedirectsController : Controller {
     }
 
     /// <summary>
-    /// Gets a list of root nodes based on the domains added to Umbraco. A root node will only be included in the
+    /// Returns a list of root nodes based on the domains added to Umbraco. A root node will only be included in the
     /// list once - even if it has been assigned multiple domains.
     /// </summary>
-    [HttpGet]
-    [Route("rootNodes")]
-    public ActionResult GetRootNodes() {
+    [HttpGet("rootNodes")]
+    [EndpointSummary("Returns a list of root nodes.")]
+    [EndpointDescription("Returns a list of root nodes based on the domains added to Umbraco. A root node will only be included in the list once - even if it has been assigned multiple domains.")]
+    [ProducesResponseType(StatusCodes.Status200OK, Description = "OK - The list of root nodes was successfully retrieved.")]
+    public ActionResult<RedirectsRootNodeListModel> GetRootNodes() {
 
         IReadOnlyList<RedirectRootNode> rootNodes = _redirectsService.GetRootNodes();
 
-        return new JsonResult(new {
-            total = rootNodes.Count,
-            items = rootNodes.Select(x => new ApiRootNode(x))
-        });
+        RedirectsRootNodeListModel result = _backOfficeHelper.MapRootNodes(rootNodes);
+
+        return result;
 
     }
 
@@ -306,7 +334,9 @@ public class RedirectsController : Controller {
     /// <param name="key">The GUID key of the content node.</param>
     /// <returns>A list of cultures.</returns>
     [HttpGet("content/{key:guid}/cultures")]
-    public async Task<ActionResult<IReadOnlyList<ApiCultureItem>>> GetCultures(Guid key) {
+    [EndpointSummary("Returns a list of cultures for the content node with the specified GUID key.")]
+    [EndpointDescription("Returns a list of cultures for the content node with the specified GUID key. If the node does not vary by culture, an empty list will be returned instead.")]
+    public async Task<ActionResult<IReadOnlyList<RedirectsCultureModel>>> GetCultures(Guid key) {
 
         // We start by looking for a published version of the content, as this is the fastest
         // approach, and still should expose the information that we need
@@ -325,54 +355,27 @@ public class RedirectsController : Controller {
 
     }
 
-    [HttpGet]
-    [Route("serverVariables")]
-    public object GetServerVariables() {
-        return new {
-            version = RedirectsPackage.InformationalVersion,
-            cacheBuster = RedirectsPackage.InformationalVersion.ToMd5Hash(),
-            settings = _settings.Value,
-            dashboard = new {
-                limit = _settings.Value.Dashboard.PageSize
-            }
+    [HttpGet("serverVariables")]
+    [EndpointSummary("Returns the server variables.")]
+    [EndpointDescription("Returns the server variables including the version, cache buster, and settings.")]
+    public RedirectsServerVariablesModel GetServerVariables() {
+        return new RedirectsServerVariablesModel {
+            Version = RedirectsPackage.InformationalVersion,
+            CacheBuster = RedirectsPackage.InformationalVersion.ToMd5Hash(),
+            Settings = _settings.Value
         };
     }
 
-    [HttpGet]
-    [Route("package")]
-    public object GetPackage() {
-
-        StringBuilder sb = new();
-
-        sb.AppendLine("export class RedirectsPackage {");
-        sb.AppendLine("    static get version() {");
-        sb.AppendLine("        return \"" + RedirectsPackage.InformationalVersion + "\";");
-        sb.AppendLine("    }");
-        sb.AppendLine("    static get cacheBuster() {");
-        sb.AppendLine("        return \"" + RedirectsPackage.InformationalVersion.ToMd5Hash() + "\";");
-        sb.AppendLine("    }");
-        sb.AppendLine("}");
-
-        sb.AppendLine("export default RedirectsPackage;");
-
-        return new ContentResult {
-            StatusCode = 200,
-            ContentType = "text/javascript",
-            Content = sb.ToString()
-        };
-
-    }
-
-    [HttpGet]
-    [Route("users/current")]
-    public ActionResult<IReadOnlyList<ApiUserItem>> GetCurrentUser() {
+    [HttpGet("users/current")]
+    [EndpointSummary("Returns the current user.")]
+    [EndpointDescription("Returns the current user including their ID, key, and groups.")]
+    public ActionResult<RedirectsUserModel> GetCurrentUser() {
         IUser user = _backOfficeHelper.CurrentUser ?? throw new InvalidOperationException("No current user found.");
-        return Ok(new ApiUserItem {
+        return Ok(new RedirectsUserModel {
             Id = user.Id,
             Key = user.Key,
             Groups = user.Groups.SelectList(x => x.Alias)
         });
-
     }
 
     #endregion
@@ -455,7 +458,7 @@ public class RedirectsController : Controller {
         }
 
         // Initialize a new error model based on the exception
-        ApiError body = new(message, data);
+        RedirectsErrorModel body = new(message, data);
 
         return new JsonResult(body) {
             StatusCode = (int) ex.StatusCode

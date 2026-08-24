@@ -8,7 +8,7 @@ using Umbraco.Cms.Core.Models;
 
 namespace Skybrud.Umbraco.Redirects.Models.Api;
 
-public class ApiRootNode {
+public class RedirectsRootNodeModel {
 
     [JsonProperty("id")]
     [JsonPropertyName("id")]
@@ -34,7 +34,7 @@ public class ApiRootNode {
     [JsonPropertyName("domains")]
     public IReadOnlyList<string> Domains { get; }
 
-    public ApiRootNode(IRedirect redirect, IContent? content, string[]? domains) {
+    public RedirectsRootNodeModel(IRedirect redirect, IContent? content, string[]? domains) {
         Id = content?.Id ?? 0;
         Key = content?.Key ?? redirect.RootKey;
         Name = content?.Name;
@@ -43,7 +43,7 @@ public class ApiRootNode {
         BackOfficeUrl = $"/umbraco/section/content/workspace/document/edit/{Key}";
     }
 
-    public ApiRootNode(RedirectRootNode rootNode) {
+    public RedirectsRootNodeModel(RedirectRootNode rootNode) {
         Id = rootNode.Id;
         Key = rootNode.Key;
         Name = rootNode.Name;
