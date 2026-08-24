@@ -6,6 +6,7 @@
     <File Path="../NUGET.md" />
     <File Path="../README.md" />
     <File Path="../release.bat" />
+    <File Path="Skybrud.Umbraco.Redirects.sln.DotSettings" />
   </Folder>
   <Project Path="Skybrud.Umbraco.Redirects/Skybrud.Umbraco.Redirects.csproj" />
 </Solution>
