@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using Skybrud.Essentials.Strings.Extensions;
 using Skybrud.Umbraco.Redirects.Config;
+using Skybrud.Umbraco.Redirects.Exceptions;
 using Skybrud.Umbraco.Redirects.Models;
 using Skybrud.Umbraco.Redirects.Models.Api;
 using Umbraco.Cms.Core.Models;
@@ -92,28 +94,49 @@ public class RedirectsBackOfficeHelper {
     /// Maps the specified <paramref name="result"/> to a corresponding object to be returned in the API.
     /// </summary>
     /// <param name="result">The search result to be mapped.</param>
-    /// <returns>An instance of <see cref="object"/>.</returns>
-    public virtual object Map(RedirectsSearchResult result) {
+    /// <returns>An instance of <see cref="RedirectListModel"/>.</returns>
+    public virtual RedirectSearchResultModel Map(RedirectsSearchResult result) {
 
-        Dictionary<Guid, ApiRootNode> rootNodeLookup = [];
+        Dictionary<Guid, RedirectsRootNodeModel> rootNodeLookup = [];
         Dictionary<Guid, IContent> contentLookup = [];
         Dictionary<Guid, IMedia> mediaLookup = [];
         Dictionary<string, ILanguage> languageLookup = [];
 
-        IEnumerable<ApiRedirect> items = result.Items
+        RedirectListPagination pagination = new(result.Pagination);
+
+        IEnumerable<RedirectItem> items = result.Items
             .Select(redirect => Map(redirect, rootNodeLookup, contentLookup, mediaLookup, languageLookup));
 
-        return new ApiRedirectList(result.Pagination, items);
+        return new RedirectSearchResultModel(pagination, items);
 
     }
 
     /// <summary>
-    /// Maps the specified <paramref name="redirect"/> to a corresponding <see cref="ApiRedirect"/> to be returned in the API.
+    /// Maps the specified list of <paramref name="redirects"/> to a corresponding object to be returned in the API.
+    /// </summary>
+    /// <param name="redirects">The list of redirects.</param>
+    /// <returns>An instance of <see cref="RedirectListModel"/>.</returns>
+    public virtual RedirectListModel Map(IReadOnlyList<IRedirect> redirects) {
+
+        Dictionary<Guid, RedirectsRootNodeModel> rootNodeLookup = [];
+        Dictionary<Guid, IContent> contentLookup = [];
+        Dictionary<Guid, IMedia> mediaLookup = [];
+        Dictionary<string, ILanguage> languageLookup = [];
+
+        IEnumerable<RedirectItem> items = redirects
+            .Select(redirect => Map(redirect, rootNodeLookup, contentLookup, mediaLookup, languageLookup));
+
+        return new RedirectListModel(redirects.Count, items);
+
+    }
+
+    /// <summary>
+    /// Maps the specified <paramref name="redirect"/> to a corresponding <see cref="RedirectItem"/> to be returned in the API.
     /// </summary>
     /// <param name="redirect">The redirect to be mapped.</param>
-    /// <returns>An instance of <see cref="ApiRedirect"/>.</returns>
-    public virtual ApiRedirect Map(IRedirect redirect) {
-        Dictionary<Guid, ApiRootNode> rootNodeLookup = new();
+    /// <returns>An instance of <see cref="RedirectItem"/>.</returns>
+    public virtual RedirectItem Map(IRedirect redirect) {
+        Dictionary<Guid, RedirectsRootNodeModel> rootNodeLookup = new();
         Dictionary<Guid, IContent> contentLookup = new();
         Dictionary<Guid, IMedia> mediaLookup = new();
         Dictionary<string, ILanguage> languageLookup = new();
@@ -121,21 +144,21 @@ public class RedirectsBackOfficeHelper {
     }
 
     /// <summary>
-    /// Maps the specified collection of <paramref name="redirects"/> to a corresponding colelction of <see cref="ApiRedirect"/> to be returned in the API.
+    /// Maps the specified collection of <paramref name="redirects"/> to a corresponding collection of <see cref="RedirectItem"/> to be returned in the API.
     /// </summary>
     /// <param name="redirects">The collection of redirects to be mapped.</param>
-    /// <returns>A collection of <see cref="ApiRedirect"/>.</returns>
-    public virtual IEnumerable<ApiRedirect> Map(IEnumerable<IRedirect> redirects) {
-        Dictionary<Guid, ApiRootNode> rootNodeLookup = new();
+    /// <returns>A collection of <see cref="RedirectItem"/>.</returns>
+    public virtual IEnumerable<RedirectItem> Map(IEnumerable<IRedirect> redirects) {
+        Dictionary<Guid, RedirectsRootNodeModel> rootNodeLookup = new();
         Dictionary<Guid, IContent> contentLookup = new();
         Dictionary<Guid, IMedia> mediaLookup = new();
         Dictionary<string, ILanguage> languageLookup = new();
         return redirects.Select(redirect => Map(redirect, rootNodeLookup, contentLookup, mediaLookup, languageLookup));
     }
 
-    private ApiRedirect Map(IRedirect redirect, Dictionary<Guid, ApiRootNode> rootNodeLookup, Dictionary<Guid, IContent> contentLookup, Dictionary<Guid, IMedia> mediaLookup, Dictionary<string, ILanguage> languageLookup) {
+    private RedirectItem Map(IRedirect redirect, Dictionary<Guid, RedirectsRootNodeModel> rootNodeLookup, Dictionary<Guid, IContent> contentLookup, Dictionary<Guid, IMedia> mediaLookup, Dictionary<string, ILanguage> languageLookup) {
 
-        ApiRootNode? rootNode = null;
+        RedirectsRootNodeModel? rootNode = null;
         if (redirect.RootKey != Guid.Empty) {
 
             if (!rootNodeLookup.TryGetValue(redirect.RootKey, out rootNode)) {
@@ -145,7 +168,7 @@ public class RedirectsBackOfficeHelper {
                     if (content != null) contentLookup.Add(content.Key, content);
                 }
                 var domains = content == null ? null : Dependencies.DomainService.GetAssignedDomainsAsync(content.Key, false).Result.Select(x => x.DomainName).ToArray();
-                rootNode = new ApiRootNode(redirect, content, domains);
+                rootNode = new RedirectsRootNodeModel(redirect, content, domains);
 
                 rootNodeLookup.Add(rootNode.Key, rootNode);
 
@@ -168,7 +191,7 @@ public class RedirectsBackOfficeHelper {
             }
         }
 
-        ApiRedirectDestination destination;
+        RedirectDestinationModel destination;
         if (redirect.Destination.Type == RedirectDestinationType.Content) {
 
             if (!contentLookup.TryGetValue(redirect.Destination.Key, out IContent? content)) {
@@ -177,7 +200,7 @@ public class RedirectsBackOfficeHelper {
             }
 
             // Initialize a new destination object
-            destination = new ApiRedirectDestination(redirect, content);
+            destination = new RedirectDestinationModel(redirect, content);
 
             // If the destination refers to a specific culture, we fetch some additional information about the culture
             if (redirect.Destination.Culture.HasValue(out string? culture)) {
@@ -199,7 +222,7 @@ public class RedirectsBackOfficeHelper {
                 string url = published.Url(destination.Culture);
                 if (!string.IsNullOrEmpty(url)) destination.Url = url;
 
-                string? name = published.Name(destination.Culture);
+                string name = published.Name(destination.Culture);
                 if (!string.IsNullOrEmpty(name)) destination.Name = name;
 
             }
@@ -215,7 +238,7 @@ public class RedirectsBackOfficeHelper {
             }
 
             // Initialize a new destination object
-            destination = new ApiRedirectDestination(redirect, media);
+            destination = new RedirectDestinationModel(redirect, media);
 
             // Look up the current URL of the destination
             if (TryGetMedia(redirect.Destination.Id, out IPublishedContent? published)) {
@@ -228,14 +251,14 @@ public class RedirectsBackOfficeHelper {
 
         } else {
 
-            destination = new ApiRedirectDestination(redirect);
+            destination = new RedirectDestinationModel(redirect);
 
         }
 
         // Determine the Umbraco base URL, if any
         string? inboundBaseUrl;
         if (redirect.RootKey != Guid.Empty && Dependencies.UmbracoContextAccessor.TryGetUmbracoContext(out IUmbracoContext? context)) {
-            inboundBaseUrl = context.Content?.GetById(redirect.RootKey)?.Url(mode: UrlMode.Absolute).TrimEnd('/');
+            inboundBaseUrl = context.Content.GetById(redirect.RootKey)?.Url(mode: UrlMode.Absolute).TrimEnd('/');
         } else if (!string.IsNullOrWhiteSpace(Dependencies.RedirectsSettings.Value.FrontendUrl)) {
             inboundBaseUrl = Dependencies.RedirectsSettings.Value.FrontendUrl.TrimEnd('/');
         } else {
@@ -243,12 +266,22 @@ public class RedirectsBackOfficeHelper {
         }
 
         // Initialize and return a new API model for the redirect
-        return new ApiRedirect(redirect, rootNode, destination) {
+        return new RedirectItem(redirect, rootNode, destination) {
             FullUrl = inboundBaseUrl + redirect.Url,
             UrlWarning = urlWarning
         };
 
     }
+
+    /// <summary>
+    /// Maps the specified <paramref name="rootNodes"/> to an instance of <see cref="RedirectsRootNodeListModel"/> to be returned in the API.
+    /// </summary>
+    /// <param name="rootNodes">The list of root nodes to map.</param>
+    /// <returns>An instance of <see cref="RedirectsRootNodeListModel"/>.</returns>
+    public virtual RedirectsRootNodeListModel MapRootNodes(IReadOnlyList<RedirectRootNode> rootNodes) {
+        return new RedirectsRootNodeListModel(rootNodes.Select(x => new RedirectsRootNodeModel(x)).ToList());
+    }
+
     /// <summary>
     /// Attempts to get the <see cref="IPublishedContent"/> with the specified <paramref name="id"/>.
     /// </summary>
@@ -258,7 +291,7 @@ public class RedirectsBackOfficeHelper {
     public virtual bool TryGetContent(int id, [NotNullWhen(true)] out IPublishedContent? result) {
 
         if (Dependencies.UmbracoContextAccessor.TryGetUmbracoContext(out IUmbracoContext? context)) {
-            result = context.Content?.GetById(id);
+            result = context.Content.GetById(id);
             return result is not null;
         }
 
@@ -276,7 +309,7 @@ public class RedirectsBackOfficeHelper {
     public virtual bool TryGetContent(Guid key, [NotNullWhen(true)] out IPublishedContent? result) {
 
         if (Dependencies.UmbracoContextAccessor.TryGetUmbracoContext(out IUmbracoContext? context)) {
-            result = context.Content?.GetById(key);
+            result = context.Content.GetById(key);
             return result is not null;
         }
 
@@ -294,12 +327,97 @@ public class RedirectsBackOfficeHelper {
     public virtual bool TryGetMedia(int id, [NotNullWhen(true)] out IPublishedContent? result) {
 
         if (Dependencies.UmbracoContextAccessor.TryGetUmbracoContext(out IUmbracoContext? context)) {
-            result = context.Media?.GetById(id);
+            result = context.Media.GetById(id);
             return result is not null;
         }
 
         result = null;
         return false;
+
+    }
+
+    /// <summary>
+    /// Returns a list of the aliases of the user groups of the current backoffice user.
+    /// </summary>
+    /// <returns>A list of user group aliases.</returns>
+    public IReadOnlyList<string> GetUserGroups() {
+        return CurrentUser?.Groups.Select(x => x.Alias).ToArray() ?? [];
+    }
+
+    /// <summary>
+    /// Returns the culture keys available for the specified <paramref name="content"/>. If the content is not culture variant, an empty list is returned.
+    /// </summary>
+    /// <param name="content">The published content.</param>
+    /// <returns>A list of culture keys.</returns>
+    public virtual IReadOnlyList<string> GetCultureKeys(IPublishedContent content) {
+        string[] cultures = content.Cultures.Keys.ToArray();
+        return cultures is [""] ? [] : cultures;
+    }
+
+    /// <summary>
+    /// Returns a list of <see cref="RedirectsCultureModel"/> for the specified <paramref name="content"/>. If the content is not culture variant, an empty list is returned.
+    /// </summary>
+    /// <param name="content">The published content.</param>
+    /// <returns>A list of culture items.</returns>
+    public virtual async Task<IReadOnlyList<RedirectsCultureModel>> GetCultureItems(IPublishedContent content) {
+        List<RedirectsCultureModel> temp = [];
+        foreach (string cultureKey in GetCultureKeys(content)) {
+            ILanguage? language = await Dependencies.LanguageService.GetAsync(cultureKey);
+            temp.Add(new RedirectsCultureModel {
+                Alias = cultureKey,
+                Name = language?.CultureName,
+                NodeName = content.Name(culture: cultureKey),
+                Url = content.Url(culture: cultureKey)
+            });
+        }
+        return temp;
+    }
+
+    /// <summary>
+    /// Returns a list of <see cref="RedirectsCultureModel"/> for the specified <paramref name="content"/>. If the content is not culture variant, an empty list is returned.
+    /// </summary>
+    /// <param name="content">The published content.</param>
+    /// <returns>A list of culture items.</returns>
+    public virtual async Task<IReadOnlyList<RedirectsCultureModel>> GetCultureItems(IContent content) {
+        List<RedirectsCultureModel> temp = [];
+        foreach (string cultureKey in content.PublishedCultures) {
+            ILanguage? language = await Dependencies.LanguageService.GetAsync(cultureKey);
+            TryGetContent(content.Key, out IPublishedContent? published);
+            temp.Add(new RedirectsCultureModel {
+                Alias = cultureKey,
+                Name = language?.CultureName,
+                NodeName = content.GetPublishName(cultureKey),
+                Url = published?.Url(culture: cultureKey)
+            });
+        }
+        return temp;
+    }
+
+    /// <summary>
+    /// Returns the localized message of <paramref name="exception"/>.
+    /// </summary>
+    /// <param name="exception">The exception to get the localized message for.</param>
+    /// <returns>The localized message.</returns>
+    public string Localize(RedirectsUserException exception) {
+        return Localize(exception, CurrentCulture);
+    }
+
+    /// <summary>
+    /// Returns the localized message of <paramref name="exception"/>.
+    /// </summary>
+    /// <param name="exception">The exception to get the localized message for.</param>
+    /// <param name="culture">The culture to use for localization.</param>
+    /// <returns>The localized message.</returns>
+    public virtual string Localize(RedirectsUserException exception, CultureInfo culture) {
+
+        int pos = exception.UserMessageKey.IndexOf('_');
+
+        string area = pos == -1 ? "skybrud" : exception.UserMessageKey[..pos];
+        string alias = pos == -1 ? exception.UserMessageKey : exception.UserMessageKey[(pos + 1)..];
+
+        string[] tokens = exception.UserMessageArgs.Select(x => string.Format(culture, "{0}", x)).ToArray();
+
+        return Dependencies.TextService.Localize(area, alias, culture, tokens);
 
     }
 

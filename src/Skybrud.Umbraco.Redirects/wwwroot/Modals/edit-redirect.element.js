@@ -255,7 +255,7 @@ export class EditRedirectModalElement extends UmbModalBaseElement {
                         <strong>${this.localize.term("redirectsProperties_id")}</strong><br />
                     </div>
                     <div>
-                        <code>${this.value.redirect?.id}</code>
+                        <code class="select-all">${this.value.redirect?.id}</code>
                     </div>
                 </div>
                 <div class="property">
@@ -263,7 +263,7 @@ export class EditRedirectModalElement extends UmbModalBaseElement {
                         <strong>${this.localize.term("redirectsProperties_key")}</strong><br />
                     </div>
                     <div>
-                        <code>${this.value.redirect?.key}</code>
+                        <code class="select-all">${this.value.redirect?.key}</code>
                     </div>
                 </div>
                 <div class="property">
@@ -357,7 +357,7 @@ export class EditRedirectModalElement extends UmbModalBaseElement {
                                 <redirects-destination id="destination" @change="${(e) => this.handleDestinationChange(e)}">${JSON.stringify(this.value.redirect?.destination)}</redirects-destination>
                             </div>
                         </div>
-                        ${when(this.cultures?.length > 1, () => html`
+                        ${when(this.cultures?.length > 0, () => html`
                             <div class="property">
                                 <div>
                                 <strong>${property("destinationCulture")}</strong><br />
@@ -454,6 +454,9 @@ export class EditRedirectModalElement extends UmbModalBaseElement {
         }
         uui-select {
             width: 100%;
+        }
+        .select-all {
+            user-select: all;
         }
     `;
 

@@ -73,6 +73,7 @@
     <!-- Misc errors-->
     <key alias="errorNoUrlTitle">Ingen URL</key>
     <key alias="errorNoUrlMessage">Du skal angive den oprindelige URL.</key>
+    <key alias="errorInvalidOriginalUrl">Den originale URL er ikke gyldig.</key>
     <key alias="errorInvalidUrlTitle">Ugyldig værdi</key>
     <key alias="errorInvalidUrlMessage">Den angivne URL er ikke gyldig.</key>
     <key alias="errorNoLinkTitle">Intet link</key>

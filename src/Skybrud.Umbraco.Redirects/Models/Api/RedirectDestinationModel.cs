@@ -7,7 +7,7 @@ using Umbraco.Cms.Core.Models;
 
 namespace Skybrud.Umbraco.Redirects.Models.Api;
 
-public class ApiRedirectDestination {
+public class RedirectDestinationModel {
 
     private readonly IRedirectDestination _destination;
 
@@ -82,9 +82,9 @@ public class ApiRedirectDestination {
     [JsonPropertyName("cultureName")]
     public string? CultureName { get; set; }
 
-    public ApiRedirectDestination(IRedirect redirect) : this(redirect.Destination) { }
+    public RedirectDestinationModel(IRedirect redirect) : this(redirect.Destination) { }
 
-    public ApiRedirectDestination(IRedirectDestination destination) {
+    public RedirectDestinationModel(IRedirectDestination destination) {
 
         _destination = destination;
 
@@ -113,7 +113,7 @@ public class ApiRedirectDestination {
 
     }
 
-    public ApiRedirectDestination(IRedirect redirect, IContent? content) {
+    public RedirectDestinationModel(IRedirect redirect, IContent? content) {
         _destination = redirect.Destination;
         Name = content?.Name ?? redirect.Destination.Name;
         Url = _destination.Url;
@@ -124,7 +124,7 @@ public class ApiRedirectDestination {
         BackOfficeUrl = $"/umbraco/section/content/workspace/document/edit/{redirect.Destination.Key}";
     }
 
-    public ApiRedirectDestination(IRedirect redirect, IMedia? media) {
+    public RedirectDestinationModel(IRedirect redirect, IMedia? media) {
         _destination = redirect.Destination;
         Name = media?.Name ?? redirect.Destination.Name;
         Url = _destination.Url;

@@ -1,0 +1,99 @@
+﻿using System;
+using System.Text.Json.Serialization;
+
+namespace Skybrud.Umbraco.Redirects.Models.Api;
+
+#pragma warning disable CS1591
+
+/// <summary>
+/// Class with pagination information about a collection of redirect items.
+/// </summary>
+public class RedirectListPagination {
+
+    #region Properties
+
+    /// <summary>
+    /// Gets the total amount of items across all pages.
+    /// </summary>
+    [JsonPropertyName("total")]
+    public int Total { get; }
+
+    /// <summary>
+    /// Gets the maximum amount of items per page.
+    /// </summary>
+    [JsonPropertyName("limit")]
+    public int Limit { get; }
+
+    /// <summary>
+    /// Gets the offset.
+    /// </summary>
+    [JsonPropertyName("offset")]
+    public int Offset { get; }
+
+    /// <summary>
+    /// Gets the current page.
+    /// </summary>
+    [JsonPropertyName("page")]
+    public int Page { get; }
+
+    /// <summary>
+    /// Gets the total amount of pages.
+    /// </summary>
+    [JsonPropertyName("pages")]
+    public int Pages { get; }
+
+    /// <summary>
+    /// Gets the index of the first item on the page.
+    /// </summary>
+    [JsonPropertyName("from")]
+    public int From { get; }
+
+    /// <summary>
+    /// Gets the index of the last item on the page.
+    /// </summary>
+    [JsonPropertyName("to")]
+    public int To { get; }
+
+    #endregion
+
+    #region Constructors
+
+    /// <summary>
+    /// Initializes a new instance based on the specified parameters.
+    /// </summary>
+    /// <param name="total">The total amount of redirects matched.</param>
+    /// <param name="limit">The maximum amount of redirects to be returned per page.</param>
+    /// <param name="offset">The offset.</param>
+    /// <param name="page">The page returned.</param>
+    /// <param name="pages">The total amount of pages.</param>
+    public RedirectListPagination(int total, int limit, int offset, int page, int pages) {
+        Total = total;
+        Limit = limit;
+        Offset = offset;
+        Page = page;
+        Pages = pages;
+        From = offset + 1;
+        To = Math.Min(offset + limit, total);
+    }
+
+    #endregion
+
+    #region Constructors
+
+    /// <summary>
+    /// Initializes a new instance based on the specified parameters.
+    /// </summary>
+    /// <param name="source">The source this instance should be based on.</param>
+    public RedirectListPagination(RedirectsSearchResultPagination source) {
+        Total = source.Total;
+        Limit = source.Limit;
+        Offset = source.Offset;
+        Page = source.Page;
+        Pages = source.Pages;
+        From = source.From;
+        To = source.To;
+    }
+
+    #endregion
+
+}

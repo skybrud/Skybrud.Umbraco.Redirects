@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
+using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 using Skybrud.Essentials.Strings.Extensions;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Extensions;
@@ -35,13 +37,17 @@ public class RedirectDestination : IRedirectDestination {
     public required string Url { get; set; }
 
     /// <summary>
-    /// Gets the query string part of the destination.
+    /// Gets the query string part of the destination - e.g. <c>?hello=there</c>.
     /// </summary>
+    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+    [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? Query { get; set; }
 
     /// <summary>
     /// Gets the fragment of the destination - e.g. <c>#hello</c>.
     /// </summary>
+    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+    [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? Fragment { get; set; }
 
     /// <summary>
@@ -70,6 +76,8 @@ public class RedirectDestination : IRedirectDestination {
     /// <summary>
     /// Gets or sets the culture of the destination, if any.
     /// </summary>
+    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+    [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? Culture { get; set; }
 
     #endregion

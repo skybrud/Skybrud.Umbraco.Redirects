@@ -63,6 +63,31 @@ export class AddRedirectModelElement extends UmbModalBaseElement {
 
     }
 
+    connectedCallback() {
+
+        super.connectedCallback();
+
+        // Set the destination, if specified
+        if (this.data?.destination) {
+            this.redirect.destination = this.data.destination;
+        }
+
+        // Set the culture (and list of available cultures), if specified
+        if (this.data?.cultures?.length > 0) {
+            this.cultures = this.data.cultures;
+            this.culture = this.cultures.find(x => x.alias === this.redirect.destination?.culture) ?? this.cultures[0];
+            this.cultures.forEach(function (culture) {
+                culture.value = culture.alias;
+            });
+            if (this.culture) this.culture.selected = true;
+        }
+
+        if (this.redirect?.destination && this.culture) {
+            this.redirect.destination.name = this.culture.nodeName;
+            this.redirect.destination.url = this.culture.url;
+        }
+
+    }
 
     handleCancel() {
         this.modalContext?.reject();
@@ -144,7 +169,10 @@ export class AddRedirectModelElement extends UmbModalBaseElement {
 
         const dest = event.detail?.value;
 
+        this.redirect.destination = dest;
+
         if (!dest || !Array.isArray(dest.cultures)) {
+            this.redirect.destination = null;
             this.cultures = [];
             self.requestUpdate();
             return;
@@ -169,6 +197,7 @@ export class AddRedirectModelElement extends UmbModalBaseElement {
     handleCultureChange(event) {
 
         const culture = this.cultures?.find(x => x.value === event.target.value);
+
         if (!culture?.url) return;
 
         const destination = this.shadowRoot.querySelector("#destination");
@@ -223,10 +252,10 @@ export class AddRedirectModelElement extends UmbModalBaseElement {
                             <small>${property("destinationDescription")}</small>
                         </div>
                         <div>
-                            <redirects-destination id="destination" @change="${(e) => this.handleDestinationChange(e)}"></redirects-destination>
+                            <redirects-destination id="destination" .value=${this.redirect.destination} @change="${(e) => this.handleDestinationChange(e)}"></redirects-destination>
                         </div>
                     </div>
-                    ${when(this.cultures?.length > 1, () => html`
+                    ${when(this.cultures?.length > 0, () => html`
                         <div class="property">
                             <div>
                             <strong>${property("destinationCulture")}</strong><br />
@@ -235,7 +264,7 @@ export class AddRedirectModelElement extends UmbModalBaseElement {
                             <div>
                                 <uui-select id="culture" label="Culture" .options=${this.cultures} @change=${(e) => this.handleCultureChange(e)}>
                                     ${repeat(this.cultures, (item) => item.key, (item) => html`
-                                        <option value="${item.value}">${item.name}</option>
+                                        <option .value="${item.alias}">${item.name}</option>
                                     `)}
                                 </uui-select>
                             </div>

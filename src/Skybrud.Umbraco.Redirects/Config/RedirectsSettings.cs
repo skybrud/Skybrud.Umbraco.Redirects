@@ -1,4 +1,6 @@
-﻿namespace Skybrud.Umbraco.Redirects.Config;
+﻿using Skybrud.Umbraco.Redirects.Config.WorkspaceViews;
+
+namespace Skybrud.Umbraco.Redirects.Config;
 
 /// <summary>
 /// Class with settings for the redirects package.
@@ -12,13 +14,13 @@ public class RedirectsSettings {
     public string? FrontendUrl { get; set; }
 
     /// <summary>
-    /// Gets the settings for the redirects content app.
-    /// </summary>
-    public RedirectsContentAppSettings ContentApp { get; } = new();
-
-    /// <summary>
     /// Gets the settings for the redirects dashboard.
     /// </summary>
     public RedirectsDashboardSettings Dashboard { get; } = new();
+
+    /// <summary>
+    /// Gets the settings for the redirects workspace views.
+    /// </summary>
+    public RedirectsWorkspaceViewSettings WorkspaceViews { get; } = new();
 
 }

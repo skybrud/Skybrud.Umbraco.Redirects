@@ -14,7 +14,7 @@ public class RedirectsException : Exception {
     public HttpStatusCode StatusCode { get; }
 
     /// <summary>
-    /// Returns whether the exception representins a 404 error.
+    /// Returns whether the exception representing a 404 error.
     /// </summary>
     public bool Is404 => StatusCode == HttpStatusCode.NotFound;
 
@@ -49,7 +49,7 @@ public class RedirectsException : Exception {
     /// </summary>
     /// <param name="message">The message of the exception.</param>
     /// <param name="innerException">An inner exception.</param>
-    public RedirectsException(string message, Exception innerException) : base(message, innerException) {
+    public RedirectsException(string message, Exception? innerException) : base(message, innerException) {
         StatusCode = HttpStatusCode.InternalServerError;
     }
 

@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>17.0.5</VersionPrefix>
+    <VersionPrefix>17.0.6</VersionPrefix>
     <VersionSuffix Condition="'$(Configuration)'=='Debug'">build$([System.DateTime]::UtcNow.ToString(`yyyyMMddHHmm`))</VersionSuffix>
     <Authors>Anders Bjerner</Authors>
     <Company>Limbo</Company>
@@ -37,25 +37,16 @@
   </ItemGroup>
 
   <!-- Ignore vulnerabilities from transient dependencies -->
-  <ItemGroup>
-
-    <!-- Package 'MimeKit' 4.14.0 has a known moderate severity vulnerability -->
-    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-g7hc-96xr-gvvx" />
-
-    <!-- Package 'MailKit' 4.14.0 has a known moderate severity vulnerability -->
-    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-9j88-vvj5-vhgr" />
-
-    <!-- Package 'System.Security.Cryptography.Xml' 8.0.0 has a known high severity vulnerability -->
-    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-37gx-xxp4-5rgx" />
-    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-w3x6-4m5h-cxqf" />
-
-  </ItemGroup>
+  <PropertyGroup>
+    <NuGetAuditMode>direct</NuGetAuditMode>
+  </PropertyGroup>
 
   <!-- Include NuGet dependencies -->
   <ItemGroup>
-    <PackageReference Include="Skybrud.Essentials" Version="1.1.67" />
+    <PackageReference Include="Skybrud.Essentials" Version="1.1.68" />
     <PackageReference Include="Umbraco.Cms.Core" Version="[17.0.0,17.999)" />
     <PackageReference Include="Umbraco.Cms.Web.Website" Version="[17.0.0,17.999)" />
+    <PackageReference Include="Umbraco.Cms.Api.Management" Version="[17.0.0,17.9.9)" NoWarn="NU1902" />
   </ItemGroup>
 
   <!-- Include package icon and README for the NuGet package -->
@@ -68,5 +59,11 @@
   <PropertyGroup>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
+
+  <!-- Include custom appsettings schema -->
+  <ItemGroup>
+    <None Include="appsettings-schema.Skybrud.Umbraco.Redirects.json" Pack="true" PackagePath="" />
+    <None Include="buildTransitive\Skybrud.Umbraco.Redirects.targets" Pack="true" PackagePath="buildTransitive\" />
+  </ItemGroup>
 
 </Project>

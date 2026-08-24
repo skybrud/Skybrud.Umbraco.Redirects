@@ -1,0 +1,5 @@
+﻿<Project>
+  <ItemGroup>
+    <UmbracoJsonSchemaFiles Include="$(MSBuildThisFileDirectory)..\appsettings-schema.Skybrud.Umbraco.Redirects.json" />
+  </ItemGroup>
+</Project>

@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Skybrud.Umbraco.Redirects.Config;
 using Skybrud.Umbraco.Redirects.Middleware;
+using Skybrud.Umbraco.Redirects.Models.Outbound;
+using Umbraco.Cms.Core.Models.PublishedContent;
+using Umbraco.Extensions;
 
 namespace Skybrud.Umbraco.Redirects.Extensions;
 
@@ -12,6 +16,8 @@ namespace Skybrud.Umbraco.Redirects.Extensions;
 /// Static class with various extension methods used throughout the package.
 /// </summary>
 public static class RedirectsExtensions {
+
+    private static readonly string[] _outboundPropertyAliases = ["outboundRedirect", "skyRedirect"];
 
     /// <summary>
     /// Registers a class used to configure the redirects settings. Note: These are run before all <see cref="PostConfigureRedirects"/>.
@@ -97,6 +103,84 @@ public static class RedirectsExtensions {
         if (feature is null) return;
         builder.Path = feature.OriginalPath;
         builder.Query = feature.OriginalQueryString;
+
+    }
+
+    /// <param name="content">The content item holding the outbound redirect.</param>
+    extension(IPublishedContent? content) {
+
+        /// <summary>
+        /// Returns an instance of <see cref="IOutboundRedirect"/> representing the outbound redirect from either the
+        /// <c>outboundRedirect</c> or <c>skyRedirect</c> properties.
+        /// </summary>
+        /// <returns>An instance of <see cref="IOutboundRedirect"/> if found; otherwise, <see langword="null"/>.</returns>
+        public IOutboundRedirect? GetOutboundRedirect() {
+            return content.GetOutboundRedirect(_outboundPropertyAliases);
+        }
+
+        /// <summary>
+        /// Returns an instance of <see cref="IOutboundRedirect"/> representing the outbound redirect from the property
+        /// with specified alias <paramref name="propertyAlias"/>.
+        /// </summary>
+        /// <param name="propertyAlias">The alias of the property.</param>
+        /// <returns>An instance of <see cref="IOutboundRedirect"/> if found; otherwise, <see langword="null"/>.</returns>
+        public IOutboundRedirect? GetOutboundRedirect(string propertyAlias) {
+            ArgumentException.ThrowIfNullOrWhiteSpace(propertyAlias);
+            return content?.Value(propertyAlias) as IOutboundRedirect;
+        }
+
+        /// <summary>
+        /// Returns an instance of <see cref="IOutboundRedirect"/> representing the outbound redirect from the first property
+        /// matching the specified <paramref name="propertyAliases"/> where the value is an <see cref="IOutboundRedirect"/>.
+        /// </summary>
+        /// <param name="propertyAliases">The aliases of the properties.</param>
+        /// <returns>An instance of <see cref="IOutboundRedirect"/> if found; otherwise, <see langword="null"/>.</returns>
+        public IOutboundRedirect? GetOutboundRedirect(params string[] propertyAliases) {
+            ArgumentNullException.ThrowIfNull(propertyAliases);
+            foreach (string alias in propertyAliases) {
+                if (content?.Value(alias) is IOutboundRedirect redirect) return redirect;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Attempts to get the outbound redirect for the current content.
+        /// </summary>
+        /// <param name="result">When the method returns <see langword="true"/>, contains the outbound redirect; otherwise, <see
+        /// langword="null"/>.</param>
+        /// <returns><see langword="true"/> if an outbound redirect was found; otherwise, <see langword="false"/>.</returns>
+        public bool TryGetOutboundRedirect([NotNullWhen(true)] out IOutboundRedirect? result) {
+            result = content.GetOutboundRedirect();
+            return result is not null;
+        }
+
+        /// <summary>
+        /// Attempts to get the outbound redirect associated with the specified property alias.
+        /// </summary>
+        /// <remarks>Throws <see cref="ArgumentException"/> if <paramref name="propertyAlias"/> is <see langword="null"/>, empty, or whitespace.</remarks>
+        /// <param name="propertyAlias">The property alias to look up.</param>
+        /// <param name="result">When this method returns <see langword="true"/>, contains the matching outbound redirect; otherwise, <see langword="null"/>.</param>
+        /// <returns><see langword="true"/> if an outbound redirect was found; otherwise, <see langword="false"/>.</returns>
+        public bool TryGetOutboundRedirect(string propertyAlias, [NotNullWhen(true)] out IOutboundRedirect? result) {
+            ArgumentException.ThrowIfNullOrWhiteSpace(propertyAlias);
+            result = content.GetOutboundRedirect(propertyAlias);
+            return result is not null;
+        }
+
+        /// <summary>
+        /// Attempts to get an outbound redirect using the specified property aliases.
+        /// </summary>
+        /// <remarks>Throws <see cref="ArgumentNullException" /> when <paramref name="propertyAliases" />
+        /// is <see langword="null" />.</remarks>
+        /// <param name="propertyAliases">The property aliases to evaluate for an outbound redirect.</param>
+        /// <param name="result">When this method returns <see langword="true" />, contains the outbound redirect; otherwise, <see
+        /// langword="null" />.</param>
+        /// <returns><see langword="true" /> if an outbound redirect is found; otherwise, <see langword="false" />.</returns>
+        public bool TryGetOutboundRedirect(string[] propertyAliases, [NotNullWhen(true)] out IOutboundRedirect? result) {
+            ArgumentNullException.ThrowIfNull(propertyAliases);
+            result = content.GetOutboundRedirect(propertyAliases);
+            return result is not null;
+        }
 
     }
 

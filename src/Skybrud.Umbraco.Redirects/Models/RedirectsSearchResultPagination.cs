@@ -35,7 +35,7 @@ public class RedirectsSearchResultPagination {
     public int Page { get; }
 
     /// <summary>
-    /// Gets the total amout of pages.
+    /// Gets the total amount of pages.
     /// </summary>
     [JsonPropertyName("pages")]
     public int Pages { get; }
@@ -71,7 +71,7 @@ public class RedirectsSearchResultPagination {
         Page = page;
         Pages = pages;
         From = offset + 1;
-        To = Math.Min(offset + limit, total);
+        To = To == 0 ? total : Math.Min(offset + limit, total);
     }
 
     #endregion
