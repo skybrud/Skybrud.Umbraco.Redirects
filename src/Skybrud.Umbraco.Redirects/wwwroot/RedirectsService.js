@@ -1,5 +1,7 @@
 ﻿import { RedirectsAuth } from "@skybrud-redirects/auth";
 
+const baseUrl = "/umbraco/management/api/v1/skybrud/redirects";
+
 function hi(url, config) {
 
     // TODO: simplify this code to use async/await instead of promises
@@ -84,25 +86,25 @@ function _delete(url, config) {
 export class RedirectsService {
 
     static getRedirects(query) {
-        return get("/umbraco/skybrud/redirects" + (query ? "?" + new URLSearchParams(query) : ""));
+        return get(baseUrl + (query ? "?" + new URLSearchParams(query) : ""));
     }
 
     static addRedirect(redirect) {
         if (!redirect) return;
-        return putJson("/umbraco/skybrud/redirects", redirect);
+        return putJson(baseUrl, redirect);
     }
 
     static saveRedirect(redirect) {
         if (!redirect) return;
         if (!redirect.key) return;
-        return patchJson("/umbraco/skybrud/redirects/" + redirect.key, redirect);
+        return patchJson(`${baseUrl}/${redirect.key}`, redirect);
     }
 
     static deleteRedirect(redirect) {
         if (!redirect) return;
         if (redirect.key) redirect = redirect.key;
         if (typeof redirect !== "string") return;
-        return _delete("/umbraco/skybrud/redirects/" + redirect);
+        return _delete(`${baseUrl}/${redirect}`);
     }
 
     static getContent(key) {
@@ -124,7 +126,7 @@ export class RedirectsService {
     }
 
     static getCultures(key) {
-        return get("/umbraco/skybrud/redirects/content/" + key + "/cultures");
+        return get(`${baseUrl}/content/${key}/cultures`);
     }
 
     static getMedia(key) {
@@ -146,19 +148,19 @@ export class RedirectsService {
     }
 
     static getRootNodes() {
-        return get("/umbraco/skybrud/redirects/rootNodes");
+        return get(`${baseUrl}/rootNodes`);
     }
 
     static getServerVariables() {
-        return get("/umbraco/skybrud/redirects/serverVariables");
+        return get(`${baseUrl}/serverVariables`);
     }
 
     static getRedirectsForNode(type, key) {
-        return get(`/umbraco/skybrud/redirects/${type}/${key}`);
+        return get(`${baseUrl}/${type}/${key}`);
     }
 
     static async getCurrentUser() {
-        const response = await get("/umbraco/skybrud/redirects/users/current");
+        const response = await get(`${baseUrl}/users/current`);
         return response.data;
     }
 

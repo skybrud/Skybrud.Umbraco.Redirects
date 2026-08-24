@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Skybrud.Umbraco.Redirects.Api;
 using Skybrud.Umbraco.Redirects.Config;
 using Skybrud.Umbraco.Redirects.Factories;
 using Skybrud.Umbraco.Redirects.Helpers;
@@ -48,6 +49,8 @@ public class RedirectsComposer : IComposer {
                 _ => { }
             ));
         });
+
+        builder.Services.ConfigureOptions<RedirectsSwaggerGenOptions>();
 
     }
 

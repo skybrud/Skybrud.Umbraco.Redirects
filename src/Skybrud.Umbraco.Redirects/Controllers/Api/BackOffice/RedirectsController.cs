@@ -9,16 +9,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Skybrud.Essentials.Collections.Extensions;
+using Skybrud.Essentials.Collections.Enumerables.Extensions;
 using Skybrud.Essentials.Enums;
 using Skybrud.Essentials.Security.Extensions;
 using Skybrud.Essentials.Strings.Extensions;
+using Skybrud.Umbraco.Redirects.Api;
 using Skybrud.Umbraco.Redirects.Config;
 using Skybrud.Umbraco.Redirects.Exceptions;
 using Skybrud.Umbraco.Redirects.Helpers;
 using Skybrud.Umbraco.Redirects.Models;
 using Skybrud.Umbraco.Redirects.Models.Api;
 using Skybrud.Umbraco.Redirects.Services;
+using Umbraco.Cms.Api.Common.Attributes;
+using Umbraco.Cms.Api.Management.Routing;
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.Membership;
@@ -26,7 +29,6 @@ using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Web.Common.Authorization;
-using Umbraco.Cms.Web.Common.Routing;
 using Umbraco.Extensions;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -34,10 +36,11 @@ using Umbraco.Extensions;
 namespace Skybrud.Umbraco.Redirects.Controllers.Api.BackOffice;
 
 [ApiController]
-[BackOfficeRoute("skybrud/redirects")]
+[VersionedApiBackOfficeRoute(RedirectsApiConstants.Route)]
 [Authorize(Policy = AuthorizationPolicies.SectionAccessContent)]
+[MapToApi(RedirectsApiConstants.Alias)]
 [ApiVersion("1.0")]
-[ApiExplorerSettings(GroupName = "Skybrud Redirects")]
+[ApiExplorerSettings(GroupName = RedirectsApiConstants.GroupName)]
 public class RedirectsController : Controller {
 
     private readonly ILogger<RedirectsController> _logger;
