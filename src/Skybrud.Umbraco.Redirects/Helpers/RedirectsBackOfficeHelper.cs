@@ -124,7 +124,7 @@ public class RedirectsBackOfficeHelper {
     }
 
     /// <summary>
-    /// Maps the specified collection of <paramref name="redirects"/> to a corresponding colelction of <see cref="ApiRedirect"/> to be returned in the API.
+    /// Maps the specified collection of <paramref name="redirects"/> to a corresponding collection of <see cref="ApiRedirect"/> to be returned in the API.
     /// </summary>
     /// <param name="redirects">The collection of redirects to be mapped.</param>
     /// <returns>A collection of <see cref="ApiRedirect"/>.</returns>

@@ -14,7 +14,7 @@ public class RedirectsException : Exception {
     public HttpStatusCode StatusCode { get; }
 
     /// <summary>
-    /// Returns whether the exception representins a 404 error.
+    /// Returns whether the exception representing a 404 error.
     /// </summary>
     public bool Is404 => StatusCode == HttpStatusCode.NotFound;
 
