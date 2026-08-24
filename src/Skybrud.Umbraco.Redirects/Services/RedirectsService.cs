@@ -100,6 +100,11 @@ public class RedirectsService : IRedirectsService {
             }
         };
 
+        // Validate the original URL. The URL must be a relative URL starting with a forward slash ("/"). If the URL is invalid, we throw an exception
+        if (string.IsNullOrWhiteSpace(redirect.Url) || !redirect.Url.StartsWith('/')) {
+            throw new RedirectsInvalidUrlException(redirect);
+        }
+
         // Does a matching redirect already exist?
         if (GetRedirectByPathAndQuery(options.RootNodeKey, redirect.Path, redirect.QueryString) != null) {
             throw new RedirectAlreadyExistsException(redirect);

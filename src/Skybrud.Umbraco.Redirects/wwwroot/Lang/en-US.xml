@@ -73,6 +73,7 @@
     <!-- Misc errors-->
     <key alias="errorNoUrlTitle">No URL</key>
     <key alias="errorNoUrlMessage">You must specify the original URL.</key>
+    <key alias="errorInvalidOriginalUrl">The original URL is not valid.</key>
     <key alias="errorInvalidUrlTitle">Invalid URL</key>
     <key alias="errorInvalidUrlMessage">The specified URL is not valid.</key>
     <key alias="errorNoLinkTitle">No link</key>
