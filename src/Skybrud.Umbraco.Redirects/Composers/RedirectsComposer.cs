@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Skybrud.Umbraco.Redirects.Api;
 using Skybrud.Umbraco.Redirects.Factories;
+using Skybrud.Umbraco.Redirects.Factories.References;
 using Skybrud.Umbraco.Redirects.Helpers;
 using Skybrud.Umbraco.Redirects.Manifests;
 using Skybrud.Umbraco.Redirects.Middleware;
@@ -51,6 +52,8 @@ public class RedirectsComposer : IComposer {
         });
 
         builder.Services.ConfigureOptions<RedirectsSwaggerGenOptions>();
+
+        builder.DataValueReferenceFactories().Append<OutboundRedirectReferenceFactory>();
 
     }
 
