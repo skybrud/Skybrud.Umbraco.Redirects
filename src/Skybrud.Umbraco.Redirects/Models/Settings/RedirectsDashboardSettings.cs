@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Skybrud.Umbraco.Redirects.Config;
+namespace Skybrud.Umbraco.Redirects.Models.Settings;
 
 /// <summary>
 /// Class representing the settings for the global redirects dashboard.

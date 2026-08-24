@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Skybrud.Umbraco.Redirects.Config.WorkspaceViews;
+namespace Skybrud.Umbraco.Redirects.Models.Settings.WorkspaceViews;
 
 /// <summary>
 /// Class representing the settings for the workspace view for <c>Document</c>.

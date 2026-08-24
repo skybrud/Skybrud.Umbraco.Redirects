@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Skybrud.Umbraco.Redirects.Config;
 using Skybrud.Umbraco.Redirects.Middleware;
 using Skybrud.Umbraco.Redirects.Models.Outbound;
+using Skybrud.Umbraco.Redirects.Models.Settings;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Extensions;
 

@@ -1,4 +1,4 @@
-﻿namespace Skybrud.Umbraco.Redirects.Config.WorkspaceViews;
+﻿namespace Skybrud.Umbraco.Redirects.Models.Settings.WorkspaceViews;
 
 /// <summary>
 /// Class with settings for the redirects content app.

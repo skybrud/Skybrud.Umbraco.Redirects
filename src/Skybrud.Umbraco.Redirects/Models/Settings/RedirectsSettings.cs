@@ -1,6 +1,6 @@
-﻿using Skybrud.Umbraco.Redirects.Config.WorkspaceViews;
+﻿using Skybrud.Umbraco.Redirects.Models.Settings.WorkspaceViews;
 
-namespace Skybrud.Umbraco.Redirects.Config;
+namespace Skybrud.Umbraco.Redirects.Models.Settings;
 
 /// <summary>
 /// Class with settings for the redirects package.

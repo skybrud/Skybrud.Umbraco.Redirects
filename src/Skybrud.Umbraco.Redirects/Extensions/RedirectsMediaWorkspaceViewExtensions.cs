@@ -1,4 +1,4 @@
-﻿using Skybrud.Umbraco.Redirects.Config.WorkspaceViews;
+﻿using Skybrud.Umbraco.Redirects.Models.Settings.WorkspaceViews;
 
 namespace Skybrud.Umbraco.Redirects.Extensions;
 

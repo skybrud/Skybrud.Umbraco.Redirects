@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Skybrud.Umbraco.Redirects.Api;
-using Skybrud.Umbraco.Redirects.Config;
 using Skybrud.Umbraco.Redirects.Factories;
 using Skybrud.Umbraco.Redirects.Helpers;
 using Skybrud.Umbraco.Redirects.Manifests;
 using Skybrud.Umbraco.Redirects.Middleware;
+using Skybrud.Umbraco.Redirects.Models.Settings;
 using Skybrud.Umbraco.Redirects.Notifications.Handlers;
 using Skybrud.Umbraco.Redirects.Services;
 using Umbraco.Cms.Core.Composing;

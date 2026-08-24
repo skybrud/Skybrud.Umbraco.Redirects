@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
-using Skybrud.Umbraco.Redirects.Config;
+using Skybrud.Umbraco.Redirects.Models.Settings;
 using Umbraco.Cms.Core.Configuration.Models;
 using Umbraco.Cms.Core.Hosting;
 using Umbraco.Cms.Core.Security;

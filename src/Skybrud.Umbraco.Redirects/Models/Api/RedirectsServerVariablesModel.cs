@@ -1,4 +1,4 @@
-﻿using Skybrud.Umbraco.Redirects.Config;
+﻿using Skybrud.Umbraco.Redirects.Models.Settings;
 
 namespace Skybrud.Umbraco.Redirects.Models.Api;
 
