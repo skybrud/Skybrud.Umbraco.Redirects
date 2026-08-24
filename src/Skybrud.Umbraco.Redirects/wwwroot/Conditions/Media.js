@@ -35,30 +35,46 @@ export class RedirectsMediaCondition extends UmbConditionBase {
 
         // TODO: should we look up whether the media has any URLs?
 
+        // Deny access when the current user isn't permitted
         if (!this.#byUser(user)) return false;
 
-        if (this.#mediaTypes.length > 0) {
-            if (this.#mediaTypes.includes("-" + mediaType.alias)) return false;
-            if (this.#mediaTypes.includes("+" + mediaType.alias)) return true;
-            if (this.#mediaTypes.includes("-*")) return false;
-            if (this.#mediaTypes.includes("+*")) return true;
-            return !this.#mediaTypes.some(x => x[0] === "+");
-            return false;
-        }
+        // Check for restrictions based on the media's media type
+        if (!this.#byMediaType(mediaType)) return false;
 
         return true;
 
     }
 
+    #byMediaType(mediaType) {
+
+        // Allow access when no media type restrictions have been configured
+        if (this.#mediaTypes.length === 0) return true;
+
+        // Check for explicit access rules for the current media type
+        if (this.#mediaTypes.includes("+" + mediaType.alias)) return true;
+        if (this.#mediaTypes.includes("-" + mediaType.alias)) return false;
+
+        // Deny access if an allow-list has been configured, otherwise allow access
+        return !this.#mediaTypes.some(x => x.startsWith("+"));
+
+    }
+
     #byUser(user) {
+
+        // Allow access when no user restrictions have been configured
         if (this.#userGroups.length === 0) return true;
+
+        // Check for explicit access rules for the current user
         if (this.#userGroups.includes("+" + user.key)) return true;
         if (this.#userGroups.includes("-" + user.key)) return false;
+
+        // Check for access rules matching any of the user's groups
         if (user.groups.some(group => this.#userGroups.includes("+" + group))) return true;
         if (user.groups.some(group => this.#userGroups.includes("-" + group))) return false;
-        if (user.groups.some(group => this.#userGroups.includes("+*"))) return true;
-        if (user.groups.some(group => this.#userGroups.includes("-*"))) return false;
-        return !this.#userGroups.some(x => x[0] === "+");
+
+        // Deny access if an allow-list has been configured, otherwise allow access
+        return !this.#userGroups.some(x => x.startsWith("+"));
+
     }
 
 }

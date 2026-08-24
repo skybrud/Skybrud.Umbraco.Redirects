@@ -17,14 +17,21 @@ export class RedirectsDashboardCondition extends UmbConditionBase {
     }
 
     #callback(user) {
+
+        // Allow access when no restrictions have been configured
         if (this.#userGroups.length === 0) return true;
+
+        // Check for explicit user access
         if (this.#userGroups.includes("+" + user.key)) return true;
         if (this.#userGroups.includes("-" + user.key)) return false;
+
+        // Check for access based on the user's groups
         if (user.groups.some(group => this.#userGroups.includes("+" + group))) return true;
         if (user.groups.some(group => this.#userGroups.includes("-" + group))) return false;
-        if (user.groups.some(group => this.#userGroups.includes("+*"))) return true;
-        if (user.groups.some(group => this.#userGroups.includes("-*"))) return false;
-        return !this.#userGroups.some(x => x[0] === "+");
+
+        // Deny access if an allow-list has been configured, otherwise allow access
+        return !this.#userGroups.some(x => x.startsWith("+"));
+
     }
 
 }

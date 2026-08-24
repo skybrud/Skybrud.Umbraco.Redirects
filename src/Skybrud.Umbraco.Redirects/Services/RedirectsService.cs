@@ -5,7 +5,7 @@ using System.Linq;
 using System.Web;
 using Microsoft.AspNetCore.Http;
 using NPoco;
-using Skybrud.Essentials.Collections.Extensions;
+using Skybrud.Essentials.Collections.Enumerables.Extensions;
 using Skybrud.Essentials.Common;
 using Skybrud.Essentials.Strings.Extensions;
 using Skybrud.Umbraco.Redirects.Exceptions;
@@ -61,7 +61,7 @@ public class RedirectsService : IRedirectsService {
     public IRedirect AddRedirect(AddRedirectOptions options) {
 
         // Input validation
-        ArgumentNullException.ThrowIfNull(options, nameof(options));
+        ArgumentNullException.ThrowIfNull(options);
 
         // Create a new scope
         using IScope scope = _scopeProvider.CreateScope();

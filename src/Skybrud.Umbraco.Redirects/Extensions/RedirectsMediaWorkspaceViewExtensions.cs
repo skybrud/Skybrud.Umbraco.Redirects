@@ -33,18 +33,8 @@ public static class RedirectsMediaWorkspaceViewExtensions {
     /// <param name="settings">The settings instance.</param>
     /// <param name="alias">The alias of the user group.</param>
     /// <returns>The updated settings instance.</returns>
-    public static RedirectsMediaWorkspaceViewSettings Allow(this RedirectsMediaWorkspaceViewSettings settings, string alias) {
+    public static RedirectsMediaWorkspaceViewSettings AllowUserGroup(this RedirectsMediaWorkspaceViewSettings settings, string alias) {
         settings.UserGroups.Add($"+{alias}");
-        return settings;
-    }
-
-    /// <summary>
-    /// Appends an allow rule for all user groups.
-    /// </summary>
-    /// <param name="settings">The settings instance.</param>
-    /// <returns>The updated settings instance.</returns>
-    public static RedirectsMediaWorkspaceViewSettings AllowAll(this RedirectsMediaWorkspaceViewSettings settings) {
-        settings.UserGroups.Add("+*");
         return settings;
     }
 
@@ -54,18 +44,8 @@ public static class RedirectsMediaWorkspaceViewExtensions {
     /// <param name="settings">The settings instance.</param>
     /// <param name="alias">The alias of the user group.</param>
     /// <returns>The updated settings instance.</returns>
-    public static RedirectsMediaWorkspaceViewSettings Disallow(this RedirectsMediaWorkspaceViewSettings settings, string alias) {
+    public static RedirectsMediaWorkspaceViewSettings DisallowUserGroup(this RedirectsMediaWorkspaceViewSettings settings, string alias) {
         settings.UserGroups.Add($"-{alias}");
-        return settings;
-    }
-
-    /// <summary>
-    /// Appends a disallow rule for all user groups.
-    /// </summary>
-    /// <param name="settings">The settings instance.</param>
-    /// <returns>The updated settings instance.</returns>
-    public static RedirectsMediaWorkspaceViewSettings DisallowAll(this RedirectsMediaWorkspaceViewSettings settings) {
-        settings.UserGroups.Add("-*");
         return settings;
     }
 
@@ -75,18 +55,8 @@ public static class RedirectsMediaWorkspaceViewExtensions {
     /// <param name="settings">The settings instance.</param>
     /// <param name="alias">The alias of the media type.</param>
     /// <returns>The updated settings instance.</returns>
-    public static RedirectsMediaWorkspaceViewSettings Include(this RedirectsMediaWorkspaceViewSettings settings, string alias) {
+    public static RedirectsMediaWorkspaceViewSettings IncludeMediaType(this RedirectsMediaWorkspaceViewSettings settings, string alias) {
         settings.MediaTypes.Add($"+{alias}");
-        return settings;
-    }
-
-    /// <summary>
-    /// Appends a new include rule for all media types.
-    /// </summary>
-    /// <param name="settings">The settings instance.</param>
-    /// <returns>The updated settings instance.</returns>
-    public static RedirectsMediaWorkspaceViewSettings IncludeAll(this RedirectsMediaWorkspaceViewSettings settings) {
-        settings.MediaTypes.Add("+*");
         return settings;
     }
 
@@ -96,18 +66,8 @@ public static class RedirectsMediaWorkspaceViewExtensions {
     /// <param name="settings">The settings instance.</param>
     /// <param name="alias">The alias of the media type.</param>
     /// <returns>The updated settings instance.</returns>
-    public static RedirectsMediaWorkspaceViewSettings Exclude(this RedirectsMediaWorkspaceViewSettings settings, string alias) {
+    public static RedirectsMediaWorkspaceViewSettings ExcludeMediaType(this RedirectsMediaWorkspaceViewSettings settings, string alias) {
         settings.MediaTypes.Add($"-{alias}");
-        return settings;
-    }
-
-    /// <summary>
-    /// Appends a new exclude rule for all media types.
-    /// </summary>
-    /// <param name="settings">The settings instance.</param>
-    /// <returns>The updated settings instance.</returns>
-    public static RedirectsMediaWorkspaceViewSettings ExcludeAll(this RedirectsMediaWorkspaceViewSettings settings) {
-        settings.MediaTypes.Add("-*");
         return settings;
     }
 
