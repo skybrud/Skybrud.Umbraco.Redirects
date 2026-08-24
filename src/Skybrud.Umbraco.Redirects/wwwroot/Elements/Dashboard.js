@@ -152,7 +152,7 @@ export class RedirectsDashboardElement extends UmbElementMixin(LitElement) {
 
         const self = this;
 
-        const params = { limit: this.dashboard.settings?.limit ?? null };
+        const params = { limit: this.dashboard?.settings?.pageSize ?? 20 };
         if (page) params.page = page;
         if (this.rootNode && this.rootNode !== "all") params.rootNodeKey = this.rootNode;
         if (this.type && this.type !== "all") params.type = this.type;
