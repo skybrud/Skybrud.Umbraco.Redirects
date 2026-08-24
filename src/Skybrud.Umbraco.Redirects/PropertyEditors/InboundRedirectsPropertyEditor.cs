@@ -9,6 +9,8 @@ public class InboundRedirectsPropertyEditor : DataEditor {
 
     internal const string EditorAlias = "Skybrud.Umbraco.Redirects";
 
+    internal const string EditorUiAlias = "Skybrud.Umbraco.Redirects.Ui";
+
     public InboundRedirectsPropertyEditor(IDataValueEditorFactory dataValueEditorFactory) : base(dataValueEditorFactory) { }
 
 }

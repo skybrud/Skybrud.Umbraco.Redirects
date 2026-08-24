@@ -24,7 +24,7 @@ export const onInit = (_host, extensionRegistry) => {
             if (RedirectsPackage.settings?.dashboard?.enabled) {
                 extensionRegistry.register({
                     type: "dashboard",
-                    name: "Redirects",
+                    name: "Skybrud Redirects: Dashboard",
                     alias: "Skybrud.Umbraco.Redirects.Dashboard",
                     elementName: "redirects-dashboard",
                     js: () => import("./Elements/Dashboard.js?v=" + RedirectsPackage.cacheBuster),
@@ -48,7 +48,7 @@ export const onInit = (_host, extensionRegistry) => {
             extensionRegistry.register({
                 "type": "localization",
                 "alias": "Skybrud.Umbraco.Redirects.En",
-                "name": "English",
+                "name": "Skybrud Redirects: English (en)",
                 "js": () => import("./Localization/en-US.js?v=" + RedirectsPackage.cacheBuster),
                 "meta": {
                     "culture": "en"
@@ -58,7 +58,7 @@ export const onInit = (_host, extensionRegistry) => {
             extensionRegistry.register({
                 "type": "localization",
                 "alias": "Skybrud.Umbraco.Redirects.EnUS",
-                "name": "English",
+                "name": "Skybrud Redirects: English (en-US)",
                 "js": () => import("./Localization/en-US.js?v=" + RedirectsPackage.cacheBuster),
                 "meta": {
                     "culture": "en"
@@ -68,7 +68,7 @@ export const onInit = (_host, extensionRegistry) => {
             extensionRegistry.register({
                 "type": "localization",
                 "alias": "Skybrud.Umbraco.Redirects.DaDk",
-                "name": "Danish",
+                "name": "Skybrud Redirects: Danish (da-DK)",
                 "js": () => import("./Localization/da-DK.js?v=" + RedirectsPackage.cacheBuster),
                 "meta": {
                     "culture": "da"
@@ -78,7 +78,7 @@ export const onInit = (_host, extensionRegistry) => {
             extensionRegistry.register({
                 "type": "localization",
                 "alias": "Skybrud.Umbraco.Redirects.SvSe",
-                "name": "Swedish",
+                "name": "Skybrud Redirects: Swedish (sv-SE)",
                 "js": () => import("./Localization/sv-SE.js?v=" + RedirectsPackage.cacheBuster),
                 "meta": {
                     "culture": "sv"
@@ -88,14 +88,14 @@ export const onInit = (_host, extensionRegistry) => {
             extensionRegistry.register({
                 "type": "modal",
                 "alias": "Skybrud.Umbraco.Redirects.AddRedirectModal",
-                "name": "Add Redirect Modal",
+                "name": "Skybrud Redirects: Add Redirect Modal",
                 "element": "/App_Plugins/Skybrud.Umbraco.Redirects/Modals/add-redirect.element.js?v=" + RedirectsPackage.cacheBuster,
             });
 
             extensionRegistry.register({
                 "type": "modal",
                 "alias": "Skybrud.Umbraco.Redirects.EditRedirectModal",
-                "name": "Edit Redirect Modal",
+                "name": "Skybrud Redirects: Edit Redirect Modal",
                 "element": "/App_Plugins/Skybrud.Umbraco.Redirects/Modals/edit-redirect.element.js?v=" + RedirectsPackage.cacheBuster,
             });
 
@@ -122,7 +122,7 @@ export const onInit = (_host, extensionRegistry) => {
 
             extensionRegistry.register({
                 type: "propertyEditorUi",
-                alias: "Skybrud.Umbraco.Redirects",
+                alias: "Skybrud.Umbraco.Redirects.Ui",
                 name: 'Skybrud Redirects: Inbound Redirects Property Editor UI',
                 element: () => import(`./Elements/InboundRedirects.js?v=${RedirectsPackage.cacheBuster}`),
                 meta: {
@@ -135,7 +135,7 @@ export const onInit = (_host, extensionRegistry) => {
 
             extensionRegistry.register({
                 type: "propertyEditorUi",
-                alias: "Skybrud.Umbraco.Redirects.Outbound",
+                alias: "Skybrud.Umbraco.Redirects.OutboundRedirect.Ui",
                 name: 'Skybrud Redirects: Outbound Redirect Property Editor UI',
                 element: () => import(`./Elements/OutboundRedirect.js?v=${RedirectsPackage.cacheBuster}`),
                 meta: {

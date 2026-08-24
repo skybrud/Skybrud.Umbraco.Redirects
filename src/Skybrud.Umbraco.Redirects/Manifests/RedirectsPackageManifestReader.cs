@@ -23,7 +23,7 @@ public class RedirectsPackageManifestReader : IPackageManifestReader {
                 Version = RedirectsPackage.InformationalVersion,
                 Extensions = [
                     new {
-                        name = "redirects.entrypoint",
+                        name = "Skybrud Redirects: Back-office Entry Point",
                         alias = "Skybrud.Umbraco.Redirects.EntryPoint",
                         type = "backofficeEntryPoint",
                         js = $"/App_Plugins/Skybrud.Umbraco.Redirects/EntryPoint.js?v={cacheBuster}"
