@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>17.0.5</VersionPrefix>
+    <VersionPrefix>17.1.0-beta001</VersionPrefix>
     <VersionSuffix Condition="'$(Configuration)'=='Debug'">build$([System.DateTime]::UtcNow.ToString(`yyyyMMddHHmm`))</VersionSuffix>
     <Authors>Anders Bjerner</Authors>
     <Company>Limbo</Company>
@@ -30,6 +30,7 @@
 
   <!-- Include additional metadata in the assembly -->
   <ItemGroup>
+    <AssemblyMetadata Include="Authors" Value="$(Authors)" />
     <AssemblyMetadata Include="PackageProjectUrl" Value="https://packages.limbo.works/skybrud.umbraco.redirects/" />
     <AssemblyMetadata Include="DocumentationUrl" Value="https://packages.limbo.works/skybrud.umbraco.redirects/docs/v17/" />
     <AssemblyMetadata Include="NuGetUrl" Value="https://www.nuget.org/packages/Skybrud.Umbraco.Redirects" />
