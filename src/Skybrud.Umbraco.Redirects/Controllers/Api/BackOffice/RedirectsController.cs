@@ -203,6 +203,47 @@ public class RedirectsController : Controller {
 
     }
 
+    [HttpGet("url")]
+    [EndpointSummary("Returns a redirect matching the specified URL.")]
+    [EndpointDescription("Returns a redirect matching the specified URL and optional root node key.")]
+    public ActionResult<RedirectItem> GetRedirectByUrl(string url, Guid? rootNodeKey = null) {
+
+        try {
+
+            // Get a reference to the redirect
+            IRedirect redirect = _redirectsService.GetRedirectByUrl(url, rootNodeKey) ?? throw RedirectsException.NotFoundByUrl(url, rootNodeKey);
+
+            // Map the result for the API
+            RedirectItem result = _backOfficeHelper.Map(redirect);
+
+            // Return the result
+            return Ok(result);
+
+        } catch (RedirectsException ex) {
+
+            if (!ex.Is404) {
+                if (rootNodeKey is null) {
+                    _logger.LogError(ex, "Failed getting redirect for URL '{Url}'.", url);
+                } else {
+                    _logger.LogError(ex, "Failed getting redirect for URL '{Url}' and root node key '{RootNodeKey}'.", url, rootNodeKey);
+                }
+            }
+
+            // Generate the error response
+            return Error(ex);
+
+        }
+
+    }
+
+    [HttpGet("url/all")]
+    [EndpointSummary("Returns redirects matching the specified URL.")]
+    [EndpointDescription("Returns all redirects matching the specified URL and optional root node key.")]
+    public ActionResult<RedirectListModel> GetRedirectsByUrl(string url, Guid? rootNodeKey = null) {
+        IReadOnlyList<IRedirect> redirects = _redirectsService.GetRedirectsByUrl(url, rootNodeKey);
+        return _backOfficeHelper.Map(redirects);
+    }
+
     [HttpPatch("{key:guid}")]
     [EndpointSummary("Updates a redirect.")]
     [EndpointDescription("Updates the redirect with the specified GUID key.")]

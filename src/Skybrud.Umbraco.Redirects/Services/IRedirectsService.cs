@@ -65,6 +65,22 @@ public interface IRedirectsService {
     IRedirect? GetRedirectByUrl(Guid rootNodeKey, string url);
 
     /// <summary>
+    /// Returns a redirect matching the specified <paramref name="url"/>, optionally limited to the specified root node.
+    /// </summary>
+    /// <param name="url">The URL of the redirect.</param>
+    /// <param name="rootNodeKey"> The key of the root node to match, or <see langword="null"/> to match redirects across all root nodes.</param>
+    /// <returns>An instance of <see cref="IRedirect"/>, or <see langword="null"/> if no matching redirect is found.</returns>
+    IRedirect? GetRedirectByUrl(string url, Guid? rootNodeKey = null);
+
+    /// <summary>
+    /// Returns redirects matching the specified <paramref name="url"/>, optionally limited to the specified root node.
+    /// </summary>
+    /// <param name="url">The URL of the redirects.</param>
+    /// <param name="rootNodeKey"> The key of the root node to match, or <see langword="null"/> to match redirects across all root nodes.</param>
+    /// <returns>A list of matching redirects.</returns>
+    IReadOnlyList<IRedirect> GetRedirectsByUrl(string url, Guid? rootNodeKey = null);
+
+    /// <summary>
     /// Returns a list of all redirects.
     /// </summary>
     /// <returns>A list of <see cref="IRedirect"/>.</returns>

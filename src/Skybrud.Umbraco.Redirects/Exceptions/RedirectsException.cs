@@ -53,4 +53,32 @@ public class RedirectsException : Exception {
         StatusCode = HttpStatusCode.InternalServerError;
     }
 
+    /// <summary>
+    /// Initializes a new <see cref="RedirectNotFoundException"/> instance based on the specified <paramref name="id"/>.
+    /// </summary>
+    /// <param name="id">The ID of the requested redirect.</param>
+    /// <returns>A new instance of <see cref="RedirectNotFoundException"/>.</returns>
+    public static RedirectNotFoundException NotFoundById(int id) {
+        return new RedirectNotFoundException(id);
+    }
+
+    /// <summary>
+    /// Initializes a new <see cref="RedirectNotFoundException"/> instance based on the specified <paramref name="key"/>.
+    /// </summary>
+    /// <param name="key">The GUID key of the requested redirect.</param>
+    /// <returns>A new instance of <see cref="RedirectNotFoundException"/>.</returns>
+    public static RedirectNotFoundException NotFoundByKey(Guid key) {
+        return new RedirectNotFoundException(key);
+    }
+
+    /// <summary>
+    /// Initializes a new <see cref="RedirectNotFoundException"/> instance based on the specified <paramref name="url"/> and <paramref name="rootNodeKey"/>.
+    /// </summary>
+    /// <param name="url">The URL of the redirect.</param>
+    /// <param name="rootNodeKey">The key of the root node used, or <see langword="null"/> if no root node was specified.</param>
+    /// <returns>A new instance of <see cref="RedirectNotFoundException"/>.</returns>
+    public static RedirectNotFoundException NotFoundByUrl(string url, Guid? rootNodeKey = null) {
+        return new RedirectNotFoundException(url, rootNodeKey);
+    }
+
 }

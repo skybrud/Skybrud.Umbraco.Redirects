@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Web;
+using Humanizer;
 using Microsoft.AspNetCore.Http;
 using NPoco;
 using Skybrud.Essentials.Collections.Enumerables.Extensions;
@@ -265,6 +266,80 @@ public class RedirectsService : IRedirectsService {
 
     }
 
+
+    /// <summary>
+    /// Returns a list of redirects matching the specified <paramref name="path"/> and <paramref name="query"/>, or <see langword="null"/> if not found.
+    /// </summary>
+    /// <param name="rootNodeKey">The key of the root node. Use <see cref="Guid.Empty"/> for a global redirect.</param>
+    /// <param name="path">The path of the redirect.</param>
+    /// <param name="query">The query string of the redirect.</param>
+    /// <returns>An instance of <see cref="Redirect"/>, or <see langword="null"/> if not found.</returns>
+    public virtual IReadOnlyList<IRedirect> GetRedirectsByPathAndQuery(Guid rootNodeKey, string path, string? query) {
+
+        // Some input validation
+        if (string.IsNullOrWhiteSpace(path)) throw new ArgumentNullException(nameof(path));
+
+        path = path.Trim().TrimEnd('/');
+        query = query.NullIfWhiteSpace();
+
+        IReadOnlyList<RedirectDto> dtos;
+
+        using (IScope scope = _scopeProvider.CreateScope()) {
+
+            // Generate the base of the SQL for the query
+            var sql = scope.SqlContext.Sql()
+                .Select<RedirectDto>()
+                .From<RedirectDto>();
+
+            // If a specific root node isn't specified, the WHERE clause can be simplified a bit. On the other
+            // hand, if a specific root node is specified, the WHERE clause should be looking for both site
+            // specific redirects and global redirects. In case there is a match for both a site specific redirect
+            // and a global redirect, the ORDER BY clause is used to ensure that we're looking at site specific
+            // redirects first, then global redirects second
+            if (rootNodeKey == Guid.Empty) {
+                if (query is null) {
+                    sql = sql
+                        .Where<RedirectDto>(x => x.RootKey == Guid.Empty && x.Path == path && (x.QueryString == null || x.ForwardQueryString));
+                } else {
+                    sql = sql
+                        .Where<RedirectDto>(x => x.RootKey == Guid.Empty && x.Path == path && (x.QueryString == query || x.ForwardQueryString));
+                }
+            } else {
+                if (query is null) {
+                    sql = sql
+                        .Where<RedirectDto>(x => (x.RootKey == rootNodeKey || x.RootKey == Guid.Empty) && x.Path == path && (x.QueryString == null || x.ForwardQueryString))
+                        .OrderByDescending<RedirectDto>(x => x.RootKey);
+                } else {
+                    sql = sql
+                        .Where<RedirectDto>(x => (x.RootKey == rootNodeKey || x.RootKey == Guid.Empty) && x.Path == path && (x.QueryString == query || x.ForwardQueryString))
+                        .OrderByDescending<RedirectDto>(x => x.RootKey);
+                }
+            }
+
+            // Make the call to the database
+            dtos = scope.Database.Fetch<RedirectDto>(sql);
+
+            // Finish the scope
+            scope.Complete();
+
+        }
+
+        // Return null if we haven't found any redirects at this point
+        if (dtos.Count == 0) return [];
+
+        // To support query string forwarding, we should only return a redirect that match either of the two criteria listed below:
+        // - query string forwarding isn't enabled and the query string is an exact match
+        // - query string forwarding is enabled and the query string is part of the query string of the inbound URI
+        string query1 = query is null ? string.Empty : $"&{query}&";
+
+        // Filter and wrap the DTOs
+        return dtos
+            .Where(x => (!x.ForwardQueryString && query.InvariantEquals(x.QueryString)) || (x.QueryString is null || x.QueryString.Length == 0 || query1.InvariantContains($"&{x.QueryString}&") && x.ForwardQueryString))
+            .Select(x => new Redirect(x))
+            .ToList();
+
+    }
+
     /// <summary>
     /// Returns the first redirect matching the specified <paramref name="request"/>, or <see langword="null"/> if the request does not match any redirects.
     /// </summary>
@@ -318,6 +393,52 @@ public class RedirectsService : IRedirectsService {
         url.Split('?', out string path, out string? query);
         return GetRedirectByPathAndQuery(rootNodeKey, path, query);
     }
+
+    /// <summary>
+    /// Returns a redirect matching the specified <paramref name="url"/>, optionally limited to the specified root node.
+    /// </summary>
+    /// <param name="url">The URL of the redirect.</param>
+    /// <param name="rootNodeKey"> The key of the root node to match, or <see langword="null"/> to match redirects across all root nodes.</param>
+    /// <returns>An instance of <see cref="IRedirect"/>, or <see langword="null"/> if no matching redirect is found.</returns>
+    public virtual IReadOnlyList<IRedirect> GetRedirectsByUrl(string url, Guid? rootNodeKey = null) {
+
+        if (string.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
+
+        url.Split('#')[0].Split('?', out string path, out string? query);
+
+        return GetRedirectsByPathAndQuery(rootNodeKey ?? Guid.Empty, path, query);
+
+    }
+
+    /// <summary>
+    /// Returns redirects matching the specified <paramref name="url"/>, optionally limited to the specified root node.
+    /// </summary>
+    /// <param name="url">The URL of the redirects.</param>
+    /// <param name="rootNodeKey"> The key of the root node to match, or <see langword="null"/> to match redirects across all root nodes.</param>
+    /// <returns>A list of matching redirects.</returns>
+    public virtual IRedirect? GetRedirectByUrl(string url, Guid? rootNodeKey = null) {
+        if (string.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
+        url.Split('#')[0].Split('?', out string path, out string? query);
+        return GetRedirectByPathAndQuery(rootNodeKey ?? Guid.Empty, path, query);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /// <summary>
     /// Returns a list of all redirects.
