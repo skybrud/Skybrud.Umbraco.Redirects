@@ -24,6 +24,7 @@ const fromNow = {
 };
 
 const misc = {
+	title: "Redirects",
 	save: "Save",
 	addRedirect: "Add redirect",
 	addRedirectTitle: "Add new redirect",

@@ -30,7 +30,7 @@ export const onInit = (_host, extensionRegistry) => {
                     js: () => import("./Elements/Dashboard.js?v=" + RedirectsPackage.cacheBuster),
                     weight: RedirectsPackage.settings?.dashboard?.weight ?? -10,
                     meta: {
-                        label: "Redirects",
+                        label: "#redirects_title",
                         pathname: "redirects"
                     },
                     conditions: [

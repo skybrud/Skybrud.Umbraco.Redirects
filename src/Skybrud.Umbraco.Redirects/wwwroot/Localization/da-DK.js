@@ -22,6 +22,7 @@ const fromNow = {
 };
 
 const misc = {
+    title: "Redirects",
 	save: "Gem",
 	addRedirect: "Tilføj redirect",
 	addRedirectTitle: "Tilføj nyt redirect",
