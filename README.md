@@ -76,6 +76,8 @@ Install-Package Skybrud.Umbraco.Redirects -Version 17.0.5
 
 - Includes a `RedirectsService` for managing the redirects from your own code
 
+- Management API for managing redirects from outside of your solution
+
 [NuGetPackage]: https://www.nuget.org/packages/Skybrud.Umbraco.Redirects
 [GitHubRelease]: https://github.com/skybrud/Skybrud.Umbraco.Redirects/releases
 
