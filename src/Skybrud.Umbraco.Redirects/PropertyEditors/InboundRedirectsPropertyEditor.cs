@@ -4,12 +4,20 @@
 
 namespace Skybrud.Umbraco.Redirects.PropertyEditors;
 
-[DataEditor(EditorAlias, ValueType = ValueTypes.Json)]
+[DataEditor(EditorAlias, ValueType = EditorValueType)]
 public class InboundRedirectsPropertyEditor : DataEditor {
+
+    public const string EditorName = "Skybrud Inbound Redirects";
 
     public const string EditorAlias = "Skybrud.Umbraco.Redirects";
 
-    public const string EditorUiAlias = "Skybrud.Umbraco.Redirects.Ui";
+    public const string EditorUiAlias = "Skybrud.Umbraco.Redirects.PropertyEditorUi";
+
+    public const string EditorIcon = "icon-arrow-right";
+
+    public const string EditorGroup = "Skybrud";
+
+    public const string EditorValueType = ValueTypes.Json;
 
     public InboundRedirectsPropertyEditor(IDataValueEditorFactory dataValueEditorFactory) : base(dataValueEditorFactory) { }
 
