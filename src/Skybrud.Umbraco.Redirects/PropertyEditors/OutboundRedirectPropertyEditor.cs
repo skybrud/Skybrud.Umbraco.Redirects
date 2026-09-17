@@ -7,7 +7,7 @@ namespace Skybrud.Umbraco.Redirects.PropertyEditors;
 [DataEditor(EditorAlias, ValueType = ValueTypes.Json)]
 public class OutboundRedirectPropertyEditor : DataEditor {
 
-    public const string EditorName = "Limbo Separator";
+    public const string EditorName = "Skybrud Outbound Redirect";
 
     public const string EditorAlias = "Skybrud.Umbraco.Redirects.OutboundRedirect";
 
