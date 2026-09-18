@@ -1,4 +1,5 @@
-﻿using Umbraco.Cms.Core.PropertyEditors;
+﻿using Skybrud.Umbraco.Redirects.Constants;
+using Umbraco.Cms.Core.PropertyEditors;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
@@ -9,9 +10,9 @@ public class InboundRedirectsPropertyEditor : DataEditor {
 
     public const string EditorName = "Skybrud Inbound Redirects";
 
-    public const string EditorAlias = "Skybrud.Umbraco.Redirects";
+    public const string EditorAlias = RedirectsPropertyEditorSchemaAliases.InboundRedirects;
 
-    public const string EditorUiAlias = "Skybrud.Umbraco.Redirects.PropertyEditorUi";
+    public const string EditorUiAlias = RedirectsPropertyEditorUiAliases.InboundRedirects;
 
     public const string EditorIcon = "icon-arrow-right";
 

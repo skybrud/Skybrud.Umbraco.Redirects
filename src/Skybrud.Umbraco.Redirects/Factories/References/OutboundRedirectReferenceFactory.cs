@@ -45,11 +45,11 @@ public class OutboundRedirectReferenceFactory : IDataValueReferenceFactory, IDat
         switch (destination?.Type) {
 
             case RedirectDestinationType.Media:
-                references.Add(new UmbracoEntityReference(new GuidUdi(Constants.UdiEntityType.Media, destination.Key)));
+                references.Add(new UmbracoEntityReference(new GuidUdi(global::Umbraco.Cms.Core.Constants.UdiEntityType.Media, destination.Key)));
                 break;
 
             case RedirectDestinationType.Content:
-                references.Add(new UmbracoEntityReference(new GuidUdi(Constants.UdiEntityType.Document, destination.Key)));
+                references.Add(new UmbracoEntityReference(new GuidUdi(global::Umbraco.Cms.Core.Constants.UdiEntityType.Document, destination.Key)));
                 break;
 
         }

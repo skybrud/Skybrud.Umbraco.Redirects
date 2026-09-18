@@ -7,7 +7,6 @@ using Newtonsoft.Json.Linq;
 using Skybrud.Essentials.Json.Newtonsoft;
 using Skybrud.Essentials.Reflection;
 using Skybrud.Umbraco.Redirects.Models.Dtos;
-using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Core.Extensions;
 using Umbraco.Cms.Core.Semver;
@@ -136,7 +135,7 @@ internal class RedirectsUtils {
 
         // Map the path to a special redirects folder (both old and new)
         string dir1 = webHostEnvironment.MapPathWebRoot($"~/App_Data/{RedirectsPackage.Alias}");
-        string dir2 = webHostEnvironment.MapPathContentRoot($"{Constants.SystemDirectories.Data}/{RedirectsPackage.Alias}");
+        string dir2 = webHostEnvironment.MapPathContentRoot($"{(global::Umbraco.Cms.Core.Constants.SystemDirectories.Data)}/{RedirectsPackage.Alias}");
 
         // Older releases would create a bacup in the "AppData" directory in the web root. Even though the
         // "App_Data" still appear to be protected in ASP.NET Core, we shouldn't save data to the web root. So
