@@ -122,7 +122,7 @@ export const onInit = (_host, extensionRegistry) => {
 
             extensionRegistry.register({
                 type: "propertyEditorUi",
-                alias: "Skybrud.Umbraco.Redirects.Ui",
+                alias: "Skybrud.Umbraco.Redirects.PropertyEditorUi.InboundRedirects",
                 name: 'Skybrud Redirects: Inbound Redirects Property Editor UI',
                 element: () => import(`./Elements/InboundRedirects.js?v=${RedirectsPackage.cacheBuster}`),
                 meta: {
@@ -135,7 +135,7 @@ export const onInit = (_host, extensionRegistry) => {
 
             extensionRegistry.register({
                 type: "propertyEditorUi",
-                alias: "Skybrud.Umbraco.Redirects.OutboundRedirect.Ui",
+                alias: "Skybrud.Umbraco.Redirects.PropertyEditorUi.OutboundRedirect",
                 name: 'Skybrud Redirects: Outbound Redirect Property Editor UI',
                 element: () => import(`./Elements/OutboundRedirect.js?v=${RedirectsPackage.cacheBuster}`),
                 meta: {
