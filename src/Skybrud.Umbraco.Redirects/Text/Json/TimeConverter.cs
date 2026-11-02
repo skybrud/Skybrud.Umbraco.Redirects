@@ -11,7 +11,7 @@ using Skybrud.Essentials.Time.UnixTime;
 
 namespace Skybrud.Umbraco.Redirects.Text.Json;
 
-public class TimeConverter : JsonConverter<object> {
+internal class TimeConverter : JsonConverter<object> {
 
     /// <summary>
     /// The format to be used when serializing to JSON. Default is <see cref="TimeFormat.Iso8601"/>.
@@ -125,7 +125,7 @@ public class TimeConverter : JsonConverter<object> {
             case TimeFormat.Rfc2822:
                 return Rfc2822Utils.ToString(value);
 
-            case TimeFormat.UnixTime:
+            case TimeFormat.UnixTimeSeconds:
                 return (long)UnixTimeUtils.ToSeconds(value);
 
             default:
@@ -162,7 +162,7 @@ public class TimeConverter : JsonConverter<object> {
             case TimeFormat.Rfc2822:
                 return Rfc2822Utils.ToString(value);
 
-            case TimeFormat.UnixTime:
+            case TimeFormat.UnixTimeSeconds:
                 return (long) UnixTimeUtils.ToSeconds(value);
 
             default:
@@ -185,4 +185,5 @@ public class TimeConverter : JsonConverter<object> {
         }
 
     }
+
 }

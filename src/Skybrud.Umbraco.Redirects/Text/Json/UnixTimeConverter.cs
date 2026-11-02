@@ -2,12 +2,10 @@
 
 #pragma warning disable 1591
 
-namespace Skybrud.Umbraco.Redirects.Text.Json {
+namespace Skybrud.Umbraco.Redirects.Text.Json;
 
-    public class UnixTimeConverter : TimeConverter {
+internal class UnixTimeConverter : TimeConverter {
 
-        public UnixTimeConverter() : base(TimeFormat.UnixTime) { }
-
-    }
+    public UnixTimeConverter() : base(TimeFormat.UnixTimeSeconds) { }
 
 }
