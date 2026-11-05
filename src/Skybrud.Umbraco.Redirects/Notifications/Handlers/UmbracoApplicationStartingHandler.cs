@@ -51,7 +51,8 @@ public class UmbracoApplicationStartingHandler : INotificationAsyncHandler<Umbra
             .To<AddDestinationCultureColumnMigration>("4.0.9")
             .To<DummyMigration>("8934735b")
             .To<AddDestinationNameColumnMigration>("c0d4ddeb")
-            .To<NullableColumnsMigration>("4b5fabfc");
+            .To<NullableColumnsMigration>("4b5fabfc")
+            .To<AddRootKeyUrlIndexMigration>("925ceb6b");
 
         var upgrader = new Upgrader(plan);
 
