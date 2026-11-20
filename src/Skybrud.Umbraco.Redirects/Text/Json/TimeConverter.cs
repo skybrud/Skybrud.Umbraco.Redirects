@@ -37,7 +37,7 @@ public class TimeConverter : JsonConverter<object> {
         return reader.TokenType switch {
             JsonTokenType.Null => (object?) null,
             JsonTokenType.Number => EssentialsTime.FromUnixTimeSeconds(reader.GetInt32()),
-            JsonTokenType.String => EssentialsTime.Parse(reader.GetString()),
+            JsonTokenType.String => EssentialsTime.Parse(reader.GetString()!),
             _ => throw new Exception($"Unsupported token type: {reader.TokenType}")
         };
     }
@@ -58,12 +58,6 @@ public class TimeConverter : JsonConverter<object> {
             case DateTimeOffset dto:
                 WriteValue(writer, ToFormat(dto, Format));
                 break;
-
-#pragma warning disable 618
-            case EssentialsDateTime edt:
-                WriteValue(writer, ToFormat(edt.DateTime, Format));
-                break;
-#pragma warning restore 618
 
             case EssentialsTime et:
                 WriteValue(writer, ToFormat(et.DateTimeOffset, Format));
@@ -125,8 +119,11 @@ public class TimeConverter : JsonConverter<object> {
             case TimeFormat.Rfc2822:
                 return Rfc2822Utils.ToString(value);
 
-            case TimeFormat.UnixTime:
+            case TimeFormat.UnixTimeSeconds:
                 return (long)UnixTimeUtils.ToSeconds(value);
+
+            case TimeFormat.UnixTimeMilliseconds:
+                return (long)UnixTimeUtils.ToMilliseconds(value);
 
             default:
                 throw new ArgumentException("Unsupported format " + format, nameof(format));
@@ -162,8 +159,11 @@ public class TimeConverter : JsonConverter<object> {
             case TimeFormat.Rfc2822:
                 return Rfc2822Utils.ToString(value);
 
-            case TimeFormat.UnixTime:
+            case TimeFormat.UnixTimeSeconds:
                 return (long) UnixTimeUtils.ToSeconds(value);
+
+            case TimeFormat.UnixTimeMilliseconds:
+                return (long) UnixTimeUtils.ToMilliseconds(value);
 
             default:
                 throw new ArgumentException("Unsupported format " + format, nameof(format));

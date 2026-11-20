@@ -12,7 +12,7 @@ public class Iso8601TimeConverter : JsonConverter<EssentialsTime> {
     public override EssentialsTime? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
         return reader.TokenType switch {
             JsonTokenType.Null => null,
-            JsonTokenType.String => EssentialsTime.Parse(reader.GetString()),
+            JsonTokenType.String => EssentialsTime.Parse(reader.GetString()!),
             _ => throw new Exception($"Unsupported token type: {reader.TokenType}")
         };
     }

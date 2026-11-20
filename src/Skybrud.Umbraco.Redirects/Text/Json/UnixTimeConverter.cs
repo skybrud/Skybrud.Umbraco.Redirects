@@ -6,7 +6,7 @@ namespace Skybrud.Umbraco.Redirects.Text.Json {
 
     public class UnixTimeConverter : TimeConverter {
 
-        public UnixTimeConverter() : base(TimeFormat.UnixTime) { }
+        public UnixTimeConverter() : base(TimeFormat.UnixTimeSeconds) { }
 
     }
 
